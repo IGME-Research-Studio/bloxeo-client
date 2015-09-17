@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/Petroochio/StormClient/issues"
   },
-  "homepage": "https://github.com/Petroochio/StormClient"
+  "homepage": "https://github.com/Petroochio/StormClient",
+  "dependencies": {
+    "socket.io": "^1.3.6"
+  }
 }

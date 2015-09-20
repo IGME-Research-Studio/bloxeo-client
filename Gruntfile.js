@@ -62,15 +62,6 @@ module.exports = function (grunt) {
       }
     },
 
-    // Uglify support for minifying output coming soon
-    // uglify: {
-    //   prod: {
-    //     files: {
-    //       'build/app.js': ['src/input1.js', 'src/input2.js']
-    //     }
-    //   }
-    // },
-
     watch: {
       js: {
         options: { spawn: false, },

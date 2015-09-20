@@ -9,7 +9,8 @@
     "lint": "grunt lint",
     "build": "grunt build-dev",
     "build-dev": "grunt build-dev",
-    "build-prod": "grunt build-prod"
+    "build-prod": "grunt build-prod",
+    "prod": "grunt prod"
   },
   "repository": {
     "type": "git",

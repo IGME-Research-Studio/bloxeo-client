@@ -1,7 +1,7 @@
 const React = require('react');
 
 const HelloMessage = React.createClass({
-  render: function () {
+  render: function() {
     return <div>Hello {this.props.name}</div>;
   },
 });

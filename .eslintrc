@@ -3,6 +3,9 @@
   "plugins": [
     "react"
   ],
+  "rules": {
+    "func-names": 0
+  },
   "ecmaFeatures": {
     "jsx": true
   }

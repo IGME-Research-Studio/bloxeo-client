@@ -16,6 +16,13 @@ module.exports = function (grunt) {
       }
     },
 
+    copy: {
+      main: {
+        src: 'src/index.html',
+        dest: 'build/index.html'
+      }
+    },
+
     // Lint our test and src files with ESlint
     eslint: {
       target: jsFiles
@@ -45,12 +52,12 @@ module.exports = function (grunt) {
       },
       dev: {
         files: {
-          'build/app.js': ['src/**/*.js']
+          'build/app.js': srcFiles
         }
       },
       prod: {
         files: {
-          'build/app.js': ['src/**/*.js']
+          'build/app.js': srcFiles
         }
       }
     },
@@ -78,8 +85,8 @@ module.exports = function (grunt) {
 
   grunt.registerTask('default', ['build', 'test']);
 
-  grunt.registerTask('build-dev', ['clean', 'browserify:dev']);
-  grunt.registerTask('build-prod', ['clean', 'browserify:prod']);
+  grunt.registerTask('build-dev', ['clean', 'browserify:dev', 'copy']);
+  grunt.registerTask('build-prod', ['clean', 'browserify:prod', 'copy']);
   grunt.registerTask('build', 'build-dev');
 
   grunt.registerTask('lint', ['eslint']);
@@ -87,4 +94,3 @@ module.exports = function (grunt) {
 
   grunt.registerTask('prod', ['lint', 'build-prod', 'test']);
 };
-

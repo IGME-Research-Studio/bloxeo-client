@@ -4,7 +4,10 @@
     "react"
   ],
   "rules": {
-    "func-names": 0
+    "func-names": 0,
+    "default-case": 1,
+    "no-else-return": 0,
+    "padded-blocks": 0
   },
   "ecmaFeatures": {
     "jsx": true

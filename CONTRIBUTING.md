@@ -22,6 +22,7 @@ We're borrowing [Airbnb's style guide](https://github.com/airbnb/javascript/tree
 * Submit a pull request to the relevant repository in IGME-research-studio.
 * Update your Github issue to mark that you have submitted code and are ready for it to be reviewed. Include a link to the pull request in the ticket.
 * After two other contributors review the PR and give it a thumbs up, then it's ready to be merged.
+* Before submitting your PR, make sure to rebase and squash all of your commits into a single commit [like this](https://ariejan.net/2011/07/05/git-squash-your-latests-commits-into-one/).
 
 ## Commit Messages
 

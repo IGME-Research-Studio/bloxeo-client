@@ -17,9 +17,15 @@ const IdeaContainer = React.createClass({
 		);
   },
   // changes state on button click
-  handleStateChange: function() {
+  handleStateChange: function(keep) {
+    if (!keep) {
+      this.props.data[i].keep = false;
+    }
+    
     i++;
     this.setState({currentIdea: this.props.data[i].idea});
+    
+    console.log(this.props.data);
   },
   render: function() {
     return (
@@ -43,11 +49,15 @@ const Idea = React.createClass({
 });
 
 const VoteButton = React.createClass({
+  handleClick: function(e) {
+    e.preventDefault();
+    this.props.changeState(this.props.data === 'true');
+  },
   render: function() {
     if (this.props.data === 'true') {
-      return <button className="yesButton" onClick={this.props.changeState}>Yes</button>;
+      return <button className="yesButton" onClick={this.handleClick}>Yes</button>;
     }
-    return <button className="noButton" onClick={this.props.changeState}>No</button>;
+    return <button className="noButton" onClick={this.handleClick}>No</button>;
   },
 });
 

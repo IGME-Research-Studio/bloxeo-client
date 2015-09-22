@@ -10,48 +10,44 @@ let ideaData = [
 let i = 0;
 
 const IdeaContainer = React.createClass({
+  // set state to the first element of the array
+  getInitialState: function() {
+    return (
+			{currentIdea: this.props.data[i].idea}
+		);
+  },
+  // changes state on button click
+  handleStateChange: function() {
+    i++;
+    this.setState({currentIdea: this.props.data[i].idea});
+  },
   render: function() {
     return (
       <div>
-        <Idea ideas={this.props.data} />
+        <Idea idea={this.state.currentIdea} />
+        <VoteButton data="true" changeState={this.handleStateChange} />
+      	<VoteButton data="false" changeState={this.handleStateChange} />
       </div>
     );
   },
 });
 
 const Idea = React.createClass({
-	//set state to the first element of the array
-	getInitialState: function(){
-		return(
-			{currentIdea: this.props.ideas[i].idea}
-		);	
-	},
-	//on click increment the array to next element and update the state
-	handleStateChange: function(){
-		i++;
-		this.setState({currentIdea: this.props.ideas[i].idea});
-	},
   render: function() {
-    return(
+    return (
 			<div>
-				{this.state.currentIdea}
-				<VoteButton data="true" changeState={this.handleStateChange} idea={this.props.ideas[i]} />
-      	<VoteButton data="false" changeState={this.handleStateChange} />
+				{this.props.idea}
 			</div>
 		);
   },
 });
 
 const VoteButton = React.createClass({
-  handleButtonClick: function() {	
-    console.log(this.props.idea.keep);
-  },
   render: function() {
     if (this.props.data === 'true') {
       return <button className="yesButton" onClick={this.props.changeState}>Yes</button>;
-    } else {
-      return <button className="noButton" onClick={this.props.changeState}>No</button>;
     }
+    return <button className="noButton" onClick={this.props.changeState}>No</button>;
   },
 });
 

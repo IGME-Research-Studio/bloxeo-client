@@ -8,4 +8,4 @@ const HelloMessage = React.createClass({
 
 const body = document.querySelector('body');
 
-React.render(<HelloMessage name="John" />, body);
+React.render(<HelloMessage name="Peter" />, body);

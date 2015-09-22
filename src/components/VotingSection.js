@@ -21,11 +21,9 @@ const IdeaContainer = React.createClass({
     if (!keep) {
       this.props.data[i].keep = false;
     }
-    
+
     i++;
     this.setState({currentIdea: this.props.data[i].idea});
-    
-    console.log(this.props.data);
   },
   render: function() {
     return (

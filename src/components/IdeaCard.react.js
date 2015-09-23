@@ -4,17 +4,22 @@ const ClassNames = require('classnames');
 const interact = require('interact.js');
 
 const IdeaCard = React.createClass({
+
   getInitialState: function () {
     return {
       x: 0,
       y: 0
     };
   },
+  /** Enables interact functionality after component is mounted
+   *
+   */
   componentDidMount: function () {
+    // Add draggable functionality to component
     interact(this.getDOMNode()).draggable({
       onmove: this._onMove
     });
-
+    // Add draggable functionality to component
     interact(this.getDOMNode()).dropzone({
       // only accept elements matching this CSS selector
       accept: '.drag',
@@ -23,30 +28,38 @@ const IdeaCard = React.createClass({
       ondrop: this._onDrop
     });
   },
-
+  /**
+   * @param event: event obj
+   */
   _onMove: function (event) {
     this.setState({
       x: this.state.x + event.dx,
       y: this.state.y + event.dy
     });
   },
-
+  /**
+   * @return {object}
+   */
   _style: function () {
     return {
       transform: "translate("+this.state.x+"px,"+this.state.y+"px)"
     };
   },
-
+  /**
+   * @param event: event obj
+   */
   _onDrop: function (event) {
     let dropzoneElement = event.target;
     dropzoneElement.textContent += event.relatedTarget.textContent;
     event.relatedTarget.remove();
   },
-
+  /**
+   * @return {object}
+   */
   render: function () {
     let idea = this.props.idea;
     let ideaString = idea.content.toString();
-    
+
     return (
       <div className="drag1 drag draggable drag-drop dropzone" style={this._style()}>
           {ideaString}

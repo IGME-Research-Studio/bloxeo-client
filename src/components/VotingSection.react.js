@@ -1,7 +1,7 @@
 const React = require('react');
 
 let i = 0;
-
+// page for displaying ideas and voting on them
 const VotingSection = React.createClass({
   // set state to the first element of the array
   getInitialState: function() {
@@ -17,11 +17,11 @@ const VotingSection = React.createClass({
 
     i++;
     this.setState({currentIdea: this.props.data[i].idea});
-<<<<<<< HEAD:src/components/VotingSection.js
-=======
+// <<<<<<< HEAD:src/components/VotingSection.js
+// =======
 
     console.log(this.props.data);
->>>>>>> cee3c627afb008e0b286a1af181a84a7a9421005:src/components/VotingSection.react.js
+// >>>>>>> cee3c627afb008e0b286a1af181a84a7a9421005:src/components/VotingSection.react.js
   },
   render: function() {
     return (
@@ -29,6 +29,26 @@ const VotingSection = React.createClass({
         <Idea idea={this.state.currentIdea} />
         <VoteButton data="true" changeState={this.handleStateChange} />
         <VoteButton data="false" changeState={this.handleStateChange} />
+      </div>
+    );
+  },
+});
+
+// page to display voting results
+const VotingResult = React.createClass({
+  render: function() {
+    // map the updated idea array
+    const ideaNode = this.props.data.map(function(idea) {
+      // only return if keep is true
+      if (idea.keep) {
+        return (
+          <Idea idea={idea.idea} />
+        );
+      }
+    });
+    return (
+      <div>
+      {ideaNode}
       </div>
     );
   },

@@ -16,12 +16,13 @@ const VotingSection = React.createClass({
     }
 
     i++;
-    this.setState({currentIdea: this.props.data[i].idea});
-// <<<<<<< HEAD:src/components/VotingSection.js
-// =======
-
-    console.log(this.props.data);
-// >>>>>>> cee3c627afb008e0b286a1af181a84a7a9421005:src/components/VotingSection.react.js
+    
+    if (i === this.props.data.length) {
+      const body = document.querySelector('body');
+      React.render(<VotingResult data={this.props.data} />, body);
+    } else {
+      this.setState({currentIdea: this.props.data[i].idea});
+    }
   },
   render: function() {
     return (
@@ -48,7 +49,8 @@ const VotingResult = React.createClass({
     });
     return (
       <div>
-      {ideaNode}
+        {ideaNode}
+        <a className="voteButton">Back to Main Screen</a>
       </div>
     );
   },

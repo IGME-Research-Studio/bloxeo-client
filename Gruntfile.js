@@ -15,14 +15,21 @@ module.exports = function (grunt) {
         src: buildFiles
       }
     },
-
+    // Copy index file
     copy: {
       main: {
         src: 'src/index.html',
         dest: 'build/index.html'
       }
     },
-
+    // Compile sass to css
+    sass: {
+      dist: {
+        files: {
+          'build/style.css': 'src/scss/main.scss'
+        }
+      }
+    },
     // Lint our test and src files with ESlint
     eslint: {
       target: jsFiles
@@ -76,8 +83,8 @@ module.exports = function (grunt) {
 
   grunt.registerTask('default', ['build', 'test']);
 
-  grunt.registerTask('build-dev', ['clean', 'browserify:dev', 'copy']);
-  grunt.registerTask('build-prod', ['clean', 'browserify:prod', 'copy']);
+  grunt.registerTask('build-dev', ['clean', 'browserify:dev', 'copy', 'sass']);
+  grunt.registerTask('build-prod', ['clean', 'browserify:prod', 'copy', 'sass']);
   grunt.registerTask('build', 'build-dev');
 
   grunt.registerTask('lint', ['eslint']);

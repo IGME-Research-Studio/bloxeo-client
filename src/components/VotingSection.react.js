@@ -16,7 +16,6 @@ const VotingSection = React.createClass({
     }
 
     i++;
-    
     if (i === this.props.data.length) {
       const body = document.querySelector('body');
       React.render(<VotingResult data={this.props.data} />, body);
@@ -38,21 +37,20 @@ const VotingSection = React.createClass({
 // page to display voting results
 const VotingResult = React.createClass({
   render: function() {
-    //array for ideas that were voted no
-    let droppedIdeas = [];
+    // array for ideas that were voted no
+    const droppedIdeas = [];
     // map the updated idea array
     const keepIdeas = this.props.data.map(function(keepIdea) {
       // if keep is true, return idea to keepIdeas
-      if (keepIdea.keep) {
+      if (!keepIdea.keep) {
+        // if the idea is false, push it to the droppedIdeas array
+        const dropIdea = <Idea idea={keepIdea.idea} />;
+        droppedIdeas.push(dropIdea);
+      } else {
         return (
           <Idea idea={keepIdea.idea} />
         );
       }
-      else {
-        //if the idea is false, push it to the droppedIdeas array
-        const dropIdea = <Idea idea={keepIdea.idea} />
-        droppedIdeas.push(dropIdea);
-      }                                   
     });
     return (
       <div>

@@ -1,11 +1,13 @@
 const React = require('react');
+const VotingSection = require('./components/VotingSection.react');
 
-const HelloMessage = React.createClass({
-  render: function() {
-    return <div>Hello {this.props.name}</div>;
-  },
-});
+const ideaData = [
+  { idea: 'purple dinosaur', keep: true },
+  { idea: 'massive kitten', keep: true },
+  { idea: 'eye tattoos', keep: true },
+  { idea: 'guava cake', keep: true},
+];
 
 const body = document.querySelector('body');
 
-React.render(<HelloMessage name="John" />, body);
+React.render(<VotingSection data={ideaData} />, body);

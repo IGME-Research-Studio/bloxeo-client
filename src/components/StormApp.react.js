@@ -1,20 +1,21 @@
 const React = require('react');
 const OrganizeBoard = require('../components/OrganizeBoard.react');
+const VotingSection = require('../components/VotingSection.react');
 
 const StormApp = React.createClass({
   getInitialState: function () {
-    const idea1 = {
-      content: ['peter'],
-      keep: true
-    };
-    const idea2 = {
-      content: ['ryan'],
-      keep: true
-    };
-
-    const generatedIdeas = [idea1, idea2];
+    const ideaData = [
+      { content: ['purple'], keep: true },
+      { content: ['massive'], keep: true },
+      { content: ['eye'], keep: true },
+      { content: ['guava'], keep: true},
+      { content: ['dinosaur'], keep: true },
+      { content: ['kitten'], keep: true },
+      { content: ['tattoos'], keep: true },
+      { content: ['cake'], keep: true}
+    ];
     return {
-      ideas: generatedIdeas
+      ideas: ideaData
     };
   },
   /**
@@ -23,7 +24,7 @@ const StormApp = React.createClass({
   render: function () {
     return (
       <div>
-        <OrganizeBoard ideas={this.state.ideas} />
+        <VotingSection data={this.state.ideas} />
       </div>
     );
   }

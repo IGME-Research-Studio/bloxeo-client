@@ -38,18 +38,28 @@ const VotingSection = React.createClass({
 // page to display voting results
 const VotingResult = React.createClass({
   render: function() {
+    //array for ideas that were voted no
+    let droppedIdeas = [];
     // map the updated idea array
-    const ideaNode = this.props.data.map(function(idea) {
-      // only return if keep is true
-      if (idea.keep) {
+    const keepIdeas = this.props.data.map(function(keepIdea) {
+      // if keep is true, return idea to keepIdeas
+      if (keepIdea.keep) {
         return (
-          <Idea idea={idea.idea} />
+          <Idea idea={keepIdea.idea} />
         );
       }
+      else {
+        //if the idea is false, push it to the droppedIdeas array
+        const dropIdea = <Idea idea={keepIdea.idea} />
+        droppedIdeas.push(dropIdea);
+      }                                   
     });
     return (
       <div>
-        {ideaNode}
+        <h1> Ideas to keep </h1>
+          {keepIdeas}
+        <h1> Ideas to forget </h1>
+          {droppedIdeas}
         <a className="voteButton">Back to Main Screen</a>
       </div>
     );

@@ -7,13 +7,11 @@ const OrganizeBoard = React.createClass({
    * @return {object}
    */
   render: function () {
-    let idea1 = this.props.ideas[0];
-    let idea2 = this.props.ideas[1];
-    
     return (
       <div>
-        <IdeaCard idea={idea1} />
-        <IdeaCard idea={idea2} />
+        {this.props.ideas.map( function (item) {
+          return <IdeaCard idea={item} />;
+        })}
       </div>
     );
   }

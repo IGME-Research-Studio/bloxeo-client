@@ -11,11 +11,11 @@ const VotingResult = React.createClass({
       // if keep is true, return idea to keepIdeas
       if (!keepIdea.keep) {
         // if the idea is false, push it to the droppedIdeas array
-        const dropIdea = <VoteElement idea={keepIdea.idea} />;
+        const dropIdea = <VoteElement idea={keepIdea.content} />;
         droppedIdeas.push(dropIdea);
       } else {
         return (
-          <VoteElement idea={keepIdea.idea} />
+          <VoteElement idea={keepIdea.content} />
         );
       }
     });

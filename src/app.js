@@ -1,5 +1,6 @@
 const React = require('react');
 const IdeaCard = require('./components/IdeaCard.react');
+const OrganizeBoard = require('./components/OrganizeBoard.react');
 
 const body = document.querySelector('body');
 
@@ -8,15 +9,16 @@ const idea1 = {
   keep: true
 };
 const idea2 = {
-  content: ['peter'],
+  content: ['ryan'],
   keep: true
 };
+
+const generatedIdeas = [idea1, idea2];
 
 window.onload = function () {
   React.render(
     <div>
-      <IdeaCard idea={idea1} />
-      <IdeaCard idea={idea2} />
+      <OrganizeBoard ideas={generatedIdeas} />
     </div>,
     body
   );

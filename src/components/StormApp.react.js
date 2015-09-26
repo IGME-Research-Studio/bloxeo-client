@@ -1,6 +1,7 @@
 const React = require('react');
 const OrganizeBoard = require('../components/OrganizeBoard.react');
 const VotingSection = require('../components/VotingSection.react');
+const IdeaBox = require('../components/IdeaBox.react');
 const StateButton = require('../components/StateButton.react');
 
 const StormApp = React.createClass({

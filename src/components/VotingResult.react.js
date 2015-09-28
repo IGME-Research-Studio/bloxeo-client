@@ -20,12 +20,24 @@ const VotingResult = React.createClass({
       }
     });
     return (
+<<<<<<< HEAD
       <div>
         <h1> Ideas to keep </h1>
           {keepIdeas}
         <h1> Ideas to forget </h1>
           {droppedIdeas}
         <a className="voteButton">Back to Main Screen</a>
+=======
+      <div className="votingResults">
+        <h1> Ideas to Keep </h1>
+        <div className="votingResults-ideas">
+          {keepIdeas}
+        </div>
+        <h1> Ideas to Forget </h1>
+        <div className="votingResults-ideas">
+          {droppedIdeas}
+        </div>
+>>>>>>> upstream/master
       </div>
     );
   },

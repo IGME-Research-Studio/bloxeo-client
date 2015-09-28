@@ -1,6 +1,9 @@
 const React = require('react');
 
 const Idea = React.createClass({
+  /**
+   * @return {object}
+   */
   render: function() {
     return (
       <div className="idea">

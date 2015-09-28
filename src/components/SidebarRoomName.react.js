@@ -1,6 +1,9 @@
 const React = require('react');
 
 const SidebarRoomName = React.createClass({
+  /**
+   * @return {object}
+   */
   render: function() {
     return (
       <div id="roomName">

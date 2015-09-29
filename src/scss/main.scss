@@ -13,14 +13,7 @@ body {
   text-align: center;
   color: white;
   font-size: 40px;
-}
-
-.drag1 {
   background-color: red;
-}
-
-.drag2 {
-  background-color: blue;
 }
 
 .votingSection {
@@ -65,3 +58,23 @@ body {
 .voteNoButton {
   background-color: red;
 }
+
+/* Styles for Sprint-1-organize*/
+.dragContainer {
+  background-color: #ddd;
+  height: 500px;
+  width: 500px;
+}
+.draggable {
+  height: 100px !important;
+  width: 100px !important;
+  transition-property: width, height;
+  transition-duration: 0.3s;
+  transition-timing-function: ease-in-out;
+}
+
+.smallPreview {
+  width: 40px !important;
+  height: 40px !important;
+}
+

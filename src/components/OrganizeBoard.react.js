@@ -1,5 +1,8 @@
 const React = require('react');
 const IdeaCard = require('../components/IdeaCard.react');
+// const jqueryUI = require('jquery-ui');
+// const jqueryDraggable = require('jquery-ui/draggable');
+// const jqueryDroppable = require('jquery-ui/droppable');
 
 const OrganizeBoard = React.createClass({
   // set state to the first element of the array

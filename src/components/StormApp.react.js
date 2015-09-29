@@ -1,5 +1,6 @@
 const React = require('react');
 const OrganizeBoard = require('../components/OrganizeBoard.react');
+const Workspace = require('../components/Workspace.react');
 const VotingSection = require('../components/VotingSection.react');
 const IdeaBox = require('../components/IdeaBox.react');
 const StateButton = require('../components/StateButton.react');
@@ -50,7 +51,8 @@ const StormApp = React.createClass({
     case 'organize':
       return (
         <div>
-          <OrganizeBoard data={this.state.ideas} />
+          <div><OrganizeBoard data={this.state.ideas}/></div>
+          <div className="dragContainer"><Workspace data={this.state.ideas}/></div>
           <StateButton parentStateChange={this.changeState} nextState='vote'/>
         </div>
       );

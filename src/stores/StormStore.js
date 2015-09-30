@@ -5,11 +5,9 @@ const assign = require('object-assign');
 
 const CHANGE_EVENT = 'change';
 
-const ideas = [];
-
-function create () {
-  //Push an idea to array
-};
+function create() {
+  // Push an idea to array
+}
 
 const StormStore = assign({}, EventEmitter.prototype, {
   emitChange: function() {
@@ -22,13 +20,14 @@ const StormStore = assign({}, EventEmitter.prototype, {
 
   removeChangeListener: function(callback) {
     this.removeListener(CHANGE_EVENT, callback);
-  }
+  },
 });
 
 AppDispatcher.register(function(action) {
-  switch(action.actionType) {
-    case StormConstants.IDEA_CREATE:
-      break;
+  switch (action.actionType) {
+  case StormConstants.IDEA_CREATE:
+    create();
+    break;
   }
 });
 

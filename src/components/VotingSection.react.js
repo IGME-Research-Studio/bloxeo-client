@@ -10,12 +10,8 @@ const VotingSection = React.createClass({
     return (
       {
         currentIdea: this.props.data[0].content,
-<<<<<<< HEAD
-        votesCast: 0
-=======
         votesCast: 0,
         state: 'vote',
->>>>>>> upstream/master
       }
     );
   },
@@ -27,29 +23,15 @@ const VotingSection = React.createClass({
 
     this.state.votesCast++;
     if (this.state.votesCast === this.props.data.length) {
-<<<<<<< HEAD
-      const body = document.querySelector('body');
-      React.render(<VotingResult data={this.props.data} />, body);
-=======
       this.setState({
         state: 'results',
       });
       this.forceUpdate();
->>>>>>> upstream/master
     } else {
       this.setState({currentIdea: this.props.data[this.state.votesCast].content});
     }
   },
   render: function() {
-<<<<<<< HEAD
-    return (
-      <div>
-        <VoteElement idea={this.state.currentIdea} />
-        <VoteButton data="true" changeState={this.handleStateChange} />
-        <VoteButton data="false" changeState={this.handleStateChange} />
-      </div>
-    );
-=======
     switch (this.state.state) {
     case 'vote':
       return (
@@ -65,8 +47,11 @@ const VotingSection = React.createClass({
           <VotingResult data={this.props.data} />
         </div>
       );
+    default:
+      return (
+        <div> Fix the warning </div>
+      );
     }
->>>>>>> upstream/master
   },
 });
 

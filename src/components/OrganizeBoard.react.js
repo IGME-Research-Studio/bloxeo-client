@@ -2,21 +2,10 @@ const React = require('react');
 const IdeaCard = require('../components/IdeaCard.react');
 
 const OrganizeBoard = React.createClass({
-<<<<<<< HEAD
 
   /**
    * @return {object}
    */
-  render: function () {
-    return (
-      <div>
-        {this.props.ideas.map( function (item) {
-          return <IdeaCard idea={item} />;
-        })}
-      </div>
-    );
-  }
-=======
   // set state to the first element of the array
   getInitialState: function() {
     return (
@@ -42,7 +31,6 @@ const OrganizeBoard = React.createClass({
       </div>
     );
   },
->>>>>>> upstream/master
 });
 
 module.exports = OrganizeBoard;

@@ -1,33 +1,16 @@
 const React = require('react');
 const OrganizeBoard = require('../components/OrganizeBoard.react');
 const VotingSection = require('../components/VotingSection.react');
-<<<<<<< HEAD
-
-const StormApp = React.createClass({
-  getInitialState: function () {
-    const ideaData = [
-      { content: ['purple'], keep: true },
-      { content: ['massive'], keep: true },
-      { content: ['eye'], keep: true },
-      { content: ['guava'], keep: true},
-      { content: ['dinosaur'], keep: true },
-      { content: ['kitten'], keep: true },
-      { content: ['tattoos'], keep: true },
-      { content: ['cake'], keep: true}
-    ];
-    return {
-      ideas: ideaData
-    };
-=======
 const IdeaBox = require('../components/IdeaBox.react');
 const StateButton = require('../components/StateButton.react');
+const TimerElement = require('../components/TimerElement.react');
 
 const StormApp = React.createClass({
   getInitialState: function() {
     const ideaData = [];
 
     return {
-      currentState: 'generate',
+      currentState: 'timer',
       ideas: ideaData,
     };
   },
@@ -52,22 +35,17 @@ const StormApp = React.createClass({
       ideas: tempArr,
     });
     this.forceUpdate();
->>>>>>> upstream/master
+
   },
   /**
    * @return {object}
    */
-<<<<<<< HEAD
-  render: function () {
-    return (
-      <div>
-        <VotingSection data={this.state.ideas} />
-      </div>
-    );
-  }
-=======
   render: function() {
     switch (this.state.currentState) {
+    case 'timer':
+      return (
+         <TimerElement />
+      );
     case 'generate':
       return (
         <div>
@@ -89,9 +67,13 @@ const StormApp = React.createClass({
           <StateButton parentStateChange={this.changeState} nextState='generate'/>
         </div>
       );
+    default:
+      return (
+        <div> Blahhhh </div>
+      );
     }
   },
->>>>>>> upstream/master
+
 });
 
 module.exports = StormApp;

@@ -6,6 +6,8 @@ const Timer = React.createClass({
       {
         seconds: this.props.seconds,
         minutes: this.props.minutes,
+        // start counting down the timer
+        runTimer: setInterval(this.countDown, 1000),
       }
       );
   },
@@ -16,6 +18,8 @@ const Timer = React.createClass({
   },
   // decreases minutes and seconds
   countDown: function() {
+    // minutes and seconds added together
+    const totalTime = parseInt(this.state.seconds, 10) + parseInt(this.state.minutes, 10);
     this.state.seconds--;
     // when seconds is below 0 decrease minutes by 1
     // and reset seconds to 59
@@ -31,11 +35,13 @@ const Timer = React.createClass({
       seconds: this.state.seconds,
       minutes: this.state.minutes,
     });
-    return ( parseInt(this.state.seconds, 10) );
+    this.checkTime(totalTime);
   },
-  componentDidMount: function() {
-    // decrease every second if there is time remaining
-    setInterval(this.countDown, 1000);
+  // checks if time is up and stops the setinterval event
+  checkTime: function(time) {
+    if (time <= 1) {
+      clearInterval(this.state.runTimer);
+    }
   },
   render: function() {
     return (

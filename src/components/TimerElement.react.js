@@ -6,7 +6,7 @@ const TimerSection = React.createClass({
   render: function() {
     return (
       <div className='timerBox'>
-        <Timer minutes={5} seconds={30} />
+        <Timer minutes={2} seconds={30} />
         <TimerCheckBox />
       </div>
     );

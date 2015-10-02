@@ -1,16 +1,16 @@
 const React = require('react');
 
-const Idea = React.createClass({
+const RoomName = React.createClass({
   /**
    * @return {object}
    */
   render: function() {
     return (
-      <div className="idea">
-        {this.props.children}
+      <div>
+        <h2>Room Name</h2>
       </div>
     );
   },
 });
 
-module.exports = Idea;
+module.exports = RoomName;

@@ -1,24 +1,16 @@
 const React = require('react');
-const OrganizeBoard = require('../components/OrganizeBoard.react');
-const VotingSection = require('../components/VotingSection.react');
-const IdeaBox = require('../components/IdeaBox.react');
-const StateButton = require('../components/StateButton.react');
+const IdeaBox = require('./IdeaBox.react');
+const OrganizeBoard = require('./OrganizeBoard.react');
+const VotingSection = require('./VotingSection.react');
+const StateButton = require('./StateButton.react');
+const StormStore = require('../stores/StormStore');
 
 const StormApp = React.createClass({
   getInitialState: function() {
-    const ideaData = [];
-
     return {
       currentState: 'generate',
-      ideas: ideaData,
+      ideas: StormStore.getAllIdeas(),
     };
-  },
-  addIdeaData: function(idea) {
-    const ideas = this.state.ideas;
-    ideas.push(idea);
-    this.setState({
-      ideas: ideas,
-    });
   },
   changeState: function(nextState) {
     this.setState({
@@ -43,7 +35,7 @@ const StormApp = React.createClass({
     case 'generate':
       return (
         <div>
-          <IdeaBox data={this.state.ideas} sendParentData={this.addIdeaData}/>
+          <IdeaBox data={this.state.ideas} />
           <StateButton parentStateChange={this.changeState} nextState='organize'/>
         </div>
       );

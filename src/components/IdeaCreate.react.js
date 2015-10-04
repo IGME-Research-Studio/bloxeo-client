@@ -14,6 +14,7 @@ const IdeaCreate = React.createClass({
     }
     StormActions.ideaCreate(ideaContent);
     React.findDOMNode(this.refs.idea).value = '';
+    this.props.onIdeaSubmit();
   },
   /**
    * @return {object}

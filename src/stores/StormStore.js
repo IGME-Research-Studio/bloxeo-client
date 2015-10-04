@@ -17,10 +17,17 @@ function create(ideaContent) {
     keep: true,
   };
   _ideas.push(idea);
-  console.log(_ideas);
 }
 
 const StormStore = assign({}, EventEmitter.prototype, {
+  /**
+   * Get the entire collection of ideas
+   * @return {array}
+   */
+  getAllIdeas: function() {
+    return _ideas;
+  },
+
   emitChange: function() {
     this.emit(CHANGE_EVENT);
   },

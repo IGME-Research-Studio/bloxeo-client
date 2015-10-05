@@ -1,11 +1,8 @@
 const React = require('react');
-
-const HelloMessage = React.createClass({
-  render: function() {
-    return <div>Hello {this.props.name}</div>;
-  },
-});
+const StormApp = require('./components/StormApp.react');
 
 const body = document.querySelector('body');
 
-React.render(<HelloMessage name="Peter" />, body);
+window.onload = function() {
+  React.render(<StormApp />, body);
+};

@@ -1,30 +1,49 @@
 const React = require('react');
 const IdeaCard = require('../components/IdeaCard.react');
-// const jqueryUI = require('jquery-ui');
-// const jqueryDraggable = require('jquery-ui/draggable');
-// const jqueryDroppable = require('jquery-ui/droppable');
+const IdeaGroup = require('./IdeaGroup.react');
+const $ = require('jquery');
+const jqueryUI = require('jquery-ui');
+const jqueryDraggable = require('jquery-ui/draggable');
+const jqueryDroppable = require('jquery-ui/droppable');
 
 const Workspace = React.createClass({
   // set state to the first element of the array
   getInitialState: function() {
     return (
       {
-        ideaArray: this.props.data,
+        ideaGroupArray: this.props.data,
       }
     );
   },
-  onIdeaMerge: function(item) {
-    this.props.data.push(item);
+  componentDidMount: function(){
+    $(".droppable").droppable({
+      hoverClass: ".drop-zone",
+      drop: this._drop
+    });
+  },
+  _drop: function(event, ui) {
+    var group = {text: ui.draggable[0].innerHTML, x:event.clientX, y:event.clientY};
+    console.log(group);
+
+    const data = this.props.data;
+    data.push(group);
     this.forceUpdate();
+
+    const groups = this.props.data.map( function(groups) {
+      return (
+        <IdeaGroup>{groups.content}</IdeaGroup>
+      );
+    });
   },
   /**
    * @return {object}
    */
   render: function() {
-    const mergeFunction = this.onIdeaMerge;
     return (
-      <div className>
-        
+      <div className="droppable workspace">
+        {this.props.data.map( function(group, i) {
+          return <p>Text: {group.text} X: {group.x} Y: {group.y}</p>;
+        })}
       </div>
     );
   },

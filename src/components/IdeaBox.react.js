@@ -8,6 +8,10 @@ const IdeaBox = React.createClass({
       data: this.props.data,
     };
   },
+  /**
+   * Push idea into data array
+   * @param {object} idea
+   */
   handleCommentSubmit: function(idea) {
     const data = this.state.data;
     data.push(idea);
@@ -17,7 +21,9 @@ const IdeaBox = React.createClass({
     });
     this.forceUpdate();
   },
-
+  /**
+   * @return {object}
+   */
   render: function() {
     return (
       <div>

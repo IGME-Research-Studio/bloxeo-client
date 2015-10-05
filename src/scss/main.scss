@@ -7,15 +7,6 @@ body {
   background-color: #fff;
 }
 
-.drag {
-  width: 200px;
-  height: 200px;
-  text-align: center;
-  color: white;
-  font-size: 40px;
-  background-color: red;
-}
-
 .votingSection {
   width: 380px;
   background-color: #FDE3A7;
@@ -65,16 +56,18 @@ body {
   height: 500px;
   width: 500px;
 }
-.draggable {
-  height: 100px !important;
-  width: 100px !important;
-  transition-property: width, height;
-  transition-duration: 0.3s;
-  transition-timing-function: ease-in-out;
+.bankCard {
+  text-align: center;
+  color: white;
+  font-size: 40px;
+  height: 200px !important;
+  width: 200px !important;
+  background-color: red;
 }
 
-.smallPreview {
-  width: 40px !important;
-  height: 40px !important;
+.workspaceCard {
+  height: 100px !important;
+  width: 100px !important;
+  background-color: green;
 }
 

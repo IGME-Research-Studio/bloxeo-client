@@ -51,7 +51,7 @@ const StormApp = React.createClass({
     case 'organize':
       return (
         <div>
-          <div><OrganizeBoard data={this.state.ideas}/></div>
+          <div><OrganizeBoard className="sortable" data={this.state.ideas}/></div>
           <div className="dragContainer"><Workspace data={this.state.ideas}/></div>
           <StateButton parentStateChange={this.changeState} nextState='vote'/>
         </div>

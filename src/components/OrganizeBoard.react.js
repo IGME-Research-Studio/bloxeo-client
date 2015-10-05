@@ -25,7 +25,7 @@ const OrganizeBoard = React.createClass({
     return (
       <div>
         {this.props.data.map( function(item, i) {
-          return <IdeaCard key={i} idea={item} owner={this} ideaID={i} parentIdeaMerge={mergeFunction}/>;
+          return <IdeaCard key={i} idea={item} ideas={[item]} owner={this} ideaID={i} parentIdeaMerge={mergeFunction}/>;
         })}
       </div>
     );

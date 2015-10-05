@@ -1,10 +1,11 @@
 const React = require('react');
 const IdeaCard = require('../components/IdeaCard.react');
-// const jqueryUI = require('jquery-ui');
-// const jqueryDraggable = require('jquery-ui/draggable');
-// const jqueryDroppable = require('jquery-ui/droppable');
+const $ = require('jquery');
+const jqueryUI = require('jquery-ui');
+const jqueryDraggable = require('jquery-ui/draggable');
+const jqueryDroppable = require('jquery-ui/droppable');
 
-const OrganizeBoard = React.createClass({
+const Wordbank = React.createClass({
   // set state to the first element of the array
   getInitialState: function() {
     return (
@@ -13,9 +14,18 @@ const OrganizeBoard = React.createClass({
       }
     );
   },
+  componentDidMount: function(){
+    $(".drag").droppable({
+      hoverClass: ".drop-zone",
+      drop: this._drop
+    });
+  },
   onIdeaMerge: function(item) {
     this.props.data.push(item);
     this.forceUpdate();
+  },
+  _drop: function(event, ui) {
+    console.log("boop");
   },
   /**
    * @return {object}
@@ -32,4 +42,4 @@ const OrganizeBoard = React.createClass({
   },
 });
 
-module.exports = OrganizeBoard;
+module.exports = Wordbank;

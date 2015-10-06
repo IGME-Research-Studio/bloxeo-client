@@ -5,6 +5,23 @@ const assign = require('object-assign');
 
 const CHANGE_EVENT = 'change';
 
+// total time set in the timer
+const _timer = {
+  minutes: 2,
+  seconds: 10,
+};
+// decreases the timer by 1 every second
+const decrease = function() {
+  _timer.seconds --;
+  if (_timer.seconds <= -1) {
+    _timer.minutes --;
+    _timer.seconds = 59;
+  }
+  // add a 0 in front of the seconds number when it drops below 10
+  if (_timer.seconds < 10) {
+    _timer.seconds = '0' + _timer.seconds;
+  }
+};
 /**
  * Create idea element
  */
@@ -30,12 +47,19 @@ const StormStore = assign({}, EventEmitter.prototype, {
   removeChangeListener: function(callback) {
     this.removeListener(CHANGE_EVENT, callback);
   },
+  getTime: function() {
+    return ( _timer );
+  },
 });
 
 AppDispatcher.register(function(action) {
   switch (action.actionType) {
   case StormConstants.IDEA_CREATE:
     create();
+    break;
+  case StormConstants.DECREASE_TIME:
+    StormStore.emit(CHANGE_EVENT);
+    decrease();
     break;
   }
 });

@@ -10,6 +10,12 @@ const StormActions = {
       actionType: StormConstants.IDEA_CREATE,
     });
   },
+  decrease: function(time) {
+    AppDispatcher.dispatch({
+      actionType: StormConstants.DECREASE_TIME,
+      time: time,
+    });
+  },
 };
 
 module.exports = StormActions;

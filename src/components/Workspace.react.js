@@ -22,13 +22,15 @@ const Workspace = React.createClass({
     });
   },
   _drop: function(event, ui) {
-    console.log(event);
+    var dropX = event.clientX - $(".dragContainer").offset().left;
+    var dropY = event.clientY - $(".dragContainer").offset().top;
     if($(ui.draggable).hasClass("bankCard")) {
-      var group = {text: ui.draggable[0].innerHTML, x:event.pageX, y:event.pageY - 400};
+      var group = {text: ui.draggable[0].innerHTML, x:dropX, y:dropY};
 
       const data = this.props.data;
       const groups = this.props.groups;
       data.push(group);
+      console.log(group);
       groups.push(group);
       this.forceUpdate();
     }
@@ -44,17 +46,24 @@ const Workspace = React.createClass({
   _onDrop: function(event, ui) {
     React.children.map(this.props.children, this._duplicateCard);
   },
+  onIdeaGroupDrop: function (ideas) {
+
+  },
   /**
    * @return {object}
    */
   render: function() {
-    console.log(this.props);
-    console.log("group: " + this.props.groups[0]);
     return (
       <div className="droppable workspace">
         {this.props.groups.map( function(group, i) {
-          return <IdeaGroup key={i} x={group.x} y={group.y} text={group.text} ideas={[group]} owner={this} ideaID={i}/>
-        })}
+          return <IdeaGroup 
+          key={i} 
+          x={group.x} 
+          y={group.y} 
+          text={group.text} 
+          ideas={[group]} 
+          owner={this} ideaID={i}/>
+        }.bind(this))}
       </div>
     );
   },

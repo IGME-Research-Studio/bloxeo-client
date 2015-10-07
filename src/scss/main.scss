@@ -57,17 +57,25 @@ body {
   width: 500px;
 }
 .bankCard {
-  text-align: center;
   color: white;
-  font-size: 40px;
-  height: 200px !important;
-  width: 200px !important;
+  font-size: 30px;
+  padding: 10px;
   background-color: red;
+  display: inline-block;
+  margin: 5px;
 }
 
 .workspaceCard {
-  height: 100px !important;
-  width: 100px !important;
+  color:white;
+  font-size:30px;
   background-color: green;
+  position:relative;
+  display:inline-block;
+  margin: 10px;
+}
+.ideaGroup {
+  background-color: yellow;
+  display:inline-block;
+  //padding:10px;
 }
 

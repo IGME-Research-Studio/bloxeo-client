@@ -21,6 +21,14 @@ const TimerSection = React.createClass({
       clearInterval(this.state.startTimer);
     }
   },
+  // stops or starts the timer if the checkbox is used
+  pauseTime: function(checked) {
+    if (checked) {
+      clearInterval(this.state.startTimer);
+    }else {
+      this.state.startTimer = setInterval(this.countDownTime, 1000);
+    }
+  },
   countDownTime: function() {
     // call function to decrase the time stored in StormStore
     StormActions.decrease(this.state.time.seconds);
@@ -44,7 +52,7 @@ const TimerSection = React.createClass({
     return (
       <div className='timerBox'>
         <Timer minutes={this.state.time.minutes} seconds={this.state.time.seconds} />
-        <TimerCheckBox />
+        <TimerCheckBox pause={this.pauseTime} />
       </div>
     );
   },

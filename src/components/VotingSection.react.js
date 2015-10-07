@@ -2,10 +2,16 @@ const React = require('react');
 const VotingResult = require('../components/VotingResult.react');
 const VoteButton = require('../components/VoteButton.react');
 const VoteElement = require('../components/VoteElement.react');
+const Modal = require('boron/FadeModal');
 
-// page for displaying ideas and voting on them
+/**
+ * Component for displaying and voting on ideas
+ */
 const VotingSection = React.createClass({
-  // set state to the first element of the array
+  /**
+   * Set state to the first element of the array
+   * @return {object} - initial state object
+   */
   getInitialState: function() {
     return (
       {
@@ -15,7 +21,22 @@ const VotingSection = React.createClass({
       }
     );
   },
-  // changes state on button click
+  /**
+   * Show voting modal
+   */
+  showModal: function() {
+    this.refs.modal.show();
+  },
+  /**
+   * Hide voting modal
+   */
+  hideModal: function() {
+    this.refs.modal.hide();
+  },
+  /**
+   * Change state on button click
+   * @param {boolean} keep - whether or not to keep the idea
+   */
   handleStateChange: function(keep) {
     if (!keep) {
       this.props.data[this.state.votesCast].keep = false;
@@ -23,10 +44,7 @@ const VotingSection = React.createClass({
 
     this.state.votesCast++;
     if (this.state.votesCast === this.props.data.length) {
-      this.setState({
-        state: 'results',
-      });
-      this.forceUpdate();
+      this.hideModal();
     } else {
       this.setState({currentIdea: this.props.data[this.state.votesCast].content});
     }
@@ -35,10 +53,15 @@ const VotingSection = React.createClass({
     switch (this.state.state) {
     case 'vote':
       return (
-        <div className="votingSection">
-          <VoteElement idea={this.state.currentIdea} />
-          <VoteButton data='true' changeState={this.handleStateChange} />
-          <VoteButton data='false' changeState={this.handleStateChange} />
+        <div>
+          <a className="button" onClick={this.showModal}>Vote</a>
+          <Modal ref="modal">
+            <div className="votingSection">
+              <VoteElement idea={this.state.currentIdea} />
+              <VoteButton data='true' changeState={this.handleStateChange} />
+              <VoteButton data='false' changeState={this.handleStateChange} />
+            </div>
+          </Modal>
         </div>
       );
     case 'results':

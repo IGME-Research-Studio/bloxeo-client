@@ -47,10 +47,6 @@ const VotingSection = React.createClass({
           <VotingResult data={this.props.data} />
         </div>
       );
-    default:
-      return (
-        <div> Fix the warning </div>
-      );
     }
   },
 });

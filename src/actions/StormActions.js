@@ -10,10 +10,9 @@ const StormActions = {
       actionType: StormConstants.IDEA_CREATE,
     });
   },
-  decrease: function(time) {
+  decrease: function() {
     AppDispatcher.dispatch({
       actionType: StormConstants.DECREASE_TIME,
-      time: time,
     });
   },
 };

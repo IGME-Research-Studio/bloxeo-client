@@ -67,10 +67,6 @@ const StormApp = React.createClass({
           <StateButton parentStateChange={this.changeState} nextState='generate'/>
         </div>
       );
-    default:
-      return (
-        <div> Blahhhh </div>
-      );
     }
   },
 

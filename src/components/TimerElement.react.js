@@ -29,9 +29,9 @@ const TimerSection = React.createClass({
       this.state.startTimer = setInterval(this.countDownTime, 1000);
     }
   },
+  // reduces the time by 1 every second
   countDownTime: function() {
-    // call function to decrase the time stored in StormStore
-    StormActions.decrease(this.state.time.seconds);
+    StormActions.decrease();
     const timeRemaining = parseInt(this.state.time.minutes * 60 + this.state.time.seconds, 10);
     this.checkTime(timeRemaining);
   },

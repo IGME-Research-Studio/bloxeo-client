@@ -5,7 +5,7 @@ const assign = require('object-assign');
 
 const CHANGE_EVENT = 'change';
 
-// total time set in the timer
+// total time in the timer
 const _timer = {
   minutes: 2,
   seconds: 10,

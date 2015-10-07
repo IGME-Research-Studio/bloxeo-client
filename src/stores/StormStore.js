@@ -22,14 +22,29 @@ const decrease = function() {
     _timer.seconds = '0' + _timer.seconds;
   }
 };
+
+const _ideas = [];
 /**
- * Create idea element
+ * Create idea element and push to ideas array
+ * @param {string} ideaContent
  */
-function create() {
-  // Push an idea to array
+function create(ideaContent) {
+  const idea = {
+    content: ideaContent,
+    keep: true,
+  };
+  _ideas.push(idea);
 }
 
 const StormStore = assign({}, EventEmitter.prototype, {
+  /**
+   * Get the entire collection of ideas
+   * @return {array}
+   */
+  getAllIdeas: function() {
+    return _ideas;
+  },
+
   emitChange: function() {
     this.emit(CHANGE_EVENT);
   },
@@ -55,7 +70,7 @@ const StormStore = assign({}, EventEmitter.prototype, {
 AppDispatcher.register(function(action) {
   switch (action.actionType) {
   case StormConstants.IDEA_CREATE:
-    create();
+    create(action.ideaContent.trim());
     break;
   case StormConstants.DECREASE_TIME:
     StormStore.emit(CHANGE_EVENT);

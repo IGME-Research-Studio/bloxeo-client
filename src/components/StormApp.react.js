@@ -1,4 +1,4 @@
-
+const React = require('react');
 const IdeaBox = require('./IdeaBox.react');
 const TimerElement = require('../components/TimerElement.react');
 const OrganizeBoard = require('./OrganizeBoard.react');
@@ -9,7 +9,7 @@ const StormStore = require('../stores/StormStore');
 const StormApp = React.createClass({
   getInitialState: function() {
     return {
-      currentState: 'generate',
+      currentState: 'timer',
       ideas: StormStore.getAllIdeas(),
     };
   },

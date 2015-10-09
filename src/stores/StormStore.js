@@ -6,6 +6,7 @@ const assign = require('object-assign');
 const CHANGE_EVENT = 'change';
 
 const _ideas = [];
+const _members = [1, 2];
 
 /**
  * Create idea element and push to ideas array
@@ -26,6 +27,13 @@ const StormStore = assign({}, EventEmitter.prototype, {
    */
   getAllIdeas: function() {
     return _ideas;
+  },
+  /**
+   * Get the entire collection of room members
+   * @return {array}
+   */
+  getAllMembers: function() {
+    return _members;
   },
 
   emitChange: function() {

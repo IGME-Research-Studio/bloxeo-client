@@ -30,7 +30,6 @@ const Workspace = React.createClass({
       const data = this.props.data;
       const groups = this.props.groups;
       data.push(group);
-      console.log(group);
       groups.push(group);
       this.forceUpdate();
     }
@@ -45,9 +44,6 @@ const Workspace = React.createClass({
 
   _onDrop: function(event, ui) {
     React.children.map(this.props.children, this._duplicateCard);
-  },
-  onIdeaGroupDrop: function (ideas) {
-
   },
   /**
    * @return {object}

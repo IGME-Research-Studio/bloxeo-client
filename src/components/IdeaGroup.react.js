@@ -39,40 +39,26 @@ const IdeaGroup = React.createClass({
 
     $(React.findDOMNode(this.refs.ideaGroup)).droppable({
       hoverClass: ".drop-zone",
-      drop: this._onDrop,
-      over: this._over
+      drop: this._onDrop
     });
-  },
-  _drag:function() {
-    console.log("dragging");
   },
   _style: function() {
     return {
       transform: `translate(${this.props.x}px,${this.props.y}px)`,
     };
   },
-  _over: function() {
-    console.log("hovering over idea group");
-  },
+
   _onDrop: function(event, ui) {
-    console.log("dropped, should add to idea group");
-    console.log($(event.target));
-    /*console.log($(ui.draggable));*/
     var ideaToAdd = $(ui.draggable).context.textContent;
-    console.log(this);
     var tempIdeas = this.state.ideas;
     tempIdeas.push({text: ideaToAdd});
     this.setState({ 
       ideas: tempIdeas
     });
-    console.log("this.state.ideas: in drop")
-    console.log(this.state.ideas);
   },
 
   render: function() {
     const groupString = this.props.text;
-    console.log("this.state.ideas:in render")
-    console.log(this.state.ideas);
 
     return (
       <div className="ideaGroup drop-zone" ref="ideaGroup">

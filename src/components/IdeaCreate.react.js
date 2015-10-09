@@ -1,18 +1,27 @@
 const React = require('react');
+const StormActions = require('../actions/StormActions');
 
 const IdeaCreate = React.createClass({
-  handleSubmit: function(e) {
+  /**
+   * Handle submit and clear input box
+   * @param {event} e
+   */
+  _onSubmit: function(e) {
     e.preventDefault();
-    const idea = React.findDOMNode(this.refs.idea).value;
-    if (!idea) {
+    const ideaContent = React.findDOMNode(this.refs.idea).value;
+    if (!ideaContent) {
       return;
     }
-    this.props.onIdeaSubmit({content: [idea.trim()], keep: true});
+    StormActions.ideaCreate(ideaContent);
     React.findDOMNode(this.refs.idea).value = '';
+    this.props.onIdeaSubmit();
   },
+  /**
+   * @return {object}
+   */
   render: function() {
     return (
-      <form className="ideaCreate" onSubmit={this.handleSubmit}>
+      <form className="ideaCreate" onSubmit={this._onSubmit}>
         <input type="text" placeholder="Create Idea" ref="idea" />
         <input type="submit" value="Create" />
       </form>

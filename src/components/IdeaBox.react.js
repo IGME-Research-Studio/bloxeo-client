@@ -3,29 +3,23 @@ const IdeaList = require('./IdeaList.react');
 const IdeaCreate = require('./IdeaCreate.react');
 
 const IdeaBox = React.createClass({
-  getInitialState: function() {
-    return {
-      data: this.props.data,
-    };
-  },
-  handleCommentSubmit: function(idea) {
-    const data = this.state.data;
-    data.push(idea);
-    this.props.sendParentData(data);
-    this.setState({
-      data: data,
-    });
+  /**
+   * Update view after creating new idea element
+   */
+  handleUpdate: function() {
     this.forceUpdate();
   },
-
+  /**
+   * @return {object}
+   */
   render: function() {
     return (
       <div>
         <div id="left">
-          <IdeaList data={this.state.data}/>
+          <IdeaList data={this.props.data}/>
         </div>
         <div id="right">
-          <IdeaCreate onIdeaSubmit={this.handleCommentSubmit} />
+          <IdeaCreate onIdeaSubmit={this.handleUpdate} />
         </div>
       </div>
     );

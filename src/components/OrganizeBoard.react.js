@@ -2,6 +2,10 @@ const React = require('react');
 const IdeaCard = require('../components/IdeaCard.react');
 
 const OrganizeBoard = React.createClass({
+
+  /**
+   * @return {object}
+   */
   // set state to the first element of the array
   getInitialState: function() {
     return (

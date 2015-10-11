@@ -24,6 +24,8 @@ const decrease = function() {
 };
 
 const _ideas = [];
+const _members = [1, 2];
+
 /**
  * Create idea element and push to ideas array
  * @param {string} ideaContent
@@ -43,6 +45,13 @@ const StormStore = assign({}, EventEmitter.prototype, {
    */
   getAllIdeas: function() {
     return _ideas;
+  },
+  /**
+   * Get the entire collection of room members
+   * @return {array}
+   */
+  getAllMembers: function() {
+    return _members;
   },
 
   emitChange: function() {

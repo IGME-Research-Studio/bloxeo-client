@@ -1,0 +1,15 @@
+## Dependencies
+
+## Database setup
+
+## Test commands
+test:
+  pre:
+    - npm run lint
+
+## Deployment commands
+deployment:
+  master:
+    branch: master
+    heroku:
+      appname: the-storm

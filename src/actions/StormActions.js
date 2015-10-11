@@ -12,6 +12,11 @@ const StormActions = {
       ideaContent: ideaContent,
     });
   },
+  decrease: function() {
+    AppDispatcher.dispatch({
+      actionType: StormConstants.DECREASE_TIME,
+    });
+  },
 };
 
 module.exports = StormActions;

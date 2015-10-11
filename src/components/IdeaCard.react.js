@@ -1,21 +1,27 @@
 const React = require('react');
+// const ReactPropTypes = React.PropTypes;
+// const ClassNames = require('classnames');
 const interact = require('interact.js');
 
 const IdeaCard = React.createClass({
+
 
   getInitialState: function() {
     return {
       x: 0,
       y: 0,
+
     };
   },
   /** Enables interact functionality after component is mounted
    *
    */
+
   componentDidMount: function() {
     // Add draggable functionality to component
     interact(this.getDOMNode()).draggable({
       onmove: this._onMove,
+
     });
     // Add draggable functionality to component
     interact(this.getDOMNode()).dropzone({
@@ -23,7 +29,10 @@ const IdeaCard = React.createClass({
       accept: '.drag',
       // Require a 75% element overlap for a drop to be possible
       overlap: 0.55,
+
+
       ondrop: this._onDrop,
+
     });
   },
   /**
@@ -70,6 +79,8 @@ const IdeaCard = React.createClass({
           {ideaString}
       </div>
     );
+
+
   },
 });
 

@@ -1,5 +1,6 @@
 const React = require('react');
 const IdeaBox = require('./IdeaBox.react');
+const TimerElement = require('../components/TimerElement.react');
 const OrganizeBoard = require('./OrganizeBoard.react');
 const VotingSection = require('./VotingSection.react');
 const StateButton = require('./StateButton.react');
@@ -9,7 +10,7 @@ const MembersList = require('./MembersList.react');
 const StormApp = React.createClass({
   getInitialState: function() {
     return {
-      currentState: 'generate',
+      currentState: 'timer',
       ideas: StormStore.getAllIdeas(),
       members: StormStore.getAllMembers(),
     };
@@ -28,12 +29,17 @@ const StormApp = React.createClass({
       ideas: tempArr,
     });
     this.forceUpdate();
+
   },
   /**
    * @return {object}
    */
   render: function() {
     switch (this.state.currentState) {
+    case 'timer':
+      return (
+         <TimerElement />
+      );
     case 'generate':
       return (
         <div>
@@ -58,6 +64,7 @@ const StormApp = React.createClass({
       );
     }
   },
+
 });
 
 module.exports = StormApp;

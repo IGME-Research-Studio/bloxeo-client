@@ -6,6 +6,8 @@ const assign = require('object-assign');
 const CHANGE_EVENT = 'change';
 
 const _ideas = [];
+const _ideaGroups = [];
+var lastMovedIdea = {};
 
 /**
  * Create idea element and push to ideas array
@@ -18,6 +20,30 @@ function create(ideaContent) {
   };
   _ideas.push(idea);
 }
+function storeMovedIdea(idea) {
+    lastMovedIdea = idea;
+}
+
+function createIdeaGroup(workspace) {
+  _ideaGroups.push(lastMovedIdea.state.idea);
+  workspace.setState({
+    ideaGroups: _ideaGroups
+  });
+}
+
+function groupIdeas(ideaGroup) {
+
+  if(lastMovedIdea.state.ideas.length > 1) {
+    return;
+  }
+
+  var updatedGroup = ideaGroup.state.ideas;
+  updatedGroup.push(lastMovedIdea.state.ideas[0]);
+
+  ideaGroup.setState({
+    ideas: updatedGroup
+  });
+}
 
 const StormStore = assign({}, EventEmitter.prototype, {
   /**
@@ -27,10 +53,14 @@ const StormStore = assign({}, EventEmitter.prototype, {
   getAllIdeas: function() {
     return _ideas;
   },
+  getAllGroups: function() {
+    return _ideaGroups;
+  },
 
   emitChange: function() {
     this.emit(CHANGE_EVENT);
   },
+  
   /**
    * Add a change listener
    * @param {function} callback - event callback function
@@ -51,6 +81,15 @@ AppDispatcher.register(function(action) {
   switch (action.actionType) {
   case StormConstants.IDEA_CREATE:
     create(action.ideaContent.trim());
+    break;
+  case StormConstants.IDEA_GROUP_CREATE:
+    createIdeaGroup(action.workspace);
+    break;
+  case StormConstants.STORE_MOVED_IDEA:
+    storeMovedIdea(action.idea);
+    break;
+  case StormConstants.GROUP_IDEAS:
+    groupIdeas(action.ideaGroup);
     break;
   }
 });

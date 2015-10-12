@@ -24,9 +24,6 @@ const Wordbank = React.createClass({
     this.props.data.push(item);
     this.forceUpdate();
   },
-  _drop: function(event, ui) {
-    console.log("boop");
-  },
   /**
    * @return {object}
    */

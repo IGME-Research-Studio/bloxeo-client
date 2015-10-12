@@ -1,6 +1,5 @@
 const React = require('react');
 const IdeaBox = require('./IdeaBox.react');
-const OrganizeBoard = require('./OrganizeBoard.react');
 const VotingSection = require('./VotingSection.react');
 const StateButton = require('./StateButton.react');
 const StormStore = require('../stores/StormStore');
@@ -9,12 +8,10 @@ const Workspace = require('../components/Workspace.react');
 
 const StormApp = React.createClass({
   getInitialState: function() {
-    const ideaData = [];
-    const ideaGroups = [];
     return {
       currentState: 'generate',
       ideas: StormStore.getAllIdeas(),
-      groups: ideaGroups
+      groups: StormStore.getAllGroups()
     };
   },
   changeState: function(nextState) {

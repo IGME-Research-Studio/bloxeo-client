@@ -19,6 +19,13 @@ const StormActions = {
       workspace: workspace,
     });
   },
+  storeWorkspace: function(workspace) {
+    console.log("in actions");
+    AppDispatcher.dispatch({
+      actionType: StormConstants.STORE_WORKSPACE,
+      workspace: workspace
+    });
+  },
   storeGroupedIdea: function(idea) {
     AppDispatcher.dispatch({
       actionType: StormConstants.STORE_MOVED_IDEA,

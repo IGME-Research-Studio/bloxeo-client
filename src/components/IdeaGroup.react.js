@@ -12,6 +12,7 @@ const IdeaGroup = React.createClass({
       x: 0,
       y: 0,
       ideas: this.props.ideas,
+      ideaID: this.props.ideaID
     };
   },
 

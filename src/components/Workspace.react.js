@@ -21,6 +21,8 @@ const Workspace = React.createClass({
       drop: this._drop,
     });
     this.state.ideaGroups = this.props.ideaGroups;
+
+    StormActions.storeWorkspace(this);
   },
   _drop: function(event, ui) {
     if (!$(ui.draggable).hasClass('bankCard')) {
@@ -34,6 +36,8 @@ const Workspace = React.createClass({
    * @return {object}
    */
   render: function() {
+    console.log("ideaGroups left on render");
+    console.log(this.state.ideaGroups);
     return (
       <div className="droppable workspace">
         {this.props.groups.map( function(group, i) {
@@ -43,7 +47,8 @@ const Workspace = React.createClass({
           y={group.y}
           text={group.text}
           ideas={[group]}
-          owner={this} ideaID={i}/>;
+          owner={this} 
+          ideaID={i}/>;
         }.bind(this))}
       </div>
     );

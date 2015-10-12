@@ -5,9 +5,29 @@ const assign = require('object-assign');
 
 const CHANGE_EVENT = 'change';
 
+// total time in the timer
+const _timer = {
+  minutes: 2,
+  seconds: 10,
+};
+
+// decreases the timer by 1 every second
+const decrease = function() {
+  _timer.seconds --;
+  if (_timer.seconds <= -1) {
+    _timer.minutes --;
+    _timer.seconds = 59;
+  }
+  // add a 0 in front of the seconds number when it drops below 10
+  if (_timer.seconds < 10) {
+    _timer.seconds = '0' + _timer.seconds;
+  }
+};
+
 const _ideas = [];
 const _ideaGroups = [];
-var lastMovedIdea = {};
+let lastMovedIdea = {};
+const _members = [1, 2];
 
 /**
  * Create idea element and push to ideas array
@@ -21,27 +41,27 @@ function create(ideaContent) {
   _ideas.push(idea);
 }
 function storeMovedIdea(idea) {
-    lastMovedIdea = idea;
+  lastMovedIdea = idea;
 }
 
 function createIdeaGroup(workspace) {
   _ideaGroups.push(lastMovedIdea.state.idea);
   workspace.setState({
-    ideaGroups: _ideaGroups
+    ideaGroups: _ideaGroups,
   });
 }
 
 function groupIdeas(ideaGroup) {
+  let updatedGroup = ideaGroup.state.ideas;
 
-  if(lastMovedIdea.state.ideas.length > 1) {
+  if (lastMovedIdea.state.ideas.length > 1) {
     return;
   }
 
-  var updatedGroup = ideaGroup.state.ideas;
   updatedGroup.push(lastMovedIdea.state.ideas[0]);
 
   ideaGroup.setState({
-    ideas: updatedGroup
+    ideas: updatedGroup,
   });
 }
 
@@ -56,11 +76,18 @@ const StormStore = assign({}, EventEmitter.prototype, {
   getAllGroups: function() {
     return _ideaGroups;
   },
+  /**
+   * Get the entire collection of room members
+   * @return {array}
+   */
+  getAllMembers: function() {
+    return _members;
+  },
 
   emitChange: function() {
     this.emit(CHANGE_EVENT);
   },
-  
+
   /**
    * Add a change listener
    * @param {function} callback - event callback function
@@ -74,6 +101,9 @@ const StormStore = assign({}, EventEmitter.prototype, {
    */
   removeChangeListener: function(callback) {
     this.removeListener(CHANGE_EVENT, callback);
+  },
+  getTime: function() {
+    return ( _timer );
   },
 });
 
@@ -90,6 +120,10 @@ AppDispatcher.register(function(action) {
     break;
   case StormConstants.GROUP_IDEAS:
     groupIdeas(action.ideaGroup);
+    break;
+  case StormConstants.DECREASE_TIME:
+    StormStore.emit(CHANGE_EVENT);
+    decrease();
     break;
   }
 });

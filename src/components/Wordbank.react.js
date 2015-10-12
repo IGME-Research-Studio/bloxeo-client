@@ -14,10 +14,10 @@ const Wordbank = React.createClass({
       }
     );
   },
-  componentDidMount: function(){
-    $(".drag").droppable({
-      hoverClass: ".drop-zone",
-      drop: this._drop
+  componentDidMount: function() {
+    $('.drag').droppable({
+      hoverClass: '.drop-zone',
+      drop: this._drop,
     });
   },
   onIdeaMerge: function(item) {

@@ -79,3 +79,38 @@ body {
   //padding:10px;
 }
 
+.timerBox { 
+  background-color: cyan;
+  display: inline-block;
+  
+}
+
+.checkbox {
+  display: inline-block;
+}
+.timer {
+  display: inline-block;
+}
+
+.circleMemberIcon {
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  line-height: 20px;
+  margin-left: 10px;
+  color: white;
+  background-color: black;
+  border-radius: 50%; 
+  display: inline-block;
+}
+
+.membersList{
+  margin-bottom: 1.5em;
+}
+
+.sideBar {
+  width: 20%;
+  background-color: red;
+  float: left;
+  margin-right: 1.5em;
+}

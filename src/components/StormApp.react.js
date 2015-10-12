@@ -5,13 +5,15 @@ const StateButton = require('./StateButton.react');
 const StormStore = require('../stores/StormStore');
 const Wordbank = require('../components/Wordbank.react');
 const Workspace = require('../components/Workspace.react');
+const TimerElement = require('../components/TimerElement.react');
+const Sidebar = require('./Sidebar.react');
 
 const StormApp = React.createClass({
   getInitialState: function() {
     return {
       currentState: 'generate',
       ideas: StormStore.getAllIdeas(),
-      groups: StormStore.getAllGroups()
+      groups: StormStore.getAllGroups(),
     };
   },
   changeState: function(nextState) {
@@ -28,15 +30,21 @@ const StormApp = React.createClass({
       ideas: tempArr,
     });
     this.forceUpdate();
+
   },
   /**
    * @return {object}
    */
   render: function() {
     switch (this.state.currentState) {
+    case 'timer':
+      return (
+         <TimerElement />
+      );
     case 'generate':
       return (
         <div>
+          <Sidebar />
           <IdeaBox data={this.state.ideas} />
           <StateButton parentStateChange={this.changeState} nextState='organize'/>
         </div>
@@ -58,6 +66,7 @@ const StormApp = React.createClass({
       );
     }
   },
+
 });
 
 module.exports = StormApp;

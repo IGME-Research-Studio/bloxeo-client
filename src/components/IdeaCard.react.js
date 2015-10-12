@@ -4,25 +4,25 @@ const jqueryUI = require('jquery-ui');
 const jqueryDraggable = require('jquery-ui/draggable');
 const jqueryDroppable = require('jquery-ui/droppable');
 const StormActions = require('../actions/StormActions');
-const IdeaCard = React.createClass({
 
-  
+const IdeaCard = React.createClass({
   getInitialState: function() {
     return {
       x: 0,
       y: 0,
-      idea: this.props.ideas
+      idea: this.props.ideas,
     };
   },
   /** Enables interact functionality after component is mounted
    *
    */
+
   componentDidMount: function() {
     // Add ghosting functionality to bank cards on drag
     $(React.findDOMNode(this.refs.ideaCard)).draggable({
-      opacity: 0.7, 
-      helper: "clone", 
-      drag: this._onDrag
+      opacity: 0.7,
+      helper: 'clone',
+      drag: this._onDrag,
     });
   },
   /**
@@ -36,9 +36,9 @@ const IdeaCard = React.createClass({
   /**
    * @param event: event obj
    */
-   _onDrag: function() {
+  _onDrag: function() {
     StormActions.storeGroupedIdea(this);
-   },
+  },
 
   render: function() {
     const idea = this.props.idea;
@@ -49,6 +49,8 @@ const IdeaCard = React.createClass({
         {ideaString}
       </div>
     );
+
+
   },
 });
 

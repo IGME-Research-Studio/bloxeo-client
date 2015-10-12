@@ -8,10 +8,10 @@ const IdeaGroup = React.createClass({
 
   getInitialState: function() {
     return {
-      text: "butts",
+      text: 'butts',
       x: 0,
-      y: 0, 
-      ideas: this.props.ideas
+      y: 0,
+      ideas: this.props.ideas,
     };
   },
 
@@ -19,16 +19,16 @@ const IdeaGroup = React.createClass({
     // Add draggable functionality to workspace cards
     $(React.findDOMNode(this.refs.ideaGroup)).draggable({
       snap: false,
-      disabled: false, //will make not draggable
-      containment: ".dragContainer",
-      stack: ".draggable",
-      cursor: "move",
-      drag: this._onDrag
+      disabled: false, // will make not draggable
+      containment: '.dragContainer',
+      stack: '.draggable',
+      cursor: 'move',
+      drag: this._onDrag,
     });
 
     $(React.findDOMNode(this.refs.ideaGroup)).droppable({
-      hoverClass: ".drop-zone",
-      drop: this._onDrop
+      hoverClass: '.drop-zone',
+      drop: this._onDrop,
     });
   },
   _style: function() {
@@ -40,14 +40,14 @@ const IdeaGroup = React.createClass({
     StormActions.storeGroupedIdea(this);
   },
 
-  _onDrop: function(event, ui) {
+  _onDrop: function() {
     StormActions.groupIdea(this);
   },
 
   render: function() {
     return (
       <div className="ideaGroup drop-zone" ref="ideaGroup">
-        {this.state.ideas.map( function(idea, i) {
+        {this.state.ideas.map( function(idea) {
           return (
           <div className="workspaceCard draggable">
             {idea}

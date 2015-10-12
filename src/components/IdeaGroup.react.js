@@ -1,8 +1,8 @@
+require('jquery-ui');
+require('jquery-ui/draggable');
+require('jquery-ui/droppable');
 const React = require('react');
 const $ = require('jquery');
-const jqueryUI = require('jquery-ui');
-const jqueryDraggable = require('jquery-ui/draggable');
-const jqueryDroppable = require('jquery-ui/droppable');
 const StormActions = require('../actions/StormActions');
 const IdeaGroup = React.createClass({
 

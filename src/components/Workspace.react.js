@@ -1,9 +1,9 @@
+require('jquery-ui');
+require('jquery-ui/draggable');
+require('jquery-ui/droppable');
 const React = require('react');
 const IdeaGroup = require('./IdeaGroup.react');
 const $ = require('jquery');
-const jqueryUI = require('jquery-ui');
-const jqueryDraggable = require('jquery-ui/draggable');
-const jqueryDroppable = require('jquery-ui/droppable');
 const StormActions = require('../actions/StormActions');
 
 const Workspace = React.createClass({
@@ -23,9 +23,6 @@ const Workspace = React.createClass({
     this.state.ideaGroups = this.props.ideaGroups;
   },
   _drop: function(event, ui) {
-    let dropX = event.clientX - $('.dragContainer').offset().left;
-    let dropY = event.clientY - $('.dragContainer').offset().top;
-
     if (!$(ui.draggable).hasClass('bankCard')) {
       return;
     }

@@ -52,7 +52,7 @@ function createIdeaGroup(workspace) {
 }
 
 function groupIdeas(ideaGroup) {
-  let updatedGroup = ideaGroup.state.ideas;
+  const updatedGroup = ideaGroup.state.ideas;
 
   if (lastMovedIdea.state.ideas.length > 1) {
     return;

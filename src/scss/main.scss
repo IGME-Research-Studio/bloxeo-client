@@ -68,15 +68,15 @@ body {
 
 .timerBox { 
   background-color: cyan;
-  position: absolute;
+  display: inline-block;
   
 }
 
 .checkbox {
-  float: left;
+  display: inline-block;
 }
 .timer {
-  float: left;
+  display: inline-block;
 }
 
 .circleMemberIcon {
@@ -84,9 +84,20 @@ body {
   height: 50px;
   text-align: center;
   line-height: 20px;
-  float: left;
   margin-left: 10px;
   color: white;
   background-color: black;
   border-radius: 50%; 
+  display: inline-block;
+}
+
+.membersList{
+  margin-bottom: 1.5em;
+}
+
+.sideBar {
+  width: 20%;
+  background-color: red;
+  float: left;
+  margin-right: 1.5em;
 }

@@ -52,14 +52,7 @@ const StormApp = React.createClass({
       return (
         <div>
           <OrganizeBoard data={this.state.ideas} />
-          <StateButton parentStateChange={this.changeState} nextState='vote' />
-        </div>
-      );
-    case 'vote':
-      return (
-        <div>
-          <VotingSection data={this.state.ideas} />
-          <StateButton parentStateChange={this.changeState} nextState='generate' />
+          <VotingSection />
         </div>
       );
     }

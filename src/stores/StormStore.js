@@ -5,7 +5,7 @@ const assign = require('object-assign');
 
 const CHANGE_EVENT = 'change';
 
-const _roomName = 'Room Name';
+let _roomName = 'Room Name';
 const _members = [1, 2];
 const _ideas = [];
 // total time in the timer
@@ -81,6 +81,9 @@ const StormStore = assign({}, EventEmitter.prototype, {
 
 AppDispatcher.register(function(action) {
   switch (action.actionType) {
+  case StormConstants.CHANGE_ROOM_NAME:
+    _roomName = action.roomName.trim();
+    break;
   case StormConstants.IDEA_CREATE:
     create(action.ideaContent.trim());
     break;

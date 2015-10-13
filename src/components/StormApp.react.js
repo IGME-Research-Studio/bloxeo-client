@@ -53,7 +53,7 @@ const StormApp = React.createClass({
       return (
         <div>
           <div><Wordbank data={this.state.ideas}/></div>
-          <div className="dragContainer"><Workspace data={this.state.ideas} groups={this.state.groups}/></div>
+          <div className="dragContainer"><Workspace groups={this.state.groups}/></div>
           <StateButton parentStateChange={this.changeState} nextState='vote'/>
         </div>
       );

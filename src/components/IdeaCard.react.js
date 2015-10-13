@@ -10,7 +10,7 @@ const IdeaCard = React.createClass({
     return {
       x: 0,
       y: 0,
-      idea: this.props.ideas,
+      idea: this.props.idea,
     };
   },
   /** Enables interact functionality after component is mounted
@@ -48,8 +48,6 @@ const IdeaCard = React.createClass({
         {ideaString}
       </div>
     );
-
-
   },
 });
 

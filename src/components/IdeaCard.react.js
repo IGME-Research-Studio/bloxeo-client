@@ -37,7 +37,7 @@ const IdeaCard = React.createClass({
    * @param event: event obj
    */
   _onDrag: function() {
-    StormActions.storeGroupedIdea(this);
+    StormActions.storeMovedIdea(this);
   },
 
   render: function() {

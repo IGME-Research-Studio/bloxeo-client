@@ -20,8 +20,8 @@ const Workspace = React.createClass({
       hoverClass: '.drop-zone',
       drop: this._drop,
     });
-    this.state.ideaGroups = this.props.ideaGroups;
 
+    this.state.ideaGroups = this.props.ideaGroups;
     StormActions.storeWorkspace(this);
   },
   _drop: function(event, ui) {
@@ -29,27 +29,24 @@ const Workspace = React.createClass({
       return;
     }
 
-    StormActions.ideaGroupCreate(this);
+    StormActions.ideaGroupCreate();
   },
 
   /**
    * @return {object}
    */
   render: function() {
-    console.log("ideaGroups left on render");
-    console.log(this.state.ideaGroups);
     return (
       <div className="droppable workspace">
         {this.state.ideaGroups.map( function(group, i) {
           return <IdeaGroup
-          key={i}
           x={group.x}
           y={group.y}
           text={group.text}
-          ideas={[group]}
-          owner={this} 
+          ideas={group}
+          owner={this}
           ideaID={i}/>;
-        }.bind(this))}
+        })}
       </div>
     );
   },

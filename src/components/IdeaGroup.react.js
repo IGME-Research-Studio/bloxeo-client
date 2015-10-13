@@ -12,7 +12,7 @@ const IdeaGroup = React.createClass({
       x: 0,
       y: 0,
       ideas: this.props.ideas,
-      ideaID: this.props.ideaID
+      ideaID: this.props.ideaID,
     };
   },
 
@@ -38,7 +38,7 @@ const IdeaGroup = React.createClass({
     };
   },
   _onDrag: function() {
-    StormActions.storeGroupedIdea(this);
+    StormActions.storeMovedIdea(this);
   },
 
   _onDrop: function() {
@@ -46,6 +46,7 @@ const IdeaGroup = React.createClass({
   },
 
   render: function() {
+    this.state.ideas = this.props.ideas;
     return (
       <div className="ideaGroup drop-zone" ref="ideaGroup">
         {this.state.ideas.map( function(idea) {

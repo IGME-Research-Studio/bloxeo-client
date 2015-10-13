@@ -1,50 +1,111 @@
+const Modal = require('boron/FadeModal');
 const React = require('react');
-const VotingResult = require('../components/VotingResult.react');
+const StormActions = require('../actions/StormActions');
+const StormStore = require('../stores/StormStore');
 const VoteButton = require('../components/VoteButton.react');
 const VoteElement = require('../components/VoteElement.react');
+const VotingResult = require('../components/VotingResult.react');
 
-// page for displaying ideas and voting on them
+/**
+ * Component for displaying and voting on ideas
+ */
 const VotingSection = React.createClass({
-  // set state to the first element of the array
+  /**
+   * Set state to the first element of the array
+   * @return {object} - initial state object
+   */
   getInitialState: function() {
     return (
       {
-        currentIdea: this.props.data[0].content,
-        votesCast: 0,
+        ideas: StormStore.getIdeaGroups(),
+        voteIndex: 0,
         state: 'vote',
+        hideIds: [],
       }
     );
   },
-  // changes state on button click
-  handleStateChange: function(keep) {
-    if (!keep) {
-      this.props.data[this.state.votesCast].keep = false;
+  /**
+   * Invoked before initial render occurs
+   */
+  componentDidMount: function() {
+    StormStore.addChangeListener(this._onChange);
+  },
+  /**
+   * Invoked before component is unmounted from DOM
+   */
+  componentWillUnmount: function() {
+    StormStore.removeChangeListener(this._onChange);
+  },
+  /**
+   * Event handler for change events from StormStore
+   */
+  _onChange: function() {
+    this.setState({ideas: StormStore.getIdeaGroups()});
+  },
+  /**
+   * @return {object} - the current idea to display
+   */
+  getCurrentIdea: function() {
+    if (this.state.ideas.length === 0) {
+      return null;
     }
-
-    this.state.votesCast++;
-    if (this.state.votesCast === this.props.data.length) {
-      this.setState({
-        state: 'results',
-      });
-      this.forceUpdate();
-    } else {
-      this.setState({currentIdea: this.props.data[this.state.votesCast].content});
+    return this.state.ideas[this.state.voteIndex];
+  },
+  /**
+   * Show voting modal
+   */
+  showModal: function() {
+    if (this.getCurrentIdea()) {
+      this.refs.modal.show();
     }
   },
+  /**
+   * Hide voting modal
+   */
+  hideModal: function() {
+    this.refs.modal.hide();
+    StormActions.hideIdeas(this.state.hideIds);
+    this.state.hideIds = [];
+  },
+  /**
+   * Change state on button click
+   * @param {boolean} keep - whether or not to keep the idea
+   */
+  handleStateChange: function(keep) {
+    if (!keep) {
+      this.state.hideIds.push(this.state.voteIndex);
+    }
+
+    if (this.state.voteIndex === this.state.ideas.length - 1) {
+      this.hideModal();
+      this.setState({voteIndex: 0});
+    } else {
+      this.setState({voteIndex: this.state.voteIndex + 1});
+    }
+  },
+  /**
+   * Render component
+   * @return {object}
+   */
   render: function() {
     switch (this.state.state) {
     case 'vote':
       return (
-        <div className="votingSection">
-          <VoteElement idea={this.state.currentIdea} />
-          <VoteButton data='true' changeState={this.handleStateChange} />
-          <VoteButton data='false' changeState={this.handleStateChange} />
+        <div>
+          <a className="button" onClick={this.showModal}>Vote</a>
+          <Modal ref="modal">
+            <div className="votingSection">
+              <VoteElement idea={this.getCurrentIdea()} />
+              <VoteButton data='true' changeState={this.handleStateChange} />
+              <VoteButton data='false' changeState={this.handleStateChange} />
+            </div>
+          </Modal>
         </div>
       );
     case 'results':
       return (
         <div>
-          <VotingResult data={this.props.data} />
+          <VotingResult />
         </div>
       );
     }

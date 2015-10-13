@@ -4,6 +4,7 @@ const EventEmitter = require('events').EventEmitter;
 const assign = require('object-assign');
 
 const CHANGE_EVENT = 'change';
+const GROUP_CHANGE_EVENT = 'group';
 
 // total time in the timer
 const _timer = {
@@ -107,6 +108,9 @@ const StormStore = assign({}, EventEmitter.prototype, {
     this.emit(CHANGE_EVENT);
   },
 
+  emitGroupChange: function() {
+    this.emit(GROUP_CHANGE_EVENT);
+  },
   /**
    * Add a change listener
    * @param {function} callback - event callback function
@@ -121,6 +125,15 @@ const StormStore = assign({}, EventEmitter.prototype, {
   removeChangeListener: function(callback) {
     this.removeListener(CHANGE_EVENT, callback);
   },
+
+  addGroupListener: function(callback) {
+    this.on(GROUP_CHANGE_EVENT, callback);
+  },
+
+  removeGroupListener: function(callback) {
+    this.removeListener(GROUP_CHANGE_EVENT, callback);
+  },
+
   getTime: function() {
     return ( _timer );
   },

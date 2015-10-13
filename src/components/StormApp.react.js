@@ -37,28 +37,16 @@ const StormApp = React.createClass({
    * @return {object}
    */
   render: function() {
-    switch (this.state.currentState) {
-    case 'timer':
-      return (
-         <TimerElement />
-      );
-    case 'generate':
-      return (
-        <div>
-          <Sidebar roomName={this.state.roomName} />
-          <IdeaBox data={this.state.ideas} />
-          <StateButton parentStateChange={this.changeState} nextState='organize' />
-        </div>
-      );
-    case 'organize':
-      return (
-        <div>
-          <div><Wordbank data={this.state.ideas}/></div>
-          <div className="dragContainer"><Workspace groups={this.state.groups}/></div>
-          <VotingSection />
-        </div>
-      );
-    }
+    return (
+      <div>
+        <TimerElement />
+        <Sidebar roomName={this.state.roomName} />
+        <IdeaBox data={this.state.ideas} />
+        <div><Wordbank data={this.state.ideas}/></div>
+        <div className="dragContainer"><Workspace groups={this.state.groups}/></div>
+        <VotingSection />
+      </div>
+    );
   },
 
 });

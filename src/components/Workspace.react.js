@@ -36,8 +36,6 @@ const Workspace = React.createClass({
     this.setState({
       ideaGroups: StormStore.getAllGroups(),
     });
-    console.log("ideaGroups here");
-    console.log(this.state.ideaGroups);
   },
 
   /**

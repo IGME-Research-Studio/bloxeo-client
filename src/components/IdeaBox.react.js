@@ -15,9 +15,6 @@ const IdeaBox = React.createClass({
   render: function() {
     return (
       <div>
-        <div id="left">
-          <IdeaList data={this.props.data}/>
-        </div>
         <div id="right">
           <IdeaCreate onIdeaSubmit={this.handleUpdate} />
         </div>

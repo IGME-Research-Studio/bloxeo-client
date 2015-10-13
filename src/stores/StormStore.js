@@ -157,6 +157,7 @@ AppDispatcher.register(function(action) {
     break;
   case StormConstants.IDEA_CREATE:
     create(action.ideaContent.trim());
+    StormStore.emit(GROUP_CHANGE_EVENT);
     break;
   case StormConstants.IDEA_GROUP_CREATE:
     createIdeaGroup();

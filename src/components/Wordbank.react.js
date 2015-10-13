@@ -3,6 +3,7 @@ require('jquery-ui/draggable');
 require('jquery-ui/droppable');
 const React = require('react');
 const IdeaCard = require('../components/IdeaCard.react');
+const StormStore = require('../stores/StormStore');
 
 const Wordbank = React.createClass({
   // set state to the first element of the array
@@ -12,6 +13,14 @@ const Wordbank = React.createClass({
         ideaArray: this.props.data,
       }
     );
+  },
+  componentDidMount: function() {
+    StormStore.addGroupListener(this.ideaAdd);
+  },
+  ideaAdd: function() {
+    this.setState({
+      ideaArray: StormStore.getAllIdeas(),
+    });
   },
   /**
    * @return {object}

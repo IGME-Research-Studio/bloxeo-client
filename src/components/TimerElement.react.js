@@ -17,21 +17,24 @@ const TimerSection = React.createClass({
   },
   // checks if there is any time remaining and stops the setinterval event
   checkTime: function(time) {
-    if (time < 0) {
+    if (time <= 0) {
       clearInterval(this.state.startTimer);
+      StormActions.pauseTimer(true);
     }
   },
   // stops or starts the timer if the checkbox is used
   pauseTime: function(checked) {
     if (checked) {
       clearInterval(this.state.startTimer);
+      StormActions.pauseTimer(true);
     }else {
       this.state.startTimer = setInterval(this.countDownTime, 1000);
+      StormActions.pauseTimer(false);
     }
   },
   // reduces the time by 1 every second
   countDownTime: function() {
-    StormActions.decrease();
+    StormActions.countdown();
     const timeRemaining = parseInt(this.state.time.minutes * 60 + this.state.time.seconds, 10);
     this.checkTime(timeRemaining);
   },

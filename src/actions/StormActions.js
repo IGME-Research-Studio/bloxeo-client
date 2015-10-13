@@ -22,9 +22,22 @@ const StormActions = {
       ideaContent: ideaContent,
     });
   },
-  decrease: function() {
+  /**
+   * Dispatch timer countdown event
+   */
+  countdown: function() {
     AppDispatcher.dispatch({
-      actionType: StormConstants.DECREASE_TIME,
+      actionType: StormConstants.TIMER_COUNTDOWN,
+    });
+  },
+  /**
+   * Dispatch pause timer event
+   * @param {boolean} pause
+   */
+  pauseTimer: function(isPaused) {
+    AppDispatcher.dispatch({
+      actionType: StormConstants.TIMER_PAUSE,
+      isPaused: isPaused,
     });
   },
   /**

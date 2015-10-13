@@ -13,19 +13,8 @@ const _timer = {
   minutes: 2,
   seconds: 10,
 };
-// decreases the timer by 1 every second
-const decrease = function() {
-  _timer.seconds --;
-  if (_timer.seconds <= -1) {
-    _timer.minutes --;
-    _timer.seconds = 59;
-  }
-  // add a 0 in front of the seconds number when it drops below 10
-  if (_timer.seconds < 10) {
-    _timer.seconds = '0' + _timer.seconds;
-  }
-};
-
+// if timer is paused
+let _timerStatus = false;
 let _ideaGroups = [
   {content: ['hello', 'world'], keep: true},
   {content: ['red', 'panda', 'blog'], keep: true},
@@ -43,7 +32,20 @@ function create(ideaContent) {
   };
   _ideas.push(idea);
 }
-
+/**
+ * Timer countdown by 1 every second
+ */
+function countdown() {
+  _timer.seconds --;
+  if (_timer.seconds <= -1) {
+    _timer.minutes --;
+    _timer.seconds = 59;
+  }
+  // add a 0 in front of the seconds number when it drops below 10
+  if (_timer.seconds < 10) {
+    _timer.seconds = '0' + _timer.seconds;
+  }
+}
 /**
  * Hide ideas with the given ids
  * @param {string[]} ids - an array of ids to remove
@@ -80,11 +82,23 @@ const StormStore = assign({}, EventEmitter.prototype, {
   getAllMembers: function() {
     return _members;
   },
+  /**
+   * @return {string}
+   */
   getRoomName: function() {
     return _roomName;
   },
+  /**
+   * @return {object}
+   */
   getTime: function() {
-    return ( _timer );
+    return _timer;
+  },
+  /**
+   * @return {boolean}
+   */
+  getTimerStatus: function() {
+    return _timerStatus;
   },
 
   emitChange: function() {
@@ -110,16 +124,20 @@ AppDispatcher.register(function(action) {
   switch (action.actionType) {
   case StormConstants.CHANGE_ROOM_NAME:
     _roomName = action.roomName.trim();
+    StormStore.emitChange();
     break;
   case StormConstants.IDEA_CREATE:
     create(action.ideaContent.trim());
+    StormStore.emitChange();
     break;
-
-  case StormConstants.DECREASE_TIME:
-    StormStore.emit(CHANGE_EVENT);
-    decrease();
+  case StormConstants.TIMER_COUNTDOWN:
+    countdown();
+    StormStore.emitChange();
     break;
-
+  case StormConstants.TIMER_PAUSE:
+    _timerStatus = action.isPaused;
+    StormStore.emitChange();
+    break;
   case StormConstants.HIDE_IDEAS:
     _hideIdeas(action.ids);
     break;

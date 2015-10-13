@@ -11,6 +11,7 @@ const StormApp = React.createClass({
   getInitialState: function() {
     return {
       currentState: 'generate',
+      roomName: StormStore.getRoomName(),
       ideas: StormStore.getAllIdeas(),
     };
   },
@@ -42,9 +43,9 @@ const StormApp = React.createClass({
     case 'generate':
       return (
         <div>
-          <Sidebar />
+          <Sidebar roomName={this.state.roomName} />
           <IdeaBox data={this.state.ideas} />
-          <StateButton parentStateChange={this.changeState} nextState='organize'/>
+          <StateButton parentStateChange={this.changeState} nextState='organize' />
         </div>
       );
     case 'organize':

@@ -5,6 +5,9 @@ const assign = require('object-assign');
 
 const CHANGE_EVENT = 'change';
 
+let _roomName = 'Room Name';
+const _members = [1, 2];
+const _ideas = [];
 // total time in the timer
 const _timer = {
   minutes: 2,
@@ -23,8 +26,6 @@ const decrease = function() {
   }
 };
 
-const _ideas = [];
-const _members = [1, 2];
 let _ideaGroups = [
   {content: ['hello', 'world'], keep: true},
   {content: ['red', 'panda', 'blog'], keep: true},
@@ -79,6 +80,12 @@ const StormStore = assign({}, EventEmitter.prototype, {
   getAllMembers: function() {
     return _members;
   },
+  getRoomName: function() {
+    return _roomName;
+  },
+  getTime: function() {
+    return ( _timer );
+  },
 
   emitChange: function() {
     this.emit(CHANGE_EVENT);
@@ -97,13 +104,13 @@ const StormStore = assign({}, EventEmitter.prototype, {
   removeChangeListener: function(callback) {
     this.removeListener(CHANGE_EVENT, callback);
   },
-  getTime: function() {
-    return ( _timer );
-  },
 });
 
 AppDispatcher.register(function(action) {
   switch (action.actionType) {
+  case StormConstants.CHANGE_ROOM_NAME:
+    _roomName = action.roomName.trim();
+    break;
   case StormConstants.IDEA_CREATE:
     create(action.ideaContent.trim());
     break;

@@ -6,6 +6,9 @@ const assign = require('object-assign');
 const CHANGE_EVENT = 'change';
 const GROUP_CHANGE_EVENT = 'group';
 
+let _roomName = 'Room Name';
+const _members = [1, 2];
+const _ideas = [];
 // total time in the timer
 const _timer = {
   minutes: 2,
@@ -51,7 +54,7 @@ function storeMovedIdea(idea) {
 */
 function createIdeaGroup() {
   const content = [lastMovedIdea.state.idea.content[0]];
-  //_ideaGroups.push([{content}]);
+  // _ideaGroups.push([{content}]);
   _ideaGroups.push({content});
   // _ideaGroups.push([lastMovedIdea.state.idea]);
 }
@@ -70,6 +73,20 @@ function groupIdeas(ideaGroup) {
   console.log(_ideaGroups);
 }
 
+/**
+ * Hide ideas with the given ids
+ * @param {string[]} ids - an array of ids to remove
+ */
+function _hideIdeas(ids) {
+  for (let i = 0; i < ids.length; i++) {
+    _ideaGroups[ids[i]].keep = false;
+  }
+
+  _ideaGroups = _ideaGroups.filter(function(group) {
+    return group.keep ? true : false;
+  });
+}
+
 const StormStore = assign({}, EventEmitter.prototype, {
   /**
    * Get the entire collection of ideas
@@ -82,11 +99,24 @@ const StormStore = assign({}, EventEmitter.prototype, {
     return _ideaGroups;
   },
   /**
+   * Get an array of all ideaGroups
+   * @return {array}
+   */
+  getIdeaGroups: function() {
+    return _ideaGroups;
+  },
+  /**
    * Get the entire collection of room members
    * @return {array}
    */
   getAllMembers: function() {
     return _members;
+  },
+  getRoomName: function() {
+    return _roomName;
+  },
+  getTime: function() {
+    return ( _timer );
   },
 
   emitChange: function() {
@@ -110,6 +140,7 @@ const StormStore = assign({}, EventEmitter.prototype, {
   removeChangeListener: function(callback) {
     this.removeListener(CHANGE_EVENT, callback);
   },
+<<<<<<< HEAD
 
   addGroupListener: function(callback) {
     this.on(GROUP_CHANGE_EVENT, callback);
@@ -122,13 +153,19 @@ const StormStore = assign({}, EventEmitter.prototype, {
   getTime: function() {
     return ( _timer );
   },
+=======
+>>>>>>> 4996a9917ae0dcf0071d7bb0964c2148c9d995f5
 });
 
 AppDispatcher.register(function(action) {
   switch (action.actionType) {
+  case StormConstants.CHANGE_ROOM_NAME:
+    _roomName = action.roomName.trim();
+    break;
   case StormConstants.IDEA_CREATE:
     create(action.ideaContent.trim());
     break;
+<<<<<<< HEAD
   case StormConstants.IDEA_GROUP_CREATE:
     createIdeaGroup();
     StormStore.emit(GROUP_CHANGE_EVENT);
@@ -140,9 +177,16 @@ AppDispatcher.register(function(action) {
     groupIdeas(action.ideaGroup);
     StormStore.emit(GROUP_CHANGE_EVENT);
     break;
+=======
+
+>>>>>>> 4996a9917ae0dcf0071d7bb0964c2148c9d995f5
   case StormConstants.DECREASE_TIME:
     StormStore.emit(CHANGE_EVENT);
     decrease();
+    break;
+
+  case StormConstants.HIDE_IDEAS:
+    _hideIdeas(action.ids);
     break;
   }
 });

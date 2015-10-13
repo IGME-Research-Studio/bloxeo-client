@@ -1,11 +1,6 @@
 const React = require('react');
-const IdeaBox = require('./IdeaBox.react');
-const VotingSection = require('./VotingSection.react');
-const StateButton = require('./StateButton.react');
 const StormStore = require('../stores/StormStore');
-const Wordbank = require('../components/Wordbank.react');
 const Workspace = require('../components/Workspace.react');
-const TimerElement = require('../components/TimerElement.react');
 const Sidebar = require('./Sidebar.react');
 
 const StormApp = React.createClass({
@@ -38,13 +33,11 @@ const StormApp = React.createClass({
    */
   render: function() {
     return (
-      <div>
-        <TimerElement />
+      <div className="appContainer">
         <Sidebar roomName={this.state.roomName} />
-        <IdeaBox data={this.state.ideas} />
-        <div><Wordbank data={this.state.ideas}/></div>
-        <div className="dragContainer"><Workspace groups={this.state.groups}/></div>
-        <VotingSection />
+        <div className="dragContainer">
+          <Workspace groups={this.state.groups}/>
+        </div>
       </div>
     );
   },

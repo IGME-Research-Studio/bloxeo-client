@@ -5,6 +5,7 @@ const React = require('react');
 const IdeaGroup = require('./IdeaGroup.react');
 const $ = require('jquery');
 const StormActions = require('../actions/StormActions');
+const StormStore = require('../stores/StormStore');
 
 const Workspace = React.createClass({
   // set state to the first element of the array
@@ -20,16 +21,25 @@ const Workspace = React.createClass({
       hoverClass: '.drop-zone',
       drop: this._drop,
     });
-
-    this.state.ideaGroups = this.props.ideaGroups;
+    this.setState({
+      ideaGroups: this.props.ideaGroups,
+    });
     StormActions.storeWorkspace(this);
+    StormStore.addGroupListener(this.groupChange);
   },
+
   _drop: function(event, ui) {
     if (!$(ui.draggable).hasClass('bankCard')) {
       return;
     }
 
     StormActions.ideaGroupCreate();
+  },
+
+  groupChange: function() {
+    this.setState({
+      ideaGroups: StormStore.getAllGroups(),
+    });
   },
 
   /**

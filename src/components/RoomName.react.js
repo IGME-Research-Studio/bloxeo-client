@@ -7,7 +7,7 @@ const RoomName = React.createClass({
   render: function() {
     return (
       <div>
-        <h2>Room Name</h2>
+        <h2>{this.props.room}</h2>
       </div>
     );
   },

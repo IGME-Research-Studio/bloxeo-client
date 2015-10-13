@@ -4,6 +4,8 @@ require('jquery-ui/droppable');
 const React = require('react');
 const $ = require('jquery');
 const StormActions = require('../actions/StormActions');
+// const StormStore = require('../stores/StormStore');
+
 const IdeaGroup = React.createClass({
 
   getInitialState: function() {
@@ -46,7 +48,6 @@ const IdeaGroup = React.createClass({
   },
 
   render: function() {
-    this.state.ideas = this.props.ideas;
     return (
       <div className="ideaGroup drop-zone" ref="ideaGroup">
         {this.state.ideas.map( function(idea) {

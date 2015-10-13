@@ -29,7 +29,6 @@ const _ideas = [];
 const _ideaGroups = [];
 let lastMovedIdea = {};
 const _members = [1, 2];
-let workspace = {};
 /**
  * Create idea element and push to ideas array
  * @param {string} ideaContent
@@ -48,41 +47,24 @@ function storeMovedIdea(idea) {
   lastMovedIdea = idea;
 }
 /**
-* Store the workspace in order to update ideaGroup array later
-*/
-function storeWorkspace(work) {
-  workspace = work;
-}
-/**
 * Create an idea group when an idea is dragged from the idea bank onto the workspace
 */
 function createIdeaGroup() {
   _ideaGroups.push(lastMovedIdea.state.idea);
-  workspace.setState({
-    ideaGroups: _ideaGroups,
-  });
 }
 /**
 * Group two ideas when one idea is dragged onto another
 * Remove the ideaGroup that was combined with a second ideaGroup
 */
 function groupIdeas(ideaGroup) {
-  const updatedGroup = ideaGroup.state.ideas;
+  const id = ideaGroup.state.ideaID;
 
   if (lastMovedIdea.state.ideas.length > 1) {
     return;
   }
 
-  updatedGroup.push(lastMovedIdea.state.ideas[0]);
+  _ideaGroups[id].push(lastMovedIdea.state.ideas[0]);
   _ideaGroups.splice(lastMovedIdea.state.ideaID, 1);
-
-  ideaGroup.setState({
-    ideas: updatedGroup,
-  });
-
-  workspace.setState({
-    ideaGroups: _ideaGroups,
-  });
 }
 
 const StormStore = assign({}, EventEmitter.prototype, {
@@ -146,15 +128,14 @@ AppDispatcher.register(function(action) {
     break;
   case StormConstants.IDEA_GROUP_CREATE:
     createIdeaGroup();
+    StormStore.emit(GROUP_CHANGE_EVENT);
     break;
   case StormConstants.STORE_MOVED_IDEA:
     storeMovedIdea(action.idea);
     break;
-  case StormConstants.STORE_WORKSPACE:
-    storeWorkspace(action.workspace);
-    break;
   case StormConstants.GROUP_IDEAS:
     groupIdeas(action.ideaGroup);
+    StormStore.emit(GROUP_CHANGE_EVENT);
     break;
   case StormConstants.DECREASE_TIME:
     StormStore.emit(CHANGE_EVENT);

@@ -12,7 +12,7 @@ const Workspace = React.createClass({
   getInitialState: function() {
     return (
       {
-        ideaGroups: [],
+        ideaGroups: StormStore.getAllGroups(),
       }
     );
   },
@@ -21,10 +21,6 @@ const Workspace = React.createClass({
       hoverClass: '.drop-zone',
       drop: this._drop,
     });
-    this.setState({
-      ideaGroups: this.props.ideaGroups,
-    });
-    StormActions.storeWorkspace(this);
     StormStore.addGroupListener(this.groupChange);
   },
 

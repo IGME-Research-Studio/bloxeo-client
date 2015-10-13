@@ -16,7 +16,6 @@ const IdeaCard = React.createClass({
   /** Enables interact functionality after component is mounted
    *
    */
-
   componentDidMount: function() {
     // Add ghosting functionality to bank cards on drag
     $(React.findDOMNode(this.refs.ideaCard)).draggable({

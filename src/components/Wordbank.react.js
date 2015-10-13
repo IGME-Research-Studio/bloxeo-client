@@ -3,7 +3,6 @@ require('jquery-ui/draggable');
 require('jquery-ui/droppable');
 const React = require('react');
 const IdeaCard = require('../components/IdeaCard.react');
-const $ = require('jquery');
 
 const Wordbank = React.createClass({
   // set state to the first element of the array

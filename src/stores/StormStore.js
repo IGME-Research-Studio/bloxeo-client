@@ -50,8 +50,7 @@ function storeMovedIdea(idea) {
 * Create an idea group when an idea is dragged from the idea bank onto the workspace
 */
 function createIdeaGroup() {
-  console.log(lastMovedIdea.state.idea);
-  _ideaGroups.push(lastMovedIdea.state.idea);
+  _ideaGroups.push([lastMovedIdea.state.idea]);
 }
 /**
 * Group two ideas when one idea is dragged onto another
@@ -63,7 +62,6 @@ function groupIdeas(ideaGroup) {
   if (lastMovedIdea.state.ideas.length > 1) {
     return;
   }
-
   _ideaGroups[id].push(lastMovedIdea.state.ideas[0]);
   _ideaGroups.splice(lastMovedIdea.state.ideaID, 1);
 }

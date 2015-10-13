@@ -24,10 +24,8 @@ body {
 }
 
 .votingSection {
-  width: 380px;
   background-color: #FDE3A7;
   padding: 110px 30px;
-  margin: 150px auto 0;
   text-align: center;
 }
 
@@ -57,12 +55,12 @@ body {
   margin-top: 40px;
 }
 
-.voteYesButton {
+.yesButton {
   background-color: green;
   margin-right: 20px;
 }
 
-.voteNoButton {
+.noButton {
   background-color: red;
 }
 

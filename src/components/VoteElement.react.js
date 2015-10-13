@@ -4,7 +4,7 @@ const VoteElement = React.createClass({
   render: function() {
     return (
       <div className="idea">
-        {this.props.idea.toString()}
+        {this.props.idea.content.toString()}
       </div>
     );
   },

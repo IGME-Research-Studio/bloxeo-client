@@ -35,7 +35,7 @@ const _members = [1, 2];
  */
 function create(ideaContent) {
   const idea = {
-    content: ideaContent,
+    content: [ideaContent],
     keep: true,
   };
   _ideas.push(idea);
@@ -50,7 +50,10 @@ function storeMovedIdea(idea) {
 * Create an idea group when an idea is dragged from the idea bank onto the workspace
 */
 function createIdeaGroup() {
-  _ideaGroups.push([lastMovedIdea.state.idea]);
+  const content = [lastMovedIdea.state.idea.content[0]];
+  //_ideaGroups.push([{content}]);
+  _ideaGroups.push({content});
+  // _ideaGroups.push([lastMovedIdea.state.idea]);
 }
 /**
 * Group two ideas when one idea is dragged onto another
@@ -59,11 +62,12 @@ function createIdeaGroup() {
 function groupIdeas(ideaGroup) {
   const id = ideaGroup.state.ideaID;
 
-  if (lastMovedIdea.state.ideas.length > 1) {
+  if (lastMovedIdea.state.ideas.content.length > 1) {
     return;
   }
-  _ideaGroups[id].push(lastMovedIdea.state.ideas[0]);
+  _ideaGroups[id].content.push(lastMovedIdea.state.ideas.content[0]);
   _ideaGroups.splice(lastMovedIdea.state.ideaID, 1);
+  console.log(_ideaGroups);
 }
 
 const StormStore = assign({}, EventEmitter.prototype, {

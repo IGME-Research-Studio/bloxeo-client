@@ -55,9 +55,11 @@ const IdeaGroup = React.createClass({
   },
 
   render: function() {
+    console.log("this.sate.idea");
+    console.log(this.state.ideas);
     return (
       <div className="ideaGroup drop-zone" ref="ideaGroup">
-        {this.state.ideas.map( function(idea) {
+        {this.state.ideas.content.map( function(idea) {
           return (
           <div className="workspaceCard draggable">
             {idea}

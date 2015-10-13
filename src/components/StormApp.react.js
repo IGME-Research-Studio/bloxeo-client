@@ -51,7 +51,7 @@ const StormApp = React.createClass({
       return (
         <div>
           <OrganizeBoard data={this.state.ideas} />
-          <VotingSection data={this.state.ideas} />
+          <VotingSection />
         </div>
       );
     }

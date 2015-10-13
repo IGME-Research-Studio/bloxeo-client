@@ -53,9 +53,7 @@ function storeMovedIdea(idea) {
 */
 function createIdeaGroup() {
   const content = [lastMovedIdea.state.idea.content[0]];
-  // _ideaGroups.push([{content}]);
-  _ideaGroups.push({content, keep:true});
-  // _ideaGroups.push([lastMovedIdea.state.idea]);
+  _ideaGroups.push({content, keep: true});
 }
 /**
 * Group two ideas when one idea is dragged onto another
@@ -69,7 +67,6 @@ function groupIdeas(ideaGroup) {
   }
   _ideaGroups[id].content.push(lastMovedIdea.state.ideas.content[0]);
   _ideaGroups.splice(lastMovedIdea.state.ideaID, 1);
-  console.log(_ideaGroups);
 }
 
 /**
@@ -84,8 +81,6 @@ function _hideIdeas(ids) {
   _ideaGroups = _ideaGroups.filter(function(group) {
     return group.keep ? true : false;
   });
-  console.log("yes");
-  console.log(_ideaGroups);
 }
 
 const StormStore = assign({}, EventEmitter.prototype, {

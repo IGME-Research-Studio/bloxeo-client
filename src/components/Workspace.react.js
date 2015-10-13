@@ -44,7 +44,7 @@ const Workspace = React.createClass({
   render: function() {
     return (
       <div className="droppable workspace">
-        {this.state.ideaGroups.map( function(group, i) {
+        {this.state.ideaGroups.map(function(group, i) {
           return <IdeaGroup
           x={group.x}
           y={group.y}

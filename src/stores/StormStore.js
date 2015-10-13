@@ -54,7 +54,7 @@ function storeMovedIdea(idea) {
 function createIdeaGroup() {
   const content = [lastMovedIdea.state.idea.content[0]];
   // _ideaGroups.push([{content}]);
-  _ideaGroups.push({content});
+  _ideaGroups.push({content, keep:true});
   // _ideaGroups.push([lastMovedIdea.state.idea]);
 }
 /**

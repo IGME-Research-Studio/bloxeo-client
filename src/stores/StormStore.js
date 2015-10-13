@@ -7,8 +7,7 @@ const CHANGE_EVENT = 'change';
 const GROUP_CHANGE_EVENT = 'group';
 
 let _roomName = 'Room Name';
-const _members = [1, 2];
-const _ideas = [];
+
 // total time in the timer
 const _timer = {
   minutes: 2,
@@ -29,7 +28,7 @@ const decrease = function() {
 };
 
 const _ideas = [];
-const _ideaGroups = [];
+let _ideaGroups = [];
 let lastMovedIdea = {};
 const _members = [1, 2];
 /**
@@ -85,6 +84,8 @@ function _hideIdeas(ids) {
   _ideaGroups = _ideaGroups.filter(function(group) {
     return group.keep ? true : false;
   });
+  console.log("yes");
+  console.log(_ideaGroups);
 }
 
 const StormStore = assign({}, EventEmitter.prototype, {
@@ -140,8 +141,6 @@ const StormStore = assign({}, EventEmitter.prototype, {
   removeChangeListener: function(callback) {
     this.removeListener(CHANGE_EVENT, callback);
   },
-<<<<<<< HEAD
-
   addGroupListener: function(callback) {
     this.on(GROUP_CHANGE_EVENT, callback);
   },
@@ -149,12 +148,6 @@ const StormStore = assign({}, EventEmitter.prototype, {
   removeGroupListener: function(callback) {
     this.removeListener(GROUP_CHANGE_EVENT, callback);
   },
-
-  getTime: function() {
-    return ( _timer );
-  },
-=======
->>>>>>> 4996a9917ae0dcf0071d7bb0964c2148c9d995f5
 });
 
 AppDispatcher.register(function(action) {
@@ -165,7 +158,6 @@ AppDispatcher.register(function(action) {
   case StormConstants.IDEA_CREATE:
     create(action.ideaContent.trim());
     break;
-<<<<<<< HEAD
   case StormConstants.IDEA_GROUP_CREATE:
     createIdeaGroup();
     StormStore.emit(GROUP_CHANGE_EVENT);
@@ -177,16 +169,13 @@ AppDispatcher.register(function(action) {
     groupIdeas(action.ideaGroup);
     StormStore.emit(GROUP_CHANGE_EVENT);
     break;
-=======
-
->>>>>>> 4996a9917ae0dcf0071d7bb0964c2148c9d995f5
   case StormConstants.DECREASE_TIME:
     StormStore.emit(CHANGE_EVENT);
     decrease();
     break;
-
   case StormConstants.HIDE_IDEAS:
     _hideIdeas(action.ids);
+    StormStore.emit(GROUP_CHANGE_EVENT);
     break;
   }
 });

@@ -1,10 +1,11 @@
 const React = require('react');
 const IdeaBox = require('./IdeaBox.react');
+const Sidebar = require('./Sidebar.react');
 const OrganizeBoard = require('./OrganizeBoard.react');
 const VotingSection = require('./VotingSection.react');
 const StateButton = require('./StateButton.react');
 const StormStore = require('../stores/StormStore');
-const Sidebar = require('./Sidebar.react');
+const StormActions = require('../actions/StormActions');
 
 /**
  * Retrieve the current data from the StormStore
@@ -15,6 +16,7 @@ function getStormState() {
     roomName: StormStore.getRoomName(),
     ideas: StormStore.getAllIdeas(),
     timerStatus: StormStore.getTimerStatus(),
+    time: StormStore.getTime(),
   };
 }
 
@@ -24,6 +26,8 @@ const StormApp = React.createClass({
   },
   componentDidMount: function() {
     StormStore.addChangeListener(this._onChange);
+    // start timer countdown
+    StormActions.countdown();
   },
   compoentWillUnmount: function() {
     StormStore.removeChangeListener(this._onChange);
@@ -57,7 +61,7 @@ const StormApp = React.createClass({
     case 'generate':
       return (
         <div>
-          <Sidebar roomName={this.state.roomName} />
+          <Sidebar roomName={this.state.roomName} time={this.state.time} />
           <IdeaBox ideas={this.state.ideas} timerStatus={this.state.timerStatus} />
           <StateButton parentStateChange={this.changeState} nextState='organize' />
         </div>

@@ -9,10 +9,11 @@ let _roomName = 'Room Name';
 const _members = [1, 2];
 const _ideas = [];
 // total time in the timer
-const _timer = {
-  minutes: 2,
+const _time = {
+  minutes: 0,
   seconds: 10,
 };
+let _timer = null;
 // if timer is paused
 let _timerStatus = false;
 let _ideaGroups = [
@@ -20,45 +21,6 @@ let _ideaGroups = [
   {content: ['red', 'panda', 'blog'], keep: true},
   {content: ['flat', 'puzzle', 'game'], keep: true},
 ];
-
-/**
- * Create idea element and push to ideas array
- * @param {string} ideaContent
- */
-function create(ideaContent) {
-  const idea = {
-    content: ideaContent,
-    keep: true,
-  };
-  _ideas.push(idea);
-}
-/**
- * Timer countdown by 1 every second
- */
-function countdown() {
-  _timer.seconds --;
-  if (_timer.seconds <= -1) {
-    _timer.minutes --;
-    _timer.seconds = 59;
-  }
-  // add a 0 in front of the seconds number when it drops below 10
-  if (_timer.seconds < 10) {
-    _timer.seconds = '0' + _timer.seconds;
-  }
-}
-/**
- * Hide ideas with the given ids
- * @param {string[]} ids - an array of ids to remove
- */
-function _hideIdeas(ids) {
-  for (let i = 0; i < ids.length; i++) {
-    _ideaGroups[ids[i]].keep = false;
-  }
-
-  _ideaGroups = _ideaGroups.filter(function(group) {
-    return group.keep ? true : false;
-  });
-}
 
 const StormStore = assign({}, EventEmitter.prototype, {
   /**
@@ -92,7 +54,7 @@ const StormStore = assign({}, EventEmitter.prototype, {
    * @return {object}
    */
   getTime: function() {
-    return _timer;
+    return _time;
   },
   /**
    * @return {boolean}
@@ -120,6 +82,65 @@ const StormStore = assign({}, EventEmitter.prototype, {
   },
 });
 
+/**
+ * Create idea element and push to ideas array
+ * @param {string} ideaContent
+ */
+function create(ideaContent) {
+  const idea = {
+    content: ideaContent,
+    keep: true,
+  };
+  _ideas.push(idea);
+}
+/**
+ * Hide ideas with the given ids
+ * @param {string[]} ids - an array of ids to remove
+ */
+function _hideIdeas(ids) {
+  for (let i = 0; i < ids.length; i++) {
+    _ideaGroups[ids[i]].keep = false;
+  }
+  _ideaGroups = _ideaGroups.filter(function(group) {
+    return group.keep ? true : false;
+  });
+}
+/**
+ * Timer countdown by 1 every second
+ */
+function countdown() {
+  _timer = setInterval(function() {
+    if (_time.minutes <= 0 && _time.seconds <= 0) {
+      clearInterval(_timer);
+      _timerStatus = isPaused;
+    } else {
+      _time.seconds --;
+      if (_time.seconds <= -1) {
+        _time.minutes --;
+        _time.seconds = 59;
+      }
+      // add a 0 in front of the seconds number when it drops below 10
+      if (_time.seconds < 10) {
+        _time.seconds = '0' + _time.seconds;
+      }
+    }
+    StormStore.emitChange();
+  }, 1000);
+}
+/**
+ * Pause timer and set timer status
+ * @param {boolean} isPaused
+ */
+function pauseTimer(isPaused) {
+  if (isPaused) {
+    clearInterval(_timer);
+    _timerStatus = isPaused;
+  } else {
+    _timerStatus = isPaused;
+    countdown();
+  }
+}
+
 AppDispatcher.register(function(action) {
   switch (action.actionType) {
   case StormConstants.CHANGE_ROOM_NAME:
@@ -132,10 +153,9 @@ AppDispatcher.register(function(action) {
     break;
   case StormConstants.TIMER_COUNTDOWN:
     countdown();
-    StormStore.emitChange();
     break;
   case StormConstants.TIMER_PAUSE:
-    _timerStatus = action.isPaused;
+    pauseTimer(action.isPaused);
     StormStore.emitChange();
     break;
   case StormConstants.HIDE_IDEAS:

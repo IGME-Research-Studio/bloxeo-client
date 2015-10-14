@@ -1,5 +1,6 @@
 $font-stack:    Helvetica, sans-serif;
 $primary-color: #333;
+$voting-bgColor: #FDE3A7;
 
 body {
   font: 100% $font-stack;
@@ -7,16 +8,14 @@ body {
   background-color: #fff;
 }
 
-.votingSection {
-  background-color: #FDE3A7;
+.votingContent {
+  background-color: $voting-bgColor;
   padding: 110px 30px;
   text-align: center;
 }
 
 .votingResults {
-  background-color: #DCC6E0;
-  width: 400px;
-  margin: auto;
+  background-color: $voting-bgColor;
   padding: 40px;
 }
 
@@ -26,7 +25,6 @@ body {
 
 .idea {
   font-size: 30px;
-  margin-bottom: 20px;
 }
 
 .button {

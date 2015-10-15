@@ -7,22 +7,6 @@ body {
   background-color: #fff;
 }
 
-.drag {
-  width: 200px;
-  height: 200px;
-  text-align: center;
-  color: white;
-  font-size: 40px;
-}
-
-.drag1 {
-  background-color: red;
-}
-
-.drag2 {
-  background-color: blue;
-}
-
 .votingSection {
   background-color: #FDE3A7;
   padding: 110px 30px;
@@ -64,6 +48,51 @@ body {
   background-color: red;
 }
 
+.sideBar {
+  width: 300px;
+  height: 500px;
+  background-color: #999;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.dragContainer, .workspace {
+  background-color: #ddd;
+  height: 500px;
+  width: 800px;
+  display: inline-block;
+  vertical-align: middle;
+}
+.bankCard {
+  color: white;
+  font-size: 30px;
+  padding: 10px;
+  background-color: red;
+  display: inline-block;
+  margin: 5px;
+}
+
+.appContainer{
+  display: inline-block;
+  vertical-align: middle;
+  width: 100%;
+  height: 100%;
+}
+
+.workspaceCard {
+  color:white;
+  font-size:30px;
+  background-color: green;
+  position:relative;
+  display:inline-block;
+  margin: 10px;
+}
+.ideaGroup {
+  background-color: yellow;
+  display:inline-block;
+  //padding:10px;
+}
+
 .timerBox { 
   background-color: cyan;
   display: inline-block;
@@ -91,11 +120,4 @@ body {
 
 .membersList{
   margin-bottom: 1.5em;
-}
-
-.sideBar {
-  width: 20%;
-  background-color: red;
-  float: left;
-  margin-right: 1.5em;
 }

@@ -65,15 +65,21 @@ const VotingSection = React.createClass({
   hideModal: function() {
     this.refs.modal.hide();
     StormActions.hideIdeas(this.state.hideIds);
-    this.state.hideIds = [];
+    this.setState({
+      hideIds: [],
+    });
   },
   /**
    * Change state on button click
    * @param {boolean} keep - whether or not to keep the idea
    */
   handleStateChange: function(keep) {
+    const hideIds = this.state.hideIds;
     if (!keep) {
-      this.state.hideIds.push(this.state.voteIndex);
+      hideIds.push(this.state.voteIndex);
+      this.setState({
+        hideIds: hideIds,
+      });
     }
 
     if (this.state.voteIndex === this.state.ideas.length - 1) {

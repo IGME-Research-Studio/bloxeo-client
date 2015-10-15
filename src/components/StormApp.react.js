@@ -1,10 +1,6 @@
 const React = require('react');
-const IdeaBox = require('./IdeaBox.react');
-const TimerElement = require('../components/TimerElement.react');
-const OrganizeBoard = require('./OrganizeBoard.react');
-const VotingSection = require('./VotingSection.react');
-const StateButton = require('./StateButton.react');
 const StormStore = require('../stores/StormStore');
+const Workspace = require('../components/Workspace.react');
 const Sidebar = require('./Sidebar.react');
 
 const StormApp = React.createClass({
@@ -13,6 +9,7 @@ const StormApp = React.createClass({
       currentState: 'generate',
       roomName: StormStore.getRoomName(),
       ideas: StormStore.getAllIdeas(),
+      groups: StormStore.getAllGroups(),
     };
   },
   changeState: function(nextState) {
@@ -35,27 +32,14 @@ const StormApp = React.createClass({
    * @return {object}
    */
   render: function() {
-    switch (this.state.currentState) {
-    case 'timer':
-      return (
-         <TimerElement />
-      );
-    case 'generate':
-      return (
-        <div>
-          <Sidebar roomName={this.state.roomName} />
-          <IdeaBox data={this.state.ideas} />
-          <StateButton parentStateChange={this.changeState} nextState='organize' />
+    return (
+      <div className="appContainer">
+        <Sidebar roomName={this.state.roomName} />
+        <div className="dragContainer">
+          <Workspace groups={this.state.groups}/>
         </div>
-      );
-    case 'organize':
-      return (
-        <div>
-          <OrganizeBoard data={this.state.ideas} />
-          <VotingSection />
-        </div>
-      );
-    }
+      </div>
+    );
   },
 
 });

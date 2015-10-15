@@ -1,5 +1,4 @@
 const React = require('react');
-const IdeaList = require('./IdeaList.react');
 const IdeaCreate = require('./IdeaCreate.react');
 
 const IdeaBox = React.createClass({
@@ -15,9 +14,6 @@ const IdeaBox = React.createClass({
   render: function() {
     return (
       <div>
-        <div id="left">
-          <IdeaList data={this.props.data}/>
-        </div>
         <div id="right">
           <IdeaCreate onIdeaSubmit={this.handleUpdate} />
         </div>

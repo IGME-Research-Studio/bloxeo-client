@@ -1,11 +1,11 @@
 const React = require('react');
 const RoomName = require('./RoomName.react.js');
 const MembersList = require('./MembersList.react');
-const TimerElement = require('./TimerElement.react');
-const Wordbank = require('../components/Wordbank.react');
+const TimerBox = require('./TimerBox.react');
+const Wordbank = require('./Wordbank.react');
 const IdeaBox = require('./IdeaBox.react');
-const StormStore = require('../stores/StormStore');
 const VotingSection = require('./VotingSection.react');
+const StormStore = require('../stores/StormStore');
 
 const Sidebar = React.createClass({
   getInitialState: function() {
@@ -20,12 +20,12 @@ const Sidebar = React.createClass({
   render: function() {
     return (
       <div className="sideBar">
-        <RoomName room={this.state.roomName} />
+        <RoomName room={this.props.roomName} />
         <MembersList />
-        <Wordbank data={this.state.ideas}/>
-        <IdeaBox data={this.state.ideas} />
+        <Wordbank data={this.props.ideas}/>
+        <IdeaBox ideas={this.props.ideas} timerStatus={this.props.timerStatus} />
         <VotingSection />
-        <TimerElement />
+        <TimerBox time={this.props.time} />
       </div>
     );
   },

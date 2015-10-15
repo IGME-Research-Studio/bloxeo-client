@@ -7,7 +7,7 @@ const IdeaList = React.createClass({
    */
   render: function() {
     // get each idea content
-    const ideas = this.props.data.map(function(idea) {
+    const ideas = this.props.ideas.map(function(idea) {
       return (
         <Idea>{idea.content}</Idea>
       );

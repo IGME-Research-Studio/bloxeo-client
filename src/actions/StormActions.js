@@ -1,7 +1,6 @@
 const AppDispatcher = require('../dispatcher/AppDispatcher');
 const StormConstants = require('../constants/StormConstants');
 
-
 const StormActions = {
   /**
    * Dispatch change room name event
@@ -21,6 +20,24 @@ const StormActions = {
     AppDispatcher.dispatch({
       actionType: StormConstants.IDEA_CREATE,
       ideaContent: ideaContent,
+    });
+  },
+  /**
+   * Dispatch timer countdown event
+   */
+  countdown: function() {
+    AppDispatcher.dispatch({
+      actionType: StormConstants.TIMER_COUNTDOWN,
+    });
+  },
+  /**
+   * Dispatch pause timer event
+   * @param {boolean} pause
+   */
+  pauseTimer: function(isPaused) {
+    AppDispatcher.dispatch({
+      actionType: StormConstants.TIMER_PAUSE,
+      isPaused: isPaused,
     });
   },
   ideaGroupCreate: function() {
@@ -44,11 +61,6 @@ const StormActions = {
     AppDispatcher.dispatch({
       actionType: StormConstants.GROUP_IDEAS,
       ideaGroup: ideaGroup,
-    });
-  },
-  decrease: function() {
-    AppDispatcher.dispatch({
-      actionType: StormConstants.DECREASE_TIME,
     });
   },
   /**

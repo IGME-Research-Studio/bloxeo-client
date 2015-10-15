@@ -1,32 +1,39 @@
 const React = require('react');
-const StormStore = require('../stores/StormStore');
-const Workspace = require('../components/Workspace.react');
 const Sidebar = require('./Sidebar.react');
+const Workspace = require('./Workspace.react');
+const StormStore = require('../stores/StormStore');
+const StormActions = require('../actions/StormActions');
+
+/**
+ * Retrieve the current data from the StormStore
+ */
+function getStormState() {
+  return {
+    roomName: StormStore.getRoomName(),
+    ideas: StormStore.getAllIdeas(),
+    timerStatus: StormStore.getTimerStatus(),
+    time: StormStore.getTime(),
+    groups: StormStore.getAllGroups(),
+  };
+}
 
 const StormApp = React.createClass({
   getInitialState: function() {
-    return {
-      currentState: 'generate',
-      roomName: StormStore.getRoomName(),
-      ideas: StormStore.getAllIdeas(),
-      groups: StormStore.getAllGroups(),
-    };
+    return getStormState();
   },
-  changeState: function(nextState) {
-    this.setState({
-      currentState: nextState,
-    });
-    const isKeep = function(idea) {
-      return idea.keep;
-    };
-
-    let tempArr = this.state.ideas;
-    tempArr = tempArr.filter(isKeep);
-    this.setState({
-      ideas: tempArr,
-    });
-    this.forceUpdate();
-
+  componentDidMount: function() {
+    StormStore.addChangeListener(this._onChange);
+    // start timer countdown
+    StormActions.countdown();
+  },
+  compoentWillUnmount: function() {
+    StormStore.removeChangeListener(this._onChange);
+  },
+  /**
+   * Event handler for 'change' events coming from the StormStore
+   */
+  _onChange: function() {
+    this.setState(getStormState());
   },
   /**
    * @return {object}
@@ -34,7 +41,7 @@ const StormApp = React.createClass({
   render: function() {
     return (
       <div className="appContainer">
-        <Sidebar roomName={this.state.roomName} />
+        <Sidebar roomName={this.state.roomName} time={this.state.time} timerStatus={this.state.timerStatus} ideas={this.state.ideas} />
         <div className="dragContainer">
           <Workspace groups={this.state.groups}/>
         </div>

@@ -1,9 +1,6 @@
 const React = require('react');
-const IdeaBox = require('./IdeaBox.react');
 const Sidebar = require('./Sidebar.react');
-const OrganizeBoard = require('./OrganizeBoard.react');
-const VotingSection = require('./VotingSection.react');
-const StateButton = require('./StateButton.react');
+const Workspace = require('./Workspace.react');
 const StormStore = require('../stores/StormStore');
 const StormActions = require('../actions/StormActions');
 
@@ -12,11 +9,11 @@ const StormActions = require('../actions/StormActions');
  */
 function getStormState() {
   return {
-    currentState: 'generate',
     roomName: StormStore.getRoomName(),
     ideas: StormStore.getAllIdeas(),
     timerStatus: StormStore.getTimerStatus(),
     time: StormStore.getTime(),
+    groups: StormStore.getAllGroups(),
   };
 }
 
@@ -38,42 +35,18 @@ const StormApp = React.createClass({
   _onChange: function() {
     this.setState(getStormState());
   },
-  changeState: function(nextState) {
-    this.setState({
-      currentState: nextState,
-    });
-    const isKeep = function(idea) {
-      return idea.keep;
-    };
-
-    let tempArr = this.state.ideas;
-    tempArr = tempArr.filter(isKeep);
-    this.setState({
-      ideas: tempArr,
-    });
-    this.forceUpdate();
-  },
   /**
    * @return {object}
    */
   render: function() {
-    switch (this.state.currentState) {
-    case 'generate':
-      return (
-        <div>
-          <Sidebar roomName={this.state.roomName} time={this.state.time} />
-          <IdeaBox ideas={this.state.ideas} timerStatus={this.state.timerStatus} />
-          <StateButton parentStateChange={this.changeState} nextState='organize' />
+    return (
+      <div className="appContainer">
+        <Sidebar roomName={this.state.roomName} time={this.state.time} timerStatus={this.state.timerStatus} ideas={this.state.ideas} />
+        <div className="dragContainer">
+          <Workspace groups={this.state.groups}/>
         </div>
-      );
-    case 'organize':
-      return (
-        <div>
-          <OrganizeBoard data={this.state.ideas} />
-          <VotingSection />
-        </div>
-      );
-    }
+      </div>
+    );
   },
 
 });

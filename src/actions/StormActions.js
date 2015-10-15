@@ -40,6 +40,29 @@ const StormActions = {
       isPaused: isPaused,
     });
   },
+  ideaGroupCreate: function() {
+    AppDispatcher.dispatch({
+      actionType: StormConstants.IDEA_GROUP_CREATE,
+    });
+  },
+  storeWorkspace: function(workspace) {
+    AppDispatcher.dispatch({
+      actionType: StormConstants.STORE_WORKSPACE,
+      workspace: workspace,
+    });
+  },
+  storeMovedIdea: function(idea) {
+    AppDispatcher.dispatch({
+      actionType: StormConstants.STORE_MOVED_IDEA,
+      idea: idea,
+    });
+  },
+  groupIdea: function(ideaGroup) {
+    AppDispatcher.dispatch({
+      actionType: StormConstants.GROUP_IDEAS,
+      ideaGroup: ideaGroup,
+    });
+  },
   /**
    * Dispatch event to hide ideas with the given ids
    * @param {number[]} ids - array of ids to hide

@@ -9,7 +9,6 @@ const IdeaBox = React.createClass({
   render: function() {
     return (
       <div id="ideaBox">
-        <IdeaList ideas={this.props.ideas} />
         <IdeaCreate timerStatus={this.props.timerStatus} />
       </div>
     );

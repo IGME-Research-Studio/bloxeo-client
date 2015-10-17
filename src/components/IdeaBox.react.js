@@ -1,5 +1,4 @@
 const React = require('react');
-const IdeaList = require('./IdeaList.react');
 const IdeaCreate = require('./IdeaCreate.react');
 
 const IdeaBox = React.createClass({

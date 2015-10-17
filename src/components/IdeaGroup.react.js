@@ -3,7 +3,9 @@ require('jquery-ui/draggable');
 require('jquery-ui/droppable');
 const React = require('react');
 const $ = require('jquery');
+//var DragSource = require('react-dnd').DragSource;
 const StormActions = require('../actions/StormActions');
+const StormStore = require('../stores/StormStore');
 
 const IdeaGroup = React.createClass({
 
@@ -20,7 +22,7 @@ const IdeaGroup = React.createClass({
   componentDidMount: function() {
     // Add draggable functionality to workspace cards
     $(React.findDOMNode(this.refs.ideaGroup)).draggable({
-      snap: false,
+      snap: false, 
       disabled: false, // will make not draggable
       containment: '.dragContainer',
       stack: '.draggable',
@@ -32,6 +34,8 @@ const IdeaGroup = React.createClass({
       hoverClass: '.drop-zone',
       drop: this._onDrop,
     });
+
+    StormStore.addGroupListener(this.ideasChange);
   },
   _style: function() {
     return {
@@ -45,11 +49,17 @@ const IdeaGroup = React.createClass({
   _onDrop: function() {
     StormActions.groupIdea(this);
   },
+  
+  ideasChange: function() {
+    this.setState({
+      ideas: StormStore.updateIdeaGroup(this.props.ideaID),
+    });
+  },
 
   render: function() {
     return (
       <div className="ideaGroup drop-zone" ref="ideaGroup">
-        {this.props.ideas.content.map(function(idea) {
+        {this.state.ideas.content.map(function(idea) {
           return (
           <div className="workspaceCard draggable">
             {idea}

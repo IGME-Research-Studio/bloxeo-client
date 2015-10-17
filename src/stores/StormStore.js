@@ -38,6 +38,9 @@ const StormStore = assign({}, EventEmitter.prototype, {
   getIdeaGroups: function() {
     return _ideaGroups;
   },
+  updateIdeaGroup: function(id) {
+    return _ideaGroups[id];
+  },
   /**
    * Get the entire collection of room members
    * @return {array}
@@ -162,8 +165,6 @@ function storeMovedIdea(idea) {
 */
 function createIdeaGroup() {
   const content = [lastMovedIdea.state.idea.content[0]];
-
-  // _ideaGroups.push([{content}]);
   _ideaGroups.push({content, keep: true});
 }
 /**
@@ -176,6 +177,7 @@ function groupIdeas(ideaGroup) {
   if (lastMovedIdea.state.ideas.content.length > 1) {
     return;
   }
+
   _ideaGroups[id].content.push(lastMovedIdea.state.ideas.content[0]);
   _ideaGroups.splice(lastMovedIdea.state.ideaID, 1);
 }

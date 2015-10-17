@@ -90,7 +90,7 @@ AppDispatcher.register(function(action) {
     break;
   case StormConstants.TIMER_PAUSE:
     pauseTimer(action.isPaused);
-    StormStore.emitTimeChange();
+    TimerStore.emitTimeChange();
     break;
   }
 });

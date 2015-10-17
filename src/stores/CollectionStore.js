@@ -80,18 +80,18 @@ AppDispatcher.register(function(action) {
   switch (action.actionType) {
   case StormConstants.COLLECTION_CREATE:
     createCollection();
-    StormStore.emitChange();
+    CollectionStore.emitChange();
     break;
   case StormConstants.STORE_MOVED_IDEA:
     storeMovedIdea(action.idea);
     break;
   case StormConstants.GROUP_IDEAS:
     groupIdeas(action.ideaGroup);
-    StormStore.emitChange();
+    CollectionStore.emitChange();
     break;
   case StormConstants.HIDE_IDEAS:
     _hideIdeas(action.ids);
-    StormStore.emitChange();
+    CollectionStore.emitChange();
     break;
   }
 });

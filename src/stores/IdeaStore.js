@@ -1,7 +1,7 @@
-const AppDispatcher = require('../dispatcher/AppDispatcher');
+const AppDispatcher  = require('../dispatcher/AppDispatcher');
 const StormConstants = require('../constants/StormConstants');
-const EventEmitter = require('events').EventEmitter;
-const assign = require('object-assign');
+const EventEmitter   = require('events').EventEmitter;
+const assign         = require('object-assign');
 
 const IDEA_CHANGE_EVENT = 'idea';
 
@@ -55,4 +55,4 @@ AppDispatcher.register(function(action) {
   }
 });
 
-module.exports = StormStore;
+module.exports = IdeaStore;

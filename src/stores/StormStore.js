@@ -31,14 +31,11 @@ const StormStore = assign({}, EventEmitter.prototype, {
   getAllIdeas: function() {
     return _ideas;
   },
-  getAllGroups: function() {
-    return _ideaGroups;
-  },
   /**
    * Get an array of all ideaGroups
    * @return {array}
    */
-  getIdeaGroups: function() {
+  getAllGroups: function() {
     return _ideaGroups;
   },
   updateIdeaGroup: function(id) {

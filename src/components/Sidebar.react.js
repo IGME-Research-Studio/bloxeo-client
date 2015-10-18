@@ -4,7 +4,7 @@ const MembersList = require('./MembersList.react');
 const TimerBox = require('./TimerBox.react');
 const Wordbank = require('./Wordbank.react');
 const IdeaBox = require('./IdeaBox.react');
-const VotingSection = require('./VotingSection.react');
+const VotingModal = require('./VotingModal.react');
 
 const Sidebar = React.createClass({
   /**
@@ -17,7 +17,7 @@ const Sidebar = React.createClass({
         <MembersList />
         <Wordbank data={this.props.ideas}/>
         <IdeaBox ideas={this.props.ideas} timerStatus={this.props.timerStatus} />
-        <VotingSection />
+        <VotingModal />
         <TimerBox time={this.props.time} />
       </div>
     );

@@ -4,6 +4,7 @@ require('jquery-ui/droppable');
 const React = require('react');
 const $ = require('jquery');
 const StormActions = require('../actions/StormActions');
+const StormStore = require('../stores/StormStore');
 
 const IdeaGroup = React.createClass({
 
@@ -32,6 +33,8 @@ const IdeaGroup = React.createClass({
       hoverClass: '.drop-zone',
       drop: this._onDrop,
     });
+
+    StormStore.addGroupListener(this.ideasChange);
   },
   _style: function() {
     return {
@@ -46,10 +49,16 @@ const IdeaGroup = React.createClass({
     StormActions.groupIdea(this);
   },
 
+  ideasChange: function() {
+    this.setState({
+      ideas: StormStore.updateIdeaGroup(this.props.ideaID),
+    });
+  },
+
   render: function() {
     return (
       <div className="ideaGroup drop-zone" ref="ideaGroup">
-        {this.props.ideas.content.map(function(idea) {
+        {this.state.ideas.content.map(function(idea) {
           return (
           <div className="workspaceCard draggable">
             {idea}

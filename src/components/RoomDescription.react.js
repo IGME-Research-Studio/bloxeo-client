@@ -3,11 +3,11 @@ const StormActions = require('../actions/StormActions');
 
 const ENTER_KEY_CODE = 13;
 
-const RoomName = React.createClass({
+const RoomDesciption = React.createClass({
   getInitialState: function() {
     return {
-      name: this.props.name,
-      value: this.props.name,
+      description: this.props.description,
+      value: this.props.description,
       isEditing: false,
     };
   },
@@ -32,10 +32,9 @@ const RoomName = React.createClass({
    */
   _onKeyDown: function(event) {
     if (event.keyCode === ENTER_KEY_CODE) {
-      // check if room name is blank
       if (!this.state.value) {
         this.setState({
-          value: this.state.name,
+          value: this.state.description,
           isEditing: false,
         });
         return;
@@ -45,14 +44,14 @@ const RoomName = React.createClass({
     }
   },
   /**
-   * Handle save and update room name
+   * Handle save and update room description
    */
   _onSave: function() {
-    // save room name to StormStore
-    StormActions.changeRoomName(this.state.value);
-    // update room name view
+    // save room description to StormStore
+    StormActions.changeRoomDescription(this.state.value);
+    // update room description view
     this.setState({
-      name: this.state.value,
+      description: this.state.value,
       isEditing: false,
     });
   },
@@ -62,14 +61,14 @@ const RoomName = React.createClass({
   render: function() {
     if (this.state.isEditing) {
       return (
-        <input type="text" value={this.state.value} onChange={this._onChange} onKeyDown={this._onKeyDown} />
+        <textarea onChange={this._onChange} onKeyDown={this._onKeyDown}>{this.state.value}</textarea>
       );
     } else {
       return (
-        <h2 onDoubleClick={this._onDoubleClick}>{this.state.name}</h2>
+        <h6 onDoubleClick={this._onDoubleClick}>{this.state.description}</h6>
       );
     }
   },
 });
 
-module.exports = RoomName;
+module.exports = RoomDesciption;

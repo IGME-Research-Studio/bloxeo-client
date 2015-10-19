@@ -1,30 +1,67 @@
 const React = require('react');
 const StormActions = require('../actions/StormActions');
 
+const ENTER_KEY_CODE = 13;
+
 const IdeaCreate = React.createClass({
+  getInitialState: function() {
+    return {
+      value: '',
+    };
+  },
+  /**
+   * @param {object} event
+   */
+  _onChange: function(event) {
+    this.setState({
+      value: event.target.value,
+    });
+  },
+  /**
+   * @param {object} event
+   */
+  _onKeyDown: function(event) {
+    if (event.keyCode === ENTER_KEY_CODE) {
+      this._onSave();
+    }
+  },
   /**
    * Handle submit and clear input box
-   * @param {event} e
    */
-  _onSubmit: function(e) {
-    e.preventDefault();
-    const ideaContent = React.findDOMNode(this.refs.idea).value;
-    if (!ideaContent) {
+  _onSave: function() {
+    if (this.state.value === '') {
       return;
     }
-    StormActions.ideaCreate(ideaContent);
-    React.findDOMNode(this.refs.idea).value = '';
-    this.props.onIdeaSubmit();
+    StormActions.ideaCreate(this.state.value);
+    this.setState({
+      value: '',
+    });
   },
   /**
    * @return {object}
    */
   render: function() {
+    if (this.props.timerStatus) {
+      return (
+        <input
+          type="text"
+          placeholder="Create Idea"
+          value={this.state.value}
+          onChange={this._onChange}
+          onKeyDown={this._onKeyDown}
+          disabled={true}
+        />
+      );
+    }
     return (
-      <form className="ideaCreate" onSubmit={this._onSubmit}>
-        <input type="text" placeholder="Create Idea" ref="idea" />
-        <input type="submit" value="Create" />
-      </form>
+      <input
+        type="text"
+        placeholder="Create Idea"
+        value={this.state.value}
+        onChange={this._onChange}
+        onKeyDown={this._onKeyDown}
+        autoFocus={true}
+      />
     );
   },
 });

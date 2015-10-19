@@ -1,15 +1,15 @@
 const React = require('react');
+const StormActions = require('../actions/StormActions');
 
-const Checkbox = React.createClass({
-  handleChange: function(e) {
-    const checked = e.target.checked;
-    this.props.pause(checked);
+const TimerCheckBox = React.createClass({
+  _onCheck: function(e) {
+    StormActions.pauseTimer(e.target.checked);
   },
   render: function() {
     return (
-      <input className='checkbox' type="checkbox" onChange={this.handleChange} />
+      <input className='checkbox' type="checkbox" onChange={this._onCheck} />
     );
   },
 });
 
-module.exports = Checkbox;
+module.exports = TimerCheckBox;

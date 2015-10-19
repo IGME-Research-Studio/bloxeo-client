@@ -164,7 +164,7 @@ function storeMovedIdea(idea) {
 * Create an idea group when an idea is dragged from the idea bank onto the workspace
 */
 function createIdeaGroup() {
-  const content = [lastMovedIdea.state.idea.content[0]];
+  const content = [lastMovedIdea.state.idea.content];
   _ideaGroups.push({content, keep: true});
 }
 /**

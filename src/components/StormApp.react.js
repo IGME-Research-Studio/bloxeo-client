@@ -9,7 +9,7 @@ const StormActions = require('../actions/StormActions');
  */
 function getStormState() {
   return {
-    roomName: StormStore.getRoomName(),
+    room: StormStore.getRoomInfo(),
     ideas: StormStore.getAllIdeas(),
     timerStatus: StormStore.getTimerStatus(),
     time: StormStore.getTime(),
@@ -41,7 +41,7 @@ const StormApp = React.createClass({
   render: function() {
     return (
       <div className="appContainer">
-        <Sidebar roomName={this.state.roomName} time={this.state.time} timerStatus={this.state.timerStatus} ideas={this.state.ideas} />
+        <Sidebar room={this.state.room} time={this.state.time} timerStatus={this.state.timerStatus} ideas={this.state.ideas} />
         <div className="dragContainer">
           <Workspace groups={this.state.groups}/>
         </div>

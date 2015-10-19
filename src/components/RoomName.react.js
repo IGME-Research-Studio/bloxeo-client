@@ -6,11 +6,14 @@ const ENTER_KEY_CODE = 13;
 const RoomName = React.createClass({
   getInitialState: function() {
     return {
-      roomName: this.props.room,
-      value: this.props.room,
+      name: this.props.name,
+      value: this.props.name,
       isEditing: false,
     };
   },
+  /**
+   * Enable editing mode on double click
+   */
   _onDoubleClick: function() {
     this.setState({
       isEditing: true,
@@ -29,25 +32,27 @@ const RoomName = React.createClass({
    */
   _onKeyDown: function(event) {
     if (event.keyCode === ENTER_KEY_CODE) {
-      this._onSave();
+      // check if room name is blank
+      if (!this.state.value) {
+        this.setState({
+          value: this.state.name,
+          isEditing: false,
+        });
+        return;
+      } else {
+        this._onSave();
+      }
     }
   },
   /**
    * Handle save and update room name
    */
   _onSave: function() {
-    // check if room name is blank
-    if (this.state.value === '') {
-      this.setState({
-        isEditing: false,
-      });
-      return;
-    }
     // save room name to StormStore
     StormActions.changeRoomName(this.state.value);
     // update room name view
     this.setState({
-      roomName: this.state.value,
+      name: this.state.value,
       isEditing: false,
     });
   },
@@ -57,16 +62,13 @@ const RoomName = React.createClass({
   render: function() {
     if (this.state.isEditing) {
       return (
-        <div>
-          <input type="text" value={this.state.value} onChange={this._onChange} onKeyDown={this._onKeyDown} />
-        </div>
+        <input type="text" value={this.state.value} onChange={this._onChange} onKeyDown={this._onKeyDown} />
+      );
+    } else {
+      return (
+        <h2 onDoubleClick={this._onDoubleClick}>{this.state.name}</h2>
       );
     }
-    return (
-      <div>
-        <h2 onDoubleClick={this._onDoubleClick}>{this.state.roomName}</h2>
-      </div>
-    );
   },
 });
 

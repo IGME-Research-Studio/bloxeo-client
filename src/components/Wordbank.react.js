@@ -1,6 +1,3 @@
-require('jquery-ui');
-require('jquery-ui/draggable');
-require('jquery-ui/droppable');
 const React = require('react');
 const IdeaCard = require('../components/IdeaCard.react');
 const StormStore = require('../stores/StormStore');

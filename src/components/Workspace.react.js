@@ -1,11 +1,10 @@
-require('jquery-ui');
-require('jquery-ui/draggable');
-require('jquery-ui/droppable');
-const React = require('react');
-const IdeaGroup = require('./IdeaGroup.react');
-const $ = require('jquery');
+const React        = require('react');
+const IdeaGroup    = require('./IdeaGroup.react');
 const StormActions = require('../actions/StormActions');
-const StormStore = require('../stores/StormStore');
+const StormStore   = require('../stores/StormStore');
+const dropTarget   = require('react-dnd').DropTarget;
+const PropTypes    = React.PropTypes;
+const DnDTypes     = require('../constants/DragAndDropConstants');
 
 const Workspace = React.createClass({
   // set state to the first element of the array
@@ -17,18 +16,10 @@ const Workspace = React.createClass({
     );
   },
   componentDidMount: function() {
-    $('.droppable').droppable({
-      hoverClass: '.drop-zone',
-      drop: this._drop,
-    });
     StormStore.addGroupListener(this.groupChange);
   },
 
-  _drop: function(event, ui) {
-    if (!$(ui.draggable).hasClass('bankCard')) {
-      return;
-    }
-
+  _drop: function() {
     StormActions.ideaGroupCreate();
   },
 
@@ -38,11 +29,18 @@ const Workspace = React.createClass({
     });
   },
 
+  propTypes: {
+    connectDropTarget: PropTypes.func.isRequired,
+  },
+
   /**
    * @return {object}
    */
   render: function() {
-    return (
+
+    const connectDropTarget = this.props.connectDropTarget;
+
+    return connectDropTarget(
       <div className="droppable workspace">
         {this.state.ideaGroups.map(function(group, i) {
           return <IdeaGroup
@@ -58,4 +56,25 @@ const Workspace = React.createClass({
   },
 });
 
-module.exports = Workspace;
+const workTarget = {
+  // canDrop: function(props, monitor) {
+  //   console.log('p');
+  //   // You can disallow drop based on props or item
+  //   const item = monitor.getItem();
+  //   return (item.type === 'CARD' || item.type === 'COLLECTION');
+  // },
+  drop: function(props, monitor, component) {
+    console.log('peter');
+    console.log(component);
+    console.log(monitor.getItem());
+  },
+};
+const collect = function(connect) {
+  return {
+    connectDropTarget: connect.dropTarget(),
+  };
+};
+
+const dropTypes = [DnDTypes.CARD, DnDTypes.COLLECTION];
+
+module.exports = dropTarget(dropTypes, workTarget, collect)(Workspace);

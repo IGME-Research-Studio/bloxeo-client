@@ -6,7 +6,10 @@ const assign = require('object-assign');
 const CHANGE_EVENT = 'change';
 const GROUP_CHANGE_EVENT = 'group';
 
-let _roomName = 'Room Name';
+const _room = {
+  name: 'Room Name',
+  description: 'Welcome!',
+};
 // total time in the timer
 const _time = {
   minutes: 0,
@@ -49,10 +52,10 @@ const StormStore = assign({}, EventEmitter.prototype, {
     return _members;
   },
   /**
-   * @return {string}
+   * @return {object}
    */
-  getRoomName: function() {
-    return _roomName;
+  getRoomInfo: function() {
+    return _room;
   },
   /**
    * @return {object}
@@ -185,7 +188,11 @@ function groupIdeas(ideaGroup) {
 AppDispatcher.register(function(action) {
   switch (action.actionType) {
   case StormConstants.CHANGE_ROOM_NAME:
-    _roomName = action.roomName.trim();
+    _room.name = action.roomName.trim();
+    StormStore.emitChange();
+    break;
+  case StormConstants.CHANGE_ROOM_DESCRIPTION:
+    _room.description = action.roomDesc.trim();
     StormStore.emitChange();
     break;
   case StormConstants.IDEA_CREATE:

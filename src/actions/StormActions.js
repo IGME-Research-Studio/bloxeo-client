@@ -13,6 +13,16 @@ const StormActions = {
     });
   },
   /**
+   * Dispatch change room description event
+   * @param {string} description
+   */
+  changeRoomDescription: function(roomDesc) {
+    AppDispatcher.dispatch({
+      actionType: StormConstants.CHANGE_ROOM_DESCRIPTION,
+      roomDesc: roomDesc,
+    });
+  },
+  /**
    * Dispatch idea create event
    * @param {string} ideaContent
    */

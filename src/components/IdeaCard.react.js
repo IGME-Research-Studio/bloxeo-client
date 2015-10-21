@@ -1,9 +1,7 @@
-const React        = require('react');
-const PropTypes    = React.PropTypes;
-// const $            = require('jquery');
-// const StormActions = require('../actions/StormActions');
-const dragSource   = require('react-dnd').DragSource;
-const DnDTypes     = require('../constants/DragAndDropConstants');
+const React      = require('react');
+const PropTypes  = React.PropTypes;
+const dragSource = require('react-dnd').DragSource;
+const DnDTypes   = require('../constants/DragAndDropConstants');
 
 const IdeaCard = React.createClass({
   getInitialState: function() {
@@ -51,7 +49,6 @@ const IdeaCard = React.createClass({
 const cardSource = {
   beginDrag: function(props) {
     // Return the data describing the dragged item
-    console.log(props.idea);
     return props.idea;
   },
 };

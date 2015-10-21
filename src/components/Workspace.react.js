@@ -27,13 +27,14 @@ const Workspace = React.createClass({
 
   propTypes: {
     connectDropTarget: PropTypes.func.isRequired,
+    isOver: PropTypes.bool.isRequired,
+    isOverCurrent: PropTypes.bool.isRequired,
   },
 
   /**
    * @return {object}
    */
   render: function() {
-
     const connectDropTarget = this.props.connectDropTarget;
 
     return connectDropTarget(
@@ -53,22 +54,27 @@ const Workspace = React.createClass({
 });
 
 const workTarget = {
-  // canDrop: function(props, monitor) {
-  //   console.log('p');
-  //   // You can disallow drop based on props or item
-  //   const item = monitor.getItem();
-  //   return (item.type === 'CARD' || item.type === 'COLLECTION');
-  // },
   drop: function(props, monitor) {
     const offset = monitor.getSourceClientOffset();
     const idea = monitor.getItem();
-    console.log(idea);
-    StormActions.ideaGroupCreate(idea, Math.round(offset.x), Math.round(offset.y));
+
+    const hasDroppedOnChild = monitor.didDrop();
+    if (hasDroppedOnChild) {
+      return;
+    }
+
+    if (monitor.getItem().type === DnDTypes.COLLECTION) {
+      StormActions.moveCollection(monitor.getItem().id, Math.round(offset.x), Math.round(offset.y));
+    } else {
+      StormActions.ideaGroupCreate(idea, Math.round(offset.x), Math.round(offset.y));
+    }
   },
 };
-function collectTarget(connect) {
+function collectTarget(connect, monitor) {
   return {
     connectDropTarget: connect.dropTarget(),
+    isOver: monitor.isOver(),
+    isOverCurrent: monitor.isOver({ shallow: true }),
   };
 }
 

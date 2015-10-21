@@ -20,7 +20,6 @@ let _timer = null;
 let _timerStatus = false;
 const _ideas = [];
 let _ideaGroups = [];
-let lastMovedIdea = {};
 const _members = [1, 2];
 
 const StormStore = assign({}, EventEmitter.prototype, {
@@ -104,6 +103,7 @@ function create(ideaContent) {
   const idea = {
     content: ideaContent,
     keep: true,
+    ideaCount: 1,
   };
   _ideas.push(idea);
 }
@@ -155,12 +155,6 @@ function _hideIdeas(ids) {
   });
 }
 /**
-* Store the last moved idea in the workspace
-*/
-function storeMovedIdea(idea) {
-  lastMovedIdea = idea;
-}
-/**
 * Create an idea group when an idea is dragged from the idea bank onto the workspace
 */
 function createIdeaGroup(idea, left, top) {
@@ -171,15 +165,12 @@ function createIdeaGroup(idea, left, top) {
 * Group two ideas when one idea is dragged onto another
 * Remove the ideaGroup that was combined with a second ideaGroup
 */
-function groupIdeas(ideaGroup) {
-  const id = ideaGroup.state.ideaID;
-
-  if (lastMovedIdea.state.ideas.content.length > 1) {
-    return;
-  }
-
-  _ideaGroups[id].content.push(lastMovedIdea.state.ideas.content[0]);
-  _ideaGroups.splice(lastMovedIdea.state.ideaID, 1);
+function groupIdeas(id, idea) {
+  // if (lastMovedIdea.state.ideas.content.length > 1) {
+  //   return;
+  // }
+  _ideaGroups[id].content.push(idea.content);
+  // _ideaGroups.splice(lastMovedIdea.state.ideaID, 1);
 }
 /**
 * Remove one idea from idea group when mouse is held for x seconds
@@ -188,6 +179,10 @@ function separateIdeas(ideaID, groupID) {
   if (_ideaGroups[groupID].content.length > 1) {
     _ideaGroups[groupID].content.splice(ideaID, 1);
   }
+}
+function moveCollection(id, left, top) {
+  _ideaGroups[id].left = left;
+  _ideaGroups[id].top = top;
 }
 
 AppDispatcher.register(function(action) {
@@ -220,11 +215,15 @@ AppDispatcher.register(function(action) {
     storeMovedIdea(action.idea);
     break;
   case StormConstants.GROUP_IDEAS:
-    groupIdeas(action.ideaGroup);
+    groupIdeas(action.id, action.idea);
     StormStore.emit(GROUP_CHANGE_EVENT);
     break;
   case StormConstants.SEPARATE_IDEAS:
     separateIdeas(action.ideaID, action.groupID);
+    StormStore.emit(GROUP_CHANGE_EVENT);
+    break;
+  case StormConstants.MOVE_COLLECTION:
+    moveCollection(action.id, action.left, action.top);
     StormStore.emit(GROUP_CHANGE_EVENT);
     break;
   case StormConstants.HIDE_IDEAS:

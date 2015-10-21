@@ -94,6 +94,18 @@ const StormActions = {
       ids: ids,
     });
   },
+  /**
+   * Dispatch event to hide ideas with the given ids
+   * @param {number[]} ids - array of ids to hide
+   */
+  moveCollection: function(id, left, top) {
+    AppDispatcher.dispatch({
+      actionType: StormConstants.MOVE_COLLECTION,
+      id: id,
+      left: left,
+      top: top,
+    });
+  },
 };
 
 module.exports = StormActions;

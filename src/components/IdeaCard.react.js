@@ -5,13 +5,6 @@ const PropTypes    = React.PropTypes;
 const dragSource   = require('react-dnd').DragSource;
 const DnDTypes     = require('../constants/DragAndDropConstants');
 
-const cardSource = {
-  beginDrag: function() {
-    // Return the data describing the dragged item
-    return {};
-  },
-};
-
 const IdeaCard = React.createClass({
   getInitialState: function() {
     return {
@@ -44,6 +37,8 @@ const IdeaCard = React.createClass({
     const ideaString = idea.content.toString();
 
     const connectDragSource = this.props.connectDragSource;
+    // const left = this.props.left;
+    // const top = this.props.top;
 
     return connectDragSource(
       <div className="bankCard ui-widget-content drop-zone ui-state-default" style={this._style()}>
@@ -52,6 +47,14 @@ const IdeaCard = React.createClass({
     );
   },
 });
+
+const cardSource = {
+  beginDrag: function(props) {
+    // Return the data describing the dragged item
+    console.log(props.idea);
+    return props.idea;
+  },
+};
 
 function collect(connect, monitor) {
   return {

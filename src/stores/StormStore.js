@@ -163,9 +163,9 @@ function storeMovedIdea(idea) {
 /**
 * Create an idea group when an idea is dragged from the idea bank onto the workspace
 */
-function createIdeaGroup() {
-  const content = [lastMovedIdea.state.idea.content];
-  _ideaGroups.push({content, keep: true});
+function createIdeaGroup(idea, left, top) {
+  const content = [idea.content];
+  _ideaGroups.push({content, keep: true, left: left, top: top});
 }
 /**
 * Group two ideas when one idea is dragged onto another
@@ -201,7 +201,7 @@ AppDispatcher.register(function(action) {
     StormStore.emitChange();
     break;
   case StormConstants.IDEA_CREATE:
-    create(action.ideaContent.trim());
+    create(action.ideaContent);
     StormStore.emitChange();
     StormStore.emit(GROUP_CHANGE_EVENT);
     break;
@@ -213,7 +213,7 @@ AppDispatcher.register(function(action) {
     StormStore.emitChange();
     break;
   case StormConstants.IDEA_GROUP_CREATE:
-    createIdeaGroup();
+    createIdeaGroup(action.idea, action.left, action.top);
     StormStore.emit(GROUP_CHANGE_EVENT);
     break;
   case StormConstants.STORE_MOVED_IDEA:

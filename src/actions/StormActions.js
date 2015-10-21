@@ -50,9 +50,12 @@ const StormActions = {
       isPaused: isPaused,
     });
   },
-  ideaGroupCreate: function() {
+  ideaGroupCreate: function(idea, left, top) {
     AppDispatcher.dispatch({
       actionType: StormConstants.IDEA_GROUP_CREATE,
+      idea: idea,
+      left: left,
+      top: top,
     });
   },
   storeWorkspace: function(workspace) {
@@ -67,10 +70,11 @@ const StormActions = {
       idea: idea,
     });
   },
-  groupIdea: function(ideaGroup) {
+  groupIdea: function(id, idea) {
     AppDispatcher.dispatch({
       actionType: StormConstants.GROUP_IDEAS,
-      ideaGroup: ideaGroup,
+      idea: idea,
+      id: id,
     });
   },
   separateIdeas: function(ideaID, groupID) {

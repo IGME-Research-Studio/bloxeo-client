@@ -7,9 +7,8 @@ const IdeaGroup = React.createClass({
 
   getInitialState: function() {
     return {
-      text: 'butts',
-      x: 0,
-      y: 0,
+      left: this.props.left,
+      top: this.props.top,
       ideas: this.props.ideas,
       ideaID: this.props.ideaID,
     };
@@ -20,17 +19,18 @@ const IdeaGroup = React.createClass({
 
     StormStore.addGroupListener(this.ideasChange);
   },
-  _style: function() {
-    return {
-      transform: `translate(${this.props.x}px,${this.props.y}px)`,
-    };
-  },
   _onDrag: function() {
     StormActions.storeMovedIdea(this);
   },
 
   _onDrop: function() {
     StormActions.groupIdea(this);
+  },
+  _style: function() {
+    return {
+      top: `${this.props.top}px`,
+      left: `${this.props.left}px`,
+    };
   },
 
   ideasChange: function() {
@@ -41,9 +41,11 @@ const IdeaGroup = React.createClass({
 
   render: function() {
     const groupID = this.state.ideaID;
+    console.log(this.props);
+
     return (
-      <div className="ideaGroup drop-zone" ref="ideaGroup">
-        {this.state.ideas.content.map(function(idea, i) {
+      <div className="ideaGroup drop-zone" ref="ideaGroup" style={this._style()}>
+        {this.state.ideas.content.map(function(idea) {
           return (
           <div className="workspaceCard draggable">
             <Idea idea={idea} ideaID={i} groupID={groupID}/>

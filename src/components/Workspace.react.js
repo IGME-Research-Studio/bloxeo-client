@@ -19,10 +19,6 @@ const Workspace = React.createClass({
     StormStore.addGroupListener(this.groupChange);
   },
 
-  _drop: function() {
-    StormActions.ideaGroupCreate();
-  },
-
   groupChange: function() {
     this.setState({
       ideaGroups: StormStore.getAllGroups(),
@@ -44,8 +40,8 @@ const Workspace = React.createClass({
       <div className="droppable workspace">
         {this.state.ideaGroups.map(function(group, i) {
           return <IdeaGroup
-          x={group.x}
-          y={group.y}
+          left={group.left}
+          top={group.top}
           text={group.text}
           ideas={group}
           owner={this}
@@ -63,18 +59,19 @@ const workTarget = {
   //   const item = monitor.getItem();
   //   return (item.type === 'CARD' || item.type === 'COLLECTION');
   // },
-  drop: function(props, monitor, component) {
-    console.log('peter');
-    console.log(component);
-    console.log(monitor.getItem());
+  drop: function(props, monitor) {
+    const offset = monitor.getSourceClientOffset();
+    const idea = monitor.getItem();
+    console.log(idea);
+    StormActions.ideaGroupCreate(idea, Math.round(offset.x), Math.round(offset.y));
   },
 };
-const collect = function(connect) {
+function collectTarget(connect) {
   return {
     connectDropTarget: connect.dropTarget(),
   };
-};
+}
 
 const dropTypes = [DnDTypes.CARD, DnDTypes.COLLECTION];
 
-module.exports = dropTarget(dropTypes, workTarget, collect)(Workspace);
+module.exports = dropTarget(dropTypes, workTarget, collectTarget)(Workspace);

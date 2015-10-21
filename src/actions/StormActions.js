@@ -106,6 +106,16 @@ const StormActions = {
       top: top,
     });
   },
+  /**
+   * Dispatch event to remove a collection with given id
+   * @param {number} id - collection to remove
+   */
+  removeCollection: function(id) {
+    AppDispatcher.dispatch({
+      actionType: StormConstants.REMOVE_COLLECTION,
+      id: id,
+    });
+  },
 };
 
 module.exports = StormActions;

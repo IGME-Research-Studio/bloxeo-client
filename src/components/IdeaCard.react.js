@@ -35,8 +35,6 @@ const IdeaCard = React.createClass({
     const ideaString = idea.content.toString();
 
     const connectDragSource = this.props.connectDragSource;
-    // const left = this.props.left;
-    // const top = this.props.top;
 
     return connectDragSource(
       <div className="bankCard ui-widget-content drop-zone ui-state-default" style={this._style()}>

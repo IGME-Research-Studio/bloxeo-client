@@ -18,6 +18,9 @@ const Workspace = React.createClass({
   componentDidMount: function() {
     StormStore.addGroupListener(this.groupChange);
   },
+  componentWillUnmount: function() {
+    StormStore.removeGroupListener(this.groupChange);
+  },
 
   groupChange: function() {
     this.setState({
@@ -43,7 +46,6 @@ const Workspace = React.createClass({
           return <IdeaGroup
           left={group.left}
           top={group.top}
-          text={group.text}
           ideas={group}
           owner={this}
           ideaID={i}/>;

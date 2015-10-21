@@ -180,9 +180,21 @@ function separateIdeas(ideaID, groupID) {
     _ideaGroups[groupID].content.splice(ideaID, 1);
   }
 }
+
+function removeCollection(id) {
+  _ideaGroups.splice(id, 1);
+}
 function moveCollection(id, left, top) {
   _ideaGroups[id].left = left;
   _ideaGroups[id].top = top;
+}
+/**
+* Remove one idea from idea group when mouse is held for x seconds
+*/
+function separateIdeas(ideaID, groupID) {
+  if (_ideaGroups[groupID].content.length > 1) {
+    _ideaGroups[groupID].content.splice(ideaID, 1);
+  }
 }
 
 AppDispatcher.register(function(action) {
@@ -224,6 +236,14 @@ AppDispatcher.register(function(action) {
     break;
   case StormConstants.MOVE_COLLECTION:
     moveCollection(action.id, action.left, action.top);
+    StormStore.emit(GROUP_CHANGE_EVENT);
+    break;
+  case StormConstants.REMOVE_COLLECTION:
+    removeCollection(action.id);
+    StormStore.emit(GROUP_CHANGE_EVENT);
+    break;
+  case StormConstants.SEPARATE_IDEAS:
+    separateIdeas(action.ideaID, action.groupID);
     StormStore.emit(GROUP_CHANGE_EVENT);
     break;
   case StormConstants.HIDE_IDEAS:

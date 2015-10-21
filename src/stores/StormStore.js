@@ -181,6 +181,14 @@ function groupIdeas(ideaGroup) {
   _ideaGroups[id].content.push(lastMovedIdea.state.ideas.content[0]);
   _ideaGroups.splice(lastMovedIdea.state.ideaID, 1);
 }
+/**
+* Remove one idea from idea group when mouse is held for x seconds
+*/
+function separateIdeas(ideaID, groupID) {
+  if (_ideaGroups[groupID].content.length > 1) {
+    _ideaGroups[groupID].content.splice(ideaID, 1);
+  }
+}
 
 AppDispatcher.register(function(action) {
   switch (action.actionType) {
@@ -213,6 +221,10 @@ AppDispatcher.register(function(action) {
     break;
   case StormConstants.GROUP_IDEAS:
     groupIdeas(action.ideaGroup);
+    StormStore.emit(GROUP_CHANGE_EVENT);
+    break;
+  case StormConstants.SEPARATE_IDEAS:
+    separateIdeas(action.ideaID, action.groupID);
     StormStore.emit(GROUP_CHANGE_EVENT);
     break;
   case StormConstants.HIDE_IDEAS:

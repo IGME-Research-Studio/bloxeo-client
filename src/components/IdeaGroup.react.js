@@ -5,6 +5,7 @@ const React = require('react');
 const $ = require('jquery');
 const StormActions = require('../actions/StormActions');
 const StormStore = require('../stores/StormStore');
+const Idea = require('./Idea.react');
 
 const IdeaGroup = React.createClass({
 
@@ -56,12 +57,13 @@ const IdeaGroup = React.createClass({
   },
 
   render: function() {
+    const groupID = this.state.ideaID;
     return (
       <div className="ideaGroup drop-zone" ref="ideaGroup">
-        {this.state.ideas.content.map(function(idea) {
+        {this.state.ideas.content.map(function(idea, i) {
           return (
           <div className="workspaceCard draggable">
-            {idea}
+            <Idea idea={idea} ideaID={i} groupID={groupID}/>
           </div>
           );
         })}

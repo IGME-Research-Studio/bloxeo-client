@@ -73,6 +73,13 @@ const StormActions = {
       ideaGroup: ideaGroup,
     });
   },
+  separateIdeas: function(ideaID, groupID) {
+    AppDispatcher.dispatch({
+      actionType: StormConstants.SEPARATE_IDEAS,
+      ideaID: ideaID,
+      groupID: groupID,
+    });
+  },
   /**
    * Dispatch event to hide ideas with the given ids
    * @param {number[]} ids - array of ids to hide

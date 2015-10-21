@@ -19,8 +19,7 @@ const Idea = React.createClass({
     /**
     * detect mouse click and hold to remove ideas from collections
     */
-    $(React.
-      findDOMNode(this.refs.idea)).mousedown(function() {
+    $(React.findDOMNode(this.refs.idea)).mousedown(function() {
       holdTimeout = setTimeout(function() {
         object.onHold();
       }, 1500);

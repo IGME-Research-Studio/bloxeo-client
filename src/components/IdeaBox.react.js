@@ -1,5 +1,4 @@
 const React = require('react');
-const IdeaList = require('./IdeaList.react');
 const IdeaCreate = require('./IdeaCreate.react');
 
 const IdeaBox = React.createClass({
@@ -9,7 +8,6 @@ const IdeaBox = React.createClass({
   render: function() {
     return (
       <div id="ideaBox">
-        <IdeaList ideas={this.props.ideas} />
         <IdeaCreate timerStatus={this.props.timerStatus} />
       </div>
     );

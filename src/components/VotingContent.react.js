@@ -1,4 +1,3 @@
-const Modal = require('boron/FadeModal');
 const React = require('react');
 const StormActions = require('../actions/StormActions');
 const StormStore = require('../stores/StormStore');
@@ -7,40 +6,38 @@ const VoteElement = require('../components/VoteElement.react');
 const VotingResult = require('../components/VotingResult.react');
 
 /**
- * Component for displaying and voting on ideas
+ * Component for voting 'Yes' or 'No' and displaying results
  */
-const VotingSection = React.createClass({
+const VotingContent = React.createClass({
   /**
    * Set state to the first element of the array
    * @return {object} - initial state object
    */
   getInitialState: function() {
-    return (
-      {
-        ideas: StormStore.getIdeaGroups(),
-        voteIndex: 0,
-        state: 'vote',
-        hideIds: [],
-      }
-    );
+    return ({
+      ideas: StormStore.getAllGroups(),
+      voteIndex: 0,
+      label: 'vote',
+      hideIds: [],
+    });
   },
   /**
    * Invoked before initial render occurs
    */
   componentDidMount: function() {
-    StormStore.addChangeListener(this._onChange);
+    StormStore.addGroupListener(this._onChange);
   },
   /**
    * Invoked before component is unmounted from DOM
    */
   componentWillUnmount: function() {
-    StormStore.removeChangeListener(this._onChange);
+    StormStore.removeGroupListener(this._onChange);
   },
   /**
    * Event handler for change events from StormStore
    */
   _onChange: function() {
-    this.setState({ideas: StormStore.getIdeaGroups()});
+    this.setState({ideas: StormStore.getAllGroups()});
   },
   /**
    * @return {object} - the current idea to display
@@ -52,70 +49,66 @@ const VotingSection = React.createClass({
     return this.state.ideas[this.state.voteIndex];
   },
   /**
-   * Show voting modal
-   */
-  showModal: function() {
-    if (this.getCurrentIdea()) {
-      this.refs.modal.show();
-    }
-  },
-  /**
-   * Hide voting modal
-   */
-  hideModal: function() {
-    this.refs.modal.hide();
-    StormActions.hideIdeas(this.state.hideIds);
-    this.setState({
-      hideIds: [],
-    });
-  },
-  /**
    * Change state on button click
    * @param {boolean} keep - whether or not to keep the idea
    */
   handleStateChange: function(keep) {
-    const hideIds = this.state.hideIds;
+    const hideIds = [];
+
     if (!keep) {
+      this.getCurrentIdea().keep = false;
       hideIds.push(this.state.voteIndex);
-      this.setState({
-        hideIds: hideIds,
-      });
+      this.setState({hideIds: hideIds});
     }
 
     if (this.state.voteIndex === this.state.ideas.length - 1) {
-      this.hideModal();
-      this.setState({voteIndex: 0});
+      this.setState({label: 'results'});
     } else {
       this.setState({voteIndex: this.state.voteIndex + 1});
     }
   },
   /**
-   * Render component
+   * Pass hideIds to the Store and reset data
+   */
+  processVotes: function() {
+    StormActions.hideIdeas(this.state.hideIds);
+    this.props.hideModal();
+
+    // reset state
+    this.setState({voteIndex: 0, hideIds: []});
+  },
+  /**
+   * Render VotingContent component
    * @return {object}
    */
   render: function() {
-    switch (this.state.state) {
+    if (!this.getCurrentIdea()) {
+      return (
+        <p>There is nothing to vote on yet. Drag some ideas onto the board
+        to start voting!</p>
+      );
+    }
+
+    switch (this.state.label) {
     case 'vote':
       return (
         <div>
-          <a className="button" onClick={this.showModal}>Vote</a>
-          <Modal ref="modal">
-            <div className="votingSection">
-              <VoteElement idea={this.getCurrentIdea()} />
-              <VoteButton data='true' changeState={this.handleStateChange} />
-              <VoteButton data='false' changeState={this.handleStateChange} />
-            </div>
-          </Modal>
+          <VoteElement idea={this.getCurrentIdea()} />
+          <VoteButton data='true' changeState={this.handleStateChange} />
+          <VoteButton data='false' changeState={this.handleStateChange} />
         </div>
       );
     case 'results':
       return (
         <div>
-          <VotingResult />
+          <VotingResult data={this.state.ideas} />
+          <a className="button" onClick={this.processVotes}>Done</a>
         </div>
       );
+    default:
+      break;
     }
   },
 });
 
-module.exports = VotingSection;
+module.exports = VotingContent;

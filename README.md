@@ -1,6 +1,6 @@
 # StormClient
 
-Client for our Brainstorm App
+Client for our [Brainstorm App](http://the-storm.herokuapp.com/)
 
 ## Getting started
 

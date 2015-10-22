@@ -1,4 +1,4 @@
-const AppDispatcher = require('../dispatcher/AppDispatcher');
+const AppDispatcher  = require('../dispatcher/AppDispatcher');
 const StormConstants = require('../constants/StormConstants');
 
 const StormActions = {
@@ -95,8 +95,10 @@ const StormActions = {
     });
   },
   /**
-   * Dispatch event to hide ideas with the given ids
-   * @param {number[]} ids - array of ids to hide
+   * Dispatch event to move a collection
+   * @param {number} ids - collection to move
+   * @param {number} left - collection new left
+   * @param {number} right - collection new right
    */
   moveCollection: function(id, left, top) {
     AppDispatcher.dispatch({

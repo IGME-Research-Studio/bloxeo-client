@@ -7,12 +7,16 @@ const PropTypes    = React.PropTypes;
 const DnDTypes     = require('../constants/DragAndDropConstants');
 
 const Workspace = React.createClass({
+  // Required property types
+  propTypes: {
+    connectDropTarget: PropTypes.func.isRequired,
+    isOver: PropTypes.bool.isRequired,
+    isOverCurrent: PropTypes.bool.isRequired,
+  },
   // set state to the first element of the array
   getInitialState: function() {
     return (
-      {
-        ideaGroups: StormStore.getAllGroups(),
-      }
+      { ideaGroups: StormStore.getAllGroups() }
     );
   },
   componentDidMount: function() {
@@ -21,25 +25,18 @@ const Workspace = React.createClass({
   componentWillUnmount: function() {
     StormStore.removeGroupListener(this.groupChange);
   },
-
+  /** Reset state to align with StormStore */
   groupChange: function() {
     this.setState({
       ideaGroups: StormStore.getAllGroups(),
     });
   },
-
-  propTypes: {
-    connectDropTarget: PropTypes.func.isRequired,
-    isOver: PropTypes.bool.isRequired,
-    isOverCurrent: PropTypes.bool.isRequired,
-  },
-
   /**
    * @return {object}
    */
   render: function() {
+    // Grab connectDropTarget function to wrap element with
     const connectDropTarget = this.props.connectDropTarget;
-
     return connectDropTarget(
       <div className="droppable workspace">
         {this.state.ideaGroups.map(function(group, i) {
@@ -54,21 +51,26 @@ const Workspace = React.createClass({
     );
   },
 });
-
+// REACT-DnD parameters
+const dropTypes = [DnDTypes.CARD, DnDTypes.COLLECTION];
+// Workspace DropTarget options
 const workTarget = {
   drop: function(props, monitor) {
-    const offset = monitor.getSourceClientOffset();
+    const pos = monitor.getSourceClientOffset();
     const idea = monitor.getItem();
-
     const hasDroppedOnChild = monitor.didDrop();
+    // If a sub-element was dropped on, prevent bubbling
     if (hasDroppedOnChild) {
       return;
     }
-
+    // If the collection is being moved do not create another
     if (monitor.getItem().type === DnDTypes.COLLECTION) {
-      StormActions.moveCollection(monitor.getItem().id, Math.round(offset.x), Math.round(offset.y));
+      StormActions.moveCollection(
+        monitor.getItem().id,
+        Math.round(pos.x),
+        Math.round(pos.y));
     } else {
-      StormActions.ideaGroupCreate(idea, Math.round(offset.x), Math.round(offset.y));
+      StormActions.ideaGroupCreate(idea, Math.round(pos.x), Math.round(pos.y));
     }
   },
 };
@@ -79,7 +81,5 @@ function collectTarget(connect, monitor) {
     isOverCurrent: monitor.isOver({ shallow: true }),
   };
 }
-
-const dropTypes = [DnDTypes.CARD, DnDTypes.COLLECTION];
 
 module.exports = dropTarget(dropTypes, workTarget, collectTarget)(Workspace);

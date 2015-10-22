@@ -1,15 +1,16 @@
 const React        = require('react');
 const StormActions = require('../actions/StormActions');
-const Idea = require('./Idea.react');
 const StormStore   = require('../stores/StormStore');
 const dropTarget   = require('react-dnd').DropTarget;
 const dragSource   = require('react-dnd').DragSource;
 const PropTypes    = React.PropTypes;
 const DnDTypes     = require('../constants/DragAndDropConstants');
-const Idea = require('./Idea.react');
+const Idea         = require('./Idea.react');
 
 const IdeaGroup = React.createClass({
-
+  propTypes: {
+    connectDropTarget: PropTypes.func.isRequired,
+  },
   getInitialState: function() {
     return {
       left: this.props.left,
@@ -18,18 +19,12 @@ const IdeaGroup = React.createClass({
       ideaID: this.props.ideaID,
     };
   },
-
-  propTypes: {
-    connectDropTarget: PropTypes.func.isRequired,
-  },
-
   componentDidMount: function() {
     StormStore.addGroupListener(this.ideasChange);
   },
   componentWillUnmount: function() {
     StormStore.removeGroupListener(this.ideasChange);
   },
-
   _style: function() {
     return {
       top: `${this.props.top}px`,
@@ -44,11 +39,10 @@ const IdeaGroup = React.createClass({
   },
 
   render: function() {
-    const groupID = this.state.ideaID;
     const connectDropTarget = this.props.connectDropTarget;
     const connectDragSource = this.props.connectDragSource;
     const groupID = this.state.ideaID;
-
+    // Apply react DnD to element
     return connectDragSource(connectDropTarget(
       <div className="ideaGroup drop-zone" style={this._style()}>
         {this.state.ideas.content.map(function(idea, i) {
@@ -62,24 +56,32 @@ const IdeaGroup = React.createClass({
     ));
   },
 });
-
+// REACT-DnD
+const dropTypes = [DnDTypes.CARD, DnDTypes.COLLECTION];
+// DropTarget parameters
 const collectionTarget = {
+  // Only allow drop from collections with one idea
   canDrop: function(props, monitor) {
-    // You can disallow drop based on props or item
     const idea = monitor.getItem();
     return (idea.ideaCount === 1);
   },
+  // Group ideas on drop
   drop: function(props, monitor) {
     const idea = monitor.getItem();
-
     StormActions.groupIdea(props.ideaID, idea);
+    // Remove combined collection
     if (idea.type === DnDTypes.COLLECTION) {
       StormActions.removeCollection(idea.id);
     }
   },
 };
-
-const collectionDrag = {
+function targetCollect(connect) {
+  return {
+    connectDropTarget: connect.dropTarget(),
+  };
+}
+// DragSource parameters
+const collectionSource = {
   beginDrag: function(props) {
     // Return the data describing the dragged item
     return {
@@ -90,20 +92,13 @@ const collectionDrag = {
     };
   },
 };
-
-function collectTarget(connect) {
-  return {
-    connectDropTarget: connect.dropTarget(),
-  };
-}
-
-function collect(connect, monitor) {
+function dragCollect(connect, monitor) {
   return {
     connectDragSource: connect.dragSource(),
     isDragging: monitor.isDragging(),
   };
 }
 
-const dropTypes = [DnDTypes.CARD, DnDTypes.COLLECTION];
-
-module.exports = dragSource(DnDTypes.COLLECTION, collectionDrag, collect)(dropTarget(dropTypes, collectionTarget, collectTarget)(IdeaGroup));
+module.exports = dragSource(DnDTypes.COLLECTION, collectionSource, dragCollect)(
+  dropTarget(dropTypes, collectionTarget, targetCollect)(IdeaGroup)
+);

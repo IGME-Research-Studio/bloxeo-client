@@ -4,18 +4,15 @@ const dragSource = require('react-dnd').DragSource;
 const DnDTypes   = require('../constants/DragAndDropConstants');
 
 const IdeaCard = React.createClass({
+  propTypes: {
+    connectDragSource: PropTypes.func.isRequired,
+  },
   getInitialState: function() {
     return {
       x: 0,
       y: 0,
       idea: this.props.idea,
     };
-  },
-  /** Enables interact functionality after component is mounted
-   *
-   */
-  componentDidMount: function() {
-    // Add ghosting functionality to bank cards on drag
   },
   /**
    * @return {object}
@@ -26,16 +23,11 @@ const IdeaCard = React.createClass({
     };
   },
 
-  propTypes: {
-    connectDragSource: PropTypes.func.isRequired,
-  },
-
   render: function() {
     const idea = this.props.idea;
     const ideaString = idea.content.toString();
-
     const connectDragSource = this.props.connectDragSource;
-
+    // Apply REACT-DnD to element
     return connectDragSource(
       <div className="bankCard ui-widget-content drop-zone ui-state-default" style={this._style()}>
         {ideaString}
@@ -43,19 +35,18 @@ const IdeaCard = React.createClass({
     );
   },
 });
-
+// REACT-DnD
+// DragSource parameters
 const cardSource = {
   beginDrag: function(props) {
-    // Return the data describing the dragged item
     return props.idea;
   },
 };
-
-function collect(connect, monitor) {
+function dragCollect(connect, monitor) {
   return {
     connectDragSource: connect.dragSource(),
     isDragging: monitor.isDragging(),
   };
 }
 
-module.exports = dragSource(DnDTypes.CARD, cardSource, collect)(IdeaCard);
+module.exports = dragSource(DnDTypes.CARD, cardSource, dragCollect)(IdeaCard);

@@ -1,7 +1,7 @@
-const AppDispatcher = require('../dispatcher/AppDispatcher');
+const AppDispatcher  = require('../dispatcher/AppDispatcher');
 const StormConstants = require('../constants/StormConstants');
-const EventEmitter = require('events').EventEmitter;
-const assign = require('object-assign');
+const EventEmitter   = require('events').EventEmitter;
+const assign         = require('object-assign');
 
 const CHANGE_EVENT = 'change';
 const GROUP_CHANGE_EVENT = 'group';
@@ -166,11 +166,7 @@ function createIdeaGroup(idea, left, top) {
 * Remove the ideaGroup that was combined with a second ideaGroup
 */
 function groupIdeas(id, idea) {
-  // if (lastMovedIdea.state.ideas.content.length > 1) {
-  //   return;
-  // }
   _ideaGroups[id].content.push(idea.content);
-  // _ideaGroups.splice(lastMovedIdea.state.ideaID, 1);
 }
 /**
 * Remove one idea from idea group when mouse is held for x seconds
@@ -181,20 +177,18 @@ function separateIdeas(ideaID, groupID) {
   }
 }
 
+/**
+* Remove idea collection at specified index
+*/
 function removeCollection(id) {
   _ideaGroups.splice(id, 1);
 }
+/**
+* Set specified collection's position
+*/
 function moveCollection(id, left, top) {
   _ideaGroups[id].left = left;
   _ideaGroups[id].top = top;
-}
-/**
-* Remove one idea from idea group when mouse is held for x seconds
-*/
-function separateIdeas(ideaID, groupID) {
-  if (_ideaGroups[groupID].content.length > 1) {
-    _ideaGroups[groupID].content.splice(ideaID, 1);
-  }
 }
 
 AppDispatcher.register(function(action) {
@@ -240,10 +234,6 @@ AppDispatcher.register(function(action) {
     break;
   case StormConstants.REMOVE_COLLECTION:
     removeCollection(action.id);
-    StormStore.emit(GROUP_CHANGE_EVENT);
-    break;
-  case StormConstants.SEPARATE_IDEAS:
-    separateIdeas(action.ideaID, action.groupID);
     StormStore.emit(GROUP_CHANGE_EVENT);
     break;
   case StormConstants.HIDE_IDEAS:

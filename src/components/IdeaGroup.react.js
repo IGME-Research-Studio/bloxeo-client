@@ -1,53 +1,35 @@
-require('jquery-ui');
-require('jquery-ui/draggable');
-require('jquery-ui/droppable');
-const React = require('react');
-const $ = require('jquery');
+const React        = require('react');
 const StormActions = require('../actions/StormActions');
-const StormStore = require('../stores/StormStore');
-const Idea = require('./Idea.react');
+const StormStore   = require('../stores/StormStore');
+const dropTarget   = require('react-dnd').DropTarget;
+const dragSource   = require('react-dnd').DragSource;
+const PropTypes    = React.PropTypes;
+const DnDTypes     = require('../constants/DragAndDropConstants');
+const Idea         = require('./Idea.react');
 
 const IdeaGroup = React.createClass({
-
+  propTypes: {
+    connectDropTarget: PropTypes.func.isRequired,
+  },
   getInitialState: function() {
     return {
-      text: 'butts',
-      x: 0,
-      y: 0,
+      left: this.props.left,
+      top: this.props.top,
       ideas: this.props.ideas,
       ideaID: this.props.ideaID,
     };
   },
-
   componentDidMount: function() {
-    // Add draggable functionality to workspace cards
-    $(React.findDOMNode(this.refs.ideaGroup)).draggable({
-      snap: false,
-      disabled: false, // will make not draggable
-      containment: '.dragContainer',
-      stack: '.draggable',
-      cursor: 'move',
-      drag: this._onDrag,
-    });
-
-    $(React.findDOMNode(this.refs.ideaGroup)).droppable({
-      hoverClass: '.drop-zone',
-      drop: this._onDrop,
-    });
-
     StormStore.addGroupListener(this.ideasChange);
+  },
+  componentWillUnmount: function() {
+    StormStore.removeGroupListener(this.ideasChange);
   },
   _style: function() {
     return {
-      transform: `translate(${this.props.x}px,${this.props.y}px)`,
+      top: `${this.props.top}px`,
+      left: `${this.props.left}px`,
     };
-  },
-  _onDrag: function() {
-    StormActions.storeMovedIdea(this);
-  },
-
-  _onDrop: function() {
-    StormActions.groupIdea(this);
   },
 
   ideasChange: function() {
@@ -57,9 +39,12 @@ const IdeaGroup = React.createClass({
   },
 
   render: function() {
+    const connectDropTarget = this.props.connectDropTarget;
+    const connectDragSource = this.props.connectDragSource;
     const groupID = this.state.ideaID;
-    return (
-      <div className="ideaGroup drop-zone" ref="ideaGroup">
+    // Apply react DnD to element
+    return connectDragSource(connectDropTarget(
+      <div className="ideaGroup drop-zone" style={this._style()}>
         {this.state.ideas.content.map(function(idea, i) {
           return (
           <div className="workspaceCard draggable">
@@ -68,8 +53,52 @@ const IdeaGroup = React.createClass({
           );
         })}
       </div>
-    );
+    ));
   },
 });
+// REACT-DnD
+const dropTypes = [DnDTypes.CARD, DnDTypes.COLLECTION];
+// DropTarget parameters
+const collectionTarget = {
+  // Only allow drop from collections with one idea
+  canDrop: function(props, monitor) {
+    const idea = monitor.getItem();
+    return (idea.ideaCount === 1);
+  },
+  // Group ideas on drop
+  drop: function(props, monitor) {
+    const idea = monitor.getItem();
+    StormActions.groupIdea(props.ideaID, idea);
+    // Remove combined collection
+    if (idea.type === DnDTypes.COLLECTION) {
+      StormActions.removeCollection(idea.id);
+    }
+  },
+};
+function targetCollect(connect) {
+  return {
+    connectDropTarget: connect.dropTarget(),
+  };
+}
+// DragSource parameters
+const collectionSource = {
+  beginDrag: function(props) {
+    // Return the data describing the dragged item
+    return {
+      content: props.ideas.content[0],
+      type: DnDTypes.COLLECTION,
+      id: props.ideaID,
+      ideaCount: props.ideas.content.length,
+    };
+  },
+};
+function dragCollect(connect, monitor) {
+  return {
+    connectDragSource: connect.dragSource(),
+    isDragging: monitor.isDragging(),
+  };
+}
 
-module.exports = IdeaGroup;
+module.exports = dragSource(DnDTypes.COLLECTION, collectionSource, dragCollect)(
+  dropTarget(dropTypes, collectionTarget, targetCollect)(IdeaGroup)
+);

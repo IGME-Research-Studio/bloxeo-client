@@ -101,10 +101,17 @@ body {
 .expandArrow {
   width: 0; 
   height: 0; 
-  border-top: 20px solid transparent;
-  border-bottom: 20px solid transparent;
-  border-left: 10px solid black;
-  margin-left: 10px;
+  margin: 0px 5px 0px 10px;
+  &.right {
+    border-top: 50px solid transparent;
+    border-bottom: 50px solid transparent;
+    border-left: 10px solid black;
+  }
+  &.left{
+    border-top: 50px solid transparent;
+    border-bottom: 50px solid transparent;
+    border-right: 10px solid black;
+  }
 }
 .appContainer{
   display:flex;

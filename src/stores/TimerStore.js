@@ -8,7 +8,7 @@ const TIME_CHANGE_EVENT = 'time';
 // total time in the timer
 const _time = {
   minutes: 0,
-  seconds: 10,
+  seconds: 30,
 };
 let _timer = null;
 // if timer is paused

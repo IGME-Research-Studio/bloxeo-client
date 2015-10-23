@@ -1,9 +1,9 @@
-const React           = require('react');
+const React = require('react');
 
-const BoardOptionsStore      = require('../stores/BoardOptionsStore');
-const IdeaStore      = require('../stores/IdeaStore');
-const TimerStore      = require('../stores/TimerStore');
-const CollectionStore      = require('../stores/CollectionStore');
+const BoardOptionsStore = require('../stores/BoardOptionsStore');
+const CollectionStore   = require('../stores/CollectionStore');
+const TimerStore        = require('../stores/TimerStore');
+const IdeaStore         = require('../stores/IdeaStore');
 
 const Sidebar         = require('./Sidebar.react');
 const Workspace       = require('./Workspace.react');
@@ -16,11 +16,11 @@ const HTML5Backend    = require('react-dnd-html5-backend');
  */
 function getStormState() {
   return {
-    room: BoardOptionsStore.getRoomName(),
-    ideas: IdeaStore.getAllIdeas(),
     timerStatus: TimerStore.getTimerStatus(),
-    time: TimerStore.getTime(),
     groups: CollectionStore.getAllCollections(),
+    ideas: IdeaStore.getAllIdeas(),
+    room: BoardOptionsStore.getRoomData(),
+    time: TimerStore.getTime(),
   };
 }
 
@@ -29,19 +29,25 @@ const StormApp = React.createClass({
     return getStormState();
   },
   componentDidMount: function() {
-    //StormStore.addChangeListener(this._onChange);
+    BoardOptionsStore.addNameListener(this._onChange);
+    CollectionStore.addChangeListener(this._onChange);
+    TimerStore.addChangeListener(this._onChange);
+    IdeaStore.addChangeListener(this._onChange);
     // start timer countdown
     StormActions.countdown();
   },
   compoentWillUnmount: function() {
-    //StormStore.removeChangeListener(this._onChange);
+    BoardOptionsStore.removeNameListener(this._onChange);
+    CollectionStore.removeChangeListener(this._onChange);
+    TimerStore.removeChangeListener(this._onChange);
+    IdeaStore.removeChangeListener(this._onChange);
   },
   /**
    * Event handler for 'change' events coming from the StormStore
    */
-  //_onChange: function() {
-    //this.setState(getStormState());
-  //},
+  _onChange: function() {
+    this.setState(getStormState());
+  },
   /**
    * @return {object}
    */
@@ -50,7 +56,7 @@ const StormApp = React.createClass({
       <div className="appContainer">
         <Sidebar room={this.state.room} time={this.state.time} timerStatus={this.state.timerStatus} ideas={this.state.ideas} />
         <div className="dragContainer">
-          <Workspace groups={this.state.groups}/>
+          <Workspace/>
         </div>
       </div>
     );

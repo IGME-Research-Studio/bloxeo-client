@@ -2,7 +2,7 @@ const React        = require('react');
 
 const CollectionStore   = require('../stores/CollectionStore');
 
-const IdeaGroup    = require('./IdeaGroup.react');
+const IdeaCollection    = require('./IdeaCollection.react');
 const StormActions = require('../actions/StormActions');
 const dropTarget   = require('react-dnd').DropTarget;
 const PropTypes    = React.PropTypes;
@@ -18,19 +18,19 @@ const Workspace = React.createClass({
   // set state to the first element of the array
   getInitialState: function() {
     return (
-      { ideaGroups: CollectionStore.getAllCollections() }
+      { ideaCollections: CollectionStore.getAllCollections() }
     );
   },
   componentDidMount: function() {
-    CollectionStore.addChangeListener(this.groupChange);
+    CollectionStore.addChangeListener(this.collectionChange);
   },
   componentWillUnmount: function() {
-    CollectionStore.removeChangeListener(this.groupChange);
+    CollectionStore.removeChangeListener(this.collectionChange);
   },
   /** Reset state to align with StormStore */
-  groupChange: function() {
+  collectionChange: function() {
     this.setState({
-      ideaGroups: CollectionStore.getAllCollections(),
+      ideaCollections: CollectionStore.getAllCollections(),
     });
   },
   /**
@@ -41,8 +41,8 @@ const Workspace = React.createClass({
     const connectDropTarget = this.props.connectDropTarget;
     return connectDropTarget(
       <div className="droppable workspace">
-        {this.state.ideaGroups.map(function(group, i) {
-          return <IdeaGroup
+        {this.state.ideaCollections.map(function(group, i) {
+          return <IdeaCollection
           left={group.left}
           top={group.top}
           ideas={group}
@@ -59,8 +59,6 @@ const dropTypes = [DnDTypes.CARD, DnDTypes.COLLECTION];
 const workTarget = {
   drop: function(props, monitor) {
     const pos = monitor.getSourceClientOffset();
-    console.log('monitor.getItem');
-    console.log(monitor.getItem());
     const idea = monitor.getItem();
     const hasDroppedOnChild = monitor.didDrop();
     // If a sub-element was dropped on, prevent bubbling

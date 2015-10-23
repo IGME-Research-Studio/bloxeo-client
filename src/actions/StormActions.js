@@ -64,12 +64,6 @@ const StormActions = {
       workspace: workspace,
     });
   },
-  storeMovedIdea: function(idea) {
-    AppDispatcher.dispatch({
-      actionType: StormConstants.STORE_MOVED_IDEA,
-      idea: idea,
-    });
-  },
   groupIdea: function(id, idea) {
     AppDispatcher.dispatch({
       actionType: StormConstants.GROUP_IDEAS,

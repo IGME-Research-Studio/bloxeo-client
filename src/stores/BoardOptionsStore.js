@@ -7,6 +7,7 @@ const MEMBER_CHANGE_EVENT = 'member';
 const NAME_CHANGE_EVENT = 'name';
 
 let _boardName = 'Board Name';
+let _description = 'Welcome';
 const _members = [1, 2];
 
 const BoardOptionsStore = assign({}, EventEmitter.prototype, {
@@ -17,11 +18,24 @@ const BoardOptionsStore = assign({}, EventEmitter.prototype, {
   getAllMembers: function() {
     return _members;
   },
+  getRoomData: function() {
+    return {
+      name: this.getRoomName(),
+      description: this.getRoomDescription(),
+    };
+  },
   /**
    * @return {string}
    */
   getRoomName: function() {
     return _boardName;
+  },
+
+  /**
+   * @return {string}
+   */
+  getRoomDescription: function() {
+    return _description;
   },
 
   emitNameChange: function() {
@@ -57,6 +71,10 @@ AppDispatcher.register(function(action) {
   switch (action.actionType) {
   case StormConstants.CHANGE_ROOM_NAME:
     _boardName = action.roomName.trim();
+    BoardOptionsStore.emitNameChange();
+    break;
+  case StormConstants.CHANGE_ROOM_DESCRIPTION:
+    _description = action.roomDesc.trim();
     BoardOptionsStore.emitNameChange();
     break;
   }

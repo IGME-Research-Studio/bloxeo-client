@@ -42,6 +42,7 @@ function create(ideaContent) {
   const idea = {
     content: ideaContent,
     keep: true,
+    ideaCount: 1,
   };
   _ideas.push(idea);
 }

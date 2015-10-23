@@ -1,13 +1,13 @@
-const React        = require('react');
-const StormActions = require('../actions/StormActions');
-const CollectionStore   = require('../stores/CollectionStore');
-const dropTarget   = require('react-dnd').DropTarget;
-const dragSource   = require('react-dnd').DragSource;
-const PropTypes    = React.PropTypes;
-const DnDTypes     = require('../constants/DragAndDropConstants');
-const Idea         = require('./Idea.react');
+const React           = require('react');
+const StormActions    = require('../actions/StormActions');
+const CollectionStore = require('../stores/CollectionStore');
+const dropTarget      = require('react-dnd').DropTarget;
+const dragSource      = require('react-dnd').DragSource;
+const PropTypes       = React.PropTypes;
+const DnDTypes        = require('../constants/DragAndDropConstants');
+const Idea            = require('./Idea.react');
 
-const IdeaGroup = React.createClass({
+const IdeaCollection = React.createClass({
   propTypes: {
     connectDropTarget: PropTypes.func.isRequired,
   },
@@ -23,7 +23,7 @@ const IdeaGroup = React.createClass({
     CollectionStore.addChangeListener(this.ideasChange);
   },
   componentWillUnmount: function() {
-    Collectiontore.removeChangeListener(this.ideasChange);
+    CollectionStore.removeChangeListener(this.ideasChange);
   },
   _style: function() {
     return {
@@ -100,5 +100,5 @@ function dragCollect(connect, monitor) {
 }
 
 module.exports = dragSource(DnDTypes.COLLECTION, collectionSource, dragCollect)(
-  dropTarget(dropTypes, collectionTarget, targetCollect)(IdeaGroup)
+  dropTarget(dropTypes, collectionTarget, targetCollect)(IdeaCollection)
 );

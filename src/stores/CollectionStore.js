@@ -6,7 +6,6 @@ const assign         = require('object-assign');
 const COLLECTION_CHANGE_EVENT = 'collection';
 
 let _collections = [];
-let lastMovedIdea = {};
 
 const CollectionStore = assign({}, EventEmitter.prototype, {
   /**
@@ -52,49 +51,53 @@ function _hideIdeas(ids) {
   });
 }
 /**
-* Store the last moved idea in the workspace
-*/
-function storeMovedIdea(idea) {
-  lastMovedIdea = idea;
-}
-/**
 * Create an idea group when an idea is dragged from the idea bank onto the workspace
 */
-function createCollection() {
-  const content = [lastMovedIdea.state.idea.content[0]];
-
-  // _ideaGroups.push([{content}]);
-  _collections.push({content, keep: true});
+function createCollection(idea, left, top) {
+  const content = [idea.content];
+  _collections.push({content, keep: true, left: left, top: top});
 }
 /**
 * Group two ideas when one idea is dragged onto another
 * Remove the ideaGroup that was combined with a second ideaGroup
 */
-function groupIdeas(collection) {
-  const id = collection.state.ideaID;
-
-  if (lastMovedIdea.state.ideas.content.length > 1) {
-    return;
-  }
-  _collections[id].content.push(lastMovedIdea.state.ideas.content[0]);
-  _collections.splice(lastMovedIdea.state.ideaID, 1);
+function groupIdeas(id, idea) {
+  _collections[id].content.push(idea.content);
+}
+/**
+ * Remove idea collection at specified index
+ */
+function removeCollection(id) {
+  _collections.splice(id, 1);
+}
+/**
+ * Set specified collection's position
+ */
+function moveCollection(id, left, top) {
+  _collections[id].left = left;
+  _collections[id].top = top;
 }
 
 AppDispatcher.register(function(action) {
   switch (action.actionType) {
   case StormConstants.COLLECTION_CREATE:
-    createCollection();
+    createCollection(action.idea, action.left, action.top);
     CollectionStore.emitChange();
     break;
-  case StormConstants.STORE_MOVED_IDEA:
-    storeMovedIdea(action.idea);
-    break;
   case StormConstants.GROUP_IDEAS:
-    groupIdeas(action.ideaGroup);
+    groupIdeas(action.id, action.idea);
     CollectionStore.emitChange();
     break;
   case StormConstants.HIDE_IDEAS:
     _hideIdeas(action.ids);
+    CollectionStore.emitChange();
+    break;
+  case StormConstants.REMOVE_COLLECTION:
+    removeCollection(action.id);
+    CollectionStore.emitChange();
+    break;
+  case StormConstants.MOVE_COLLECTION:
+    moveCollection(action.id, action.left, action.top);
     CollectionStore.emitChange();
     break;
   }

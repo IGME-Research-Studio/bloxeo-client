@@ -68,6 +68,10 @@ const collectionTarget = {
   // Group ideas on drop
   drop: function(props, monitor) {
     const idea = monitor.getItem();
+    // Do not execute drop on self
+    if (props.ideaID === idea.id) {
+      return;
+    }
     StormActions.groupIdea(props.ideaID, idea);
     // Remove combined collection
     if (idea.type === DnDTypes.COLLECTION) {

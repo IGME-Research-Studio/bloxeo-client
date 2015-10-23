@@ -1,4 +1,8 @@
 const React = require('react');
+<<<<<<< HEAD
+=======
+const ReactDOM = require('react-dom');
+>>>>>>> upstream/master
 const $ = require('jquery');
 const StormActions = require('../actions/StormActions');
 
@@ -19,7 +23,11 @@ const Idea = React.createClass({
     /**
     * detect mouse click and hold to remove ideas from collections
     */
+<<<<<<< HEAD
     $(React.findDOMNode(this.refs.idea)).mousedown(function() {
+=======
+    $(ReactDOM.findDOMNode(this.refs.idea)).mousedown(function() {
+>>>>>>> upstream/master
       holdTimeout = setTimeout(function() {
         object.onHold();
       }, 1500);
@@ -30,7 +38,11 @@ const Idea = React.createClass({
     /**
     * detect mouse move to stop idea from being removed from collections
     */
+<<<<<<< HEAD
     $(React.findDOMNode(this.refs.idea)).mousemove(function() {
+=======
+    $(ReactDOM.findDOMNode(this.refs.idea)).mousemove(function() {
+>>>>>>> upstream/master
       clearTimeout(holdTimeout);
     });
   },

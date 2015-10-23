@@ -1,4 +1,4 @@
-const AppDispatcher = require('../dispatcher/AppDispatcher');
+const AppDispatcher  = require('../dispatcher/AppDispatcher');
 const StormConstants = require('../constants/StormConstants');
 
 const StormActions = {
@@ -50,9 +50,12 @@ const StormActions = {
       isPaused: isPaused,
     });
   },
-  ideaGroupCreate: function() {
+  ideaGroupCreate: function(idea, left, top) {
     AppDispatcher.dispatch({
       actionType: StormConstants.IDEA_GROUP_CREATE,
+      idea: idea,
+      left: left,
+      top: top,
     });
   },
   storeWorkspace: function(workspace) {
@@ -67,10 +70,18 @@ const StormActions = {
       idea: idea,
     });
   },
-  groupIdea: function(ideaGroup) {
+  groupIdea: function(id, idea) {
     AppDispatcher.dispatch({
       actionType: StormConstants.GROUP_IDEAS,
-      ideaGroup: ideaGroup,
+      idea: idea,
+      id: id,
+    });
+  },
+  separateIdeas: function(ideaID, groupID) {
+    AppDispatcher.dispatch({
+      actionType: StormConstants.SEPARATE_IDEAS,
+      ideaID: ideaID,
+      groupID: groupID,
     });
   },
   separateIdeas: function(ideaID, groupID) {
@@ -88,6 +99,30 @@ const StormActions = {
     AppDispatcher.dispatch({
       actionType: StormConstants.HIDE_IDEAS,
       ids: ids,
+    });
+  },
+  /**
+   * Dispatch event to move a collection
+   * @param {number} ids - collection to move
+   * @param {number} left - collection new left
+   * @param {number} right - collection new right
+   */
+  moveCollection: function(id, left, top) {
+    AppDispatcher.dispatch({
+      actionType: StormConstants.MOVE_COLLECTION,
+      id: id,
+      left: left,
+      top: top,
+    });
+  },
+  /**
+   * Dispatch event to remove a collection with given id
+   * @param {number} id - collection to remove
+   */
+  removeCollection: function(id) {
+    AppDispatcher.dispatch({
+      actionType: StormConstants.REMOVE_COLLECTION,
+      id: id,
     });
   },
 };

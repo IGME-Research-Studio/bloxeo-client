@@ -81,20 +81,21 @@ body {
   color:white;
   font-size:30px;
   background-color: green;
-  position:relative;
-  display:inline-block;
+  //position: absolute;
+  //display:inline-block;
   margin: 10px;
 }
 .ideaGroup {
   background-color: yellow;
   display:inline-block;
+  position: absolute;
   //padding:10px;
 }
 
-.timerBox { 
+.timerBox {
   background-color: cyan;
   display: inline-block;
-  
+
 }
 
 .checkbox {
@@ -112,10 +113,19 @@ body {
   margin-left: 10px;
   color: white;
   background-color: black;
-  border-radius: 50%; 
+  border-radius: 50%;
   display: inline-block;
 }
 
 .membersList{
   margin-bottom: 1.5em;
+}
+
+.noSelect{
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }

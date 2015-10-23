@@ -1,8 +1,10 @@
-const React = require('react');
-const Sidebar = require('./Sidebar.react');
-const Workspace = require('./Workspace.react');
-const StormStore = require('../stores/StormStore');
-const StormActions = require('../actions/StormActions');
+const React           = require('react');
+const Sidebar         = require('./Sidebar.react');
+const Workspace       = require('./Workspace.react');
+const StormStore      = require('../stores/StormStore');
+const StormActions    = require('../actions/StormActions');
+const dragDropContext = require('react-dnd').DragDropContext;
+const HTML5Backend    = require('react-dnd-html5-backend');
 
 /**
  * Retrieve the current data from the StormStore
@@ -51,4 +53,4 @@ const StormApp = React.createClass({
 
 });
 
-module.exports = StormApp;
+module.exports = dragDropContext(HTML5Backend)(StormApp);

@@ -6,6 +6,8 @@ body {
   font: 100% $font-stack;
   color: $primary-color;
   background-color: #fff;
+  margin:0;
+  overflow: hidden;
 }
 
 .votingContent {
@@ -48,18 +50,27 @@ body {
 
 .sideBar {
   width: 300px;
-  height: 500px;
+  height: 100vh;
+  display:flex;
+  flex-direction: column;
   background-color: #999;
-  display: inline-block;
   vertical-align: middle;
 }
 
 .dragContainer, .workspace {
   background-color: #ddd;
-  height: 500px;
-  width: 800px;
+  flex-grow:1;
   display: inline-block;
   vertical-align: middle;
+}
+.workspace {
+  height:100vh;
+  width: 100%;
+  overflow:none;
+}
+.wordbank {
+  flex-grow: 1;
+  overflow: auto;
 }
 .bankCard {
   color: white;
@@ -71,7 +82,8 @@ body {
 }
 
 .appContainer{
-  display: inline-block;
+  display:flex;
+  flex-direction:row;
   vertical-align: middle;
   width: 100%;
   height: 100%;
@@ -81,8 +93,6 @@ body {
   color:white;
   font-size:30px;
   background-color: green;
-  //position: absolute;
-  //display:inline-block;
   margin: 10px;
 }
 .ideaGroup {

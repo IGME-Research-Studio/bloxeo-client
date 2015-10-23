@@ -1,7 +1,9 @@
 const React        = require('react');
-const IdeaGroup    = require('./IdeaGroup.react');
+
+const CollectionStore   = require('../stores/CollectionStore');
+
+const IdeaCollection    = require('./IdeaCollection.react');
 const StormActions = require('../actions/StormActions');
-const StormStore   = require('../stores/StormStore');
 const dropTarget   = require('react-dnd').DropTarget;
 const PropTypes    = React.PropTypes;
 const DnDTypes     = require('../constants/DragAndDropConstants');
@@ -16,19 +18,19 @@ const Workspace = React.createClass({
   // set state to the first element of the array
   getInitialState: function() {
     return (
-      { ideaGroups: StormStore.getAllGroups() }
+      { ideaCollections: CollectionStore.getAllCollections() }
     );
   },
   componentDidMount: function() {
-    StormStore.addGroupListener(this.groupChange);
+    CollectionStore.addChangeListener(this.collectionChange);
   },
   componentWillUnmount: function() {
-    StormStore.removeGroupListener(this.groupChange);
+    CollectionStore.removeChangeListener(this.collectionChange);
   },
   /** Reset state to align with StormStore */
-  groupChange: function() {
+  collectionChange: function() {
     this.setState({
-      ideaGroups: StormStore.getAllGroups(),
+      ideaCollections: CollectionStore.getAllCollections(),
     });
   },
   /**
@@ -39,8 +41,8 @@ const Workspace = React.createClass({
     const connectDropTarget = this.props.connectDropTarget;
     return connectDropTarget(
       <div className="droppable workspace">
-        {this.state.ideaGroups.map(function(group, i) {
-          return <IdeaGroup
+        {this.state.ideaCollections.map(function(group, i) {
+          return <IdeaCollection
           left={group.left}
           top={group.top}
           ideas={group}
@@ -70,7 +72,7 @@ const workTarget = {
         Math.round(pos.x),
         Math.round(pos.y));
     } else {
-      StormActions.ideaGroupCreate(idea, Math.round(pos.x), Math.round(pos.y));
+      StormActions.collectionCreate(idea, Math.round(pos.x), Math.round(pos.y));
     }
   },
 };

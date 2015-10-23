@@ -1,6 +1,6 @@
 const React = require('react');
 const IdeaCard = require('../components/IdeaCard.react');
-const StormStore = require('../stores/StormStore');
+const IdeaStore = require('../stores/IdeaStore');
 
 const Wordbank = React.createClass({
   // set state to the first element of the array
@@ -12,11 +12,11 @@ const Wordbank = React.createClass({
     );
   },
   componentDidMount: function() {
-    StormStore.addGroupListener(this.ideaAdd);
+    IdeaStore.addChangeListener(this.ideaAdd);
   },
   ideaAdd: function() {
     this.setState({
-      ideaArray: StormStore.getAllIdeas(),
+      ideaArray: IdeaStore.getAllIdeas(),
     });
   },
   /**

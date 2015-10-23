@@ -77,6 +77,15 @@ function moveCollection(id, left, top) {
   _collections[id].left = left;
   _collections[id].top = top;
 }
+/**
+ * Remove one idea from idea group when mouse is held for x seconds
+ */
+function separateIdeas(ideaID, groupID) {
+  if (_collections[groupID].content.length > 1) {
+    _collections[groupID].content.splice(ideaID, 1);
+  }
+}
+
 
 AppDispatcher.register(function(action) {
   switch (action.actionType) {
@@ -98,6 +107,10 @@ AppDispatcher.register(function(action) {
     break;
   case StormConstants.MOVE_COLLECTION:
     moveCollection(action.id, action.left, action.top);
+    CollectionStore.emitChange();
+    break;
+  case StormConstants.SEPARATE_IDEAS:
+    separateIdeas(action.ideaID, action.groupID);
     CollectionStore.emitChange();
     break;
   }

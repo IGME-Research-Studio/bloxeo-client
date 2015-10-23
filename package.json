@@ -58,7 +58,12 @@
     "react-fontawesome": "^0.3.3",
     "react-router": "^1.0.0-r3",
     "reactify": "^1.1.1",
-    "socket.io": "^1.3.6"
+    "socket.io": "^1.3.6",
+    "history": "^1.12.6",
+    "react-router": "^1.0.0-r3",
+    "reqwest": "^2.0.5",
+    "sails.io.js": "^0.11.7",
+    "socket.io-client": "^1.3.7"
   },
   "devDependencies": {
     "eslint": "^1.5.0",

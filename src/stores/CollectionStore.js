@@ -17,6 +17,10 @@ const CollectionStore = assign({}, EventEmitter.prototype, {
     return _collections;
   },
 
+  updateCollection: function(id) {
+    return _collections[id];
+  },
+
   emitChange: function() {
     this.emit(COLLECTION_CHANGE_EVENT);
   },

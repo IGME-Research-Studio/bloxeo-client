@@ -1,7 +1,9 @@
 const React        = require('react');
+
+const CollectionStore   = require('../stores/CollectionStore');
+
 const IdeaGroup    = require('./IdeaGroup.react');
 const StormActions = require('../actions/StormActions');
-const StormStore   = require('../stores/StormStore');
 const dropTarget   = require('react-dnd').DropTarget;
 const PropTypes    = React.PropTypes;
 const DnDTypes     = require('../constants/DragAndDropConstants');
@@ -16,19 +18,19 @@ const Workspace = React.createClass({
   // set state to the first element of the array
   getInitialState: function() {
     return (
-      { ideaGroups: StormStore.getAllGroups() }
+      { ideaGroups: CollectionStore.getAllCollections() }
     );
   },
   componentDidMount: function() {
-    StormStore.addGroupListener(this.groupChange);
+    CollectionStore.addChangeListener(this.groupChange);
   },
   componentWillUnmount: function() {
-    StormStore.removeGroupListener(this.groupChange);
+    CollectionStore.removeChangeListener(this.groupChange);
   },
   /** Reset state to align with StormStore */
   groupChange: function() {
     this.setState({
-      ideaGroups: StormStore.getAllGroups(),
+      ideaGroups: CollectionStore.getAllCollections(),
     });
   },
   /**
@@ -57,6 +59,8 @@ const dropTypes = [DnDTypes.CARD, DnDTypes.COLLECTION];
 const workTarget = {
   drop: function(props, monitor) {
     const pos = monitor.getSourceClientOffset();
+    console.log('monitor.getItem');
+    console.log(monitor.getItem());
     const idea = monitor.getItem();
     const hasDroppedOnChild = monitor.didDrop();
     // If a sub-element was dropped on, prevent bubbling
@@ -70,7 +74,7 @@ const workTarget = {
         Math.round(pos.x),
         Math.round(pos.y));
     } else {
-      StormActions.ideaGroupCreate(idea, Math.round(pos.x), Math.round(pos.y));
+      StormActions.collectionCreate(idea, Math.round(pos.x), Math.round(pos.y));
     }
   },
 };

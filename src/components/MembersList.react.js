@@ -1,10 +1,10 @@
 const React = require('react');
-const StormStore = require('../stores/StormStore');
+const BoardOptionsStore = require('../stores/BoardOptionsStore');
 
 const MembersList = React.createClass({
   getInitialState: function() {
     return {
-      members: StormStore.getAllMembers(),
+      members: BoardOptionsStore.getAllMembers(),
     };
   },
 

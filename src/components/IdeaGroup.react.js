@@ -1,6 +1,6 @@
 const React        = require('react');
 const StormActions = require('../actions/StormActions');
-const StormStore   = require('../stores/StormStore');
+const CollectionStore   = require('../stores/CollectionStore');
 const dropTarget   = require('react-dnd').DropTarget;
 const dragSource   = require('react-dnd').DragSource;
 const PropTypes    = React.PropTypes;
@@ -20,10 +20,10 @@ const IdeaGroup = React.createClass({
     };
   },
   componentDidMount: function() {
-    StormStore.addGroupListener(this.ideasChange);
+    CollectionStore.addChangeListener(this.ideasChange);
   },
   componentWillUnmount: function() {
-    StormStore.removeGroupListener(this.ideasChange);
+    Collectiontore.removeChangeListener(this.ideasChange);
   },
   _style: function() {
     return {
@@ -34,7 +34,7 @@ const IdeaGroup = React.createClass({
 
   ideasChange: function() {
     this.setState({
-      ideas: StormStore.updateIdeaGroup(this.props.ideaID),
+      ideas: CollectionStore.updateCollection(this.props.ideaID),
     });
   },
 

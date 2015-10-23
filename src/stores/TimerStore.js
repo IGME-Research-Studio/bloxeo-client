@@ -66,7 +66,7 @@ function countdown() {
         _time.seconds = '0' + _time.seconds;
       }
     }
-    StormStore.emitChange();
+    TimerStore.emitTimeChange();
   }, 1000);
 }
 /**

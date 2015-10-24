@@ -2,10 +2,17 @@ const AppDispatcher  = require('../dispatcher/AppDispatcher');
 const StormConstants = require('../constants/StormConstants');
 const EventEmitter   = require('events').EventEmitter;
 const assign         = require('object-assign');
+const d3             = require('d3');
 
 const COLLECTION_CHANGE_EVENT = 'collection';
 
 let _collections = [];
+
+// D3 force layout stuff
+const force = d3.layout.force()
+  .nodes(_collections)
+  .charge(-300)
+  .start();
 
 const CollectionStore = assign({}, EventEmitter.prototype, {
   /**
@@ -38,6 +45,9 @@ const CollectionStore = assign({}, EventEmitter.prototype, {
     this.removeListener(COLLECTION_CHANGE_EVENT, callback);
   },
 });
+function updateForce() {
+  force.nodes(_collections).start();
+}
 /**
  * Hide ideas with the given ids
  * @param {string[]} ids - an array of ids to remove
@@ -55,7 +65,8 @@ function _hideIdeas(ids) {
 */
 function createCollection(idea, left, top) {
   const content = [idea.content];
-  _collections.push({content, keep: true, left: left, top: top});
+  _collections.push({content, keep: true, x: left, y: top});
+  updateForce();
 }
 /**
 * Group two ideas when one idea is dragged onto another
@@ -63,19 +74,24 @@ function createCollection(idea, left, top) {
 */
 function groupIdeas(id, idea) {
   _collections[id].content.push(idea.content);
+  updateForce();
 }
 /**
  * Remove idea collection at specified index
  */
 function removeCollection(id) {
   _collections.splice(id, 1);
+  updateForce();
 }
 /**
  * Set specified collection's position
  */
 function moveCollection(id, left, top) {
-  _collections[id].left = left;
-  _collections[id].top = top;
+  _collections[id].x = left;
+  _collections[id].y = top;
+  _collections[id].px = left;
+  _collections[id].py = top;
+  updateForce();
 }
 /**
  * Remove one idea from idea group when mouse is held for x seconds
@@ -84,8 +100,17 @@ function separateIdeas(ideaID, groupID) {
   if (_collections[groupID].content.length > 1) {
     _collections[groupID].content.splice(ideaID, 1);
   }
+  updateForce();
 }
 
+function setLayoutSize(width, height) {
+  force.size([width, height]);
+}
+
+// More d3
+force.on('tick', function() {
+  CollectionStore.emitChange();
+});
 
 AppDispatcher.register(function(action) {
   switch (action.actionType) {
@@ -112,6 +137,9 @@ AppDispatcher.register(function(action) {
   case StormConstants.SEPARATE_IDEAS:
     separateIdeas(action.ideaID, action.groupID);
     CollectionStore.emitChange();
+    break;
+  case StormConstants.SET_LAYOUT_SIZE:
+    setLayoutSize(action.width, action.height);
     break;
   }
 });

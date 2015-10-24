@@ -1,7 +1,7 @@
-const AppDispatcher = require('../dispatcher/AppDispatcher');
+const AppDispatcher  = require('../dispatcher/AppDispatcher');
 const StormConstants = require('../constants/StormConstants');
-const EventEmitter = require('events').EventEmitter;
-const assign = require('object-assign');
+const EventEmitter   = require('events').EventEmitter;
+const assign         = require('object-assign');
 
 const CHANGE_EVENT = 'change';
 const GROUP_CHANGE_EVENT = 'group';
@@ -13,14 +13,13 @@ const _room = {
 // total time in the timer
 const _time = {
   minutes: 0,
-  seconds: 10,
+  seconds: 30,
 };
 let _timer = null;
 // if timer is paused
 let _timerStatus = false;
 const _ideas = [];
 let _ideaGroups = [];
-let lastMovedIdea = {};
 const _members = [1, 2];
 
 const StormStore = assign({}, EventEmitter.prototype, {
@@ -104,6 +103,7 @@ function create(ideaContent) {
   const idea = {
     content: ideaContent,
     keep: true,
+    ideaCount: 1,
   };
   _ideas.push(idea);
 }
@@ -155,31 +155,31 @@ function _hideIdeas(ids) {
   });
 }
 /**
-* Store the last moved idea in the workspace
-*/
-function storeMovedIdea(idea) {
-  lastMovedIdea = idea;
-}
-/**
 * Create an idea group when an idea is dragged from the idea bank onto the workspace
 */
-function createIdeaGroup() {
-  const content = [lastMovedIdea.state.idea.content];
-  _ideaGroups.push({content, keep: true});
+function createIdeaGroup(idea, left, top) {
+  const content = [idea.content];
+  _ideaGroups.push({content, keep: true, left: left, top: top});
 }
 /**
 * Group two ideas when one idea is dragged onto another
 * Remove the ideaGroup that was combined with a second ideaGroup
 */
-function groupIdeas(ideaGroup) {
-  const id = ideaGroup.state.ideaID;
-
-  if (lastMovedIdea.state.ideas.content.length > 1) {
-    return;
-  }
-
-  _ideaGroups[id].content.push(lastMovedIdea.state.ideas.content[0]);
-  _ideaGroups.splice(lastMovedIdea.state.ideaID, 1);
+function groupIdeas(id, idea) {
+  _ideaGroups[id].content.push(idea.content);
+}
+/**
+* Remove idea collection at specified index
+*/
+function removeCollection(id) {
+  _ideaGroups.splice(id, 1);
+}
+/**
+* Set specified collection's position
+*/
+function moveCollection(id, left, top) {
+  _ideaGroups[id].left = left;
+  _ideaGroups[id].top = top;
 }
 /**
 * Remove one idea from idea group when mouse is held for x seconds
@@ -201,7 +201,7 @@ AppDispatcher.register(function(action) {
     StormStore.emitChange();
     break;
   case StormConstants.IDEA_CREATE:
-    create(action.ideaContent.trim());
+    create(action.ideaContent);
     StormStore.emitChange();
     StormStore.emit(GROUP_CHANGE_EVENT);
     break;
@@ -213,14 +213,22 @@ AppDispatcher.register(function(action) {
     StormStore.emitChange();
     break;
   case StormConstants.IDEA_GROUP_CREATE:
-    createIdeaGroup();
+    createIdeaGroup(action.idea, action.left, action.top);
     StormStore.emit(GROUP_CHANGE_EVENT);
     break;
   case StormConstants.STORE_MOVED_IDEA:
     storeMovedIdea(action.idea);
     break;
   case StormConstants.GROUP_IDEAS:
-    groupIdeas(action.ideaGroup);
+    groupIdeas(action.id, action.idea);
+    StormStore.emit(GROUP_CHANGE_EVENT);
+    break;
+  case StormConstants.MOVE_COLLECTION:
+    moveCollection(action.id, action.left, action.top);
+    StormStore.emit(GROUP_CHANGE_EVENT);
+    break;
+  case StormConstants.REMOVE_COLLECTION:
+    removeCollection(action.id);
     StormStore.emit(GROUP_CHANGE_EVENT);
     break;
   case StormConstants.SEPARATE_IDEAS:

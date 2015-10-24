@@ -15,8 +15,10 @@ const Sidebar = React.createClass({
       <div className="sideBar">
         <RoomInfoBox room={this.props.room} />
         <MembersList />
-        <Wordbank data={this.props.ideas}/>
-        <IdeaBox ideas={this.props.ideas} timerStatus={this.props.timerStatus} />
+        <IdeaBox timerStatus={this.props.timerStatus} />
+        <section className="wordbank">
+          <Wordbank data={this.props.ideas}/>
+        </section>
         <VotingModal />
         <TimerBox time={this.props.time} />
       </div>

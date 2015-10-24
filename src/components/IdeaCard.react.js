@@ -1,28 +1,18 @@
-require('jquery-ui');
-require('jquery-ui/draggable');
-require('jquery-ui/droppable');
-const React = require('react');
-const $ = require('jquery');
-const StormActions = require('../actions/StormActions');
+const React      = require('react');
+const PropTypes  = React.PropTypes;
+const dragSource = require('react-dnd').DragSource;
+const DnDTypes   = require('../constants/DragAndDropConstants');
 
 const IdeaCard = React.createClass({
+  propTypes: {
+    connectDragSource: PropTypes.func.isRequired,
+  },
   getInitialState: function() {
     return {
       x: 0,
       y: 0,
       idea: this.props.idea,
     };
-  },
-  /** Enables interact functionality after component is mounted
-   *
-   */
-  componentDidMount: function() {
-    // Add ghosting functionality to bank cards on drag
-    $(React.findDOMNode(this.refs.ideaCard)).draggable({
-      opacity: 0.7,
-      helper: 'clone',
-      drag: this._onDrag,
-    });
   },
   /**
    * @return {object}
@@ -32,23 +22,31 @@ const IdeaCard = React.createClass({
       transform: `translate(${this.state.x}px,${this.state.y}px)`,
     };
   },
-  /**
-   * @param event: event obj
-   */
-  _onDrag: function() {
-    StormActions.storeMovedIdea(this);
-  },
 
   render: function() {
     const idea = this.props.idea;
     const ideaString = idea.content.toString();
-
-    return (
-      <div className="bankCard ui-widget-content drop-zone ui-state-default" style={this._style()} ref="ideaCard">
+    const connectDragSource = this.props.connectDragSource;
+    // Apply REACT-DnD to element
+    return connectDragSource(
+      <div className="bankCard ui-widget-content drop-zone ui-state-default" style={this._style()}>
         {ideaString}
       </div>
     );
   },
 });
+// REACT-DnD
+// DragSource parameters
+const cardSource = {
+  beginDrag: function(props) {
+    return props.idea;
+  },
+};
+function dragCollect(connect, monitor) {
+  return {
+    connectDragSource: connect.dragSource(),
+    isDragging: monitor.isDragging(),
+  };
+}
 
-module.exports = IdeaCard;
+module.exports = dragSource(DnDTypes.CARD, cardSource, dragCollect)(IdeaCard);

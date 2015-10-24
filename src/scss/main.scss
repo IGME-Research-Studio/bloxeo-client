@@ -69,8 +69,17 @@ body {
   overflow:none;
 }
 .wordbank {
+  display: flex;
   flex-grow: 1;
-  overflow: auto;
+  overflow: hidden;
+  background-color: #bbb;
+  z-index: 100;
+  width: 100%;
+
+  transition: width 0.5s ease-in-out;
+  &.expanded {
+    width: calc(100vw - 200px);
+  }
 }
 .bankCard {
   color: white;
@@ -80,7 +89,30 @@ body {
   display: inline-block;
   margin: 5px;
 }
-
+.wordbankIdeas {
+  flex-grow:1;
+  overflow: auto;
+}
+.expandColumn {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.expandArrow {
+  width: 0; 
+  height: 0; 
+  margin: 0px 5px 0px 10px;
+  &.right {
+    border-top: 50px solid transparent;
+    border-bottom: 50px solid transparent;
+    border-left: 10px solid black;
+  }
+  &.left{
+    border-top: 50px solid transparent;
+    border-bottom: 50px solid transparent;
+    border-right: 10px solid black;
+  }
+}
 .appContainer{
   display:flex;
   flex-direction:row;
@@ -99,13 +131,11 @@ body {
   background-color: yellow;
   display:inline-block;
   position: absolute;
-  //padding:10px;
 }
 
 .timerBox {
   background-color: cyan;
   display: inline-block;
-
 }
 
 .checkbox {

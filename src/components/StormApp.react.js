@@ -5,6 +5,7 @@ const StormStore      = require('../stores/StormStore');
 const StormActions    = require('../actions/StormActions');
 const dragDropContext = require('react-dnd').DragDropContext;
 const HTML5Backend    = require('react-dnd-html5-backend');
+const LandingPage     = require('./LandingPage.react');
 
 /**
  * Retrieve the current data from the StormStore
@@ -16,6 +17,7 @@ function getStormState() {
     timerStatus: StormStore.getTimerStatus(),
     time: StormStore.getTime(),
     groups: StormStore.getAllGroups(),
+    page: 'Landing',
   };
 }
 
@@ -41,14 +43,21 @@ const StormApp = React.createClass({
    * @return {object}
    */
   render: function() {
-    return (
-      <div className="appContainer">
-        <Sidebar room={this.state.room} time={this.state.time} timerStatus={this.state.timerStatus} ideas={this.state.ideas} />
-        <div className="dragContainer">
-          <Workspace groups={this.state.groups}/>
+    switch (this.state.page) {
+    case 'Landing':
+      return (
+        <LandingPage />
+      );
+    case 'Workspace':
+      return (
+        <div className="appContainer">
+          <Sidebar room={this.state.room} time={this.state.time} timerStatus={this.state.timerStatus} ideas={this.state.ideas} />
+          <div className="dragContainer">
+            <Workspace groups={this.state.groups}/>
+          </div>
         </div>
-      </div>
-    );
+      );
+    }
   },
 
 });

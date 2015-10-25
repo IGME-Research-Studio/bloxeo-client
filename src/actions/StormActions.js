@@ -112,6 +112,17 @@ const StormActions = {
       id: id,
     });
   },
+  /**
+   * Dispatch event to remove a collection with given id
+   * @param {number} id - collection to remove
+   */
+  setLayoutSize: function(width, height) {
+    AppDispatcher.dispatch({
+      actionType: StormConstants.SET_LAYOUT_SIZE,
+      width: width,
+      height: height,
+    });
+  },
 };
 
 module.exports = StormActions;

@@ -29,7 +29,7 @@ body {
 }
 
 .idea {
-  font-size: 30px;
+  font-size: 18px;
 }
 
 .button {
@@ -175,14 +175,19 @@ body {
 
 .workspaceCard {
   color:white;
-  font-size:30px;
+  width: 100px;
+  height: 50px;
   background-color: green;
   margin: 10px;
+  display: inline-block;
+  vertical-align: top;
 }
 .ideaGroup {
   background-color: yellow;
   display:inline-block;
   position: absolute;
+  max-width: 360px;
+  text-align: center;
 }
 
 .timerBox {

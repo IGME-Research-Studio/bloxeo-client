@@ -2,11 +2,14 @@ $font-stack:    Helvetica, sans-serif;
 $primary-color: #333;
 $voting-bgColor: #FDE3A7;
 
+.noMargin {
+  margin: 0;
+}
+
 body {
   font: 100% $font-stack;
   color: $primary-color;
   background-color: #fff;
-  margin:0;
   overflow: hidden;
 }
 
@@ -36,7 +39,7 @@ body {
   cursor: pointer;
   padding: 10px 50px;
   border-radius: 3px;
-  margin-top: 40px;
+  margin-top: 20px;
 }
 
 .yesButton {
@@ -55,6 +58,53 @@ body {
   flex-direction: column;
   background-color: #999;
   vertical-align: middle;
+}
+
+.sidebar-title {
+  margin-bottom: 10px;
+}
+
+.sidebar-info {
+  padding: 10px 20px;
+}
+
+.sidebar-create {
+  padding: 10px;
+}
+
+.sidebar-vote {
+  padding: 20px 0;
+}
+
+.room-desc {
+  margin-top: 10px;
+}
+
+.vote-check {
+  -ms-transform: scale(2);
+  -moz-transform: scale(2);
+  -webkit-transform: scale(2);
+  -o-transform: scale(2);
+  transform: scale(2);
+}
+
+.vote-text {
+  margin-left: 10px;
+}
+
+.vote-waiting {
+  margin: 0 0 0 30px;
+}
+
+.idea-create {
+  padding: 0 10px;
+  width: 260px;
+  height: 30px;
+  appearance: none;
+  box-shadow: none;
+  border-radius: 5px;
+  border: none;
+  background-color: rgb(50, 50, 50);
 }
 
 .dragContainer, .workspace {
@@ -100,8 +150,8 @@ body {
   justify-content: center;
 }
 .expandArrow {
-  width: 0; 
-  height: 0; 
+  width: 0;
+  height: 0;
   margin: 0px 5px 0px 10px;
   &.right {
     border-top: 50px solid transparent;
@@ -135,31 +185,39 @@ body {
 }
 
 .timerBox {
-  background-color: cyan;
   display: inline-block;
 }
-
-.checkbox {
-  display: inline-block;
+.timer-title {
+  margin: 20px 0 0 0;
 }
 .timer {
+  margin-right: 10px;
+  font-size: 26px;
   display: inline-block;
+}
+.timer-btn {
+  cursor: pointer;
+}
+.timer-btn.start {
+  color: green;
+}
+.timer-btn.stop {
+  color: red;
+}
+.underline {
+  text-decoration: underline;
 }
 
 .circleMemberIcon {
-  width: 50px;
-  height: 50px;
+  width: 35px;
+  height: 35px;
   text-align: center;
-  line-height: 20px;
-  margin-left: 10px;
+  line-height: 7px;
+  margin-right: 10px;
   color: white;
   background-color: black;
   border-radius: 50%;
   display: inline-block;
-}
-
-.membersList{
-  margin-bottom: 1.5em;
 }
 
 .noSelect{

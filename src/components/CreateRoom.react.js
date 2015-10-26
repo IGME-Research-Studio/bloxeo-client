@@ -1,10 +1,11 @@
 const React = require('react');
+const Link  = require('react-router').Link;
 
 const CreateRoom = React.createClass({
   render: function() {
     return (
       <div className="createRoomButton">
-        <a className="button" onClick={this.showModal}>Create a room</a>
+        <Link className="button" to="/workSpace">CreateRoom</Link>
       </div>
     );
   },

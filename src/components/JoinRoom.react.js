@@ -1,4 +1,5 @@
 const React = require('react');
+// const Link  = require('react-router').Link;
 
 const JoinRoom = React.createClass({
   render: function() {

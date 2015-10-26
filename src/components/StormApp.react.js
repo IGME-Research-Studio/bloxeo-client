@@ -46,7 +46,7 @@ const StormApp = React.createClass({
     switch (this.state.page) {
     case 'Landing':
       return (
-        <LandingPage />
+       <LandingPage />
       );
     case 'Workspace':
       return (
@@ -61,5 +61,6 @@ const StormApp = React.createClass({
   },
 
 });
+
 
 module.exports = dragDropContext(HTML5Backend)(StormApp);

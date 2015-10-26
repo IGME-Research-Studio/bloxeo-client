@@ -61,6 +61,17 @@ function _hideIdeas(ids) {
   });
 }
 /**
+ * Swap two elements positions in an array
+ * @param {array} arr - an array to move within
+ * @param {number} fromIndex - array position to swap from
+ * @param {number} toIndex - array position to swap to
+ */
+function _arraymove(arr, fromIndex, toIndex) {
+  const element = arr[fromIndex];
+  arr.splice(fromIndex, 1);
+  arr.splice(toIndex, 0, element);
+}
+/**
 * Create an idea group when an idea is dragged from the idea bank onto the workspace
 */
 function createCollection(idea, left, top) {
@@ -70,10 +81,17 @@ function createCollection(idea, left, top) {
 }
 /**
 * Group two ideas when one idea is dragged onto another
-* Remove the ideaGroup that was combined with a second ideaGroup
+* Remove the ideaCollection that was combined with a second ideaCollection
+* Keep the first element of the ideaCollection in the 'middle' as ideas are added
 */
 function groupIdeas(id, idea) {
   _collections[id].content.push(idea.content);
+  if (_collections[id].content.length === 3) {
+    _arraymove(_collections[id].content, 0, 1);
+  }
+  if (_collections[id].content.length === 7) {
+    _arraymove(_collections[id].content, 1, 4);
+  }
   updateForce();
 }
 /**

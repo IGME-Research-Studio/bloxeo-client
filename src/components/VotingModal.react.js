@@ -17,6 +17,13 @@ const VotingModal = React.createClass({
    */
   hideModal: function() {
     this.refs.modal.hide();
+    this.uncheck();
+  },
+  /**
+   * Uncheck the 'Ready to Vote' checkbox
+   */
+  uncheck: function() {
+    this.refs.checkbox.checked = false;
   },
   /**
    * Render VotingModal component
@@ -26,12 +33,12 @@ const VotingModal = React.createClass({
     return (
       <div>
         <div className="sidebar-vote">
-          <input className="vote-check" type="checkbox" onChange={this.showModal} />
+          <input ref="checkbox" className="vote-check" type="checkbox" onChange={this.showModal} />
           <span className="vote-text">Lets vote on these!</span>
           <p className="vote-waiting">Waiting for... 2 people.</p>
         </div>
 
-        <Modal ref="modal">
+        <Modal ref="modal" onHide={this.uncheck}>
           <div className="votingContent">
             <VotingContent hideModal={this.hideModal} />
           </div>

@@ -89,6 +89,25 @@ const StormActions = {
     });
   },
   /**
+   * Dispatch event to set voting results
+   * @param {object[]} results - voting results
+   */
+  storeResults: function(results) {
+    AppDispatcher.dispatch({
+      actionType: StormConstants.STORE_RESULTS,
+      results: results,
+    });
+  },
+  /**
+   * Dispatch event to select a tab
+   */
+  selectTab: function(tab) {
+    AppDispatcher.dispatch({
+      actionType: StormConstants.SELECT_TAB,
+      selectedTab: tab,
+    });
+  },
+  /**
    * Dispatch event to move a collection
    * @param {number} ids - collection to move
    * @param {number} left - collection new left

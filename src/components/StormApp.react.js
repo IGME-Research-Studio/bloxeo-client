@@ -4,9 +4,15 @@ const BoardOptionsStore = require('../stores/BoardOptionsStore');
 const CollectionStore   = require('../stores/CollectionStore');
 const TimerStore        = require('../stores/TimerStore');
 const IdeaStore         = require('../stores/IdeaStore');
+
+const NavBar          = require('./NavBar.react');
+const Results         = require('./Results.react');
 const Sidebar         = require('./Sidebar.react');
 const Workspace       = require('./Workspace.react');
+
 const StormActions    = require('../actions/StormActions');
+const NavBarConstants = require('../constants/NavBarConstants');
+
 const dragDropContext = require('react-dnd').DragDropContext;
 const HTML5Backend    = require('react-dnd-html5-backend');
 
@@ -19,6 +25,7 @@ function getStormState() {
     groups: CollectionStore.getAllCollections(),
     ideas: IdeaStore.getAllIdeas(),
     room: BoardOptionsStore.getRoomData(),
+    tab: BoardOptionsStore.getSelectedTab(),
     time: TimerStore.getTime(),
   };
 }
@@ -29,14 +36,16 @@ const StormApp = React.createClass({
   },
   componentDidMount: function() {
     BoardOptionsStore.addNameListener(this._onChange);
+    BoardOptionsStore.addTabChangeListener(this._onChange);
     CollectionStore.addChangeListener(this._onChange);
     TimerStore.addChangeListener(this._onChange);
     IdeaStore.addChangeListener(this._onChange);
     // start timer countdown
     StormActions.countdown();
   },
-  compoentWillUnmount: function() {
+  componentWillUnmount: function() {
     BoardOptionsStore.removeNameListener(this._onChange);
+    BoardOptionsStore.removeTabChangeListener(this._onChange);
     CollectionStore.removeChangeListener(this._onChange);
     TimerStore.removeChangeListener(this._onChange);
     IdeaStore.removeChangeListener(this._onChange);
@@ -48,6 +57,7 @@ const StormApp = React.createClass({
     this.setState(getStormState());
   },
   /**
+   * Render StormApp component
    * @return {object}
    */
   render: function() {
@@ -55,7 +65,17 @@ const StormApp = React.createClass({
       <div className="appContainer">
         <Sidebar room={this.state.room} time={this.state.time} timerStatus={this.state.timerStatus} ideas={this.state.ideas} />
         <div className="dragContainer">
-          <Workspace/>
+          <NavBar selectedTab={this.state.tab} />
+          {(() => {
+            switch (this.state.tab) {
+            case NavBarConstants.WORKSPACE_TAB:
+              return <Workspace />;
+            case NavBarConstants.RESULTS_TAB:
+              return <Results />;
+            default:
+              break;
+            }
+          })()}
         </div>
       </div>
     );

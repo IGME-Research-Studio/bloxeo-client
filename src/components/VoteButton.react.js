@@ -7,9 +7,9 @@ const VoteButton = React.createClass({
   },
   render: function() {
     if (this.props.data === 'true') {
-      return <a className="button yesButton" onClick={this.handleClick}>Yes</a>;
+      return <a className="button yesButton" onClick={this.handleClick}>+1</a>;
     }
-    return <a className="button noButton" onClick={this.handleClick}>No</a>;
+    return <a className="button noButton" onClick={this.handleClick}>+0</a>;
   },
 });
 

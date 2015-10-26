@@ -7,7 +7,6 @@ const PropTypes    = React.PropTypes;
 const DnDTypes     = require('../constants/DragAndDropConstants');
 const Idea         = require('./Idea.react');
 
-
 const IdeaGroup = React.createClass({
   propTypes: {
     connectDropTarget: PropTypes.func.isRequired,

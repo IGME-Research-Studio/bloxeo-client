@@ -45,6 +45,7 @@ const IdeaCreate = React.createClass({
       return (
         <input
           type="text"
+          maxLength="30"
           className="idea-create"
           placeholder="Idea spew!"
           value={this.state.value}
@@ -57,6 +58,7 @@ const IdeaCreate = React.createClass({
     return (
       <input
         type="text"
+        maxLength="30"
         className="idea-create"
         placeholder="Idea spew!"
         value={this.state.value}

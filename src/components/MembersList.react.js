@@ -21,6 +21,7 @@ const MembersList = React.createClass({
     // put all ideas in ideaList
     return (
       <div className="membersList">
+        <h5 className="sidebar-title">Team Members</h5>
         {members}
       </div>
     );

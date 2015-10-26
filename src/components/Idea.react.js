@@ -1,53 +1,112 @@
 const React = require('react');
 const ReactDOM = require('react-dom');
-const $ = require('jquery');
+const PropTypes  = React.PropTypes;
 const StormActions = require('../actions/StormActions');
+const dragSource = require('react-dnd').DragSource;
+const DnDTypes   = require('../constants/DragAndDropConstants');
 
 const Idea = React.createClass({
-
+  propTypes: {
+    connectDragSource: PropTypes.func.isRequired,
+  },
   getInitialState: function() {
-
     return {
-      idea: this.props.idea,
+      content: this.props.content,
       ideaID: this.props.ideaID,
       groupID: this.props.groupID,
+      canDrag: false,
     };
   },
-
+  handleMouseOver: function() {
+    this.state.holdTimer++;
+    if (this.state.holdTimer > 5) {
+      setCanDrag(true);
+    }
+  },
+  handleMouseDown: function() {
+    this.state.mouseClicked = true;
+  },
+  handleMouseStop: function() {
+    this.state.mouseClicked = false;
+    this.state.holdTimer = 0;
+    this.setCanDrag(false);
+  },
   componentDidMount: function() {
-    const object = this;
+    const idea = this;
+    const object = ReactDOM.findDOMNode(this);
     let holdTimeout = 0;
-    /**
-    * detect mouse click and hold to remove ideas from collections
-    */
-    $(ReactDOM.findDOMNode(this.refs.idea)).mousedown(function() {
+    object.addEventListener('mousedown', function() {
       holdTimeout = setTimeout(function() {
-        object.onHold();
+        idea.setCanDrag(true);
       }, 1500);
-    }).bind('mouseup mouseleave', function() {
-      clearTimeout(holdTimeout);
     });
-
-    /**
-    * detect mouse move to stop idea from being removed from collections
+    object.addEventListener('mouseup', function() {
+      clearTimeout(holdTimeout);
+      idea.setCanDrag(false);
+    });
+    object.addEventListener('mouseleave', function() {
+      clearTimeout(holdTimeout);
+      idea.setCanDrag(false);
+    });
+  },
+  /**
+    * Set draggable
+    * @param <Boolean> draggable
     */
-    $(ReactDOM.findDOMNode(this.refs.idea)).mousemove(function() {
-      clearTimeout(holdTimeout);
+  setCanDrag: function(draggable) {
+    this.setState({
+      canDrag: draggable,
     });
   },
-  onHold: function() {
-    StormActions.separateIdeas(this.state.ideaID, this.state.groupID);
-  },
+
   /**
    * @return {object}
    */
   render: function() {
-    return (
-      <div className="idea" ref="idea">
-        {this.props.idea}
-      </div>
-    );
+    const ideaString = this.props.content.toString();
+    const connectDragSource = this.props.connectDragSource;
+    const draggableState = this.state.canDrag;
+
+    if (draggableState) {
+      return connectDragSource(
+        <div className="idea" canDrag={draggableState}>
+          {ideaString}
+        </div>
+      );
+    } else {
+      return (
+        <div className="idea" canDrag={draggableState}>
+          {ideaString}
+        </div>
+      );
+    }
   },
 });
 
-module.exports = Idea;
+// REACT-DnD
+// DragSource parameters
+const ideaSource = {
+  beginDrag: function(props) {
+    return {
+      content: props.content,
+      type: DnDTypes.IDEA,
+      id: props.ideaID,
+      ideaCount: props.content.length,
+    };
+  },
+  endDrag: function(props, monitor, component) {
+    const dropped = monitor.didDrop();
+
+    if (dropped) {
+      StormActions.separateIdeas(component.state.ideaID, component.state.groupID);
+    }
+  },
+};
+function dragCollect(connect, monitor) {
+  return {
+    connectDragSource: connect.dragSource(),
+    isDragging: monitor.isDragging(),
+  };
+}
+
+module.exports = dragSource(DnDTypes.IDEA, ideaSource, dragCollect)(Idea);

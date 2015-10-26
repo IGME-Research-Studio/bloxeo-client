@@ -2,9 +2,11 @@ const React        = require('react');
 const ReactDOM = require('react-dom');
 
 const CollectionStore   = require('../stores/CollectionStore');
-
-const IdeaCollection    = require('./IdeaCollection.react');
 const StormActions = require('../actions/StormActions');
+
+const IdeaCollection = require('./IdeaCollection.react');
+const TrashCan = require('./TrashCan.react');
+
 const dropTarget   = require('react-dnd').DropTarget;
 const PropTypes    = React.PropTypes;
 const DnDTypes     = require('../constants/DragAndDropConstants');
@@ -44,16 +46,19 @@ const Workspace = React.createClass({
     const connectDropTarget = this.props.connectDropTarget;
     return connectDropTarget(
       <div className="droppable workspace">
-        {this.state.ideaCollections.map(function(group, i) {
-          const left = Math.round(group.x);
-          const top = Math.round(group.y);
-          return <IdeaCollection
-          left={left}
-          top={top}
-          ideas={group}
-          owner={this}
-          ideaID={i}/>;
-        })}
+        <div>
+          {this.state.ideaCollections.map(function(group, i) {
+            const left = Math.round(group.x);
+            const top = Math.round(group.y);
+            return <IdeaCollection
+            left={left}
+            top={top}
+            ideas={group}
+            owner={this}
+            ideaID={i}/>;
+          })}
+        </div>
+        <TrashCan />
       </div>
     );
   },
@@ -66,6 +71,7 @@ const workTarget = {
     const pos = monitor.getClientOffset();
     const idea = monitor.getItem();
     const hasDroppedOnChild = monitor.didDrop();
+
     // If a sub-element was dropped on, prevent bubbling
     if (hasDroppedOnChild) {
       return;

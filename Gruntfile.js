@@ -20,6 +20,10 @@ module.exports = function (grunt) {
       main: {
         src: 'src/index.html',
         dest: 'build/index.html'
+      },
+      trashIcon: {
+        src: 'assets/trashCanIcon.png',
+        dest: 'build/assets/trashCanIcon.png'
       }
     },
     // Compile sass to css

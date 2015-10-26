@@ -132,6 +132,7 @@ body {
     width: calc(100vw - 200px);
   }
 }
+
 .bankCard {
   color: white;
   font-size: 30px;
@@ -227,4 +228,12 @@ body {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+.trashCan {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 45px;
+  padding: 30px 20px 20px 30px;
 }

@@ -64,7 +64,7 @@ const Workspace = React.createClass({
   },
 });
 // REACT-DnD parameters
-const dropTypes = [DnDTypes.CARD, DnDTypes.COLLECTION];
+const dropTypes = [DnDTypes.CARD, DnDTypes.COLLECTION, DnDTypes.IDEA];
 // Workspace DropTarget options
 const workTarget = {
   drop: function(props, monitor, component) {

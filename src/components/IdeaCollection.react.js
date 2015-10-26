@@ -48,7 +48,7 @@ const IdeaCollection = React.createClass({
         {this.state.ideas.content.map(function(idea, i) {
           return (
           <div className="workspaceCard draggable">
-            <Idea idea={idea} ideaID={i} groupID={groupID}/>
+            <Idea content={idea} ideaID={i} groupID={groupID}/>
           </div>
           );
         })}
@@ -57,7 +57,7 @@ const IdeaCollection = React.createClass({
   },
 });
 // REACT-DnD
-const dropTypes = [DnDTypes.CARD, DnDTypes.COLLECTION];
+const dropTypes = [DnDTypes.CARD, DnDTypes.COLLECTION, DnDTypes.IDEA];
 // DropTarget parameters
 const collectionTarget = {
   // Only allow drop from collections with one idea

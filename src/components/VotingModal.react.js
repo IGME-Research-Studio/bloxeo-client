@@ -1,6 +1,6 @@
 const Modal = require('boron/FadeModal');
 const React = require('react');
-const VotingContent = require('../components/VotingContent.react');
+const VotingContent = require('./VotingContent.react');
 
 /**
  * Component including a Vote button that opens the Voting modal
@@ -25,7 +25,12 @@ const VotingModal = React.createClass({
   render: function() {
     return (
       <div>
-        <a className="button" onClick={this.showModal}>Vote</a>
+        <div className="sidebar-vote">
+          <input className="vote-check" type="checkbox" onChange={this.showModal} />
+          <span className="vote-text">Lets vote on these!</span>
+          <p className="vote-waiting">Waiting for... 2 people.</p>
+        </div>
+
         <Modal ref="modal">
           <div className="votingContent">
             <VotingContent hideModal={this.hideModal} />

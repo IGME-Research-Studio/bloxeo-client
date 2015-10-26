@@ -1,4 +1,5 @@
 const React        = require('react');
+const ReactDOM = require('react-dom');
 
 const CollectionStore   = require('../stores/CollectionStore');
 
@@ -17,12 +18,14 @@ const Workspace = React.createClass({
   },
   // set state to the first element of the array
   getInitialState: function() {
-    return (
-      { ideaCollections: CollectionStore.getAllCollections() }
-    );
+    return ({
+      ideaCollections: CollectionStore.getAllCollections(),
+    });
   },
   componentDidMount: function() {
     CollectionStore.addChangeListener(this.collectionChange);
+    const domNode = ReactDOM.findDOMNode(this);
+    StormActions.setLayoutSize(domNode.offsetWidth, domNode.offsetHeight);
   },
   componentWillUnmount: function() {
     CollectionStore.removeChangeListener(this.collectionChange);
@@ -42,9 +45,11 @@ const Workspace = React.createClass({
     return connectDropTarget(
       <div className="droppable workspace">
         {this.state.ideaCollections.map(function(group, i) {
+          const left = Math.round(group.x);
+          const top = Math.round(group.y);
           return <IdeaCollection
-          left={group.left}
-          top={group.top}
+          left={left}
+          top={top}
           ideas={group}
           owner={this}
           ideaID={i}/>;
@@ -57,22 +62,28 @@ const Workspace = React.createClass({
 const dropTypes = [DnDTypes.CARD, DnDTypes.COLLECTION];
 // Workspace DropTarget options
 const workTarget = {
-  drop: function(props, monitor) {
-    const pos = monitor.getSourceClientOffset();
+  drop: function(props, monitor, component) {
+    const pos = monitor.getClientOffset();
     const idea = monitor.getItem();
     const hasDroppedOnChild = monitor.didDrop();
     // If a sub-element was dropped on, prevent bubbling
     if (hasDroppedOnChild) {
       return;
     }
+    const domNode = ReactDOM.findDOMNode(component).getBoundingClientRect();
     // If the collection is being moved do not create another
     if (monitor.getItem().type === DnDTypes.COLLECTION) {
       StormActions.moveCollection(
         monitor.getItem().id,
-        Math.round(pos.x),
-        Math.round(pos.y));
+        Math.round(pos.x) - domNode.left,
+        Math.round(pos.y) - domNode.top
+      );
     } else {
-      StormActions.collectionCreate(idea, Math.round(pos.x), Math.round(pos.y));
+      StormActions.collectionCreate(
+        idea,
+        Math.round(pos.x) - domNode.left,
+        Math.round(pos.y) - domNode.top
+      );
     }
   },
 };

@@ -6,8 +6,8 @@ const assign         = require('object-assign');
 const MEMBER_CHANGE_EVENT = 'member';
 const NAME_CHANGE_EVENT = 'name';
 
-let _boardName = 'Board Name';
-let _description = 'Welcome';
+let _boardName = 'Project Title';
+let _description = 'This is the description.';
 const _members = [1, 2];
 
 const BoardOptionsStore = assign({}, EventEmitter.prototype, {

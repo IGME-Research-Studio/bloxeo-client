@@ -50,9 +50,9 @@ const StormActions = {
       isPaused: isPaused,
     });
   },
-  ideaGroupCreate: function(idea, left, top) {
+  collectionCreate: function(idea, left, top) {
     AppDispatcher.dispatch({
-      actionType: StormConstants.IDEA_GROUP_CREATE,
+      actionType: StormConstants.COLLECTION_CREATE,
       idea: idea,
       left: left,
       top: top,
@@ -62,12 +62,6 @@ const StormActions = {
     AppDispatcher.dispatch({
       actionType: StormConstants.STORE_WORKSPACE,
       workspace: workspace,
-    });
-  },
-  storeMovedIdea: function(idea) {
-    AppDispatcher.dispatch({
-      actionType: StormConstants.STORE_MOVED_IDEA,
-      idea: idea,
     });
   },
   groupIdea: function(id, idea) {
@@ -116,6 +110,17 @@ const StormActions = {
     AppDispatcher.dispatch({
       actionType: StormConstants.REMOVE_COLLECTION,
       id: id,
+    });
+  },
+  /**
+   * Dispatch event to remove a collection with given id
+   * @param {number} id - collection to remove
+   */
+  setLayoutSize: function(width, height) {
+    AppDispatcher.dispatch({
+      actionType: StormConstants.SET_LAYOUT_SIZE,
+      width: width,
+      height: height,
     });
   },
 };

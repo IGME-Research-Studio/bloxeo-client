@@ -45,7 +45,9 @@ const IdeaCreate = React.createClass({
       return (
         <input
           type="text"
-          placeholder="Create Idea"
+          maxLength="30"
+          className="idea-create"
+          placeholder="Idea spew!"
           value={this.state.value}
           onChange={this._onChange}
           onKeyDown={this._onKeyDown}
@@ -56,7 +58,9 @@ const IdeaCreate = React.createClass({
     return (
       <input
         type="text"
-        placeholder="Create Idea"
+        maxLength="30"
+        className="idea-create"
+        placeholder="Idea spew!"
         value={this.state.value}
         onChange={this._onChange}
         onKeyDown={this._onKeyDown}

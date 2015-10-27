@@ -1,9 +1,10 @@
 const React = require('react');
+const Brand = require('./Brand.react');
 const RoomInfoBox = require('./RoomInfoBox.react');
 const MembersList = require('./MembersList.react');
 const TimerBox = require('./TimerBox.react');
 const Wordbank = require('./Wordbank.react');
-const IdeaBox = require('./IdeaBox.react');
+const IdeaCreate = require('./IdeaCreate.react');
 const VotingModal = require('./VotingModal.react');
 
 const Sidebar = React.createClass({
@@ -13,14 +14,17 @@ const Sidebar = React.createClass({
   render: function() {
     return (
       <div className="sideBar">
-        <RoomInfoBox room={this.props.room} />
-        <MembersList />
-        <IdeaBox timerStatus={this.props.timerStatus} />
-        <section className="wordbank">
-          <Wordbank data={this.props.ideas}/>
-        </section>
-        <VotingModal />
-        <TimerBox time={this.props.time} />
+        <div className="sidebar-info">
+          <Brand />
+          <RoomInfoBox room={this.props.room} />
+          <MembersList />
+          <TimerBox time={this.props.time} timerStatus={this.props.timerStatus} />
+          <VotingModal />
+        </div>
+        <Wordbank data={this.props.ideas}/>
+        <div className="sidebar-create">
+          <IdeaCreate timerStatus={this.props.timerStatus} />
+        </div>
       </div>
     );
   },

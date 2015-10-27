@@ -54,7 +54,9 @@
     "react-dom": "^0.14.0",
     "react-router": "^1.0.0-rc3",
     "reactify": "^1.1.1",
-    "socket.io": "^1.3.6"
+    "socket.io": "^1.3.6",
+    "history": "^1.12.6",
+    "react-router": "^1.0.0-r3"
   },
   "devDependencies": {
     "eslint": "^1.5.0",

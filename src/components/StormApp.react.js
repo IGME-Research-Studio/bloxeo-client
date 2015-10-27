@@ -4,7 +4,6 @@ const BoardOptionsStore = require('../stores/BoardOptionsStore');
 const CollectionStore   = require('../stores/CollectionStore');
 const TimerStore        = require('../stores/TimerStore');
 const IdeaStore         = require('../stores/IdeaStore');
-
 const Sidebar         = require('./Sidebar.react');
 const Workspace       = require('./Workspace.react');
 const StormActions    = require('../actions/StormActions');
@@ -59,7 +58,7 @@ const StormApp = React.createClass({
           <Workspace/>
         </div>
       </div>
-    );
+      );
   },
 
 });

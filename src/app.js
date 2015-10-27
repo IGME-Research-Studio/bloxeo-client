@@ -10,7 +10,7 @@ const Route = ReactRouter.Route;
 
 window.onload = function() {
   const body = document.querySelector('#app_space');
-  // ReactDOM.render(<StormApp />, body);
+  // renders the routing path
   ReactDOM.render((
   <Router>
     <Route path="/" component={LandingPage}/>

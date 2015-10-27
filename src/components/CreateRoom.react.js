@@ -5,6 +5,7 @@ const CreateRoom = React.createClass({
   render: function() {
     return (
       <div className="createRoomButton">
+        // link used in routing
         <Link to="/workSpace" className="button">Create a room</Link>
       </div>
     );

@@ -1,10 +1,10 @@
 const React = require('react');
-const StormStore = require('../stores/StormStore');
+const BoardOptionsStore = require('../stores/BoardOptionsStore');
 
 const MembersList = React.createClass({
   getInitialState: function() {
     return {
-      members: StormStore.getAllMembers(),
+      members: BoardOptionsStore.getAllMembers(),
     };
   },
 
@@ -21,6 +21,7 @@ const MembersList = React.createClass({
     // put all ideas in ideaList
     return (
       <div className="membersList">
+        <h5 className="sidebar-title">Team Members</h5>
         {members}
       </div>
     );

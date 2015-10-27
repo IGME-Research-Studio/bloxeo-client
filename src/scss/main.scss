@@ -2,11 +2,14 @@ $font-stack:    Helvetica, sans-serif;
 $primary-color: #333;
 $voting-bgColor: #FDE3A7;
 
+.noMargin {
+  margin: 0;
+}
+
 body {
   font: 100% $font-stack;
   color: $primary-color;
   background-color: #fff;
-  margin:0;
   overflow: hidden;
 }
 
@@ -36,7 +39,7 @@ body {
   cursor: pointer;
   padding: 10px 50px;
   border-radius: 3px;
-  margin-top: 40px;
+  margin-top: 20px;
 }
 
 .yesButton {
@@ -57,11 +60,59 @@ body {
   vertical-align: middle;
 }
 
+.sidebar-title {
+  margin-bottom: 10px;
+}
+
+.sidebar-info {
+  padding: 10px 20px;
+}
+
+.sidebar-create {
+  padding: 10px;
+}
+
+.sidebar-vote {
+  padding: 20px 0;
+}
+
+.room-desc {
+  margin-top: 10px;
+}
+
+.vote-check {
+  -ms-transform: scale(2);
+  -moz-transform: scale(2);
+  -webkit-transform: scale(2);
+  -o-transform: scale(2);
+  transform: scale(2);
+}
+
+.vote-text {
+  margin-left: 10px;
+}
+
+.vote-waiting {
+  margin: 0 0 0 30px;
+}
+
+.idea-create {
+  padding: 0 10px;
+  width: 260px;
+  height: 30px;
+  appearance: none;
+  box-shadow: none;
+  border-radius: 5px;
+  border: none;
+  background-color: rgb(50, 50, 50);
+}
+
 .dragContainer, .workspace {
   background-color: #ddd;
   flex-grow:1;
   display: inline-block;
   vertical-align: middle;
+  position: relative;
 }
 .workspace {
   height:100vh;
@@ -69,9 +120,19 @@ body {
   overflow:none;
 }
 .wordbank {
+  display: flex;
   flex-grow: 1;
-  overflow: auto;
+  overflow: hidden;
+  background-color: #bbb;
+  z-index: 100;
+  width: 100%;
+
+  transition: width 0.5s ease-in-out;
+  &.expanded {
+    width: calc(100vw - 200px);
+  }
 }
+
 .bankCard {
   color: white;
   font-size: 30px;
@@ -80,7 +141,30 @@ body {
   display: inline-block;
   margin: 5px;
 }
-
+.wordbankIdeas {
+  flex-grow:1;
+  overflow: auto;
+}
+.expandColumn {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.expandArrow {
+  width: 0;
+  height: 0;
+  margin: 0px 5px 0px 10px;
+  &.right {
+    border-top: 50px solid transparent;
+    border-bottom: 50px solid transparent;
+    border-left: 10px solid black;
+  }
+  &.left{
+    border-top: 50px solid transparent;
+    border-bottom: 50px solid transparent;
+    border-right: 10px solid black;
+  }
+}
 .appContainer{
   display:flex;
   flex-direction:row;
@@ -99,28 +183,38 @@ body {
   background-color: yellow;
   display:inline-block;
   position: absolute;
-  //padding:10px;
 }
 
 .timerBox {
-  background-color: cyan;
   display: inline-block;
-
 }
-
-.checkbox {
-  display: inline-block;
+.timer-title {
+  margin: 20px 0 0 0;
 }
 .timer {
+  margin-right: 10px;
+  font-size: 26px;
   display: inline-block;
+}
+.timer-btn {
+  cursor: pointer;
+}
+.timer-btn.start {
+  color: green;
+}
+.timer-btn.stop {
+  color: red;
+}
+.underline {
+  text-decoration: underline;
 }
 
 .circleMemberIcon {
-  width: 50px;
-  height: 50px;
+  width: 35px;
+  height: 35px;
   text-align: center;
-  line-height: 20px;
-  margin-left: 10px;
+  line-height: 7px;
+  margin-right: 10px;
   color: white;
   background-color: black;
   border-radius: 50%;
@@ -135,7 +229,6 @@ body {
   text-align: center;
 }
   
-
 .noSelect{
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -144,3 +237,12 @@ body {
   -ms-user-select: none;
   user-select: none;
 }
+
+.trashCan {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 45px;
+  padding: 30px 20px 20px 30px;
+}
+

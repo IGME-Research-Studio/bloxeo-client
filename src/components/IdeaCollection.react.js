@@ -1,14 +1,13 @@
-const React        = require('react');
-const StormActions = require('../actions/StormActions');
-const StormStore   = require('../stores/StormStore');
-const dropTarget   = require('react-dnd').DropTarget;
-const dragSource   = require('react-dnd').DragSource;
-const PropTypes    = React.PropTypes;
-const DnDTypes     = require('../constants/DragAndDropConstants');
-const Idea         = require('./Idea.react');
+const React           = require('react');
+const StormActions    = require('../actions/StormActions');
+const CollectionStore = require('../stores/CollectionStore');
+const dropTarget      = require('react-dnd').DropTarget;
+const dragSource      = require('react-dnd').DragSource;
+const PropTypes       = React.PropTypes;
+const DnDTypes        = require('../constants/DragAndDropConstants');
+const Idea            = require('./Idea.react');
 
-
-const IdeaGroup = React.createClass({
+const IdeaCollection = React.createClass({
   propTypes: {
     connectDropTarget: PropTypes.func.isRequired,
   },
@@ -21,10 +20,10 @@ const IdeaGroup = React.createClass({
     };
   },
   componentDidMount: function() {
-    StormStore.addGroupListener(this.ideasChange);
+    CollectionStore.addChangeListener(this.ideasChange);
   },
   componentWillUnmount: function() {
-    StormStore.removeGroupListener(this.ideasChange);
+    CollectionStore.removeChangeListener(this.ideasChange);
   },
   _style: function() {
     return {
@@ -35,7 +34,7 @@ const IdeaGroup = React.createClass({
 
   ideasChange: function() {
     this.setState({
-      ideas: StormStore.updateIdeaGroup(this.props.ideaID),
+      ideas: CollectionStore.updateCollection(this.props.ideaID),
     });
   },
 
@@ -49,7 +48,7 @@ const IdeaGroup = React.createClass({
         {this.state.ideas.content.map(function(idea, i) {
           return (
           <div className="workspaceCard draggable">
-            <Idea idea={idea} ideaID={i} groupID={groupID}/>
+            <Idea content={idea} ideaID={i} groupID={groupID}/>
           </div>
           );
         })}
@@ -58,7 +57,7 @@ const IdeaGroup = React.createClass({
   },
 });
 // REACT-DnD
-const dropTypes = [DnDTypes.CARD, DnDTypes.COLLECTION];
+const dropTypes = [DnDTypes.CARD, DnDTypes.COLLECTION, DnDTypes.IDEA];
 // DropTarget parameters
 const collectionTarget = {
   // Only allow drop from collections with one idea
@@ -105,5 +104,5 @@ function dragCollect(connect, monitor) {
 }
 
 module.exports = dragSource(DnDTypes.COLLECTION, collectionSource, dragCollect)(
-  dropTarget(dropTypes, collectionTarget, targetCollect)(IdeaGroup)
+  dropTarget(dropTypes, collectionTarget, targetCollect)(IdeaCollection)
 );

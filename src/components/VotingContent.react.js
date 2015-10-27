@@ -1,6 +1,6 @@
 const React = require('react');
 const StormActions = require('../actions/StormActions');
-const StormStore = require('../stores/StormStore');
+const CollectionStore = require('../stores/CollectionStore');
 const VoteButton = require('../components/VoteButton.react');
 const VoteElement = require('../components/VoteElement.react');
 const VotingResult = require('../components/VotingResult.react');
@@ -15,7 +15,7 @@ const VotingContent = React.createClass({
    */
   getInitialState: function() {
     return ({
-      ideas: StormStore.getAllGroups(),
+      ideas: CollectionStore.getAllCollections(),
       voteIndex: 0,
       label: 'vote',
       hideIds: [],
@@ -25,19 +25,19 @@ const VotingContent = React.createClass({
    * Invoked before initial render occurs
    */
   componentDidMount: function() {
-    StormStore.addGroupListener(this._onChange);
+    CollectionStore.addChangeListener(this._onChange);
   },
   /**
    * Invoked before component is unmounted from DOM
    */
   componentWillUnmount: function() {
-    StormStore.removeGroupListener(this._onChange);
+    CollectionStore.removeChangeListener(this._onChange);
   },
   /**
    * Event handler for change events from StormStore
    */
   _onChange: function() {
-    this.setState({ideas: StormStore.getAllGroups()});
+    this.setState({ideas: CollectionStore.getAllCollections()});
   },
   /**
    * @return {object} - the current idea to display

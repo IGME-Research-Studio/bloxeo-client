@@ -8,6 +8,7 @@ const LandingPage = React.createClass({
       <div className="landingPage">
         <CreateRoom />
         <JoinRoom />
+        {this.props.children}
       </div>
     );
   },

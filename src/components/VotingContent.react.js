@@ -1,6 +1,8 @@
 const React = require('react');
 const StormActions = require('../actions/StormActions');
+const BoardOptionsStore = require('../stores/BoardOptionsStore');
 const CollectionStore = require('../stores/CollectionStore');
+const NavBarConstants = require('../constants/NavBarConstants');
 const VoteButton = require('../components/VoteButton.react');
 const VoteElement = require('../components/VoteElement.react');
 const VotingResult = require('../components/VotingResult.react');
@@ -18,7 +20,6 @@ const VotingContent = React.createClass({
       ideas: CollectionStore.getAllCollections(),
       voteIndex: 0,
       label: 'vote',
-      hideIds: [],
     });
   },
   /**
@@ -42,47 +43,78 @@ const VotingContent = React.createClass({
   /**
    * @return {object} - the current idea to display
    */
-  getCurrentIdea: function() {
+  _getCurrentIdea: function() {
     if (this.state.ideas.length === 0) {
       return null;
     }
     return this.state.ideas[this.state.voteIndex];
   },
   /**
+   * Sort ideas by number of votes
+   */
+  _sortIdeas: function() {
+    this.state.ideas.sort(function(idea1, idea2) {
+      if (idea1.votes < idea2.votes) {
+        return 1;
+      } else if (idea1.votes === idea2.votes) {
+        return 0;
+      } else {
+        return -1;
+      }
+    });
+  },
+  /**
+   * Get an array of ids of the ideaCollection not in the top number of
+   * vote results to return to the workspace.
+   * @return {array} - ids to hide
+   */
+  _getHideIds: function() {
+    const numReturnToWorkspace = BoardOptionsStore.getNumReturnToWorkspace();
+    const hideIds = [];
+
+    for (let i = 0; i < this.state.ideas.length; i++) {
+      if (i >= numReturnToWorkspace) {
+        hideIds.push(this.state.ideas[i].index);
+      }
+    }
+
+    return hideIds;
+  },
+  /**
    * Change state on button click
    * @param {boolean} keep - whether or not to keep the idea
    */
-  handleStateChange: function(keep) {
-    const hideIds = [];
+  handleStateChange: function(upvote) {
+    const idea = this._getCurrentIdea();
 
-    if (!keep) {
-      this.getCurrentIdea().keep = false;
-      hideIds.push(this.state.voteIndex);
-      this.setState({hideIds: hideIds});
+    if (upvote) {
+      idea.votes += 1;
     }
 
     if (this.state.voteIndex === this.state.ideas.length - 1) {
-      this.setState({label: 'results'});
+      this._sortIdeas();
+
+      // store voting results
+      StormActions.storeResults(this.state.ideas);
+
+      // remove non-top voted ideaCollections from the Workspace
+      const hideIds = this._getHideIds();
+      StormActions.hideIdeas(hideIds);
+
+      // show results tab
+      StormActions.selectTab(NavBarConstants.RESULTS_TAB);
+
+      this.props.hideModal();
     } else {
       this.setState({voteIndex: this.state.voteIndex + 1});
     }
-  },
-  /**
-   * Pass hideIds to the Store and reset data
-   */
-  processVotes: function() {
-    StormActions.hideIdeas(this.state.hideIds);
-    this.props.hideModal();
-
-    // reset state
-    this.setState({voteIndex: 0, hideIds: []});
   },
   /**
    * Render VotingContent component
    * @return {object}
    */
   render: function() {
-    if (!this.getCurrentIdea()) {
+    if (!this._getCurrentIdea()) {
       return (
         <p>There is nothing to vote on yet. Drag some ideas onto the board
         to start voting!</p>
@@ -93,7 +125,7 @@ const VotingContent = React.createClass({
     case 'vote':
       return (
         <div>
-          <VoteElement idea={this.getCurrentIdea()} />
+          <VoteElement idea={this._getCurrentIdea()} />
           <VoteButton data='true' changeState={this.handleStateChange} />
           <VoteButton data='false' changeState={this.handleStateChange} />
         </div>

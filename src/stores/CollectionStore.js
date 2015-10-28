@@ -50,14 +50,14 @@ function updateForce() {
 }
 /**
  * Hide ideas with the given ids
- * @param {string[]} ids - an array of ids to remove
+ * @param {number[]} ids - an array of ids to remove
  */
 function _hideIdeas(ids) {
-  for (let i = 0; i < ids.length; i++) {
-    _collections[ids[i]].keep = false;
-  }
   _collections = _collections.filter(function(group) {
-    return group.keep ? true : false;
+    if (ids.indexOf(group.index) === -1) {
+      return true;
+    }
+    return false;
   });
 }
 /**
@@ -65,7 +65,7 @@ function _hideIdeas(ids) {
 */
 function createCollection(idea, left, top) {
   const content = [idea.content];
-  _collections.push({content, keep: true, x: left, y: top});
+  _collections.push({content, keep: true, x: left, y: top, votes: 0});
   updateForce();
 }
 /**

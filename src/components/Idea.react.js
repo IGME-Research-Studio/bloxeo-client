@@ -91,7 +91,7 @@ const ideaSource = {
       content: props.content,
       type: DnDTypes.IDEA,
       id: props.ideaID,
-      ideaCount: props.content.length,
+      ideaCount: 1,
     };
   },
   endDrag: function(props, monitor, component) {

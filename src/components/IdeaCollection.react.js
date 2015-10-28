@@ -69,7 +69,7 @@ const collectionTarget = {
   drop: function(props, monitor) {
     const idea = monitor.getItem();
     // Do not execute drop on self
-    if (props.ideaID === idea.id) {
+    if (props.ideaID === idea.id && idea.type !== 'IDEA') {
       return;
     }
     StormActions.groupIdea(props.ideaID, idea);

@@ -42,13 +42,14 @@ const IdeaCollection = React.createClass({
     const connectDropTarget = this.props.connectDropTarget;
     const connectDragSource = this.props.connectDragSource;
     const groupID = this.state.ideaID;
+    console.log(this.state.ideas);
     // Apply react DnD to element
     return connectDragSource(connectDropTarget(
       <div className="ideaGroup drop-zone" style={this._style()}>
         {this.state.ideas.content.map(function(idea, i) {
           return (
           <div className="workspaceCard draggable">
-            <Idea content={idea} ideaID={i} groupID={groupID}/>
+            <Idea content={idea.text} ideaID={i} groupID={groupID}/>
           </div>
           );
         })}

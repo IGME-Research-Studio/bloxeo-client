@@ -50,7 +50,7 @@ function create(ideaContent) {
 AppDispatcher.register(function(action) {
   switch (action.actionType) {
   case StormConstants.IDEA_CREATE:
-    create(action.ideaContent.trim());
+    create(action.ideaContent);
     IdeaStore.emitChange();
     break;
   }

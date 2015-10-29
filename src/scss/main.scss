@@ -1,3 +1,5 @@
+@import "../../node_modules/bootstrap-sass/assets/stylesheets/_bootstrap.scss";
+
 $font-stack:    Helvetica, sans-serif;
 $primary-color: #333;
 $voting-bgColor: #FDE3A7;
@@ -13,7 +15,12 @@ body {
   background-color: #fff;
   overflow: hidden;
 }
-
+a:hover {
+  text-decoration: none;
+}
+p {
+  font-size: 14px;
+}
 .votingContent {
   background-color: $voting-bgColor;
   padding: 110px 30px;
@@ -41,6 +48,10 @@ body {
   padding: 10px 50px;
   border-radius: 3px;
   margin-top: 20px;
+  font-size: 14px;
+  &:hover {
+    color: white;
+  }
 }
 
 .yesButton {
@@ -71,6 +82,12 @@ body {
   &.is-selected {
     color: $primary-color;
     background-color: $workspace-bgColor;
+    &:hover {
+      color: black;
+    }
+  }
+  &:hover {
+    color: $workspace-bgColor;
   }
 }
 
@@ -188,10 +205,12 @@ body {
 
 .vote-text {
   margin-left: 10px;
+  font-size: 15px;
 }
 
 .vote-waiting {
   margin: 0 0 0 30px;
+  font-size: 15px;
 }
 
 .idea-create {
@@ -203,6 +222,8 @@ body {
   border-radius: 5px;
   border: none;
   background-color: rgb(50, 50, 50);
+  color: white;
+  font-size: 12px;
 }
 
 .dragContainer, .workspace {
@@ -290,12 +311,28 @@ body {
   margin: 20px 0 0 0;
 }
 .timer {
-  margin-right: 10px;
-  font-size: 26px;
+  font-size: 25px;
+  line-height: 25px;
   display: inline-block;
+  position: absolute;
+  transform: translateX(-50%);
+}
+.progress {
+  border-radius: 0px;
+  height: 25px;
+  text-align: center;
+  filter: brightness(100%);
+  margin-bottom: 0px;
+}
+.progress-bar {
+  -webkit-transition: width 1s linear;
+  transition: width 1s linear;
 }
 .timer-btn {
   cursor: pointer;
+  font-size: 14px;
+  float: right;
+  margin-right: 10px;
 }
 .timer-btn.start {
   color: green;

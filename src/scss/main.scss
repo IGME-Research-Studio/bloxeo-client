@@ -84,12 +84,20 @@ body {
 
 .resultContainer {
   display: inline-block;
-  padding: 15px 80px 50px 0;
+  margin: 15px 90px 50px 0;
   vertical-align: top;
 }
 
 .resultGroup {
   display: inline-block;
+
+  &.is-selectable {
+    cursor: pointer;
+  }
+
+  &.is-selected {
+    border: 3px solid gold;
+  }
 }
 
 .resultGroupItem {
@@ -97,16 +105,48 @@ body {
   text-align: center;
   color: white;
   background-color: MediumSeaGreen;
-  margin: 0 2px 2px 0;
+  margin: 2px;
   padding: 10px 30px;
 }
 
-.resultVotesBadge {
+.resultVotes {
   display: inline-block;
-  color: white;
-  padding: 5px 10px;
-  background-color: green;
+  color: $primary-color;
   vertical-align: top;
+  margin-left: 5px;
+}
+
+.resultVotesStar {
+  color: gold;
+  font-size: 35px;
+  line-height: 1;
+  padding: 0 4px;
+  line-height: 0.8;
+}
+
+.resultVotesNumber {
+  position: relative;
+  top: -5px;
+}
+
+.otherResults {
+  display: inline-block;
+}
+
+.resultsControls {
+  float: right;
+  margin: 18px 0;
+}
+
+.resultsControls > a {
+  cursor: pointer;
+  margin-left: 25px;
+  color: dodgerblue;
+
+  &.is-disabled {
+    color: gray;
+    cursor: auto;
+  }
 }
 
 .sideBar {

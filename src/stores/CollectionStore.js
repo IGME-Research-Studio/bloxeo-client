@@ -61,6 +61,13 @@ function _hideIdeas(ids) {
   });
 }
 /**
+ * Add given collections to the stored collections
+ * @param {object[]} collections - given collections
+ */
+function _addCollections(collections) {
+  Array.prototype.push.apply(_collections, collections);
+}
+/**
 * Create an idea group when an idea is dragged from the idea bank onto the workspace
 */
 function createCollection(idea, left, top) {
@@ -74,6 +81,8 @@ function createCollection(idea, left, top) {
 */
 function groupIdeas(id, idea) {
   _collections[id].content.push(idea.content);
+  // reset stored votes
+  _collections[id].votes = 0;
   updateForce();
 }
 /**
@@ -140,6 +149,12 @@ AppDispatcher.register(function(action) {
     break;
   case StormConstants.SET_LAYOUT_SIZE:
     setLayoutSize(action.width, action.height);
+    break;
+  case StormConstants.ADD_COllECTIONS:
+    _addCollections(action.collections);
+    CollectionStore.emitChange();
+    break;
+  default:
     break;
   }
 });

@@ -1,5 +1,6 @@
 const AppDispatcher  = require('../dispatcher/AppDispatcher');
 const StormConstants = require('../constants/StormConstants');
+const StormActions   = require('../actions/StormActions');
 const socketIO       = require('socket.io-client');
 const sailsIO        = require('sails.io.js');
 // const reqwest        = require('reqwest');
@@ -15,6 +16,7 @@ io.socket.get('/', function(body, JWR) {
     //   index: in _collections array,
     //   content: ['strings', 'string'],
     // }
+    StormActions.addedCollection(res.index, res.content);
   });
 
   io.socket.on(SocketEvents.MODIFIED_COLLECTION, function(res) {
@@ -23,6 +25,7 @@ io.socket.get('/', function(body, JWR) {
     //   index: in _collections array,
     //   content: ['strings', 'string'],
     // }
+    StormActions.modifiedCollection(res.index, res.content);
   });
 
   io.socket.on(SocketEvents.REMOVED_COLLECTION, function(res) {
@@ -30,16 +33,19 @@ io.socket.get('/', function(body, JWR) {
     // res = {
     //   index: in _collections array,
     // }
+    StormActions.removedCollection(res.index);
   });
 
   io.socket.on(SocketEvents.UPDATED_IDEAS, function(res) {
     console.log(res);
     // res = ['strings', 'string']
+    StormActions.updatedIdeas(res);
   });
 
   io.socket.on(SocketEvents.RECIEVED_COLLECTIONS, function(res) {
     console.log(res);
     // res = []
+    StormActions.recievedCollections(res);
   });
 });
 

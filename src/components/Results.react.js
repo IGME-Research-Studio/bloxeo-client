@@ -1,8 +1,11 @@
 const React = require('react');
 
 const Result = require('./Result.react');
+
 const BoardOptionsStore = require('../stores/BoardOptionsStore');
 const VotingResultsStore = require('../stores/VotingResultsStore');
+const StormActions = require('../actions/StormActions');
+const NavBarConstants = require('../constants/NavBarConstants');
 
 /**
  * Retrieve the current data from the VotingResultsStore
@@ -10,6 +13,7 @@ const VotingResultsStore = require('../stores/VotingResultsStore');
 function getStoreState() {
   return {
     results: VotingResultsStore.getResults(),
+    showReturnToWorkspace: false,
   };
 }
 
@@ -37,10 +41,54 @@ const Results = React.createClass({
     this.setState(getStoreState());
   },
   /**
+   * Get the selected results
+   * @return {object[]} - an array of selected results
+   */
+  _getSelectedResults: function() {
+    const returnCollections = this.state.results.filter(function(result) {
+      if (result.selected) {
+        return true;
+      }
+      return false;
+    });
+
+    return returnCollections;
+  },
+  /**
+   * Called from Result child components when user selects or
+   * deselects a result
+   * @param {object} result - the result
+   * @param {boolean} selected - set selected to true or false
+   */
+  handleSelect: function(result, selected) {
+    result.selected = selected;
+    const selectedResults = this._getSelectedResults();
+    this.setState({
+      showReturnToWorkspace: selectedResults.length > 0 ? true : false,
+    });
+  },
+  returnToWorkspace: function() {
+    let returnCollections = this._getSelectedResults();
+    if (returnCollections.length > 0) {
+      // remove selected property before storing
+      returnCollections = returnCollections.map(function(collection) {
+        delete collection.selected;
+        return collection;
+      });
+
+      // add selected collections to store
+      StormActions.addCollections(returnCollections);
+
+      // show workspace tab
+      StormActions.selectTab(NavBarConstants.WORKSPACE_TAB);
+    }
+  },
+  /**
    * Render Results Component
    * @return {object}
    */
   render: function() {
+    const that = this;
     const topResults = [];
     const otherResults = [];
 
@@ -58,13 +106,23 @@ const Results = React.createClass({
         <p>Top 3</p>
         {topResults.map(function(ideaCollection) {
           return (
-            <Result ideaCollection={ideaCollection} />
+            <Result ideaCollection={ideaCollection} selectable={false} />
           );
         })}
-        <p>Other Results</p>
+        <div>
+          <p className="otherResults">Other Results</p>
+          <div className="resultsControls">
+            <a onClick={this.returnToWorkspace}
+                className={this.state.showReturnToWorkspace ? '' : 'is-disabled'}>
+              Return to Workspace
+            </a>
+          </div>
+        </div>
         {otherResults.map(function(ideaCollection) {
           return (
-            <Result ideaCollection={ideaCollection} />
+            <Result ideaCollection={ideaCollection}
+                selectable={true}
+                handleSelect={that.handleSelect} />
           );
         })}
       </div>

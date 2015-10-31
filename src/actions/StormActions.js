@@ -132,6 +132,16 @@ const StormActions = {
     });
   },
   /**
+   * Dispatch event add idea collections
+   * @param {object[]} collections - collections to add
+   */
+  addCollections: function(collections) {
+    AppDispatcher.dispatch({
+      actionType: StormConstants.ADD_COllECTIONS,
+      collections: collections,
+    });
+  },
+  /**
    * Dispatch event to remove a collection with given id
    * @param {number} id - collection to remove
    */

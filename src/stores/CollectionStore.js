@@ -70,26 +70,34 @@ function _addCollections(collections) {
 /**
 * Create an idea group when an idea is dragged from the idea bank onto the workspace
 */
-function createCollection(idea, left, top) {
-  const content = [idea.content];
-  _collections.push({content, keep: true, x: left, y: top, votes: 0});
-  updateForce();
+function createCollection(index, content, left, top) {
+  _collections[index] = {content, keep: true, x: left, y: top, votes: 0};
 }
 /**
-* Group two ideas when one idea is dragged onto another
-* Remove the ideaGroup that was combined with a second ideaGroup
+* Change the content of collection with given index
 */
-function groupIdeas(id, idea) {
-  _collections[id].content.push(idea.content);
-  // reset stored votes
-  _collections[id].votes = 0;
-  updateForce();
+function updateCollection(index, content) {
+  _collections[index].content = content;
+}
+/**
+ * Recieve collections from server
+ * @param {object[]} collections - all collections
+ */
+function recievedAllCollections(collections) {
+  collections.forEach((collection, index) => {
+    if (_collections[index] === undefined) {
+      createCollection(index, collection.content, 0, 0);
+    } else {
+      updateCollection(index, collection.content);
+    }
+    // _collections[index].content = collection.content;
+  });
 }
 /**
  * Remove idea collection at specified index
  */
-function removeCollection(id) {
-  _collections.splice(id, 1);
+function removeCollection(index) {
+  _collections.splice(index, 1);
   updateForce();
 }
 /**
@@ -123,25 +131,28 @@ force.on('tick', function() {
 
 AppDispatcher.register(function(action) {
   switch (action.actionType) {
-  case StormConstants.COLLECTION_CREATE:
-    createCollection(action.idea, action.left, action.top);
+  case StormConstants.ADDED_COLLECTION:
+    createCollection(action.index, action.content, 0, 0);
     CollectionStore.emitChange();
+    updateForce();
     break;
-  case StormConstants.GROUP_IDEAS:
-    groupIdeas(action.id, action.idea);
+  case StormConstants.MODIFIED_COLLECTION:
+    updateCollection(action.index, action.content);
     CollectionStore.emitChange();
+    updateForce();
     break;
   case StormConstants.HIDE_IDEAS:
     _hideIdeas(action.ids);
     CollectionStore.emitChange();
     break;
-  case StormConstants.REMOVE_COLLECTION:
-    removeCollection(action.id);
+  case StormConstants.REMOVED_COLLECTION:
+    removeCollection(action.index);
     CollectionStore.emitChange();
     break;
   case StormConstants.MOVE_COLLECTION:
     moveCollection(action.id, action.left, action.top);
     CollectionStore.emitChange();
+    updateForce();
     break;
   case StormConstants.SEPARATE_IDEAS:
     separateIdeas(action.ideaID, action.groupID);
@@ -152,6 +163,11 @@ AppDispatcher.register(function(action) {
     break;
   case StormConstants.ADD_COllECTIONS:
     _addCollections(action.collections);
+    CollectionStore.emitChange();
+    break;
+  case StormConstants.RECIEVED_COLLECTIONS:
+    recievedAllCollections(action.collections);
+    updateForce();
     CollectionStore.emitChange();
     break;
   default:

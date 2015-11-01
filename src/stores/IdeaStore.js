@@ -5,7 +5,7 @@ const assign         = require('object-assign');
 
 const IDEA_CHANGE_EVENT = 'idea';
 
-const _ideas = [];
+let _ideas = [];
 
 const IdeaStore = assign({}, EventEmitter.prototype, {
   /**
@@ -35,22 +35,17 @@ const IdeaStore = assign({}, EventEmitter.prototype, {
   },
 });
 /**
- * Create idea element and push to ideas array
- * @param {string} ideaContent
+ * Set idea array on response from server
+ * @param {array} ideas
  */
-function create(ideaContent) {
-  const idea = {
-    content: ideaContent,
-    keep: true,
-    ideaCount: 1,
-  };
-  _ideas.push(idea);
+function setIdeas(ideas) {
+  _ideas = ideas;
 }
 
 AppDispatcher.register(function(action) {
   switch (action.actionType) {
-  case StormConstants.IDEA_CREATE:
-    create(action.ideaContent.trim());
+  case StormConstants.UPDATED_IDEAS:
+    setIdeas(action.ideas);
     IdeaStore.emitChange();
     break;
   }

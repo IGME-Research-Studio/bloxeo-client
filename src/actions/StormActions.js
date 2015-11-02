@@ -71,11 +71,11 @@ const StormActions = {
       id: id,
     });
   },
-  separateIdeas: function(ideaID, groupID) {
+  separateIdeas: function(groupID, ideaContent) {
     AppDispatcher.dispatch({
       actionType: StormConstants.SEPARATE_IDEAS,
-      ideaID: ideaID,
       groupID: groupID,
+      ideaContent: ideaContent,
     });
   },
   /**

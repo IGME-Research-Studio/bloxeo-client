@@ -110,15 +110,6 @@ function moveCollection(id, left, top) {
   _collections[id].py = top;
   updateForce();
 }
-/**
- * Remove one idea from idea group when mouse is held for x seconds
- */
-function separateIdeas(ideaID, groupID) {
-  if (_collections[groupID].content.length > 1) {
-    _collections[groupID].content.splice(ideaID, 1);
-  }
-  updateForce();
-}
 
 function setLayoutSize(width, height) {
   force.size([width, height]);
@@ -153,10 +144,6 @@ AppDispatcher.register(function(action) {
     moveCollection(action.id, action.left, action.top);
     CollectionStore.emitChange();
     updateForce();
-    break;
-  case StormConstants.SEPARATE_IDEAS:
-    separateIdeas(action.ideaID, action.groupID);
-    CollectionStore.emitChange();
     break;
   case StormConstants.SET_LAYOUT_SIZE:
     setLayoutSize(action.width, action.height);

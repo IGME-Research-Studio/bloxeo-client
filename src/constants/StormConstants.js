@@ -21,11 +21,10 @@ module.exports = {
   STORE_WORKSPACE: 'STORE_WORKSPACE',
   STORE_MOVED_IDEA: 'STORE_MOVED_IDEA',
   // Server URL constants
-  SERVER_URL_DEV: 'http://storm-server-will.herokuapp.com',// 'http://storm-server-stage.herokuapp.com',
+  SERVER_URL_DEV: 'http://storm-server-stage.herokuapp.com',
   SERVER_URL_PROD: 'http://storm-server-prod.herokuapp.com',
   API_VERSION: '/v1',
-  TEST_BOARD: 'VJVdwO1Gx', // '4kc-P_1zl',
-  TEST_BOARD_2: 'VJVdwO1Gx',
+  TEST_BOARD: 'Ny4ZtHmfe',
   // Server requests
   GET_IDEAS: 'GET_IDEAS',
   GET_COLLECTIONS: 'GET_COLLECTIONS',

@@ -98,7 +98,7 @@ const ideaSource = {
     const dropped = monitor.didDrop();
 
     if (dropped) {
-      StormActions.separateIdeas(component.state.ideaID, component.state.groupID);
+      StormActions.separateIdeas(component.state.groupID, component.props.content);
     }
   },
 };

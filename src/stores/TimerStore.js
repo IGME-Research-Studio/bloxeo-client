@@ -13,6 +13,7 @@ const _time = {
 let _timer = null;
 // if timer is paused
 let _timerStatus = false;
+const _totalTime = (_time.minutes * 60) + _time.seconds;
 
 const TimerStore = assign({}, EventEmitter.prototype, {
   /**
@@ -20,6 +21,14 @@ const TimerStore = assign({}, EventEmitter.prototype, {
    */
   getTime: function() {
     return _time;
+  },
+   /**
+  * Calculate the width of the timer visual as a percentage
+  */
+  getTimerWidth: function() {
+    const timeLeft = _totalTime - ((_time.minutes * 60) + _time.seconds);
+    const timePassedPercent = (timeLeft / _totalTime) * 100;
+    return timePassedPercent;
   },
   /**
    * @return {boolean}

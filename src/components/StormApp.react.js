@@ -27,6 +27,7 @@ function getStormState() {
     room: BoardOptionsStore.getRoomData(),
     tab: BoardOptionsStore.getSelectedTab(),
     time: TimerStore.getTime(),
+    timerWidth: TimerStore.getTimerWidth(),
   };
 }
 
@@ -63,7 +64,7 @@ const StormApp = React.createClass({
   render: function() {
     return (
       <div className="appContainer">
-        <Sidebar room={this.state.room} time={this.state.time} timerStatus={this.state.timerStatus} ideas={this.state.ideas} />
+        <Sidebar room={this.state.room} time={this.state.time} timerStatus={this.state.timerStatus} ideas={this.state.ideas} timerWidth={this.state.timerWidth}/>
         <div className="dragContainer">
           <NavBar selectedTab={this.state.tab} />
           {(() => {

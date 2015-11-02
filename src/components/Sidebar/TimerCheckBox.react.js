@@ -1,5 +1,5 @@
 const React = require('react');
-const StormActions = require('../actions/StormActions');
+const StormActions = require('../../actions/StormActions');
 
 const TimerCheckBox = React.createClass({
   _onClick: function() {

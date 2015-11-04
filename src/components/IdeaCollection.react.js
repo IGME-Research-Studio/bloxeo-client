@@ -48,7 +48,7 @@ const IdeaCollection = React.createClass({
         {this.state.ideas.content.map(function(idea, i) {
           return (
           <div className="workspaceCard draggable">
-            <Idea content={idea} ideaID={i} groupID={groupID}/>
+            <Idea content={idea.text} ideaID={i} groupID={groupID}/>
           </div>
           );
         })}

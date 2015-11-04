@@ -8,7 +8,7 @@ const RoomInfoBox = React.createClass({
    */
   render: function() {
     return (
-      <div id="roomInfoBox">
+      <div className="sidebar-section">
         <RoomName name={this.props.room.name} />
         <RoomDesciption description={this.props.room.description} />
       </div>

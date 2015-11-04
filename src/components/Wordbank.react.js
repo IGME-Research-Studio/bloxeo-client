@@ -38,15 +38,15 @@ const Wordbank = React.createClass({
 
     return (
       <div className={classToAdd} ref="wordbank">
-      <div className='wordbankIdeas'>
-        {this.props.data.map( function(item, i) {
-          return <IdeaCard key={i} idea={item} owner={this} ideaID={i} />;
-        })}
-      </div>
-      <div className='expandColumn'>
-        <div className={arrowDirection} ref="expand" onClick={this._onClick}>
+        <div className='wordbankIdeas'>
+          {this.props.data.map( function(item, i) {
+            return <IdeaCard key={i} idea={item} owner={this} ideaID={i} />;
+          })}
         </div>
-      </div>
+        <div className='expandColumn'>
+          <div className={arrowDirection} ref="expand" onClick={this._onClick}>
+          </div>
+        </div>
       </div>
     );
   },

@@ -66,7 +66,7 @@ const RoomName = React.createClass({
       );
     } else {
       return (
-        <h2 className="sidebar-title" onDoubleClick={this._onDoubleClick}>{this.state.name}</h2>
+        <h2 className="noMargin" id="room-name" onDoubleClick={this._onDoubleClick}>{this.state.name}</h2>
       );
     }
   },

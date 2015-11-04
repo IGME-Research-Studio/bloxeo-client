@@ -1,7 +1,12 @@
 const React = require('react');
-
+const Bootstrap = require('react-bootstrap');
+const FontAwesome = require('react-fontawesome');
 const NavBarTypes = require('../constants/NavBarConstants');
 const StormActions = require('../actions/StormActions');
+
+const DropdownButton = Bootstrap.DropdownButton;
+const MenuItem = Bootstrap.MenuItem;
+const cogIcon = <FontAwesome name="cog" size="lg" />;
 
 /**
  * Navigation Bar Component
@@ -43,6 +48,28 @@ const NavBar = React.createClass({
             onClick={this.selectTab}>
           Results
         </a>
+        <DropdownButton bsStyle="link" id="room-cog" title={cogIcon} style={{float: 'right', margin: '1px 0'}} pullRight>
+          <MenuItem header>Room Settings</MenuItem>
+          <li role="presentation" className="dropdown-item">
+            <input type="checkbox" /> <span className="dropdown-text">Choose color</span>
+          </li>
+          <MenuItem divider />
+          <li role="presentation" className="dropdown-item">
+            <input type="checkbox" /> <span className="dropdown-text">Allow invitations</span>
+          </li>
+          <MenuItem divider />
+          <li role="presentation" className="dropdown-item">
+            <input type="checkbox" /> <span className="dropdown-text">Disable timer restriction</span>
+          </li>
+          <MenuItem divider />
+          <li role="presentation" className="dropdown-item">
+            <input type="text" style={{width: '30px', border: 'none', borderBottom: '1px solid'}} /> <span className="dropdown-text">Number of top results kept</span>
+          </li>
+          <MenuItem divider />
+          <li role="presentation" className="dropdown-item">
+            <input type="checkbox" /> <span className="dropdown-text">Vote initiated by admin only</span>
+          </li>
+        </DropdownButton>
       </div>
     );
   },

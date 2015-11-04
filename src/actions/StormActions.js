@@ -71,11 +71,11 @@ const StormActions = {
       id: id,
     });
   },
-  separateIdeas: function(ideaID, groupID) {
+  separateIdeas: function(groupID, ideaContent) {
     AppDispatcher.dispatch({
       actionType: StormConstants.SEPARATE_IDEAS,
-      ideaID: ideaID,
       groupID: groupID,
+      ideaContent: ideaContent,
     });
   },
   /**
@@ -150,6 +150,63 @@ const StormActions = {
       actionType: StormConstants.SET_LAYOUT_SIZE,
       width: width,
       height: height,
+    });
+  },
+  // SOCKET ACTIONS
+  // Collections
+  /**
+   * Dispatch event to add a collection
+   * @param {number} index - position in collections array
+   * @param {array} content - content of collection
+   */
+  addedCollection: function(index, content) {
+    AppDispatcher.dispatch({
+      actionType: StormConstants.ADDED_COLLECTION,
+      index: index,
+      content: content,
+    });
+  },
+  /**
+   * Dispatch event to update a collection
+   * @param {number} index - position in collections array
+   * @param {array} content - content of collection
+   */
+  modifiedCollection: function(index, content) {
+    AppDispatcher.dispatch({
+      actionType: StormConstants.MODIFIED_COLLECTION,
+      index: index,
+      content: content,
+    });
+  },
+  /**
+   * Dispatch event to remove a collection
+   * @param {number} index - position in collections array
+   */
+  removedCollection: function(index) {
+    AppDispatcher.dispatch({
+      actionType: StormConstants.REMOVED_COLLECTION,
+      index: index,
+    });
+  },
+  /**
+   * Dispatch event to update collections
+   * @param {array} collections - all collections
+   */
+  recievedCollections: function(collections) {
+    AppDispatcher.dispatch({
+      actionType: StormConstants.RECIEVED_COLLECTIONS,
+      collections: collections,
+    });
+  },
+  // IDEAS
+  /**
+   * Dispatch event to update ideas
+   * @param {array} ideas - all ideas
+   */
+  updatedIdeas: function(ideas) {
+    AppDispatcher.dispatch({
+      actionType: StormConstants.UPDATED_IDEAS,
+      ideas: ideas,
     });
   },
 };

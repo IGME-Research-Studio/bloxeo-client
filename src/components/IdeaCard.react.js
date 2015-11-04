@@ -25,7 +25,7 @@ const IdeaCard = React.createClass({
 
   render: function() {
     const idea = this.props.idea;
-    const ideaString = idea.content.toString();
+    const ideaString = idea.toString();
     const connectDragSource = this.props.connectDragSource;
     // Apply REACT-DnD to element
     return connectDragSource(
@@ -39,7 +39,10 @@ const IdeaCard = React.createClass({
 // DragSource parameters
 const cardSource = {
   beginDrag: function(props) {
-    return props.idea;
+    return {
+      content: props.idea,
+      ideaCount: 1,
+    };
   },
 };
 function dragCollect(connect, monitor) {

@@ -63,7 +63,8 @@ const Idea = React.createClass({
    * @return {object}
    */
   render: function() {
-    const ideaString = this.props.content.toString();
+    const ideaString = this.props.content;
+    console.log(ideaString);
     const connectDragSource = this.props.connectDragSource;
     const draggableState = this.state.canDrag;
 

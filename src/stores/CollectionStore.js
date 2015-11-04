@@ -71,6 +71,7 @@ function _addCollections(collections) {
 * Create an idea group when an idea is dragged from the idea bank onto the workspace
 */
 function createCollection(idea, left, top) {
+  console.log(idea.content);
   const content = [idea.content];
   _collections.push({content, keep: true, x: left, y: top, votes: 0});
   updateForce();

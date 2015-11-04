@@ -22,6 +22,63 @@ a:hover {
 p {
   font-size: 14px;
 }
+.votingContent {
+  background-color: $voting-bgColor;
+  padding: 110px 30px;
+  text-align: center;
+}
+
+.votingResults {
+  background-color: $voting-bgColor;
+  padding: 40px;
+}
+
+.votingResults-ideas {
+  margin-bottom: 38px;
+}
+
+.idea {
+  font-size: 30px;
+
+  &.deleting {
+    background-color: red;
+  }
+}
+
+.button {
+  display: inline-block;
+  color: white;
+  background-color: cornflowerblue;
+  cursor: pointer;
+  padding: 10px 50px;
+  border-radius: 3px;
+  margin-top: 20px;
+  font-size: 14px;
+  &:hover {
+    color: white;
+  }
+}
+
+.yesButton {
+  background-color: green;
+  margin-right: 20px;
+}
+
+.noButton {
+  background-color: gray;
+}
+
+.navBar {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  background-color: gray;
+  z-index: 2;
+}
+
+p {
+  font-size: 14px;
+}
 
 .appContainer{
   display: flex;

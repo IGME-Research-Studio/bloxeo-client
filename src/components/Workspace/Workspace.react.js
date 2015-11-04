@@ -51,6 +51,7 @@ const Workspace = React.createClass({
             const left = Math.round(group.x);
             const top = Math.round(group.y);
             return <IdeaCollection
+            key={i}
             left={left}
             top={top}
             ideas={group}

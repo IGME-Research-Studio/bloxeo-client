@@ -13,8 +13,8 @@ const Sidebar = React.createClass({
    */
   render: function() {
     return (
-      <div className="sideBar">
-        <div className="sidebar-info">
+      <div id="sidebar">
+        <div id="sidebar-info">
           <Brand />
           <RoomInfoBox room={this.props.room} />
           <MembersList />

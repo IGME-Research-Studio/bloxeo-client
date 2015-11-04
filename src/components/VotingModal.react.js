@@ -31,12 +31,10 @@ const VotingModal = React.createClass({
    */
   render: function() {
     return (
-      <div>
-        <div className="sidebar-vote">
-          <input ref="checkbox" className="vote-check" type="checkbox" onChange={this.showModal} />
-          <span className="vote-text">Lets vote on these!</span>
-          <p className="vote-waiting">Waiting for... 2 people.</p>
-        </div>
+      <div className="sidebar-section">
+        <input ref="checkbox" className="vote-check" type="checkbox" onChange={this.showModal} />
+        <span className="vote-text">Lets vote on these!</span>
+        <p className="vote-text">Waiting for... <strong>2</strong> people.</p>
 
         <Modal ref="modal" onHide={this.uncheck}>
           <div className="votingContent">

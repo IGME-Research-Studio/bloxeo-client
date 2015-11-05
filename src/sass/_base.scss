@@ -1,0 +1,11 @@
+/**
+ * base.scss
+ *   Defaults. They are almost exclusively single element selectors but it
+ *   could include attribute selectors, pseudo-class selectors, helper classes,
+ *   child selectors or sibling selectors. Essentially, a base style says that
+ *   wherever this element is on the page, it should look like this.
+ */
+
+//import vars and mixins to use
+@import '_vars';
+@import '_mixins';

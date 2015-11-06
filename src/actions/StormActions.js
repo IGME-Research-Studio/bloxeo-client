@@ -3,6 +3,14 @@ const StormConstants = require('../constants/StormConstants');
 
 const StormActions = {
   /**
+   * Dispatch create new board event
+   */
+  createBoard: function() {
+    AppDispatcher.dispatch({
+      actionType: StormConstants.CREATE_BOARD,
+    });
+  },
+  /**
    * Dispatch change room name event
    * @param {string} roomName
    */

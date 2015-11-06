@@ -15,7 +15,7 @@ io.socket.get(StormConstants.API_VERSION + '/constants', (body) => {
     return _.template(route);
   });
   // Temp room join
-  io.socket.post(Routes.joinRoom({boardId: StormConstants.TEST_BOARD }));
+  // io.socket.post(Routes.joinRoom({boardId: StormConstants.TEST_BOARD }));
   // Socket Handlers
   // Collection was created
   io.socket.on(EVENT_API.ADDED_COLLECTION, (res) => {
@@ -34,6 +34,19 @@ io.socket.get(StormConstants.API_VERSION + '/constants', (body) => {
     StormActions.updatedIdeas(res);
   });
   // Request Functions
+  /**
+   * Create new board
+   */
+  function createBoard() {
+    io.socket.post(
+      Routes.createBoard(),
+      {isPublic: true},
+      (res) => {
+        console.log(res.data.boardId);
+        io.socket.post(Routes.joinRoom({boardId: res.data.boardId}));
+      }
+    );
+  }
   /**
    * Get all ideas on a board
    */
@@ -126,6 +139,9 @@ io.socket.get(StormConstants.API_VERSION + '/constants', (body) => {
   // Set up action watchers
   AppDispatcher.register((action) => {
     switch (action.actionType) {
+    case StormConstants.CREATE_BOARD:
+      createBoard();
+      break;
     case StormConstants.GET_IDEAS:
       getIdeas();
       break;

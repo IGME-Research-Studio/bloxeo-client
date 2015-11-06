@@ -35,6 +35,18 @@ io.socket.get(StormConstants.API_VERSION + '/constants', (body) => {
   });
   // Request Functions
   /**
+   * Create new board
+   */
+  function createBoard() {
+    io.socket.post(
+      Routes.createBoard(),
+      {isPublic: true},
+      (res) => {
+        console.log(res.data.boardId);
+      }
+    );
+  }
+  /**
    * Get all ideas on a board
    */
   function getIdeas() {
@@ -124,6 +136,9 @@ io.socket.get(StormConstants.API_VERSION + '/constants', (body) => {
   // Set up action watchers
   AppDispatcher.register((action) => {
     switch (action.actionType) {
+    case StormConstants.CREATE_BOARD:
+      createBoard();
+      break;
     case StormConstants.GET_IDEAS:
       getIdeas();
       break;

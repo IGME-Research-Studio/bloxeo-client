@@ -101,25 +101,6 @@ p {
         border-radius: 50%;
         display: inline-block;
       }
-      /* Timer */
-      .timer {
-        margin-right: 10px;
-        font-size: 26px;
-        display: inline-block;
-        .underline {
-          text-decoration: underline;
-        }
-      }
-      .timer-btn {
-        font-size: 12px;
-        cursor: pointer;
-        &.start {
-          color: green;
-        }
-        &.stop {
-          color: red;
-        }
-      }
       /* Vote Check */
       .vote-check {
         -ms-transform: scale(2);
@@ -142,7 +123,7 @@ p {
 /* Timer */
 .timerBox {
   display: inline-block;
-  margin-bottom: 10px;
+  margin: 10px 0;
   .progress {
     border-radius: 0px;
     height: 25px;

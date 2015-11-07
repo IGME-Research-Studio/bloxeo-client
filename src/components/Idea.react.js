@@ -4,6 +4,7 @@ const PropTypes  = React.PropTypes;
 const StormActions = require('../actions/StormActions');
 const dragSource = require('react-dnd').DragSource;
 const DnDTypes   = require('../constants/DragAndDropConstants');
+const classNames = require('classnames');
 
 const Idea = React.createClass({
   propTypes: {
@@ -35,9 +36,12 @@ const Idea = React.createClass({
     const idea = this;
     const object = ReactDOM.findDOMNode(this);
     let holdTimeout = 0;
+    const that = this;
     object.addEventListener('mousedown', function() {
       holdTimeout = setTimeout(function() {
-        idea.setCanDrag(true);
+        if (that.props.collectionCount > 1) {
+          idea.setCanDrag(true);
+        }
       }, 1500);
     });
     object.addEventListener('mouseup', function() {
@@ -66,16 +70,17 @@ const Idea = React.createClass({
     const ideaString = this.props.content.toString();
     const connectDragSource = this.props.connectDragSource;
     const draggableState = this.state.canDrag;
+    const classToAdd = classNames('idea', {deleting: this.state.canDrag});
 
     if (draggableState) {
       return connectDragSource(
-        <div className="idea" canDrag={draggableState}>
+        <div className={classToAdd} canDrag={draggableState}>
           {ideaString}
         </div>
       );
     } else {
       return (
-        <div className="idea" canDrag={draggableState}>
+        <div className={classToAdd} canDrag={draggableState}>
           {ideaString}
         </div>
       );

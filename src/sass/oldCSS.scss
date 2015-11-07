@@ -50,6 +50,10 @@ p {
 
 .idea {
   font-size: 30px;
+
+  &.deleting {
+    background-color: red;
+  }
 }
 
 

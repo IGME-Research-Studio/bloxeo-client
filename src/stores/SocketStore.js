@@ -75,11 +75,14 @@ io.socket.get(StormConstants.API_VERSION + '/constants', (body) => {
    * Creates a collection with the given idea
    * @param {string} collection content from first idea added to collection
    */
-  function addCollection(content) {
-    // Do post request
+  function addCollection(content, top, left) {
     io.socket.post(
       Routes.createIdeaCollection({boardId: StormConstants.TEST_BOARD}),
-      {content: content}
+      {
+        content: content,
+        top: top,
+        left: left,
+      }
     );
   }
   /**
@@ -98,7 +101,6 @@ io.socket.get(StormConstants.API_VERSION + '/constants', (body) => {
    * @param {string} content : idea content
    */
   function addIdeaToCollection(index, content) {
-    // Do post request
     io.socket.post(
       Routes.addIdeaToIdeaCollection({
         boardId: StormConstants.TEST_BOARD,

@@ -115,6 +115,7 @@ function updateCollection(_key, cont) {
  * @param {object[]} collections - all collections
  * @param {bool} reset - should old collection postion data be retained
  */
+<<<<<<< HEAD
 function receivedAllCollections(collections, reset) {
   let oldCollections = {};
   if (!reset) {
@@ -211,6 +212,9 @@ AppDispatcher.register(function(action) {
   case StormConstants.RETURN_RESULTS:
     returnResults(action.results);
     CollectionStore.emitChange();
+    if (_collections.lenth > 0) {
+      updateForce();
+    }
     break;
   default:
     break;

@@ -3,8 +3,10 @@ module.exports = function (grunt) {
 
   var testFiles = ['tests/**/*.js'],
       srcFiles = ['src/**/*.js'],
+      sassFiles = ['src/**/*.scss'],
       buildFiles = 'build/',
-      jsFiles = srcFiles.concat(testFiles);
+      jsFiles = srcFiles.concat(testFiles),
+      watchFiles = jsFiles.concat(sassFiles);
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
@@ -76,7 +78,7 @@ module.exports = function (grunt) {
     watch: {
       js: {
         options: { spawn: false, },
-        files: jsFiles,
+        files: watchFiles,
         tasks: ['default']
       }
     }

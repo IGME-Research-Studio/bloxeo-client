@@ -61,9 +61,10 @@ function targetCollect(connect) {
     connectDropTarget: connect.dropTarget(),
   };
 }
+const dropTypes = [DnDTypes.COLLECTION, DnDTypes.IDEA];
 
 module.exports = dropTarget(
-  DnDTypes.COLLECTION,
+  dropTypes,
   collectionTarget,
   targetCollect
 )(TrashCan);

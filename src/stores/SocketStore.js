@@ -15,7 +15,7 @@ io.socket.get(StormConstants.API_VERSION + '/constants', (body) => {
     return _.template(route);
   });
   // Temp room join
-  io.socket.post(Routes.joinRoom({boardId: StormConstants.TEST_BOARD }));
+  // io.socket.post(Routes.joinRoom({boardId: StormConstants.TEST_BOARD }));
   // Socket Handlers
   // Collection was created
   io.socket.on(EVENT_API.ADDED_COLLECTION, (res) => {
@@ -43,6 +43,7 @@ io.socket.get(StormConstants.API_VERSION + '/constants', (body) => {
       {isPublic: true},
       (res) => {
         console.log(res.data.boardId);
+        io.socket.post(Routes.joinRoom({boardId: res.data.boardId}));
       }
     );
   }

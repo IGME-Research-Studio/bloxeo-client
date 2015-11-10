@@ -1,5 +1,5 @@
 const React = require('react');
-const BoardOptionsStore = require('../stores/BoardOptionsStore');
+const BoardOptionsStore = require('../../stores/BoardOptionsStore');
 
 const MembersList = React.createClass({
   getInitialState: function() {

@@ -1,6 +1,6 @@
 const React = require('react');
-const IdeaCard = require('../components/IdeaCard.react');
-const IdeaStore = require('../stores/IdeaStore');
+const IdeaCard = require('../IdeaCard.react');
+const IdeaStore = require('../../stores/IdeaStore');
 const classNames = require('classnames');
 const Wordbank = React.createClass({
   // set state to the first element of the array

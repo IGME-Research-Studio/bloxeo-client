@@ -1,8 +1,8 @@
 const React           = require('react');
-const StormActions    = require('../actions/StormActions');
+const StormActions    = require('../../actions/StormActions');
 const dropTarget      = require('react-dnd').DropTarget;
 const PropTypes       = React.PropTypes;
-const DnDTypes        = require('../constants/DragAndDropConstants');
+const DnDTypes        = require('../../constants/DragAndDropConstants');
 
 /**
  * TrashCan component which is a dragTarget for IdeaCollections

@@ -1,5 +1,5 @@
 const React = require('react');
-const StormActions = require('../actions/StormActions');
+const StormActions = require('../../actions/StormActions');
 
 const ENTER_KEY_CODE = 13;
 

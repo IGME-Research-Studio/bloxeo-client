@@ -1,11 +1,11 @@
 const React = require('react');
-const StormActions = require('../actions/StormActions');
-const BoardOptionsStore = require('../stores/BoardOptionsStore');
-const CollectionStore = require('../stores/CollectionStore');
-const NavBarConstants = require('../constants/NavBarConstants');
-const VoteButton = require('../components/VoteButton.react');
-const VoteElement = require('../components/VoteElement.react');
-const VotingResult = require('../components/VotingResult.react');
+const StormActions = require('../../actions/StormActions');
+const BoardOptionsStore = require('../../stores/BoardOptionsStore');
+const CollectionStore = require('../../stores/CollectionStore');
+const NavBarConstants = require('../../constants/NavBarConstants');
+const VoteButton = require('./VoteButton.react');
+const VoteElement = require('./VoteElement.react');
+const VotingResult = require('./VotingResult.react');
 
 /**
  * Component for voting 'Yes' or 'No' and displaying results

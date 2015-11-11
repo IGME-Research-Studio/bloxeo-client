@@ -5,7 +5,7 @@ const MembersList = require('./MembersList.react');
 const TimerBox = require('./TimerBox.react');
 const Wordbank = require('./Wordbank.react');
 const IdeaCreate = require('./IdeaCreate.react');
-const VotingModal = require('./VotingModal.react');
+const VotingModal = require('../Voting/VotingModal.react');
 
 const Sidebar = React.createClass({
   /**

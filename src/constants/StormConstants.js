@@ -24,7 +24,7 @@ module.exports = {
   SERVER_URL_DEV: 'http://storm-server-stage.herokuapp.com',
   SERVER_URL_PROD: 'http://storm-server-prod.herokuapp.com',
   API_VERSION: '/v1',
-  TEST_BOARD: 'Ny4ZtHmfe',
+  TEST_BOARD: 'NJfCalyXe',
   // Server requests
   GET_IDEAS: 'GET_IDEAS',
   GET_COLLECTIONS: 'GET_COLLECTIONS',

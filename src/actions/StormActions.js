@@ -159,11 +159,13 @@ const StormActions = {
    * @param {number} index - position in collections array
    * @param {array} content - content of collection
    */
-  addedCollection: function(index, content) {
+  addedCollection: function(index, content, left, top) {
     AppDispatcher.dispatch({
       actionType: StormConstants.ADDED_COLLECTION,
       index: index,
       content: content,
+      top: top,
+      left: left,
     });
   },
   /**

@@ -12,6 +12,7 @@ const PropTypes    = React.PropTypes;
 const DnDTypes     = require('../../constants/DragAndDropConstants');
 
 const Workspace = React.createClass({
+
   // Required property types
   propTypes: {
     connectDropTarget: PropTypes.func.isRequired,
@@ -22,12 +23,41 @@ const Workspace = React.createClass({
   getInitialState: function() {
     return ({
       ideaCollections: CollectionStore.getAllCollections(),
+      x: 0,
+      y: 0,
+      panning: false,
     });
   },
   componentDidMount: function() {
     CollectionStore.addChangeListener(this.collectionChange);
     const domNode = ReactDOM.findDOMNode(this);
     StormActions.setLayoutSize(domNode.offsetWidth, domNode.offsetHeight);
+  },
+  _onDrag: function(e) {
+
+    if (this.state.panning === true) {
+      this.setState({
+        x: this.state.x + e.nativeEvent.movementX,
+        y: this.state.y + e.nativeEvent.movementY,
+      });
+    }
+  },
+  _onMouseUp: function() {
+    this.setState({
+      panning: false,
+    });
+  },
+  _onMouseDown: function(e) {
+    if (e.nativeEvent.target.className.indexOf('workspace') > -1) {
+      this.setState({
+        panning: true,
+      });
+    }
+  },
+  _onMouseLeave: function() {
+    this.setState({
+      panning: false,
+    });
   },
   componentWillUnmount: function() {
     CollectionStore.removeChangeListener(this.collectionChange);
@@ -44,12 +74,17 @@ const Workspace = React.createClass({
   render: function() {
     // Grab connectDropTarget function to wrap element with
     const connectDropTarget = this.props.connectDropTarget;
+    const that = this;
     return connectDropTarget(
-      <div className="droppable workspace">
+      <div className="droppable workspace" draggable='true'
+      onMouseMove={this._onDrag}
+      onMouseUp={this._onMouseUp}
+      onMouseDown={this._onMouseDown}
+      onMouseLeave={this._onMouseLeave}>
         <div>
           {this.state.ideaCollections.map(function(group, i) {
-            const left = Math.round(group.x);
-            const top = Math.round(group.y);
+            const left = Math.round(group.x) + (that.state.x);
+            const top = Math.round(group.y) + (that.state.y);
             return <IdeaCollection
             key={i}
             left={left}
@@ -72,7 +107,6 @@ const workTarget = {
     const pos = monitor.getClientOffset();
     const idea = monitor.getItem();
     const hasDroppedOnChild = monitor.didDrop();
-
     // If a sub-element was dropped on, prevent bubbling
     if (hasDroppedOnChild) {
       return;
@@ -82,14 +116,16 @@ const workTarget = {
     if (monitor.getItem().type === DnDTypes.COLLECTION) {
       StormActions.moveCollection(
         monitor.getItem().id,
-        Math.round(pos.x) - domNode.left,
-        Math.round(pos.y) - domNode.top
+        Math.round(pos.x) - (domNode.left) - component.state.x,
+        Math.round(pos.y) - (domNode.top) - component.state.y
       );
     } else {
       StormActions.collectionCreate(
         idea,
-        Math.round(pos.x) - domNode.left,
-        Math.round(pos.y) - domNode.top
+        // Math.round(pos.x) - (domNode.left) - component.state.x,
+        // Math.round(pos.y) - (domNode.top)
+        0,
+        0
       );
     }
   },

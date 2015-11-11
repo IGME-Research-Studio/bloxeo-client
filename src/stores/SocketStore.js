@@ -19,7 +19,8 @@ io.socket.get(StormConstants.API_VERSION + '/constants', (body) => {
   // Socket Handlers
   // Collection was created
   io.socket.on(EVENT_API.ADDED_COLLECTION, (res) => {
-    StormActions.addedCollection(res.index, res.content);
+    console.log(res);
+    StormActions.addedCollection(res.index, res.content, res.left, res.top);
   });
   // Idea was added or removed from collection
   io.socket.on(EVENT_API.MODIFIED_COLLECTION, (res) => {

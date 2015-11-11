@@ -1,6 +1,6 @@
 const React = require('react');
 // const Link  = require('react-router').Link;
-const StormActions = require('../actions/StormActions');
+const StormActions = require('../../actions/StormActions');
 
 const CreateRoom = React.createClass({
   _onClick: function() {

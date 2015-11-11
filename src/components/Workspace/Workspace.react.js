@@ -22,12 +22,36 @@ const Workspace = React.createClass({
   getInitialState: function() {
     return ({
       ideaCollections: CollectionStore.getAllCollections(),
+      x: 0,
+      y: 0,
     });
   },
   componentDidMount: function() {
     CollectionStore.addChangeListener(this.collectionChange);
     const domNode = ReactDOM.findDOMNode(this);
     StormActions.setLayoutSize(domNode.offsetWidth, domNode.offsetHeight);
+
+    domNode.addEventListener('mousedown', function() {
+      this.panning = true;
+    });
+    domNode.addEventListener('mouseup', function() {
+      this.panning = false;
+    });
+    domNode.addEventListener('mouseleave', function() {
+      this.panning = false;
+    });
+    domNode.addEventListener('mousemove', function(e) {
+      if (this.panning === true) {
+        console.log('X:' + e.movementX);
+        console.log('Y:' + e.movementY);
+        this.setState(function(previousState) {
+          return {
+            x: previousState.x + e.movementX,
+            y: previousState.y + e.movementY,
+          };
+        });
+      }
+    });
   },
   componentWillUnmount: function() {
     CollectionStore.removeChangeListener(this.collectionChange);
@@ -48,8 +72,8 @@ const Workspace = React.createClass({
       <div className="droppable workspace">
         <div>
           {this.state.ideaCollections.map(function(group, i) {
-            const left = Math.round(group.x);
-            const top = Math.round(group.y);
+            const left = Math.round(group.x) - this.state.x;
+            const top = Math.round(group.y) - this.state.y;
             return <IdeaCollection
             left={left}
             top={top}

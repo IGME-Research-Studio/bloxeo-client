@@ -6,9 +6,9 @@ const TimerStore        = require('../stores/TimerStore');
 const IdeaStore         = require('../stores/IdeaStore');
 
 const NavBar          = require('./NavBar.react');
-const Results         = require('./Results.react');
-const Sidebar         = require('./Sidebar.react');
-const Workspace       = require('./Workspace.react');
+const Results         = require('./Results/Results.react');
+const Sidebar         = require('./Sidebar/Sidebar.react');
+const Workspace       = require('./Workspace/Workspace.react');
 
 const StormActions    = require('../actions/StormActions');
 const NavBarConstants = require('../constants/NavBarConstants');

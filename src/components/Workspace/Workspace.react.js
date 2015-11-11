@@ -1,15 +1,15 @@
 const React        = require('react');
 const ReactDOM = require('react-dom');
 
-const CollectionStore   = require('../stores/CollectionStore');
-const StormActions = require('../actions/StormActions');
+const CollectionStore   = require('../../stores/CollectionStore');
+const StormActions = require('../../actions/StormActions');
 
-const IdeaCollection = require('./IdeaCollection.react');
+const IdeaCollection = require('../IdeaCollection.react');
 const TrashCan = require('./TrashCan.react');
 
 const dropTarget   = require('react-dnd').DropTarget;
 const PropTypes    = React.PropTypes;
-const DnDTypes     = require('../constants/DragAndDropConstants');
+const DnDTypes     = require('../../constants/DragAndDropConstants');
 
 const Workspace = React.createClass({
   // Required property types

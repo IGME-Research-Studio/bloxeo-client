@@ -1,5 +1,5 @@
 const React = require('react');
-const VoteElement = require('../components/VoteElement.react');
+const VoteElement = require('./VoteElement.react');
 
 /**
  * Component for displaying voting results

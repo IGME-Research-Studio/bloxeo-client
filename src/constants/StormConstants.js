@@ -26,6 +26,7 @@ module.exports = {
   API_VERSION: '/v1',
   TEST_BOARD: 'Ny4ZtHmfe',
   // Server requests
+  CREATE_BOARD: 'CREATE_BOARD',
   GET_IDEAS: 'GET_IDEAS',
   GET_COLLECTIONS: 'GET_COLLECTIONS',
   // Socket responses

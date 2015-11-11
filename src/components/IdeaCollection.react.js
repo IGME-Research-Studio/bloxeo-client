@@ -6,6 +6,7 @@ const dragSource      = require('react-dnd').DragSource;
 const PropTypes       = React.PropTypes;
 const DnDTypes        = require('../constants/DragAndDropConstants');
 const Idea            = require('./Idea.react');
+const d3              = require('d3');
 
 const IdeaCollection = React.createClass({
   propTypes: {
@@ -49,7 +50,7 @@ const IdeaCollection = React.createClass({
         {this.state.ideas.content.map(function(idea, i) {
           return (
           <div className="workspaceCard draggable">
-            <Idea content={idea} ideaID={i} groupID={groupID} collectionCount={count}/>
+            <Idea content={idea.text} ideaID={i} groupID={groupID} collectionCount={count}/>
           </div>
           );
         })}

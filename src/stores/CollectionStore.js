@@ -71,13 +71,26 @@ function _addCollections(collections) {
 * Create an idea group when an idea is dragged from the idea bank onto the workspace
 */
 function createCollection(index, content, left, top) {
+  content = objectifyContent(content);
   _collections[index] = {content, keep: true, x: left, y: top, votes: 0};
 }
 /**
 * Change the content of collection with given index
 */
 function updateCollection(index, content) {
+  content = objectifyContent(content);
   _collections[index].content = content;
+}
+/**
+* Mutate content strings to a more usable object
+* @param {Object[]} content - an array of strings
+*/
+function objectifyContent(content) {
+  content = content.map(function(item) {
+    item = {text: item, top:0, left: 0};
+    return item;
+  });
+  return content;
 }
 /**
  * Recieve collections from server

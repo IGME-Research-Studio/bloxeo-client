@@ -1,6 +1,6 @@
 {
   "name": "storm-client",
-  "version": "0.0.16",
+  "version": "0.0.18",
   "description": "Storm app client",
   "scripts": {
     "start": "node ./server.js",
@@ -43,9 +43,6 @@
     "grunt-contrib-watch": "^0.6.1",
     "grunt-sass": "^1.1.0-beta",
     "history": "^1.12.6",
-    "interact.js": "^1.2.5",
-    "jquery": "^2.1.4",
-    "jquery-ui": "^1.10.5",
     "jsx": "^0.9.89",
     "load-grunt-tasks": "^3.2.0",
     "lodash": "^3.10.1",

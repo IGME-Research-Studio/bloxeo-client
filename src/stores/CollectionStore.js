@@ -12,6 +12,8 @@ let _collections = [];
 const force = d3.layout.force()
   .nodes(_collections)
   .charge(-300)
+  .gravity(0.02)
+  .friction(0.6)
   .start();
 
 const CollectionStore = assign({}, EventEmitter.prototype, {
@@ -72,7 +74,7 @@ function _addCollections(collections) {
 */
 function createCollection(index, content, left, top) {
   content = objectifyContent(content);
-  _collections[index] = {content, keep: true, x: left, y: top, votes: 0};
+  _collections[index] = {content, keep: true, x: left, y: top, votes: 0, fixed: false};
 }
 /**
 * Change the content of collection with given index
@@ -99,7 +101,7 @@ function objectifyContent(content) {
 function recievedAllCollections(collections) {
   collections.forEach((collection, index) => {
     if (_collections[index] === undefined) {
-      createCollection(index, collection.content, 0, 0);
+      createCollection(index, collection.content, force.size[0] / 2, force.size[1] / 2);
     } else {
       updateCollection(index, collection.content);
     }
@@ -121,6 +123,7 @@ function moveCollection(id, left, top) {
   _collections[id].y = top;
   _collections[id].px = left;
   _collections[id].py = top;
+  _collections[id].fixed = true;
   updateForce();
 }
 

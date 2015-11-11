@@ -2,10 +2,10 @@ const React = require('react');
 
 const Result = require('./Result.react');
 
-const BoardOptionsStore = require('../stores/BoardOptionsStore');
-const VotingResultsStore = require('../stores/VotingResultsStore');
-const StormActions = require('../actions/StormActions');
-const NavBarConstants = require('../constants/NavBarConstants');
+const BoardOptionsStore = require('../../stores/BoardOptionsStore');
+const VotingResultsStore = require('../../stores/VotingResultsStore');
+const StormActions = require('../../actions/StormActions');
+const NavBarConstants = require('../../constants/NavBarConstants');
 
 /**
  * Retrieve the current data from the VotingResultsStore

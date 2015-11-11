@@ -3,7 +3,7 @@ const React = require('react');
 /*eslint-enable */
 const ReactDOM = require('react-dom');
 const StormApp = require('./components/StormApp.react');
-const LandingPage = require('./components/LandingPage.react');
+const LandingPage = require('./components/Landing/LandingPage.react');
 const ReactRouter = require('react-router');
 const Router = ReactRouter.Router;
 const Route = ReactRouter.Route;

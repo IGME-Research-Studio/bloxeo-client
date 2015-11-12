@@ -67,20 +67,18 @@ const Results = React.createClass({
       showReturnToWorkspace: selectedResults.length > 0 ? true : false,
     });
   },
+  /**
+   * Return selected results to workspace
+   */
   returnToWorkspace: function() {
-    let returnCollections = this._getSelectedResults();
-    if (returnCollections.length > 0) {
-      // remove selected property before storing
-      returnCollections = returnCollections.map(function(collection) {
-        delete collection.selected;
-        return collection;
-      });
-
-      // add selected collections to store
-      StormActions.addCollections(returnCollections);
-
-      // show workspace tab
+    const results = this._getSelectedResults();
+    if (results.length > 0) {
+      StormActions.returnResults(results);
       StormActions.selectTab(NavBarConstants.WORKSPACE_TAB);
+
+      for (let i = 0; i < results.length; i++) {
+        results[i].selected = false;
+      }
     }
   },
   /**
@@ -102,15 +100,8 @@ const Results = React.createClass({
 
     return (
       <div className="results">
-        <h2>The results are in!</h2>
-        <p>Top 3</p>
-        {topResults.map(function(ideaCollection) {
-          return (
-            <Result ideaCollection={ideaCollection} selectable={false} />
-          );
-        })}
         <div>
-          <p className="otherResults">Other Results</p>
+          <h2 className="resultsHeading">The results are in!</h2>
           <div className="resultsControls">
             <a onClick={this.returnToWorkspace}
                 className={this.state.showReturnToWorkspace ? '' : 'is-disabled'}>
@@ -118,10 +109,17 @@ const Results = React.createClass({
             </a>
           </div>
         </div>
+        <p>Top 3</p>
+        {topResults.map(function(ideaCollection) {
+          return (
+            <Result ideaCollection={ideaCollection}
+                handleSelect={that.handleSelect} />
+          );
+        })}
+        <p>Other Results</p>
         {otherResults.map(function(ideaCollection) {
           return (
             <Result ideaCollection={ideaCollection}
-                selectable={true}
                 handleSelect={that.handleSelect} />
           );
         })}

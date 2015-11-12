@@ -18,11 +18,9 @@ const Result = React.createClass({
    * Toggle selected state of result
    */
   toggleSelected: function() {
-    if (this.props.selectable) {
-      const newSelectedState = !this.state.selected;
-      this.setState({selected: newSelectedState});
-      this.props.handleSelect(this.props.ideaCollection, newSelectedState);
-    }
+    const newSelectedState = !this.state.selected;
+    this.setState({selected: newSelectedState});
+    this.props.handleSelect(this.props.ideaCollection, newSelectedState);
   },
   /**
    * Render Results Component
@@ -31,7 +29,6 @@ const Result = React.createClass({
   render: function() {
     const groupClass = classNames({
       'resultGroup': true,
-      'is-selectable': this.props.selectable,
       'is-selected': this.state.selected,
     });
 

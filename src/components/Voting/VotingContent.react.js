@@ -99,7 +99,7 @@ const VotingContent = React.createClass({
 
       // remove non-top voted ideaCollections from the Workspace
       const hideIds = this._getHideIds();
-      StormActions.hideIdeas(hideIds);
+      StormActions.hideCollections(hideIds);
 
       // show results tab
       StormActions.selectTab(NavBarConstants.RESULTS_TAB);

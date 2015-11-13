@@ -11,6 +11,16 @@ const StormActions = {
     });
   },
   /**
+   * Dispatch join board event
+   * @param {string} id of board to join
+   */
+  joinBoard: function(boardId) {
+    AppDispatcher.dispatch({
+      actionType: StormConstants.JOIN_BOARD,
+      boardId: boardId,
+    });
+  },
+  /**
    * Dispatch change room name event
    * @param {string} roomName
    */

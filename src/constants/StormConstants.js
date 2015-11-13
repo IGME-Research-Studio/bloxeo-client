@@ -27,6 +27,7 @@ module.exports = {
   TEST_BOARD: 'NJfCalyXe',
   // Server requests
   CREATE_BOARD: 'CREATE_BOARD',
+  JOIN_BOARD: 'JOIN_BOARD',
   GET_IDEAS: 'GET_IDEAS',
   GET_COLLECTIONS: 'GET_COLLECTIONS',
   // Socket responses

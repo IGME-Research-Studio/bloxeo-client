@@ -33,9 +33,11 @@ const IdeaCollection = React.createClass({
   },
 
   ideasChange: function() {
-    this.setState({
-      ideas: CollectionStore.updateCollection(this.props.ideaID),
-    });
+    if (this.isMounted()) {
+      this.setState({
+        ideas: CollectionStore.updateCollection(this.props.ideaID),
+      });
+    }
   },
 
   render: function() {
@@ -48,7 +50,7 @@ const IdeaCollection = React.createClass({
       <div className="ideaGroup drop-zone" style={this._style()}>
         {this.state.ideas.content.map(function(idea, i) {
           return (
-          <div className="workspaceCard draggable">
+          <div key={i} className="workspaceCard draggable">
             <Idea content={idea} ideaID={i} groupID={groupID} collectionCount={count}/>
           </div>
           );

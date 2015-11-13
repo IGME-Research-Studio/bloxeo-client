@@ -122,10 +122,8 @@ const workTarget = {
     } else {
       StormActions.collectionCreate(
         idea,
-        // Math.round(pos.x) - (domNode.left) - component.state.x,
-        // Math.round(pos.y) - (domNode.top)
-        0,
-        0
+        Math.round(pos.x) - (domNode.left) - component.state.x,
+        Math.round(pos.y) - (domNode.top) - component.state.y
       );
     }
   },

@@ -60,9 +60,11 @@ const Idea = React.createClass({
     * @param <Boolean> draggable
     */
   setCanDrag: function(draggable) {
-    this.setState({
-      canDrag: draggable,
-    });
+    if (this.isMounted()) {
+      this.setState({
+        canDrag: draggable,
+      });
+    }
   },
 
   /**
@@ -73,6 +75,7 @@ const Idea = React.createClass({
     const connectDragSource = this.props.connectDragSource;
     const draggableState = this.state.canDrag;
     const classToAdd = classNames('idea', {deleting: this.state.canDrag});
+    const id = this.state.ideaID;
 
     if (draggableState) {
       return connectDragSource(
@@ -82,7 +85,7 @@ const Idea = React.createClass({
       );
     } else {
       return (
-        <div className={classToAdd} canDrag={draggableState}>
+        <div className={classToAdd} canDrag={draggableState} id={id}>
           {ideaString}
         </div>
       );

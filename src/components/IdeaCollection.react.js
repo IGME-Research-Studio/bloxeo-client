@@ -6,14 +6,11 @@ const dragSource      = require('react-dnd').DragSource;
 const PropTypes       = React.PropTypes;
 const DnDTypes        = require('../constants/DragAndDropConstants');
 const Idea            = require('./Idea.react');
-const ReactDOM        = require('react-dom');
-const d3              = require('d3');
 
 const IdeaCollection = React.createClass({
   propTypes: {
     connectDropTarget: PropTypes.func.isRequired,
   },
-  force: undefined,
   getInitialState: function() {
     return {
       left: this.props.left,
@@ -24,16 +21,6 @@ const IdeaCollection = React.createClass({
   },
   componentDidMount: function() {
     CollectionStore.addChangeListener(this.ideasChange);
-
-    this.force = d3.layout.force()
-      .nodes(this.state.ideas.content)
-      .charge(100)
-      .gravity(0.02)
-      .friction(0.6)
-      .start();
-
-    const domNode = ReactDOM.findDOMNode(this);
-    this.force.size([domNode.offsetWidth, domNode.offsetHeight]);
   },
   componentWillUnmount: function() {
     CollectionStore.removeChangeListener(this.ideasChange);
@@ -46,10 +33,11 @@ const IdeaCollection = React.createClass({
   },
 
   ideasChange: function() {
-    this.setState({
-      ideas: CollectionStore.updateCollection(this.props.ideaID),
-    });
-    this.force.nodes(this.state.ideas.content).start();
+    if (this.isMounted()) {
+      this.setState({
+        ideas: CollectionStore.updateCollection(this.props.ideaID),
+      });
+    }
   },
 
   render: function() {
@@ -66,9 +54,7 @@ const IdeaCollection = React.createClass({
             <Idea content={idea.text}
                   ideaID={i}
                   groupID={groupID}
-                  collectionCount={count}
-                  top={idea.top}
-                  left={idea.left}/>
+                  collectionCount={count}/>
           </div>
           );
         })}

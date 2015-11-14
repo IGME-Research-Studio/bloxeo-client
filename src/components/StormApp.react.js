@@ -55,7 +55,9 @@ const StormApp = React.createClass({
    * Event handler for 'change' events coming from the StormStore
    */
   _onChange: function() {
-    this.setState(getStormState());
+    if (this.isMounted()) {
+      this.setState(getStormState());
+    }
   },
   /**
    * Render StormApp component

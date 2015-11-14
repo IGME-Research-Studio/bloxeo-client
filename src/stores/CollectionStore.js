@@ -139,7 +139,7 @@ force.on('tick', function() {
 AppDispatcher.register(function(action) {
   switch (action.actionType) {
   case StormConstants.ADDED_COLLECTION:
-    createCollection(action.index, action.content, 0, 0);
+    createCollection(action.index, action.content, action.left, action.top);
     CollectionStore.emitChange();
     updateForce();
     break;

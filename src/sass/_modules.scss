@@ -143,6 +143,7 @@
 .sidebar-voteSection {
   text-align: center;
   margin: 15px 0;
+  height: 100px;
 
   .callVoteButton {
     padding: 9px 20px;
@@ -203,9 +204,12 @@
 
   .wordbankIdeas {
     flex-grow: 1;
-    overflow: auto;
     padding: 15px;
+    overflow: auto;
     text-align: center;
+    -webkit-columns: auto 235px;
+    -moz-columns: auto 235px;
+    columns: auto 235px;
 
     .bankCard {
       color: white;

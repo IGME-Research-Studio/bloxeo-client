@@ -15,6 +15,8 @@ const Idea = React.createClass({
       content: this.props.content,
       ideaID: this.props.ideaID,
       groupID: this.props.groupID,
+      top: this.props.top,
+      left: this.props.left,
       canDrag: false,
     };
   },

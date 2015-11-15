@@ -70,15 +70,28 @@ function _addCollections(collections) {
   Array.prototype.push.apply(_collections, collections);
 }
 /**
+* Mutate content strings to a more usable object
+* @param {Object[]} content - an array of strings
+*/
+function objectifyContent(cont) {
+  const content = cont.map(function(i) {
+    const item = {text: i, top: 0, left: 0};
+    return item;
+  });
+  return content;
+}
+/**
 * Create an idea group when an idea is dragged from the idea bank onto the workspace
 */
-function createCollection(index, content, left, top) {
+function createCollection(index, cont, left, top) {
+  const content = objectifyContent(cont);
   _collections[index] = {content, keep: true, x: left, y: top, votes: 0, fixed: false};
 }
 /**
 * Change the content of collection with given index
 */
-function updateCollection(index, content) {
+function updateCollection(index, cont) {
+  const content = objectifyContent(cont);
   _collections[index].content = content;
 }
 /**

@@ -50,8 +50,11 @@ const IdeaCollection = React.createClass({
       <div className="ideaGroup drop-zone" style={this._style()}>
         {this.state.ideas.content.map(function(idea, i) {
           return (
-          <div key={i} className="workspaceCard draggable">
-            <Idea content={idea} ideaID={i} groupID={groupID} collectionCount={count}/>
+          <div className="workspaceCard draggable">
+            <Idea content={idea.text}
+                  ideaID={i}
+                  groupID={groupID}
+                  collectionCount={count}/>
           </div>
           );
         })}

@@ -12,6 +12,7 @@ const IdeaCollection = React.createClass({
   propTypes: {
     connectDropTarget: PropTypes.func.isRequired,
   },
+  force: undefined,
   getInitialState: function() {
     return {
       left: this.props.left,
@@ -21,6 +22,13 @@ const IdeaCollection = React.createClass({
     };
   },
   componentDidMount: function() {
+    this.force = d3.layout.force()
+      .nodes(this.state.ideas.content)
+      .charge(100)
+      .gravity(0.02)
+      .friction(0.6)
+      .start();
+    this.force.size([300, 300]);
     CollectionStore.addChangeListener(this.ideasChange);
   },
   componentWillUnmount: function() {
@@ -34,9 +42,12 @@ const IdeaCollection = React.createClass({
   },
 
   ideasChange: function() {
-    this.setState({
-      ideas: CollectionStore.updateCollection(this.props.ideaID),
-    });
+    if (this.isMounted()) {
+      this.setState({
+        ideas: CollectionStore.updateCollection(this.props.ideaID),
+      });
+      this.force.nodes(this.state.ideas.content).start();
+    }
   },
 
   render: function() {
@@ -44,13 +55,20 @@ const IdeaCollection = React.createClass({
     const connectDragSource = this.props.connectDragSource;
     const groupID = this.state.ideaID;
     const count = this.state.ideas.content.length;
+    const left = this.props.left;
+    const top = this.props.top;
     // Apply react DnD to element
     return connectDragSource(connectDropTarget(
       <div className="ideaGroup drop-zone" style={this._style()}>
         {this.state.ideas.content.map(function(idea, i) {
           return (
           <div className="workspaceCard draggable">
-            <Idea content={idea.text} ideaID={i} groupID={groupID} collectionCount={count}/>
+            <Idea content={idea.text}
+                  ideaID={i}
+                  groupID={groupID}
+                  collectionCount={count}
+                  top={top}
+                  left={left}/>
           </div>
           );
         })}

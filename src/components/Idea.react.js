@@ -55,6 +55,12 @@ const Idea = React.createClass({
       idea.setCanDrag(false);
     });
   },
+  _style: function() {
+    return {
+      top: `${this.props.top}px`,
+      left: `${this.props.left}px`,
+    };
+  },
   /**
     * Set draggable
     * @param <Boolean> draggable
@@ -76,7 +82,7 @@ const Idea = React.createClass({
 
     if (draggableState) {
       return connectDragSource(
-        <div className={classToAdd} canDrag={draggableState}>
+        <div className={classToAdd} canDrag={draggableState} style={this._style()}>
           {ideaString}
         </div>
       );

@@ -19,6 +19,7 @@ io.socket.get(StormConstants.API_VERSION + '/constants', (body) => {
   // Socket Handlers
   // Collection was created
   io.socket.on(EVENT_API.ADDED_COLLECTION, (res) => {
+    console.log(res);
     StormActions.addedCollection(res.index, res.content);
   });
   // Idea was added or removed from collection
@@ -115,6 +116,7 @@ io.socket.get(StormConstants.API_VERSION + '/constants', (body) => {
    * @param {string} content : idea content
    */
   function removeIdeaFromCollection(index, content) {
+    console.log(content);
     io.socket.delete(
       Routes.removeIdeaFromIdeaCollection({
         boardId: StormConstants.TEST_BOARD,

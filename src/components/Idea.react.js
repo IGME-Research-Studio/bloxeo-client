@@ -1,10 +1,10 @@
 const React = require('react');
-const ReactDOM = require('react-dom');
 const PropTypes  = React.PropTypes;
 const StormActions = require('../actions/StormActions');
 const dragSource = require('react-dnd').DragSource;
 const DnDTypes   = require('../constants/DragAndDropConstants');
 const classNames = require('classnames');
+let holdTimeout = 0;
 
 const Idea = React.createClass({
   propTypes: {
@@ -18,40 +18,29 @@ const Idea = React.createClass({
       canDrag: false,
     };
   },
-  handleMouseOver: function() {
-    this.state.holdTimer++;
-    if (this.state.holdTimer > 5) {
-      setCanDrag(true);
-    }
-  },
-  handleMouseDown: function() {
-    this.state.mouseClicked = true;
-  },
-  handleMouseStop: function() {
-    this.state.mouseClicked = false;
-    this.state.holdTimer = 0;
-    this.setCanDrag(false);
-  },
   componentDidMount: function() {
-    const idea = this;
-    const object = ReactDOM.findDOMNode(this);
-    let holdTimeout = 0;
+
+  },
+  _onMouseDown: function() {
     const that = this;
-    object.addEventListener('mousedown', function() {
-      holdTimeout = setTimeout(function() {
-        if (that.props.collectionCount > 1) {
-          idea.setCanDrag(true);
-        }
-      }, 1500);
-    });
-    object.addEventListener('mouseup', function() {
-      clearTimeout(holdTimeout);
-      idea.setCanDrag(false);
-    });
-    object.addEventListener('mouseleave', function() {
-      clearTimeout(holdTimeout);
-      idea.setCanDrag(false);
-    });
+    holdTimeout = setTimeout(function() {
+      if (that.props.collectionCount > 1) {
+        that.setCanDrag(true);
+      }
+    }, 1500);
+  },
+  _onMouseUp: function() {
+    const that = this;
+    clearTimeout(holdTimeout);
+    that.setCanDrag(false);
+  },
+  _onMouseLeave: function() {
+    const that = this;
+    clearTimeout(holdTimeout);
+    that.setCanDrag(false);
+  },
+  _onMouseMove: function() {
+    clearTimeout(holdTimeout);
   },
   /**
     * Set draggable
@@ -77,13 +66,21 @@ const Idea = React.createClass({
 
     if (draggableState) {
       return connectDragSource(
-        <div className={classToAdd} canDrag={draggableState}>
+        <div className={classToAdd} canDrag={draggableState}
+        onMouseDown={this._onMouseDown}
+        onMouseUp={this._onMouseUp}
+        onMouseLeave={this._onMouseLeave}
+        onMouseMove={this._onMouseMove}>
           {ideaString}
         </div>
       );
     } else {
       return (
-        <div className={classToAdd} canDrag={draggableState} id={id}>
+        <div className={classToAdd} canDrag={draggableState} id={id}
+        onMouseDown={this._onMouseDown}
+        onMouseUp={this._onMouseUp}
+        onMouseLeave={this._onMouseLeave}
+        onMouseMove={this._onMouseMove}>
           {ideaString}
         </div>
       );

@@ -51,10 +51,10 @@ function updateForce() {
   force.nodes(_collections).start();
 }
 /**
- * Hide ideas with the given ids
+ * Hide collections with the given ids
  * @param {number[]} ids - an array of ids to remove
  */
-function _hideIdeas(ids) {
+function hideCollections(ids) {
   _collections = _collections.filter(function(group) {
     if (ids.indexOf(group.index) === -1) {
       return true;
@@ -63,11 +63,22 @@ function _hideIdeas(ids) {
   });
 }
 /**
- * Add given collections to the stored collections
- * @param {object[]} collections - given collections
+ * Create new collections for the given results
+ * @param {object[]} results - given results
  */
-function _addCollections(collections) {
-  Array.prototype.push.apply(_collections, collections);
+function returnResults(results) {
+  for (let i = 0; i < results.length; i++) {
+    _collections.push({
+      content: results[i].content,
+      votes: 0,
+      fixed: false,
+      px: 0,
+      py: 0,
+      weight: 0,
+      x: 100,
+      y: 100,
+    });
+  }
 }
 /**
 * Mutate content strings to a more usable object
@@ -148,8 +159,8 @@ AppDispatcher.register(function(action) {
     CollectionStore.emitChange();
     updateForce();
     break;
-  case StormConstants.HIDE_IDEAS:
-    _hideIdeas(action.ids);
+  case StormConstants.HIDE_COLLECTIONS:
+    hideCollections(action.ids);
     CollectionStore.emitChange();
     break;
   case StormConstants.REMOVED_COLLECTION:
@@ -164,13 +175,13 @@ AppDispatcher.register(function(action) {
   case StormConstants.SET_LAYOUT_SIZE:
     setLayoutSize(action.width, action.height);
     break;
-  case StormConstants.ADD_COllECTIONS:
-    _addCollections(action.collections);
-    CollectionStore.emitChange();
-    break;
   case StormConstants.RECIEVED_COLLECTIONS:
     recievedAllCollections(action.collections);
     updateForce();
+    CollectionStore.emitChange();
+    break;
+  case StormConstants.RETURN_RESULTS:
+    returnResults(action.results);
     CollectionStore.emitChange();
     break;
   default:

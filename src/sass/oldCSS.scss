@@ -319,13 +319,9 @@ p {
   }
 }
 
-.otherResults {
-  display: inline-block;
-}
-
 .resultsControls {
   float: right;
-  margin: 18px 0;
+  margin-top: 40px;
 }
 
 .resultsControls > a {
@@ -336,6 +332,10 @@ p {
     color: gray;
     cursor: auto;
   }
+}
+
+.resultsHeading {
+  display: inline-block;
 }
 
 

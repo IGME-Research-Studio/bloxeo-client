@@ -79,12 +79,12 @@ const StormActions = {
     });
   },
   /**
-   * Dispatch event to hide ideas with the given ids
+   * Dispatch event to hide collections with the given ids
    * @param {number[]} ids - array of ids to hide
    */
-  hideIdeas: function(ids) {
+  hideCollections: function(ids) {
     AppDispatcher.dispatch({
-      actionType: StormConstants.HIDE_IDEAS,
+      actionType: StormConstants.HIDE_COLLECTIONS,
       ids: ids,
     });
   },
@@ -95,6 +95,16 @@ const StormActions = {
   storeResults: function(results) {
     AppDispatcher.dispatch({
       actionType: StormConstants.STORE_RESULTS,
+      results: results,
+    });
+  },
+  /**
+   * Dispatch event return results to the workspace
+   * @param {object[]} results - voting results
+   */
+  returnResults: function(results) {
+    AppDispatcher.dispatch({
+      actionType: StormConstants.RETURN_RESULTS,
       results: results,
     });
   },

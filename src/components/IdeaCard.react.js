@@ -29,7 +29,9 @@ const IdeaCard = React.createClass({
     const connectDragSource = this.props.connectDragSource;
     // Apply REACT-DnD to element
     return connectDragSource(
-      <div className="bankCard ui-widget-content drop-zone ui-state-default" style={this._style()}>
+      <div className="bankCard ui-widget-content drop-zone ui-state-default"
+        style={this._style()}
+      >
         {ideaString}
       </div>
     );

@@ -3,6 +3,24 @@ const StormConstants = require('../constants/StormConstants');
 
 const StormActions = {
   /**
+   * Dispatch create new board event
+   */
+  createBoard: function() {
+    AppDispatcher.dispatch({
+      actionType: StormConstants.CREATE_BOARD,
+    });
+  },
+  /**
+   * Dispatch join board event
+   * @param {string} id of board to join
+   */
+  joinBoard: function(boardId) {
+    AppDispatcher.dispatch({
+      actionType: StormConstants.JOIN_BOARD,
+      boardId: boardId,
+    });
+  },
+  /**
    * Dispatch change room name event
    * @param {string} roomName
    */

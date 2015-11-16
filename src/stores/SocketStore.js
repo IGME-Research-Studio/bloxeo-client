@@ -6,6 +6,7 @@ const socketIO       = require('socket.io-client');
 const _              = require('lodash');
 // Init socket.io connection
 const io = sailsIO(socketIO);
+let currentBoardId = 0;
 io.sails.url = StormConstants.SERVER_URL_DEV;
 
 io.socket.get(StormConstants.API_VERSION + '/constants', (body) => {
@@ -14,8 +15,6 @@ io.socket.get(StormConstants.API_VERSION + '/constants', (body) => {
   const Routes = _.mapValues(REST_API, (route) => {
     return _.template(route);
   });
-  // Temp room join
-  io.socket.post(Routes.joinRoom({boardId: StormConstants.TEST_BOARD }));
   // Socket Handlers
   // Collection was created
   io.socket.on(EVENT_API.ADDED_COLLECTION, (res) => {
@@ -39,7 +38,7 @@ io.socket.get(StormConstants.API_VERSION + '/constants', (body) => {
    */
   function getIdeas() {
     io.socket.get(
-      Routes.getIdeas({boardId: StormConstants.TEST_BOARD }),
+      Routes.getIdeas({boardId: currentBoardId }),
       {},
       (res) => {
         StormActions.updatedIdeas(res.data);
@@ -51,7 +50,7 @@ io.socket.get(StormConstants.API_VERSION + '/constants', (body) => {
    */
   function getCollections() {
     io.socket.get(
-      Routes.getIdeaCollections({boardId: StormConstants.TEST_BOARD }),
+      Routes.getIdeaCollections({boardId: currentBoardId }),
       {},
       (res) => {
         StormActions.recievedCollections(res.data);
@@ -59,15 +58,40 @@ io.socket.get(StormConstants.API_VERSION + '/constants', (body) => {
     );
   }
   // Initialize ideas an collections
-  getIdeas();
-  getCollections();
+  /**
+   * Joins board of given id
+   * @param {string} boardId
+   */
+  function joinBoard(boardId) {
+    currentBoardId = boardId;
+    io.socket.post(
+      Routes.joinRoom({boardId: currentBoardId}),
+      {},
+      () => {
+        getIdeas();
+        getCollections();
+      }
+    );
+  }
+  /**
+   * Create new board
+   */
+  function createBoard() {
+    io.socket.post(
+      Routes.createBoard(),
+      {isPublic: true},
+      (res) => {
+        joinBoard(res.data.boardId);
+      }
+    );
+  }
   /**
    * Make post request to server for idea creation
    * @param {string} ideaContent
    */
   function addIdea(content) {
     io.socket.post(
-      Routes.createIdea({boardId: StormConstants.TEST_BOARD }),
+      Routes.createIdea({boardId: currentBoardId}),
       {content: content}
     );
   }
@@ -77,7 +101,7 @@ io.socket.get(StormConstants.API_VERSION + '/constants', (body) => {
    */
   function addCollection(content, left, top) {
     io.socket.post(
-      Routes.createIdeaCollection({boardId: StormConstants.TEST_BOARD}),
+      Routes.createIdeaCollection({boardId: currentBoardId}),
       {
         content: content,
         top: top,
@@ -91,7 +115,7 @@ io.socket.get(StormConstants.API_VERSION + '/constants', (body) => {
    */
   function removeCollection(index) {
     io.socket.delete(
-      Routes.removeIdeaCollection({boardId: StormConstants.TEST_BOARD}),
+      Routes.removeIdeaCollection({boardId: currentBoardId}),
       {index: index}
     );
   }
@@ -103,7 +127,7 @@ io.socket.get(StormConstants.API_VERSION + '/constants', (body) => {
   function addIdeaToCollection(index, content) {
     io.socket.post(
       Routes.addIdeaToIdeaCollection({
-        boardId: StormConstants.TEST_BOARD,
+        boardId: currentBoardId,
         index: index,
       }),
       {content: content}
@@ -117,7 +141,7 @@ io.socket.get(StormConstants.API_VERSION + '/constants', (body) => {
   function removeIdeaFromCollection(index, content) {
     io.socket.delete(
       Routes.removeIdeaFromIdeaCollection({
-        boardId: StormConstants.TEST_BOARD,
+        boardId: currentBoardId,
         index: index,
       }),
       {index: index, content: content}
@@ -126,6 +150,12 @@ io.socket.get(StormConstants.API_VERSION + '/constants', (body) => {
   // Set up action watchers
   AppDispatcher.register((action) => {
     switch (action.actionType) {
+    case StormConstants.CREATE_BOARD:
+      createBoard();
+      break;
+    case StormConstants.JOIN_BOARD:
+      joinBoard(action.boardId);
+      break;
     case StormConstants.GET_IDEAS:
       getIdeas();
       break;

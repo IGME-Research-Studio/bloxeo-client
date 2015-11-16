@@ -110,6 +110,7 @@ function updateCollection(index, cont) {
  * @param {object[]} collections - all collections
  */
 function recievedAllCollections(collections) {
+  _collections = [];
   collections.forEach((collection, index) => {
     if (_collections[index] === undefined) {
       createCollection(index, collection.content, force.size[0] / 2, force.size[1] / 2);
@@ -177,8 +178,10 @@ AppDispatcher.register(function(action) {
     break;
   case StormConstants.RECIEVED_COLLECTIONS:
     recievedAllCollections(action.collections);
-    updateForce();
     CollectionStore.emitChange();
+    if (_collections.lenth > 0) {
+      updateForce();
+    }
     break;
   case StormConstants.RETURN_RESULTS:
     returnResults(action.results);

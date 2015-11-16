@@ -70,29 +70,29 @@ function _addCollections(collections) {
   Array.prototype.push.apply(_collections, collections);
 }
 /**
+* Mutate content strings to a more usable object
+* @param {Object[]} content - an array of strings
+*/
+function objectifyContent(cont) {
+  const content = cont.map(function(i) {
+    const item = {text: i, top: 0, left: 0};
+    return item;
+  });
+  return content;
+}
+/**
 * Create an idea group when an idea is dragged from the idea bank onto the workspace
 */
-function createCollection(index, content, left, top) {
-  content = objectifyContent(content);
+function createCollection(index, cont, left, top) {
+  const content = objectifyContent(cont);
   _collections[index] = {content, keep: true, x: left, y: top, votes: 0, fixed: false};
 }
 /**
 * Change the content of collection with given index
 */
-function updateCollection(index, content) {
-  content = objectifyContent(content);
+function updateCollection(index, cont) {
+  const content = objectifyContent(cont);
   _collections[index].content = content;
-}
-/**
-* Mutate content strings to a more usable object
-* @param {Object[]} content - an array of strings
-*/
-function objectifyContent(content) {
-  content = content.map(function(item) {
-    item = {text: item, top:0, left: 0};
-    return item;
-  });
-  return content;
 }
 /**
  * Recieve collections from server
@@ -139,7 +139,7 @@ force.on('tick', function() {
 AppDispatcher.register(function(action) {
   switch (action.actionType) {
   case StormConstants.ADDED_COLLECTION:
-    createCollection(action.index, action.content, 0, 0);
+    createCollection(action.index, action.content, action.left, action.top);
     CollectionStore.emitChange();
     updateForce();
     break;

@@ -15,7 +15,8 @@ const MembersList = React.createClass({
     // get each idea content
     const members = this.state.members.map(function(member) {
       return (
-        <div className="circleMemberIcon"><p>{member}</p></div>
+        // member id in the store?
+        <div key={member} className="circleMemberIcon"><p>{member}</p></div>
       );
     });
     // put all ideas in ideaList

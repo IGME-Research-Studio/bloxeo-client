@@ -61,7 +61,7 @@ const RoomDesciption = React.createClass({
   render: function() {
     if (this.state.isEditing) {
       return (
-        <textarea onChange={this._onChange} onKeyDown={this._onKeyDown}>{this.state.value}</textarea>
+        <textarea defaultValue={this.state.value} onChange={this._onChange} onKeyDown={this._onKeyDown}></textarea>
       );
     } else {
       return (

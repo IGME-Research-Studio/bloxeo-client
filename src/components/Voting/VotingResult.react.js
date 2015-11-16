@@ -13,15 +13,15 @@ const VotingResult = React.createClass({
     // array for ideas that were voted no
     const droppedIdeas = [];
     // map the updated idea array
-    const keepIdeas = this.props.data.map(function(idea) {
+    const keepIdeas = this.props.data.map(function(idea, i) {
       // if keep is true, return idea to keepIdeas
       if (!idea.keep) {
         // if keep is false, push it to the droppedIdeas array
-        const dropIdea = <VoteElement idea={idea} />;
+        const dropIdea = <VoteElement key={i} idea={idea} />;
         droppedIdeas.push(dropIdea);
       } else {
         return (
-          <VoteElement idea={idea} />
+          <VoteElement key={i} idea={idea} />
         );
       }
     });

@@ -101,9 +101,9 @@ function updateCollection(index, cont) {
 function recievedAllCollections(collections) {
   collections.forEach((collection, index) => {
     if (_collections[index] === undefined) {
-      createCollection(index, collection.content, force.size[0] / 2, force.size[1] / 2);
+      createCollection(index, collection.ideas, force.size[0] / 2, force.size[1] / 2);
     } else {
-      updateCollection(index, collection.content);
+      updateCollection(index, collection.ideas);
     }
     // _collections[index].content = collection.content;
   });

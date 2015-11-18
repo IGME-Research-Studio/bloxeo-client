@@ -11,6 +11,36 @@ let currentBoardId = 0;
 let notReceived = true;
 let notReceivedBank = true;
 
+const JOIN_CHANGE_EVENT = 'join';
+let _joinError = '';
+const SocketStore = assign({}, EventEmitter.prototype, {
+  /**
+   * Get join error message
+   * @return {array}
+   */
+  getJoinError: function() {
+    return _joinError;
+  },
+
+  emitChange: function() {
+    this.emit(JOIN_CHANGE_EVENT);
+  },
+  /**
+   * Add a change listener
+   * @param {function} callback - event callback function
+   */
+  addJoinListener: function(callback) {
+    this.on(JOIN_CHANGE_EVENT, callback);
+  },
+  /**
+   * Remove a change listener
+   * @param {function} callback - callback to be removed
+   */
+  removeJoinListener: function(callback) {
+    this.removeListener(JOIN_CHANGE_EVENT, callback);
+  },
+});
+
 /**
  * Checks a socket response for an error
  * @param {object} data: response data
@@ -251,3 +281,5 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
     joinBoard(roomid);
   }
 });
+
+module.exports = SocketStore;

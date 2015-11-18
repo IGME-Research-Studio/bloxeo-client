@@ -206,6 +206,9 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
     case StormConstants.JOIN_BOARD:
       joinBoard(action.boardId);
       break;
+    case StormConstants.GET_BOARD_ID:
+      getBoardId();
+      break;
     case StormConstants.GET_IDEAS:
       socket.emit(EVENT_API.GET_IDEAS, {boardId: currentBoardId });
       break;

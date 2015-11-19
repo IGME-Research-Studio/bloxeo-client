@@ -11,7 +11,7 @@ const CreateRoom = React.createClass({
   render: function() {
     return (
       <div className="createRoomButton">
-        <Link onClick={this._onClick} to="/workSpace" className="button">
+        <Link onClick={this._onClick} to="/" className="button">
           Create a room
         </Link>
       </div>

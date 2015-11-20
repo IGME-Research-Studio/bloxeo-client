@@ -6,15 +6,15 @@ const d3             = require('d3');
 
 const COLLECTION_CHANGE_EVENT = 'collection';
 
-let _collections = [];
+let _collections = {};
+let layoutObjs = [];
 
 // D3 force layout stuff
 const force = d3.layout.force()
-  .nodes(_collections)
+  .nodes(layoutObjs)
   .charge(-300)
   .gravity(0.02)
-  .friction(0.6)
-  .start();
+  .friction(0.6);
 
 const CollectionStore = assign({}, EventEmitter.prototype, {
   /**
@@ -23,6 +23,10 @@ const CollectionStore = assign({}, EventEmitter.prototype, {
    */
   getAllCollections: function() {
     return _collections;
+  },
+
+  getD3Data: function() {
+    return layoutObjs;
   },
 
   updateCollection: function(id) {
@@ -48,7 +52,7 @@ const CollectionStore = assign({}, EventEmitter.prototype, {
   },
 });
 function updateForce() {
-  force.nodes(_collections).start();
+  force.nodes(layoutObjs).start();
 }
 /**
  * Hide collections with the given ids
@@ -86,7 +90,7 @@ function returnResults(results) {
 */
 function objectifyContent(cont) {
   const content = cont.map(function(i) {
-    const item = {text: i, top: 0, left: 0};
+    const item = {text: i.content, top: 0, left: 0};
     return item;
   });
   return content;
@@ -94,48 +98,49 @@ function objectifyContent(cont) {
 /**
 * Create an idea group when an idea is dragged from the idea bank onto the workspace
 */
-function createCollection(index, cont, left, top) {
+function createCollection(_key, cont, left, top) {
   const content = objectifyContent(cont);
-  _collections[index] = {content, keep: true, x: left, y: top, votes: 0, fixed: false};
+  _collections[_key] = {content, x: left, y: top, votes: 0, key: _key};
 }
 /**
 * Change the content of collection with given index
 */
-function updateCollection(index, cont) {
+function updateCollection(_key, cont) {
   const content = objectifyContent(cont);
-  _collections[index].content = content;
+  _collections[_key].content = content;
 }
 /**
  * Recieve collections from server
  * @param {object[]} collections - all collections
  */
-function recievedAllCollections(collections) {
-  _collections = [];
-  collections.forEach((collection, index) => {
-    if (_collections[index] === undefined) {
-      createCollection(index, collection.content, force.size[0] / 2, force.size[1] / 2);
+function receivedAllCollections(collections) {
+  _collections = {};
+  layoutObjs = [];
+  for (const _key in collections) {
+    if (_collections[_key] === undefined) {
+      createCollection(_key, collections[_key].ideas, 100, 100);
+      layoutObjs.push({key: _key, fixed: true, x: 100, y: 100});
     } else {
-      updateCollection(index, collection.content);
+      updateCollection(_key, collections[_key].ideas);
     }
-    // _collections[index].content = collection.content;
-  });
+  }
 }
 /**
- * Remove idea collection at specified index
+ * Remove idea collection at specified key
  */
-function removeCollection(index) {
-  _collections.splice(index, 1);
+function removeCollection(_key) {
+  _collections = _omit(_collections, _key);
   updateForce();
 }
 /**
  * Set specified collection's position
  */
-function moveCollection(id, left, top) {
-  _collections[id].x = left;
-  _collections[id].y = top;
-  _collections[id].px = left;
-  _collections[id].py = top;
-  _collections[id].fixed = true;
+function moveCollection(key, left, top) {
+  _collections[key].x = left;
+  _collections[key].y = top;
+  _collections[key].px = left;
+  _collections[key].py = top;
+  _collections[key].fixed = true;
   updateForce();
 }
 
@@ -144,9 +149,14 @@ function setLayoutSize(width, height) {
 }
 
 // More d3
-force.on('tick', function() {
-  CollectionStore.emitChange();
-});
+// force.on('tick', function() {
+//   console.log('h');
+//   // layoutObjs.forEach(function(n) {
+//   //   _collections[n.key].x = n.x;
+//   //   _collections[n.key].y = n.y;
+//   // });
+//   CollectionStore.emitChange();
+// });
 
 AppDispatcher.register(function(action) {
   switch (action.actionType) {
@@ -176,10 +186,10 @@ AppDispatcher.register(function(action) {
   case StormConstants.SET_LAYOUT_SIZE:
     setLayoutSize(action.width, action.height);
     break;
-  case StormConstants.RECIEVED_COLLECTIONS:
-    recievedAllCollections(action.collections);
+  case StormConstants.RECEIVED_COLLECTIONS:
+    receivedAllCollections(action.collections);
     CollectionStore.emitChange();
-    if (_collections.lenth > 0) {
+    if (Object.keys(_collections).length > 0) {
       updateForce();
     }
     break;

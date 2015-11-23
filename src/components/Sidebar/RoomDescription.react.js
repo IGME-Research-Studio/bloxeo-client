@@ -65,7 +65,7 @@ const RoomDesciption = React.createClass({
       );
     } else {
       return (
-        <h6 className="noMargin" onDoubleClick={this._onDoubleClick}>{this.state.description}</h6>
+        <div id="room-description" onDoubleClick={this._onDoubleClick}>{this.state.description}</div>
       );
     }
   },

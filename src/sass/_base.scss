@@ -9,3 +9,7 @@
 //import vars and mixins to use
 @import '_vars';
 @import '_mixins';
+
+body {
+  @include font-regular();
+}

@@ -20,9 +20,11 @@ const Sidebar = React.createClass({
           <MembersList />
           <VotingModal />
         </div>
-        <TimerBox time={this.props.time} timerStatus={this.props.timerStatus} timerWidth={this.props.timerWidth}/>
         <Wordbank data={this.props.ideas}/>
-        <div className="sidebar-create">
+        <div>
+          <TimerBox time={this.props.time}
+            timerStatus={this.props.timerStatus}
+            timerWidth={this.props.timerWidth}/>
           <IdeaCreate timerStatus={this.props.timerStatus} />
         </div>
       </div>

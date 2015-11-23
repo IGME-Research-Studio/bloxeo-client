@@ -3,6 +3,7 @@ const StormConstants = require('../constants/StormConstants');
 const EventEmitter   = require('events').EventEmitter;
 const assign         = require('object-assign');
 const d3             = require('d3');
+const _              = require('lodash');
 
 const COLLECTION_CHANGE_EVENT = 'collection';
 
@@ -12,8 +13,8 @@ let layoutObjs = [];
 // D3 force layout stuff
 const force = d3.layout.force()
   .nodes(layoutObjs)
-  .charge(-300)
-  .gravity(0.02)
+  .charge(-100)
+  .gravity(0.1)
   .friction(0.6);
 
 const CollectionStore = assign({}, EventEmitter.prototype, {
@@ -96,7 +97,7 @@ function objectifyContent(cont) {
   return content;
 }
 /**
-* Create an idea group when an idea is dragged from the idea bank onto the workspace
+* Create an idea group when an idea is dragged to the workspace
 */
 function createCollection(_key, cont, left, top) {
   const content = objectifyContent(cont);
@@ -113,15 +114,21 @@ function updateCollection(_key, cont) {
  * Recieve collections from server
  * @param {object[]} collections - all collections
  */
-function receivedAllCollections(collections) {
-  _collections = {};
+function receivedAllCollections(collections, reset) {
+  if (reset) {
+    _collections = {};
+  } else {
+    _collections = _.pick(_collections, _.keys(collections));
+  }
   layoutObjs = [];
   for (const _key in collections) {
     if (_collections[_key] === undefined) {
       createCollection(_key, collections[_key].ideas, 100, 100);
-      layoutObjs.push({key: _key, fixed: true, x: 100, y: 100});
+      layoutObjs.push({key: _key, fixed: false, x: 100, y: 100});
     } else {
+      const col = _collections[_key];
       updateCollection(_key, collections[_key].ideas);
+      layoutObjs.push({key: _key, fixed: col.fixed, x: col.x, y: col.y});
     }
   }
 }
@@ -135,12 +142,14 @@ function removeCollection(_key) {
 /**
  * Set specified collection's position
  */
-function moveCollection(key, left, top) {
-  _collections[key].x = left;
-  _collections[key].y = top;
-  _collections[key].px = left;
-  _collections[key].py = top;
-  _collections[key].fixed = true;
+function moveCollection(_key, left, top) {
+  const d3Index = _.findIndex(layoutObjs, 'key', _key);
+  layoutObjs[d3Index].x = left;
+  layoutObjs[d3Index].y = top;
+  layoutObjs[d3Index].px = left;
+  layoutObjs[d3Index].py = top;
+  layoutObjs[d3Index].fixed = true;
+  _collections[_key].fixed = true;
   updateForce();
 }
 
@@ -149,14 +158,14 @@ function setLayoutSize(width, height) {
 }
 
 // More d3
-// force.on('tick', function() {
-//   console.log('h');
-//   // layoutObjs.forEach(function(n) {
-//   //   _collections[n.key].x = n.x;
-//   //   _collections[n.key].y = n.y;
-//   // });
-//   CollectionStore.emitChange();
-// });
+force.on('tick', function() {
+  // console.log(layoutObjs);
+  layoutObjs.forEach(function(n) {
+    _collections[n.key].x = n.x;
+    _collections[n.key].y = n.y;
+  });
+  CollectionStore.emitChange();
+});
 
 AppDispatcher.register(function(action) {
   switch (action.actionType) {
@@ -187,7 +196,7 @@ AppDispatcher.register(function(action) {
     setLayoutSize(action.width, action.height);
     break;
   case StormConstants.RECEIVED_COLLECTIONS:
-    receivedAllCollections(action.collections);
+    receivedAllCollections(action.collections, action.reset);
     CollectionStore.emitChange();
     if (Object.keys(_collections).length > 0) {
       updateForce();

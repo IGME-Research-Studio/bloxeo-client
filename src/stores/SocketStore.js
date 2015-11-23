@@ -5,7 +5,7 @@ const socketIO       = require('socket.io-client');
 const _              = require('lodash');
 const reqwest        = require('reqwest');
 // Init socket.io connection
-const socket = socketIO.connect(StormConstants.SERVER_URL_REVAMP);
+const socket = socketIO.connect(StormConstants.SERVER_URL_DEV);
 let currentBoardId = 0;
 
 /**
@@ -41,7 +41,10 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
   // Idea was added or removed from collection
   socket.on(EVENT_API.UPDATED_COLLECTIONS, (data) => {
     catchSocketError(data, (res) => {
-      StormActions.receivedCollections(_.omit(res.data, ['top', 'left']));
+      StormActions.receivedCollections(
+        _.omit(res.data, ['top', 'left']),
+        false
+      );
     });
   });
   // Idea was added or removed
@@ -61,7 +64,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
   });
   socket.on(EVENT_API.RECEIVED_COLLECTIONS, (data) => {
     catchSocketError(data, (res) => {
-      StormActions.receivedCollections(res.data);
+      StormActions.receivedCollections(res.data, true);
     });
   });
   socket.on(EVENT_API.RECEIVED_IDEAS, (data) => {

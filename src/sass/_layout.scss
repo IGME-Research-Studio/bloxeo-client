@@ -40,3 +40,12 @@
   display:inline-block;
   position:relative;
 }
+
+.idea {
+  font-size: 18px;
+  word-wrap: break-word;
+
+  &.deleting {
+    background-color: red;
+  }
+}

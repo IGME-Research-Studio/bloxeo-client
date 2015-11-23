@@ -46,10 +46,10 @@ const Idea = React.createClass({
   },
   _style: function() {
     let big = false;
-    if (this.state.content.length>15){
-      big = true
+    if (this.state.content.length > 15) {
+      big = true;
     }
-    if (big){
+    if (big) {
       return {
         width: `150px`,
         height: `125px`,
@@ -99,7 +99,7 @@ const Idea = React.createClass({
       );
     } else {
       return (
-        <div className={classToAdd} 
+        <div className={classToAdd}
         canDrag={draggableState} id={id}
         onMouseDown={this._onMouseDown}
         onMouseUp={this._onMouseUp}

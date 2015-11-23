@@ -7,7 +7,7 @@ const _              = require('lodash');
 // Init socket.io connection
 const io = sailsIO(socketIO);
 let currentBoardId = 0;
-io.sails.url = StormConstants.SERVER_URL_DEV;
+io.sails.url = StormConstants.SERVER_URL_PROD;
 
 io.socket.get(StormConstants.API_VERSION + '/constants', (body) => {
   const { EVENT_API, REST_API } = body.data;

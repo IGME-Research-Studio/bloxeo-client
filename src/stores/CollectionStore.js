@@ -113,21 +113,28 @@ function updateCollection(_key, cont) {
 /**
  * Recieve collections from server
  * @param {object[]} collections - all collections
+ * @param {bool} reset - should old collection postion data be retained
  */
 function receivedAllCollections(collections, reset) {
-  if (reset) {
-    _collections = {};
-  } else {
-    _collections = _.pick(_collections, _.keys(collections));
+  let oldCollections = {};
+  if (!reset) {
+    oldCollections = JSON.parse(JSON.stringify(_collections));
   }
+  // Clear out old collection data
+  _collections = {};
   layoutObjs = [];
+  CollectionStore.emitChange();
+  // Create collections from server data
   for (const _key in collections) {
     if (_collections[_key] === undefined) {
       createCollection(_key, collections[_key].ideas, 100, 100);
-      layoutObjs.push({key: _key, fixed: false, x: 100, y: 100});
-    } else {
+      // Retain old collection postion data
       const col = _collections[_key];
-      updateCollection(_key, collections[_key].ideas);
+      if (oldCollections[_key]) {
+        col.x = oldCollections[_key].x;
+        col.y = oldCollections[_key].y;
+        col.fixed = oldCollections[_key].fixed;
+      }
       layoutObjs.push({key: _key, fixed: col.fixed, x: col.x, y: col.y});
     }
   }
@@ -159,7 +166,6 @@ function setLayoutSize(width, height) {
 
 // More d3
 force.on('tick', function() {
-  // console.log(layoutObjs);
   layoutObjs.forEach(function(n) {
     _collections[n.key].x = n.x;
     _collections[n.key].y = n.y;
@@ -198,7 +204,7 @@ AppDispatcher.register(function(action) {
   case StormConstants.RECEIVED_COLLECTIONS:
     receivedAllCollections(action.collections, action.reset);
     CollectionStore.emitChange();
-    if (Object.keys(_collections).length > 0) {
+    if (_.keys(_collections).length > 0) {
       updateForce();
     }
     break;

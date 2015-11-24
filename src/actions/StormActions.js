@@ -222,10 +222,11 @@ const StormActions = {
    * Dispatch event to update collections
    * @param {array} collections - all collections
    */
-  recievedCollections: function(collections) {
+  receivedCollections: function(collections, reset) {
     AppDispatcher.dispatch({
-      actionType: StormConstants.RECIEVED_COLLECTIONS,
+      actionType: StormConstants.RECEIVED_COLLECTIONS,
       collections: collections,
+      reset: reset,
     });
   },
   // IDEAS

@@ -1,15 +1,16 @@
-const React        = require('react');
+const React    = require('react');
 const ReactDOM = require('react-dom');
 
-const CollectionStore   = require('../../stores/CollectionStore');
-const StormActions = require('../../actions/StormActions');
+const CollectionStore = require('../../stores/CollectionStore');
+const StormActions    = require('../../actions/StormActions');
 
 const IdeaCollection = require('../IdeaCollection.react');
-const TrashCan = require('./TrashCan.react');
+const TrashCan       = require('./TrashCan.react');
 
 const dropTarget   = require('react-dnd').DropTarget;
 const PropTypes    = React.PropTypes;
 const DnDTypes     = require('../../constants/DragAndDropConstants');
+const _            = require('lodash');
 
 const Workspace = React.createClass({
 
@@ -34,7 +35,6 @@ const Workspace = React.createClass({
     StormActions.setLayoutSize(domNode.offsetWidth, domNode.offsetHeight);
   },
   _onDrag: function(e) {
-
     if (this.state.panning === true) {
       this.setState({
         x: this.state.x + e.nativeEvent.movementX,
@@ -82,7 +82,7 @@ const Workspace = React.createClass({
       onMouseDown={this._onMouseDown}
       onMouseLeave={this._onMouseLeave}>
         <div>
-          {this.state.ideaCollections.map(function(group, i) {
+          {_.values(this.state.ideaCollections).map(function(group, i) {
             const left = Math.round(group.x) + (that.state.x);
             const top = Math.round(group.y) + (that.state.y);
             return <IdeaCollection
@@ -91,7 +91,7 @@ const Workspace = React.createClass({
             top={top}
             ideas={group}
             owner={this}
-            ideaID={i}/>;
+            ideaID={group.key}/>;
           })}
         </div>
         <TrashCan />

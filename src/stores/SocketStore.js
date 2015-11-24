@@ -1,62 +1,81 @@
 const AppDispatcher  = require('../dispatcher/AppDispatcher');
 const StormConstants = require('../constants/StormConstants');
 const StormActions   = require('../actions/StormActions');
-const sailsIO        = require('sails.io.js');
 const socketIO       = require('socket.io-client');
 const _              = require('lodash');
+const reqwest        = require('reqwest');
 // Init socket.io connection
-const io = sailsIO(socketIO);
+const socket = socketIO.connect(StormConstants.SERVER_URL_DEV);
 let currentBoardId = 0;
-io.sails.url = StormConstants.SERVER_URL_DEV;
 
-io.socket.get(StormConstants.API_VERSION + '/constants', (body) => {
-  const { EVENT_API, REST_API } = body.data;
-  // turn REST_API into route templates
+/**
+ * Checks a socket response for an error
+ * @param {object} res: response data
+ * @param {function} func: callback function
+ */
+function catchSocketError(res, func) {
+  if (!(res.error >= 400)) {
+    func(res);
+  } else {
+    console.error(res.message);
+  }
+}
+
+socket.on('connect', () => {
+  socket.emit('GET_CONSTANTS');
+});
+
+socket.on('RECEIVED_CONSTANTS', (body) => {
+  const { EVENT_API, REST_API } = body;
+  // // turn REST_API into route templates
   const Routes = _.mapValues(REST_API, (route) => {
-    return _.template(route);
+    return _.template(StormConstants.SERVER_URL_REVAMP + route[1]);
   });
   // Socket Handlers
-  // Collection was created
-  io.socket.on(EVENT_API.ADDED_COLLECTION, (res) => {
-    StormActions.addedCollection(res.index, res.content, res.left, res.top);
+  // Idea was added or removed from collection
+  socket.on(EVENT_API.MODIFIED_COLLECTION, (data) => {
+    catchSocketError(data, (res) => {
+      StormActions.modifiedCollection(res.data.key, res.data.content);
+    });
   });
   // Idea was added or removed from collection
-  io.socket.on(EVENT_API.MODIFIED_COLLECTION, (res) => {
-    StormActions.modifiedCollection(res.index, res.content);
-  });
-  // Collection was deleted
-  io.socket.on(EVENT_API.REMOVED_COLLECTION, (res) => {
-    StormActions.removedCollection(res.index);
+  socket.on(EVENT_API.UPDATED_COLLECTIONS, (data) => {
+    catchSocketError(data, (res) => {
+      StormActions.receivedCollections(
+        _.omit(res.data, ['top', 'left']),
+        false
+      );
+    });
   });
   // Idea was added or removed
-  io.socket.on(EVENT_API.UPDATED_IDEAS, function(res) {
-    StormActions.updatedIdeas(res);
+  socket.on(EVENT_API.UPDATED_IDEAS, (data) => {
+    catchSocketError(data, (res) => {
+      const ideas = res.data.map((idea) => {
+        return idea.content;
+      });
+      StormActions.updatedIdeas(ideas);
+    });
+  });
+  socket.on(EVENT_API.JOINED_ROOM, (data) => {
+    catchSocketError(data, () => {
+      socket.emit(EVENT_API.GET_IDEAS, {boardId: currentBoardId});
+      socket.emit(EVENT_API.GET_COLLECTIONS, {boardId: currentBoardId});
+    });
+  });
+  socket.on(EVENT_API.RECEIVED_COLLECTIONS, (data) => {
+    catchSocketError(data, (res) => {
+      StormActions.receivedCollections(res.data, true);
+    });
+  });
+  socket.on(EVENT_API.RECEIVED_IDEAS, (data) => {
+    catchSocketError(data, (res) => {
+      const ideas = res.data.map((idea) => {
+        return idea.content;
+      });
+      StormActions.updatedIdeas(ideas);
+    });
   });
   // Request Functions
-  /**
-   * Get all ideas on a board
-   */
-  function getIdeas() {
-    io.socket.get(
-      Routes.getIdeas({boardId: currentBoardId }),
-      {},
-      (res) => {
-        StormActions.updatedIdeas(res.data);
-      }
-    );
-  }
-  /**
-   * Get all collections on a board
-   */
-  function getCollections() {
-    io.socket.get(
-      Routes.getIdeaCollections({boardId: currentBoardId }),
-      {},
-      (res) => {
-        StormActions.recievedCollections(res.data);
-      }
-    );
-  }
   // Initialize ideas an collections
   /**
    * Joins board of given id
@@ -64,35 +83,31 @@ io.socket.get(StormConstants.API_VERSION + '/constants', (body) => {
    */
   function joinBoard(boardId) {
     currentBoardId = boardId;
-    io.socket.post(
-      Routes.joinRoom({boardId: currentBoardId}),
-      {},
-      () => {
-        getIdeas();
-        getCollections();
-      }
-    );
+    socket.emit(EVENT_API.JOIN_ROOM, {boardId: currentBoardId});
   }
   /**
    * Create new board
    */
   function createBoard() {
-    io.socket.post(
-      Routes.createBoard(),
-      {isPublic: true},
-      (res) => {
-        joinBoard(res.data.boardId);
-      }
-    );
+    reqwest({
+      url: Routes.createBoard(),
+      method: REST_API.createBoard[0],
+      success: (res) => {
+        joinBoard(res.boardId);
+      },
+    });
   }
   /**
    * Make post request to server for idea creation
    * @param {string} ideaContent
    */
   function addIdea(content) {
-    io.socket.post(
-      Routes.createIdea({boardId: currentBoardId}),
-      {content: content}
+    socket.emit(
+      EVENT_API.CREATE_IDEA,
+      {
+        boardId: currentBoardId,
+        content: content,
+      }
     );
   }
   /**
@@ -100,9 +115,10 @@ io.socket.get(StormConstants.API_VERSION + '/constants', (body) => {
    * @param {string} collection content from first idea added to collection
    */
   function addCollection(content, left, top) {
-    io.socket.post(
-      Routes.createIdeaCollection({boardId: currentBoardId}),
+    socket.emit(
+      EVENT_API.CREATE_COLLECTION,
       {
+        boardId: currentBoardId,
         content: content,
         top: top,
         left: left,
@@ -113,10 +129,13 @@ io.socket.get(StormConstants.API_VERSION + '/constants', (body) => {
    * Remove collection of given index from board
    * @param {number} index
    */
-  function removeCollection(index) {
-    io.socket.delete(
-      Routes.removeIdeaCollection({boardId: currentBoardId}),
-      {index: index}
+  function removeCollection(_key) {
+    socket.emit(
+      EVENT_API.DESTROY_COLLECTION,
+      {
+        boardId: currentBoardId,
+        key: _key,
+      }
     );
   }
   /**
@@ -124,13 +143,14 @@ io.socket.get(StormConstants.API_VERSION + '/constants', (body) => {
    * @param {number} index : collection index
    * @param {string} content : idea content
    */
-  function addIdeaToCollection(index, content) {
-    io.socket.post(
-      Routes.addIdeaToIdeaCollection({
+  function addIdeaToCollection(_key, content) {
+    socket.emit(
+      EVENT_API.ADD_IDEA,
+      {
         boardId: currentBoardId,
-        index: index,
-      }),
-      {content: content}
+        key: _key,
+        content: content,
+      }
     );
   }
   /**
@@ -138,13 +158,14 @@ io.socket.get(StormConstants.API_VERSION + '/constants', (body) => {
    * @param {number} index : collection index
    * @param {string} content : idea content
    */
-  function removeIdeaFromCollection(index, content) {
-    io.socket.delete(
-      Routes.removeIdeaFromIdeaCollection({
+  function removeIdeaFromCollection(_key, content) {
+    socket.emit(
+      EVENT_API.REMOVE_IDEA,
+      {
         boardId: currentBoardId,
-        index: index,
-      }),
-      {index: index, content: content}
+        content: content,
+        key: _key,
+      }
     );
   }
   // Set up action watchers
@@ -157,10 +178,10 @@ io.socket.get(StormConstants.API_VERSION + '/constants', (body) => {
       joinBoard(action.boardId);
       break;
     case StormConstants.GET_IDEAS:
-      getIdeas();
+      socket.emit(EVENT_API.GET_IDEAS, {boardId: currentBoardId });
       break;
     case StormConstants.GET_COLLECTIONS:
-      getCollections();
+      socket.emit(EVENT_API.GET_COLLECTIONS, {boardId: currentBoardId });
       break;
     case StormConstants.IDEA_CREATE:
       addIdea(action.ideaContent.trim());

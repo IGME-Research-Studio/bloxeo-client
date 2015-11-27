@@ -34,7 +34,15 @@ const Wordbank = React.createClass({
   render: function() {
 
     const classToAdd = classNames('wordbank', {expanded: this.state.expanded});
-    const arrowDirection = classNames('expandArrow', {left: this.state.expanded, right: !this.state.expanded});
+    const arrowDirection = classNames(
+      'expandArrow',
+      {left: this.state.expanded, right: !this.state.expanded}
+    );
+
+    const arrowIconClass = classNames({
+      'fa fa-chevron-right': !this.state.expanded,
+      'fa fa-chevron-left': this.state.expanded,
+    });
 
     return (
       <div className={classToAdd} ref="wordbank">
@@ -43,9 +51,8 @@ const Wordbank = React.createClass({
             return <IdeaCard key={i} idea={item} owner={this} ideaID={i} />;
           })}
         </div>
-        <div className='expandColumn'>
-          <div className={arrowDirection} ref="expand" onClick={this._onClick}>
-          </div>
+        <div className={arrowDirection} ref="expand" onClick={this._onClick}>
+          <i className={arrowIconClass}></i>
         </div>
       </div>
     );

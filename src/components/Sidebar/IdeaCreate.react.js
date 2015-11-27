@@ -41,8 +41,9 @@ const IdeaCreate = React.createClass({
    * @return {object}
    */
   render: function() {
-    if (this.props.timerStatus) {
-      return (
+    const isTimerDisabled = this.props.timerStatus;
+    return (
+      <div className="sidebar-create">
         <input
           type="text"
           maxLength="30"
@@ -51,22 +52,16 @@ const IdeaCreate = React.createClass({
           value={this.state.value}
           onChange={this._onChange}
           onKeyDown={this._onKeyDown}
-          disabled={true}
+          disabled={isTimerDisabled}
+          autoFocus={!isTimerDisabled}
         />
-      );
-    }
-    return (
-      <input
-        type="text"
-        maxLength="30"
-        className="idea-create"
-        placeholder="Idea spew!"
-        value={this.state.value}
-        onChange={this._onChange}
-        onKeyDown={this._onKeyDown}
-        autoFocus={true}
-      />
+        <a className={isTimerDisabled ? 'enterButton is-disabled' : 'enterButton'}
+          onClick={this._onSave}>
+          <i className="fa fa-arrow-up"></i>
+        </a>
+      </div>
     );
+
   },
 });
 

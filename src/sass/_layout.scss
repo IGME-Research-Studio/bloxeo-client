@@ -15,66 +15,16 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: #999;
+  background-color: $storm-blue;
   vertical-align: middle;
   position:relative;
   z-index:100;
-  #sidebar-info {
-    padding: 10px 20px;
-    .sidebar-section {
-      margin: 20px 0;
-      /* Room Info Box */
-      #room-name {
-        margin-bottom: 10px;
-      }
-      /* Member List */
-      .circleMemberIcon {
-        width: 35px;
-        height: 35px;
-        text-align: center;
-        line-height: 7px;
-        margin-right: 10px;
-        color: white;
-        background-color: black;
-        border-radius: 50%;
-        display: inline-block;
-      }
-      /* Timer */
-      .timer {
-        margin-right: 10px;
-        font-size: 26px;
-        display: inline-block;
-        .underline {
-          text-decoration: underline;
-        }
-      }
-      .timer-btn {
-        font-size: 12px;
-        cursor: pointer;
-        &.start {
-          color: green;
-        }
-        &.stop {
-          color: red;
-        }
-      }
-      /* Vote Check */
-      .vote-check {
-        -ms-transform: scale(2);
-        -moz-transform: scale(2);
-        -webkit-transform: scale(2);
-        -o-transform: scale(2);
-        transform: scale(2);
-      }
-      .vote-text {
-        font-size: 12px;
-        margin-left: 10px;
-        &:nth-child(3) {
-          margin-left: 20px;
-        }
-      }
-    }
-  }
+}
+
+.sidebar-brand {
+  position: absolute;
+  top: 10px;
+  left: 15px;
 }
 
 .workspaceCard {

@@ -12,7 +12,7 @@ const NUM_RETURN_TO_WORKSPACE = 3;
 let _boardName = 'Project Title';
 let _description = 'This is the description.';
 let _selectedTab = NavBarConstants.WORKSPACE_TAB;
-const _members = [1, 2];
+const _members = ['AZ', 'GH'];
 
 const BoardOptionsStore = assign({}, EventEmitter.prototype, {
   /**

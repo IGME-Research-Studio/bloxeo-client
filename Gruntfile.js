@@ -23,6 +23,14 @@ module.exports = function (grunt) {
         src: 'src/index.html',
         dest: 'build/index.html'
       },
+      landing: {
+        src: 'src/landing.html',
+        dest: 'build/landing.html'
+      },
+      skrollr: {
+        src: 'src/skrollr.min.js',
+        dest: 'build/skrollr.min.js'
+      },
       trashIcon: {
         src: 'assets/trashCanIcon.png',
         dest: 'build/assets/trashCanIcon.png'

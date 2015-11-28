@@ -7,6 +7,7 @@
 //import vars and mixins to use
 @import '_vars';
 @import '_mixins';
+
 .button {
   display: inline-block;
   color: white;
@@ -124,7 +125,7 @@
   .sidebar-section {
     margin: 20px 0;
     /* Room Info Box */
-    
+
     #room-name {
       font-size: 18px;
       line-height: 1;
@@ -134,7 +135,7 @@
       @include font-light();
     }
     /* Member List */
-    
+
     .circleMemberIcon {
       width: 32px;
       height: 32px;
@@ -257,7 +258,7 @@
     border-radius: 5px;
     background-color: $storm-orange;
     /* hardcoded for now, colors will have to be associated with users */
-    
+
     &:nth-child(2) {
       background-color: $storm-cyan;
     }
@@ -681,4 +682,142 @@
   width: 14px;
   height: 14px;
   text-align: center;
+}
+/* Styles for landing page */
+.landingPage {
+  height: 100vh;
+}
+.page1 {
+  background-color: white;
+}
+.page2 {
+  background-color: #1cbbb4;
+  color: white;
+
+  h1 {
+    color:  #ffffff;
+    font-size: 45px;
+    font-weight: 400;
+    line-height: 50px;
+    text-align: center;
+  }
+  p {
+    color:  #ffffff;
+    font-size: 23px;
+    line-height: 30px;
+    text-align: center;
+    width: 449px;
+    margin: 0 auto;
+  }
+}
+.page3 {
+  background-color: #282828;
+}
+.page4 {
+  background-color: #474b55;
+
+  p {
+    color: #fffcf0;
+    font-size: 16px;
+    line-height: 20px;
+  }
+  h1 {
+    color: rgba(167, 167, 167, 0.2);
+    font-size: 45px;
+    line-height: 55px;
+  }
+  input {
+    font-size: 20px;
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid grey;
+
+    &:focus {
+      outline: none;
+      border-bottom: 2px solid #4b7df1;
+    }
+  }
+
+  .createRoomButton {
+    border-radius: 3px;
+    background-color: #4b7df1;
+    color: #fffcf0;
+    font-size: 20px;
+    line-height: 45px;
+  }
+}
+
+
+.header {
+
+  h1 {
+    color:  #464a55;
+    font-size: 35px;
+    font-weight: 500;
+    line-height: 48px;
+  }
+
+  .landingNav {
+    list-style-type: none;
+
+    li {
+      font-size: 20px;
+      line-height: 48px;
+    }
+  }
+}
+
+.createRoomButton,
+.joinRoomButton {
+  font-size: 20px;
+  line-height: 45px;
+  color: #fffcf0;
+  border-radius:3px;
+}
+
+.page1 {
+  .content {
+    .joinLinks {
+      p {
+        color:  #464a55;
+        font-size: 16px;
+        line-height: 20px;
+      }
+    }
+
+    .textCopy {
+      h1 {
+        color: #464a55;
+        font-size: 55px;
+        font-weight: 300;
+        line-height: 58px;
+      }
+
+      p {
+        color:  #8d8d8d;
+        font-size: 23px;
+        line-height: 28px;
+      }
+    }
+  }
+  .footer {
+    background-color: #1cbbb4;
+    color:  #ffffff;
+    line-height: 48px;
+    p {
+      font-family: Lato;
+      color:  #ffffff;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 48px;
+    }
+  }
+}
+
+.createRoomButton {
+  background-color: #4b7df1;
+}
+
+.joinRoomButton {
+  background-color: #ff1e78;
 }

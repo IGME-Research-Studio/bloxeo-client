@@ -16,11 +16,13 @@ body {
   overflow: hidden;
   @include font-regular();
 }
-
 a:hover {
   text-decoration: none;
 }
 
 p {
   font-size: 14px;
+}
+html {
+	overflow: auto;
 }

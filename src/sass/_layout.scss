@@ -32,10 +32,20 @@
   font-size:30px;
   background-color: green;
   margin: 10px;
+  text-align: center;
 }
 
 .ideaGroup {
   background-color: yellow;
   display:inline-block;
   position:relative;
+}
+
+.idea {
+  font-size: 18px;
+  word-wrap: break-word;
+
+  &.deleting {
+    background-color: red;
+  }
 }

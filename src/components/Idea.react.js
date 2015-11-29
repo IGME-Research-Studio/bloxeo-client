@@ -44,6 +44,25 @@ const Idea = React.createClass({
   _onMouseMove: function() {
     clearTimeout(holdTimeout);
   },
+  _style: function() {
+    let big = false;
+    if (this.state.content.length > 15) {
+      big = true;
+    }
+    if (big) {
+      return {
+        width: `150px`,
+        height: `125px`,
+        overflow: `ellipsis`,
+      };
+    } else {
+      return {
+        width: `150px`,
+        height: `75px`,
+        overflow: `ellipsis`,
+      };
+    }
+  },
   /**
     * Set draggable
     * @param <Boolean> draggable
@@ -68,21 +87,25 @@ const Idea = React.createClass({
 
     if (draggableState) {
       return connectDragSource(
-        <div className={classToAdd} canDrag={draggableState}
+        <div className={classToAdd}
+        canDrag={draggableState}
         onMouseDown={this._onMouseDown}
         onMouseUp={this._onMouseUp}
         onMouseLeave={this._onMouseLeave}
-        onMouseMove={this._onMouseMove}>
+        onMouseMove={this._onMouseMove}
+        style={this._style()}>
           {ideaString}
         </div>
       );
     } else {
       return (
-        <div className={classToAdd} canDrag={draggableState} id={id}
+        <div className={classToAdd}
+        canDrag={draggableState} id={id}
         onMouseDown={this._onMouseDown}
         onMouseUp={this._onMouseUp}
         onMouseLeave={this._onMouseLeave}
-        onMouseMove={this._onMouseMove}>
+        onMouseMove={this._onMouseMove}
+        style={this._style()}>
           {ideaString}
         </div>
       );

@@ -20,9 +20,6 @@ const Idea = React.createClass({
       canDrag: false,
     };
   },
-  componentDidMount: function() {
-
-  },
   _onMouseDown: function() {
     const that = this;
     holdTimeout = setTimeout(function() {
@@ -126,10 +123,9 @@ const ideaSource = {
   },
   endDrag: function(props, monitor, component) {
     const dropped = monitor.didDrop();
-
     if (dropped) {
       StormActions.separateIdeas(
-        component.state.groupID,
+        component.props.groupID,
         component.props.content
       );
     }

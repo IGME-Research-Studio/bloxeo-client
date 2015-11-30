@@ -14,7 +14,7 @@ let currentBoardId = 0;
  * @param {function} func: callback function
  */
 function catchSocketError(res, func) {
-  if (!(res.error >= 400)) {
+  if (!(res.code >= 400)) {
     func(res);
   } else {
     console.error(res.message);

@@ -94,7 +94,7 @@ module.exports = function (grunt) {
 
   // Load plugins
   require('load-grunt-tasks')(grunt);
-
+  
   grunt.registerTask('default', ['lint', 'build', 'test']);
 
   grunt.registerTask('build-dev', ['clean', 'browserify:dev', 'copy', 'sass']);

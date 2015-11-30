@@ -244,10 +244,15 @@
   position:relative;
 }
 
-/* Styles for page -- ORGANIZE THIS*/
 
+/* Styles for landing page */
+.page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
 
-/* z-index for slides */
+/* Landing slides position and layering for parallax */
 #slide-1 {
   z-index: 40;
   position: absolute;
@@ -280,81 +285,9 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
-}
-.page1 {
-  background-color: white;
-}
-.page2 {
-  background-color: #1cbbb4;
-  color: white;
-
-  h1 {
-    color:  #ffffff;
-    font-size: 45px;
-    font-weight: 400;
-    line-height: 50px;
-    text-align: center;
-  }
-  p {
-    color:  #ffffff;
-    font-size: 23px;
-    line-height: 30px;
-    text-align: center;
-    width: 449px;
-    margin: 0 auto;
-  }
-}
-.page3 {
-  background-color: #282828;
-}
-.page4 {
-  background-color: #474b55;
-
-  p {
-    width: 320px;
-    text-align: center;
-    color: #fffcf0;
-    font-size: 16px;
-    line-height: 20px;
-    margin: 0 auto;
-    margin-top: 10px;
-  }
-  h1 {
-    color: rgba(167, 167, 167, 0.2);
-    font-size: 45px;
-    line-height: 55px;
-    margin: 0;
-  }
-  input {
-    width: 320px;
-    font-size: 20px;
-    margin: 0 auto;
-    background-color: transparent;
-    border: none;
-    border-bottom: 2px solid grey;
-    margin-top: 20px;
-    padding: 10px 0px;
-
-    &:focus {
-      outline: none;
-      border-bottom: 2px solid #4b7df1;
-    }
-  }
-
-  .createRoomButton {
-    border-radius: 3px;
-    background-color: #4b7df1;
-    color: #fffcf0;
-    font-size: 20px;
-    line-height: 45px;
-    text-align: center;
-    margin: 0 auto;
-    margin-top: 40px;
-  }
-}
 
 /* Vertically centered landing content sections */
-.content {
+.contentContainer {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -363,105 +296,87 @@
   margin: 0 auto;
 }
 
-/* Landing page header */
+/* Landing slide1 content */
+.page1 {
+  .content {
+    display: flex;
+    justify-content:space-between;
+    position: relative;
+    margin-top: 50px;
+
+    .joinLinks {
+      max-width: 275px;
+      p {
+        text-align: left;
+      }
+    }
+
+    .textCopy {
+      max-width: 397px;
+      text-align:left;
+    }
+  }
+  .footer {
+    height: 50px;
+    width: 100%;
+  }
+}
+
+/* Landing slide 4 content */
+.page4 {
+  p {
+    width: 320px;
+    margin: 0 auto;
+    margin-top: 10px;
+  }
+
+  h1 {
+    margin: 0;
+  }
+
+  input {
+    width: 320px;
+    margin: 0 auto;
+    margin-top: 20px;
+    padding: 10px 0px;
+  }
+
+  .createRoomButton {
+    margin: 0 auto;
+    margin-top: 40px;
+  }
+}
+
+/* Landing slide 1 header */
 .header {
   display: flex;
 
-  h1 {
-    color:  #464a55;
-    font-size: 35px;
-    font-weight: 500;
-    line-height: 48px;
-  }
-
   .landingNav {
-    list-style-type: none;
     text-align: left;
     margin: 0;
     padding: 20px;
 
     li {
       display: inline-block;
-      font-size: 20px;
-      line-height: 48px;
       padding: 0px 20px;
     }
   }
 }
+
+/* Landing create and join buttons */
 .createRoomButton, 
 .joinRoomButton {
   height: 48px;
   width: 100%;
-  font-size: 20px;
-  line-height: 45px;
-  color: #fffcf0;
-  text-align: center;
   max-width: 275px;
-}
-
-
-.pageOneContent {
-  display: flex;
-  justify-content:space-between;
-  position: relative;
-  margin-top: 50px;
-
-
-  .joinLinks {
-    max-width: 275px;
-    
-
-    p {
-      color:  #464a55;
-      font-size: 16px;
-      line-height: 20px;
-      text-align: left;
-    }
-  }
-
-  .textCopy {
-    max-width: 397px;
-    text-align:left;
-
-    h1 {
-      color: #464a55;
-      font-size: 55px;
-      font-weight: 300;
-      line-height: 58px;
-    }
-
-    p {
-      color:  #8d8d8d;
-      font-size: 23px;
-      line-height: 28px;
-    }
-  }
-}
-.pageOneFooter {
-  p {
-    font-family: Lato;
-    color:  #ffffff;
-    font-size: 16px;
-    font-weight: 700;
-    line-height: 48px;
-    text-align: center;
-  }
-}
-
-.createRoomButton {
   margin-top: 20px;
-  background-color: #4b7df1;
-  border-radius: 3px;
 }
-.joinRoomButton {
-  margin-top: 20px;
-  background-color: #ff1e78;
-  border-radius:3px
-}
-.pageOneFooter {
-  background-color: #1cbbb4;
-  color:  #ffffff;
-  height: 50px;
-  line-height: 48px;
-  width: 100%;
+
+.idea {
+  font-size: 18px;
+  word-wrap: break-word;
+
+  &.deleting {
+    background-color: red;
+  }
 }

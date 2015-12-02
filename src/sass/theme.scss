@@ -4,9 +4,6 @@
 
 /* Custom Imports */
 
-//Temporary import for oldCSS.scss
-@import 'oldCSS';
-
 //base
 @import '_base';
 
@@ -21,3 +18,7 @@
 
 //media queries
 @import 'state/_mediaqueries';
+
+
+//Temporary import for oldCSS.scss
+@import 'oldCSS';

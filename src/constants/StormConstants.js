@@ -25,7 +25,7 @@ module.exports = {
   SERVER_URL_PROD: 'http://storm-server-prod.herokuapp.com',
   SERVER_URL_REVAMP: 'http://storm-server-fun.herokuapp.com',
   API_VERSION: '/v1',
-  TEST_BOARD: 'N1wMRenQe',
+  TEST_BOARD: '4yibJDO4l',
   // Server requests
   CREATE_BOARD: 'CREATE_BOARD',
   JOIN_BOARD: 'JOIN_BOARD',

@@ -29,7 +29,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
   const { EVENT_API, REST_API } = body;
   // // turn REST_API into route templates
   const Routes = _.mapValues(REST_API, (route) => {
-    return _.template(StormConstants.SERVER_URL_REVAMP + route[1]);
+    return _.template(StormConstants.SERVER_URL_DEV + route[1]);
   });
   // Socket Handlers
   // Idea was added or removed from collection

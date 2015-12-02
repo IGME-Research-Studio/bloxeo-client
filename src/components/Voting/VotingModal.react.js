@@ -32,7 +32,9 @@ const VotingModal = React.createClass({
   render: function() {
     return (
       <div className="sidebar-voteSection">
-        <a className="button callVoteButton" onClick={this.showModal}>Call Vote</a>
+        <a className="button callVoteButton" onClick={this.showModal}>
+          Call Vote
+        </a>
         <div className="waitingSection">
           <span className="waitingText">Waiting on</span>
           <span className="waitingCircle"></span>

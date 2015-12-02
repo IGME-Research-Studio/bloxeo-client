@@ -5,7 +5,6 @@ const CollectionStore = require('../../stores/CollectionStore');
 const NavBarConstants = require('../../constants/NavBarConstants');
 const VoteButton = require('./VoteButton.react');
 const VoteElement = require('./VoteElement.react');
-const VotingResult = require('./VotingResult.react');
 
 /**
  * Component for voting 'Yes' or 'No' and displaying results
@@ -17,9 +16,8 @@ const VotingContent = React.createClass({
    */
   getInitialState: function() {
     return ({
-      ideas: CollectionStore.getAllCollections(),
+      collections: CollectionStore.getAllCollections(),
       voteIndex: 0,
-      label: 'vote',
     });
   },
   /**
@@ -38,22 +36,32 @@ const VotingContent = React.createClass({
    * Event handler for change events from StormStore
    */
   _onChange: function() {
-    this.setState({ideas: CollectionStore.getAllCollections()});
+    this.setState({collections: CollectionStore.getAllCollections()});
   },
   /**
-   * @return {object} - the current idea to display
+   * @return {object} - the current collection to display
    */
-  _getCurrentIdea: function() {
-    if (this.state.ideas.length === 0) {
+  _getCurrentCollection: function() {
+    if (this.state.collections.length === 0) {
       return null;
     }
-    return this.state.ideas[this.state.voteIndex];
+    const currId = Object.keys(this.state.collections)[this.state.voteIndex];
+    return this.state.collections[currId];
   },
   /**
-   * Sort ideas by number of votes
+   * Sort collections by number of votes
    */
-  _sortIdeas: function() {
-    this.state.ideas.sort(function(idea1, idea2) {
+  _getSortedCollections: function() {
+    const self = this;
+    const keys = Object.keys(this.state.collections);
+    const sorted = keys.map(function(key) {
+      return {
+        id: key,
+        collection: self.state.collections[key],
+      };
+    });
+
+    sorted.sort(function(idea1, idea2) {
       if (idea1.votes < idea2.votes) {
         return 1;
       } else if (idea1.votes === idea2.votes) {
@@ -62,19 +70,22 @@ const VotingContent = React.createClass({
         return -1;
       }
     });
+
+    return sorted;
   },
   /**
    * Get an array of ids of the ideaCollection not in the top number of
    * vote results to return to the workspace.
+   * @return {array} - sorted array of collection objects
    * @return {array} - ids to hide
    */
-  _getHideIds: function() {
+  _getHideIds: function(sorted) {
     const numReturnToWorkspace = BoardOptionsStore.getNumReturnToWorkspace();
     const hideIds = [];
 
-    for (let i = 0; i < this.state.ideas.length; i++) {
+    for (let i = 0; i < sorted.length; i++) {
       if (i >= numReturnToWorkspace) {
-        hideIds.push(this.state.ideas[i].index);
+        hideIds.push(sorted[i].id);
       }
     }
 
@@ -85,20 +96,20 @@ const VotingContent = React.createClass({
    * @param {boolean} keep - whether or not to keep the idea
    */
   handleStateChange: function(upvote) {
-    const idea = this._getCurrentIdea();
+    const collection = this._getCurrentCollection();
+    const collectionSize = Object.keys(this.state.collections).length;
 
     if (upvote) {
-      idea.votes += 1;
+      collection.votes += 1;
     }
 
-    if (this.state.voteIndex === this.state.ideas.length - 1) {
-      this._sortIdeas();
-
+    if (this.state.voteIndex === collectionSize - 1) {
       // store voting results
-      StormActions.storeResults(this.state.ideas);
+      const sortedCollections = this._getSortedCollections();
+      StormActions.storeResults(sortedCollections);
 
       // remove non-top voted ideaCollections from the Workspace
-      const hideIds = this._getHideIds();
+      const hideIds = this._getHideIds(sortedCollections);
       StormActions.hideCollections(hideIds);
 
       // show results tab
@@ -114,32 +125,20 @@ const VotingContent = React.createClass({
    * @return {object}
    */
   render: function() {
-    if (!this._getCurrentIdea()) {
+    if (!this._getCurrentCollection()) {
       return (
         <p>There is nothing to vote on yet. Drag some ideas onto the board
         to start voting!</p>
       );
     }
 
-    switch (this.state.label) {
-    case 'vote':
-      return (
-        <div>
-          <VoteElement idea={this._getCurrentIdea()} />
-          <VoteButton data='true' changeState={this.handleStateChange} />
-          <VoteButton data='false' changeState={this.handleStateChange} />
-        </div>
-      );
-    case 'results':
-      return (
-        <div>
-          <VotingResult data={this.state.ideas} />
-          <a className="button" onClick={this.processVotes}>Done</a>
-        </div>
-      );
-    default:
-      break;
-    }
+    return (
+      <div>
+        <VoteElement collection={this._getCurrentCollection()} />
+        <VoteButton data='true' changeState={this.handleStateChange} />
+        <VoteButton data='false' changeState={this.handleStateChange} />
+      </div>
+    );
   },
 });
 

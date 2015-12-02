@@ -60,12 +60,9 @@ function updateForce() {
  * @param {number[]} ids - an array of ids to remove
  */
 function hideCollections(ids) {
-  _collections = _collections.filter(function(group) {
-    if (ids.indexOf(group.index) === -1) {
-      return true;
-    }
-    return false;
-  });
+  for (let i = 0; i < ids.length; i++) {
+    delete _collections[ids[i]];
+  }
 }
 /**
  * Create new collections for the given results

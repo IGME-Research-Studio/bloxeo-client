@@ -13,7 +13,7 @@ let currentBoardId = 0;
  * Checks a socket response for an error
  * @param {object} data: response data
  */
-function catchSocketError(data) {
+function resolveSocketResponse(data) {
   return new Promise((resolve, reject) => {
     if (!(data.code >= 400)) {
       resolve(data);
@@ -35,18 +35,8 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
   });
   // Socket Handlers
   // Idea was added or removed from collection
-  socket.on(EVENT_API.MODIFIED_COLLECTION, (data) => {
-    catchSocketError(data)
-    .then((res) => {
-      StormActions.receivedCollections(res.data, true);
-    })
-    .catch((res) => {
-      console.error('Error receiving collections ' + res.message);
-    });
-  });
-  // Idea was added or removed from collection
   socket.on(EVENT_API.UPDATED_COLLECTIONS, (data) => {
-    catchSocketError(data)
+    resolveSocketResponse(data)
     .then((res) => {
       StormActions.receivedCollections(
         _.omit(res.data, ['top', 'left']),
@@ -54,12 +44,12 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       );
     })
     .catch((res) => {
-      console.error('Error updating collections: ' + res.message);
+      console.error(`Error updating collections: ${res.message}`);
     });
   });
   // Idea was added or removed
   socket.on(EVENT_API.UPDATED_IDEAS, (data) => {
-    catchSocketError(data)
+    resolveSocketResponse(data)
     .then((res) => {
       const ideas = res.data.map((idea) => {
         return idea.content;
@@ -67,30 +57,30 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       StormActions.updatedIdeas(ideas);
     })
     .catch((res) => {
-      console.error('Error updating ideas: ' + res.message);
+      console.error(`Error updating ideas: ${res.message}`);
     });
   });
   socket.on(EVENT_API.JOINED_ROOM, (data) => {
-    catchSocketError(data)
+    resolveSocketResponse(data)
     .then(() => {
       socket.emit(EVENT_API.GET_IDEAS, {boardId: currentBoardId});
       socket.emit(EVENT_API.GET_COLLECTIONS, {boardId: currentBoardId});
     })
     .catch((res) => {
-      console.error('Error joining a room: ' + res.message);
+      console.error(`Error joining a room: ${res.message}`);
     });
   });
   socket.on(EVENT_API.RECEIVED_COLLECTIONS, (data) => {
-    catchSocketError(data)
+    resolveSocketResponse(data)
     .then((res) => {
       StormActions.receivedCollections(res.data, true);
     })
     .catch((res) => {
-      console.error('Error receiving collections: ' + res.message);
+      console.error(`Error receiving collections: ${res.message}`);
     });
   });
   socket.on(EVENT_API.RECEIVED_IDEAS, (data) => {
-    catchSocketError(data)
+    resolveSocketResponse(data)
     .then((res) => {
       const ideas = res.data.map((idea) => {
         return idea.content;
@@ -98,7 +88,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       StormActions.updatedIdeas(ideas);
     })
     .catch((res) => {
-      console.error('Error receiving ideas: ' + res.message);
+      console.error(`Error receiving ideas: ${res.message}`);
     });
   });
   // Request Functions

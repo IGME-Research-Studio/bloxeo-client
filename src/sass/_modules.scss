@@ -737,19 +737,10 @@
       border-bottom: 2px solid #4b7df1;
     }
   }
-
-  .createRoomButton {
-    border-radius: 3px;
-    background-color: #4b7df1;
-    color: #fffcf0;
-    font-size: 20px;
-    line-height: 45px;
-  }
 }
 
 
 .header {
-
   h1 {
     color:  #464a55;
     font-size: 35px;
@@ -767,8 +758,8 @@
   }
 }
 
-.createRoomButton,
-.joinRoomButton {
+.createRoomButton a,
+.joinRoomButton a {
   font-size: 20px;
   line-height: 45px;
   color: #fffcf0;

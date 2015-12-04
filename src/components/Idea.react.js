@@ -80,6 +80,7 @@ const Idea = React.createClass({
     const connectDragSource = this.props.connectDragSource;
     const draggableState = this.state.canDrag;
     const classToAdd = classNames('idea', {deleting: this.state.canDrag});
+    const id = this.state.ideaID;
 
     if (draggableState) {
       return connectDragSource(

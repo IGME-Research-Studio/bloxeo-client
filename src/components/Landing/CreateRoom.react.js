@@ -5,7 +5,6 @@ const StormActions = require('../../actions/StormActions');
 const CreateRoom = React.createClass({
   _onClick: function() {
     StormActions.createBoard();
-    StormActions.getBoardId();
   },
   render: function() {
     return (

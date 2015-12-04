@@ -27,12 +27,19 @@ const IdeaCollection = React.createClass({
   },
   _style: function() {
     const ss = this.squareSize();
-    return {
+    const styles = {
       top: `${this.props.top}px`,
       left: `${this.props.left}px`,
       width: `${(ss * 160) + 24}px`, // width of card + collection padding
+      WebkitColumnCount: `${ss}`,
+      WebkitColumnGap: `10px`,
+      MozColumnCount: `${ss}`,
+      MozColumnGap: `10px`,
+      ColumnCount: `${ss}`,
+      ColumnGap: `10px`,
       height: `auto`,
     };
+    return styles;
   },
 
   squareSize: function() {

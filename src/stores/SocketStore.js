@@ -8,6 +8,7 @@ const Promise        = require('bluebird');
 // Init socket.io connection
 const socket = socketIO.connect(StormConstants.SERVER_URL_DEV);
 let currentBoardId = 0;
+let notReceived = true;
 
 /**
  * Checks a socket response for an error
@@ -29,6 +30,16 @@ socket.on('connect', () => {
 
 socket.on('RECEIVED_CONSTANTS', (body) => {
   const { EVENT_API, REST_API } = body;
+
+  /**
+   * Checks to update the client to the server
+   */
+  function updateClient() {
+    socket.emit(EVENT_API.GET_IDEAS, {boardId: currentBoardId});
+    socket.emit(EVENT_API.GET_COLLECTIONS, {boardId: currentBoardId});
+  }
+  window.setInterval(updateClient, 10000);
+
   // // turn REST_API into route templates
   const Routes = _.mapValues(REST_API, (route) => {
     return _.template(StormConstants.SERVER_URL_DEV + route[1]);
@@ -73,11 +84,13 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
   socket.on(EVENT_API.RECEIVED_COLLECTIONS, (data) => {
     resolveSocketResponse(data)
     .then((res) => {
-      StormActions.receivedCollections(res.data, true);
+      StormActions.receivedCollections(res.data, notReceived);
+      notReceived = false;
     })
     .catch((res) => {
       console.error(`Error receiving collections: ${res.message}`);
     });
+
   });
   socket.on(EVENT_API.RECEIVED_IDEAS, (data) => {
     resolveSocketResponse(data)

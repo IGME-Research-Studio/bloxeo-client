@@ -35,7 +35,8 @@
   border-radius: 3px;
   border-bottom: 5px solid #9acc60;
   margin: 5px;
-  float: left;
+  display: inline-block;
+  vertical-align: top;
 }
 
 .ideaGroup {

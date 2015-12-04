@@ -143,7 +143,7 @@
 .sidebar-voteSection {
   text-align: center;
   margin: 15px 0;
-  height: 100px;
+  height: 70px;
 
   .callVoteButton {
     padding: 9px 20px;
@@ -190,9 +190,9 @@
 }
 
 .wordbank {
+  position: relative;
   display: flex;
   flex-grow: 1;
-  overflow: hidden;
   background-color: $storm-blueLight;
   z-index: 100;
   width: 100%;
@@ -202,31 +202,50 @@
     width: 200%;
   }
 
-  .wordbankIdeas {
-    flex-grow: 1;
-    padding: 15px;
+  .wordbankWrap {
+    position: absolute;
+    width: 100%;
+    height: 100%;
     overflow: auto;
-    text-align: center;
-    -webkit-columns: auto 235px;
-    -moz-columns: auto 235px;
-    columns: auto 235px;
 
-    .bankCard {
-      color: white;
-      font-size: 13px;
-      padding: 8px 18px;
-      background-color: $storm-blueGray;
-      display: inline-block;
-      margin: 4px;
-      border-radius: 2px;
-      line-height: 1;
-      cursor: pointer;
+    .wordbankIdeas {
+      position: absolute;
+      width: 600px;
+      flex-grow: 1;
+      padding: 15px;
+      overflow: auto;
+      text-align: center;
+      -webkit-columns: auto 270px;
+      -moz-columns: auto 270px;
+      columns: auto 270px;
+
+      .bankCard {
+        color: white;
+        font-size: 13px;
+        padding: 8px 18px;
+        background-color: $storm-blueGray;
+        display: inline-block;
+        margin: 4px;
+        border-radius: 2px;
+        line-height: 1;
+        cursor: pointer;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        max-width: 230px;
+        overflow: hidden;
+        -o-transform: none !important;
+        -moz-transform: none !important;
+        -ms-transform: none !important;
+        -webkit-transform: none !important;
+        transform: none !important;
+      }
     }
   }
 
   .expandArrow {
     position: absolute;
-    top: 55%;
+    top: 45%;
+    right: -22px;
     padding: 17px 6px;
     border-top-right-radius: 2px;
     border-bottom-right-radius: 2px;

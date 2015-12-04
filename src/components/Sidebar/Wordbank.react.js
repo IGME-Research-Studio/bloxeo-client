@@ -56,10 +56,12 @@ const Wordbank = React.createClass({
 
     return (
       <div className={classToAdd} ref="wordbank">
-        <div className='wordbankIdeas'>
-          {this.props.data.map(function(item, i) {
-            return <IdeaCard key={i} idea={item} owner={this} ideaID={i} />;
-          })}
+        <div className='wordbankWrap'>
+          <div className='wordbankIdeas'>
+            {this.props.data.map(function(item, i) {
+              return <IdeaCard key={i} idea={item} owner={this} ideaID={i} />;
+            })}
+          </div>
         </div>
         <div className={arrowDirection} ref="expand" onClick={this._onClick}>
           <i className={arrowIconClass}></i>

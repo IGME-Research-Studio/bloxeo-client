@@ -1,4 +1,5 @@
 const React           = require('react');
+const ReactDOM        = require('react-dom');
 const StormActions    = require('../actions/StormActions');
 const CollectionStore = require('../stores/CollectionStore');
 const dropTarget      = require('react-dnd').DropTarget;
@@ -22,16 +23,20 @@ const IdeaCollection = React.createClass({
   },
   componentDidMount: function() {
     CollectionStore.addChangeListener(this.ideasChange);
+    const width = parseInt(ReactDOM.findDOMNode(this).offsetWidth, 10);
+    const height = parseInt(ReactDOM.findDOMNode(this).offsetHeight, 10);
+    CollectionStore.setCollectionRadius(this.props.ideaID, width, height);
   },
   componentWillUnmount: function() {
     CollectionStore.removeChangeListener(this.ideasChange);
   },
   _style: function() {
     const ss = this.squareSize();
+    const width = (ss * 160) + 24;
     const styles = {
       top: `${this.props.top}px`,
       left: `${this.props.left}px`,
-      width: `${(ss * 160) + 24}px`, // width of card + collection padding
+      width: `${width}px`, // width of card + collection padding
       WebkitColumnCount: `${ss}`,
       WebkitColumnGap: `10px`,
       MozColumnCount: `${ss}`,
@@ -42,7 +47,6 @@ const IdeaCollection = React.createClass({
     };
     return styles;
   },
-
   squareSize: function() {
     let sizeCount = 1;
     let value = 0;
@@ -61,6 +65,7 @@ const IdeaCollection = React.createClass({
         return (sizeCount);
       }
     }
+    return 1;
   },
 
   ideasChange: function() {

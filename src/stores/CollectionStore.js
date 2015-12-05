@@ -9,11 +9,17 @@ const COLLECTION_CHANGE_EVENT = 'collection';
 
 let _collections = {};
 let layoutObjs = [];
+const layoutSize = {
+  width: 0,
+  height: 0,
+};
 
 // D3 force layout stuff
 const force = d3.layout.force()
   .nodes(layoutObjs)
-  .charge(-100)
+  .charge((n) => {
+    return n.radius * n.radius * -0.1;
+  })
   .gravity(0.1)
   .friction(0.6);
 
@@ -50,6 +56,10 @@ const CollectionStore = assign({}, EventEmitter.prototype, {
    */
   removeChangeListener: function(callback) {
     this.removeListener(COLLECTION_CHANGE_EVENT, callback);
+  },
+  setCollectionRadius: function(_key, r) {
+    const d3Index = _.findIndex(layoutObjs, 'key', _key);
+    layoutObjs[d3Index].radius = r;
   },
 });
 function updateForce() {
@@ -122,9 +132,16 @@ function receivedAllCollections(collections, reset) {
   layoutObjs = [];
   CollectionStore.emitChange();
   // Create collections from server data
+  let i = 0;
   for (const _key in collections) {
     if (_collections[_key] === undefined) {
-      createCollection(_key, collections[_key].ideas, 100, 100);
+      createCollection(
+        _key,
+        collections[_key].ideas,
+        layoutSize.width / 2 + i * ( (i % 3) === 0 ? 1 : -1),
+        layoutSize.height / 2 + i * ( (i % 2) === 0 ? 1 : -1)
+      );
+      i++;
       // Retain old collection postion data
       const col = _collections[_key];
       if (oldCollections[_key]) {
@@ -159,6 +176,8 @@ function moveCollection(_key, left, top) {
 
 function setLayoutSize(width, height) {
   force.size([width, height]);
+  layoutSize.width = width;
+  layoutSize.height = height;
 }
 
 // More d3

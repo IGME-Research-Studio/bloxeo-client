@@ -1,6 +1,4 @@
 const React = require('react');
-const Link  = require('react-router').Link;
-
 const StormConstants = require('../../constants/StormConstants');
 const StormActions   = require('../../actions/StormActions');
 
@@ -11,9 +9,9 @@ const JoinRoom = React.createClass({
   render: function() {
     return (
       <div className="joinRoomButton">
-          <Link to="/workSpace" onClick={this._onClick} className="button">
+          <div onClick={this._onClick} className="button">
             Join a room
-          </Link>
+          </div>
       </div>
     );
   },

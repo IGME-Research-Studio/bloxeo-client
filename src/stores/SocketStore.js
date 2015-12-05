@@ -112,6 +112,12 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
    */
   function joinBoard(boardId) {
     currentBoardId = boardId;
+    // append the board id to the url upon joining a room if it is not already there
+    if (window.location.hash.split('?')[0] !== '#/workSpace') {
+      const newUrl = window.location.href.split('?')[0] + 'workSpace?roomId=' + currentBoardId;
+      window.location.href = newUrl;
+    }
+
     socket.emit(EVENT_API.JOIN_ROOM, {boardId: currentBoardId});
   }
   /**
@@ -122,6 +128,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       url: Routes.createBoard(),
       method: REST_API.createBoard[0],
       success: (res) => {
+        // set url
         joinBoard(res.boardId);
       },
     });
@@ -229,4 +236,9 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       break;
     }
   });
+  // if page is on the workspace, join the room on page load
+  if (window.location.hash.split('?')[0] === '#/workSpace') {
+    const roomid = window.location.hash.split('=')[1];
+    joinBoard(roomid);
+  }
 });

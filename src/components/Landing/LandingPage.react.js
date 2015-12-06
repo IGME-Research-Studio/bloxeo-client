@@ -5,22 +5,27 @@ const SocketStore = require('../../stores/SocketStore');
 
 function getStates() {
   return {
-    joinError: SocketStore.getJoinError(),
+    joinError: SocketStore.getErrorMessage(),
   };
 }
+
 const LandingPage = React.createClass({
   getInitialState: function() {
     return getStates();
   },
+
   componentDidMount: function() {
-    SocketStore.addJoinListener(this._onChange);
+    SocketStore.addErrorListener(this._onChange);
   },
+
   componentWillUnmount: function() {
-    SocketStore.removeJoinListener(this._onChange);
+    SocketStore.removeErrorListener(this._onChange);
   },
+
   _onChange: function() {
     this.setState(getStates());
   },
+
   render: function() {
     return (
       <div className="landingPage">

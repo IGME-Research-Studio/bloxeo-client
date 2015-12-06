@@ -13,31 +13,34 @@ let notReceivedBank = true;
 
 const JOIN_CHANGE_EVENT = 'join';
 let _joinError = '';
+
+let errorMsg = '';
+const ERROR_CHANGE_EVENT = 'JOIN_ERROR';
 const SocketStore = assign({}, EventEmitter.prototype, {
   /**
    * Get join error message
    * @return {array}
    */
-  getJoinError: function() {
-    return _joinError;
+  getErrorMessage: function() {
+    return errorMsg;
   },
 
   emitChange: function() {
-    this.emit(JOIN_CHANGE_EVENT);
+    this.emit(ERROR_CHANGE_EVENT);
   },
   /**
    * Add a change listener
    * @param {function} callback - event callback function
    */
-  addJoinListener: function(callback) {
-    this.on(JOIN_CHANGE_EVENT, callback);
+  addErrorListener: function(callback) {
+    this.on(ERROR_CHANGE_EVENT, callback);
   },
   /**
    * Remove a change listener
    * @param {function} callback - callback to be removed
    */
-  removeJoinListener: function(callback) {
-    this.removeListener(JOIN_CHANGE_EVENT, callback);
+  removeErrorListener: function(callback) {
+    this.removeListener(ERROR_CHANGE_EVENT, callback);
   },
 });
 
@@ -106,9 +109,18 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
     .then(() => {
       socket.emit(EVENT_API.GET_IDEAS, {boardId: currentBoardId});
       socket.emit(EVENT_API.GET_COLLECTIONS, {boardId: currentBoardId});
+      errorMsg = '';
+      SocketStore.emitChange();
+      // append the board id to the url upon joining a room if it is not already there
+      if (window.location.hash.split('?')[0] !== '#/workSpace') {
+        const newUrl = window.location.href.split('?')[0] + 'workSpace?roomId=' + currentBoardId;
+        window.location.href = newUrl;
+      }
     })
-    .catch(() => {
+    .catch((res) => {
       console.error(`Error joining a room: ${res}`);
+      errorMsg = res.message;
+      SocketStore.emitChange();
     });
   });
   socket.on(EVENT_API.RECEIVED_COLLECTIONS, (data) => {
@@ -150,12 +162,6 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
    */
   function joinBoard(boardId) {
     currentBoardId = boardId;
-    // append the board id to the url upon joining a room if it is not already there
-    if (window.location.hash.split('?')[0] !== '#/workSpace') {
-      const newUrl = window.location.href.split('?')[0] + 'workSpace?roomId=' + currentBoardId;
-      window.location.href = newUrl;
-    }
-
     socket.emit(EVENT_API.JOIN_ROOM, {boardId: currentBoardId});
   }
   /**

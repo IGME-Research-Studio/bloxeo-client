@@ -21,7 +21,7 @@ const StormActions = {
     });
   },
   hideLoading: function() {
-    console.log("hideLoading");
+    console.log('hideLoading');
     AppDispatcher.dispatch({
       actionType: StormConstants.HIDE_LOADING,
     });

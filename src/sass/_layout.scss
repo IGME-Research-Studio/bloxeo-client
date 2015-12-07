@@ -89,6 +89,8 @@
       margin: 5px;
       border-radius: 3px;
       -webkit-transform: scale(0.0);
+      -ms-transform: scale(0.0);
+      transform: scale(0.0);
       opacity: 0;
       animation: sizeSquare 4.8s ease infinite;
 
@@ -137,16 +139,22 @@
 @-webkit-keyframes sizeSquare {
   0%, 15% {
     -webkit-transform: scale(0.0);
+    -ms-transform: scale(0.0);
+    transform: scale(0.0);
     opacity: 0;
   }
 
   25%, 75% {
     -webkit-transform: scale(1.0);
+    -ms-transform: scale(1.0);
+    transform: scale(1.0);
     opacity: 1
   }
 
   85%, 100% {
     -webkit-transform: scale(0.0);
+    -ms-transform: scale(0.0);
+    transform: scale(0.0);
     opacity: 0;
   }
 }

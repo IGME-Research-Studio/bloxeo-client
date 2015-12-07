@@ -26,10 +26,40 @@ const IdeaCollection = React.createClass({
     CollectionStore.removeChangeListener(this.ideasChange);
   },
   _style: function() {
-    return {
+    const ss = this.squareSize();
+    const styles = {
       top: `${this.props.top}px`,
       left: `${this.props.left}px`,
+      width: `${(ss * 160) + 24}px`, // width of card + collection padding
+      WebkitColumnCount: `${ss}`,
+      WebkitColumnGap: `10px`,
+      MozColumnCount: `${ss}`,
+      MozColumnGap: `10px`,
+      ColumnCount: `${ss}`,
+      ColumnGap: `10px`,
+      height: `auto`,
     };
+    return styles;
+  },
+
+  squareSize: function() {
+    let sizeCount = 1;
+    let value = 0;
+    if (this.props.ideas.content.length > 0) { // TODO remove when empty collections are fixed
+      this.props.ideas.content.forEach(function(item) {
+        if (item.text.length > 15) {
+          value += 1;
+        } else {
+          value += 0.5;
+        }
+      });
+    }
+    for (let i = Math.ceil(value); i < value * 100; i++) {
+      if (Math.sqrt(i) % 1 === 0) {
+        sizeCount = Math.sqrt(i);
+        return (sizeCount);
+      }
+    }
   },
 
   ideasChange: function() {

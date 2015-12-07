@@ -57,7 +57,8 @@ const SocketStore = assign({}, EventEmitter.prototype, {
 });
 /**
  * Checks a socket response for an error
- * @param {object} data: response data
+ * @param {object} res: response data
+ * @param {function} func: callback function
  */
 function resolveSocketResponse(data) {
   return new Promise((resolve, reject) => {
@@ -87,8 +88,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
   // Socket Handlers
   // Idea was added or removed from collection
   socket.on(EVENT_API.UPDATED_COLLECTIONS, (data) => {
-    resolveSocketResponse(data)
-    .then((res) => {
+    catchSocketError(data, (res) => {
       StormActions.receivedCollections(
         _.omit(res.data, ['top', 'left', 'key']),
         false
@@ -100,8 +100,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
   });
   // Idea was added or removed
   socket.on(EVENT_API.UPDATED_IDEAS, (data) => {
-    resolveSocketResponse(data)
-    .then((res) => {
+    catchSocketError(data, (res) => {
       const ideas = res.data.map((idea) => {
         return idea.content;
       });
@@ -150,8 +149,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
     });
   });
   socket.on(EVENT_API.RECEIVED_IDEAS, (data) => {
-    resolveSocketResponse(data)
-    .then((res) => {
+    catchSocketError(data, (res) => {
       const ideas = res.data.map((idea) => {
         return idea.content;
       });

@@ -4,8 +4,11 @@ module.exports = {
   CHANGE_ROOM_DESCRIPTION: 'CHANGE_ROOM_DESCRIPTION',
   TIMER_COUNTDOWN: 'TIMER_COUNTDOWN',
   TIMER_PAUSE: 'TIMER_PAUSE',
+<<<<<<< HEAD
   END_LOAD_ANIMATION: 'END_LOAD_ANIMATION',
   HIDE_LOADING: 'HIDE_LOADING',
+=======
+>>>>>>> setting up animation listener
   // Idea constants
   IDEA_CREATE: 'IDEA_CREATE',
   // Collection Constants

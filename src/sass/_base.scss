@@ -11,9 +11,7 @@
 @import '_mixins';
 
 body {
-  color: $storm-primary;
-  background-color: #fff;
-  overflow: hidden;
+	overflow: auto;
   @include font-regular();
 }
 a:hover {
@@ -24,5 +22,5 @@ p {
   font-size: 14px;
 }
 html {
-	overflow: auto;
+	overflow: none;
 }

@@ -257,6 +257,7 @@
   z-index: 40;
   position: absolute;
   width: 100%;
+  top: 0;
 }
 #slide-2 {
   z-index: 30;
@@ -291,9 +292,9 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 768px;
+  //width: 768px;
   height: 100vh;
-  margin: 0 auto;
+  //margin: 0 auto;
 }
 
 /* Landing slide1 content */
@@ -375,6 +376,7 @@
   border-radius: 3px;
   text-align:center;
   line-height: 45px;
+  color: white;
 }
 
 .idea {

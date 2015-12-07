@@ -4,24 +4,21 @@ const StormActions   = require('../actions/StormActions');
 const socketIO       = require('socket.io-client');
 const _              = require('lodash');
 const reqwest        = require('reqwest');
-const Promise        = require('bluebird');
 // Init socket.io connection
 const socket = socketIO.connect(StormConstants.SERVER_URL_DEV);
 let currentBoardId = 0;
-let notReceived = true;
 
 /**
  * Checks a socket response for an error
- * @param {object} data: response data
+ * @param {object} res: response data
+ * @param {function} func: callback function
  */
-function resolveSocketResponse(data) {
-  return new Promise((resolve, reject) => {
-    if (!(data.code >= 400)) {
-      resolve(data);
-    } else {
-      reject(data);
-    }
-  });
+function catchSocketError(res, func) {
+  if (!(res.code >= 400)) {
+    func(res);
+  } else {
+    console.error(res.message);
+  }
 }
 
 socket.on('connect', () => {
@@ -30,78 +27,52 @@ socket.on('connect', () => {
 
 socket.on('RECEIVED_CONSTANTS', (body) => {
   const { EVENT_API, REST_API } = body;
-
-  /**
-   * Checks to update the client to the server
-   */
-  function updateClient() {
-    socket.emit(EVENT_API.GET_IDEAS, {boardId: currentBoardId});
-    socket.emit(EVENT_API.GET_COLLECTIONS, {boardId: currentBoardId});
-  }
-  window.setInterval(updateClient, 10000);
-
   // // turn REST_API into route templates
   const Routes = _.mapValues(REST_API, (route) => {
     return _.template(StormConstants.SERVER_URL_REVAMP + route[1]);
   });
   // Socket Handlers
   // Idea was added or removed from collection
+  socket.on(EVENT_API.MODIFIED_COLLECTION, (data) => {
+    catchSocketError(data, (res) => {
+      StormActions.modifiedCollection(res.data.key, res.data.content);
+    });
+  });
+  // Idea was added or removed from collection
   socket.on(EVENT_API.UPDATED_COLLECTIONS, (data) => {
-    resolveSocketResponse(data)
-    .then((res) => {
+    catchSocketError(data, (res) => {
       StormActions.receivedCollections(
         _.omit(res.data, ['top', 'left']),
         false
       );
-    })
-    .catch((res) => {
-      console.error(`Error updating collections: ${res.message}`);
     });
   });
   // Idea was added or removed
   socket.on(EVENT_API.UPDATED_IDEAS, (data) => {
-    resolveSocketResponse(data)
-    .then((res) => {
+    catchSocketError(data, (res) => {
       const ideas = res.data.map((idea) => {
         return idea.content;
       });
       StormActions.updatedIdeas(ideas);
-    })
-    .catch((res) => {
-      console.error(`Error updating ideas: ${res.message}`);
     });
   });
   socket.on(EVENT_API.JOINED_ROOM, (data) => {
-    resolveSocketResponse(data)
-    .then(() => {
+    catchSocketError(data, () => {
       socket.emit(EVENT_API.GET_IDEAS, {boardId: currentBoardId});
       socket.emit(EVENT_API.GET_COLLECTIONS, {boardId: currentBoardId});
-    })
-    .catch((res) => {
-      console.error(`Error joining a room: ${res.message}`);
     });
   });
   socket.on(EVENT_API.RECEIVED_COLLECTIONS, (data) => {
-    resolveSocketResponse(data)
-    .then((res) => {
-      StormActions.receivedCollections(res.data, notReceived);
-      notReceived = false;
-    })
-    .catch((res) => {
-      console.error(`Error receiving collections: ${res.message}`);
+    catchSocketError(data, (res) => {
+      StormActions.receivedCollections(res.data, true);
     });
-
   });
   socket.on(EVENT_API.RECEIVED_IDEAS, (data) => {
-    resolveSocketResponse(data)
-    .then((res) => {
+    catchSocketError(data, (res) => {
       const ideas = res.data.map((idea) => {
         return idea.content;
       });
       StormActions.updatedIdeas(ideas);
-    })
-    .catch((res) => {
-      console.error(`Error receiving ideas: ${res.message}`);
     });
   });
   // Request Functions
@@ -112,12 +83,6 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
    */
   function joinBoard(boardId) {
     currentBoardId = boardId;
-    // append the board id to the url upon joining a room if it is not already there
-    if (window.location.hash.split('?')[0] !== '#/workSpace') {
-      const newUrl = window.location.href.split('?')[0] + 'workSpace?roomId=' + currentBoardId;
-      window.location.href = newUrl;
-    }
-
     socket.emit(EVENT_API.JOIN_ROOM, {boardId: currentBoardId});
   }
   /**
@@ -128,9 +93,8 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       url: Routes.createBoard(),
       method: REST_API.createBoard[0],
       success: (res) => {
-        // set url
-        joinBoard(res.boardId);
-        StormActions.hideLoading();
+        joinBoard(res.boardId
+        console.log('joined board');    
       },
     });
   }
@@ -237,9 +201,4 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       break;
     }
   });
-  // if page is on the workspace, join the room on page load
-  if (window.location.hash.split('?')[0] === '#/workSpace') {
-    const roomid = window.location.hash.split('=')[1];
-    joinBoard(roomid);
-  }
 });

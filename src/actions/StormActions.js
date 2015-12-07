@@ -20,6 +20,12 @@ const StormActions = {
       boardId: boardId,
     });
   },
+  hideLoading: function() {
+    console.log("hideLoading");
+    AppDispatcher.dispatch({
+      actionType: StormConstants.HIDE_LOADING,
+    });
+  },
   /**
    * Dispatch change room name event
    * @param {string} roomName

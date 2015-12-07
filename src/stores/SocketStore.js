@@ -71,7 +71,6 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
   //   socket.emit(EVENT_API.GET_IDEAS, {boardId: currentBoardId});
   //   socket.emit(EVENT_API.GET_COLLECTIONS, {boardId: currentBoardId});
   // }
-  // window.setInterval(updateClient, 10000);
 
   // // turn REST_API into route templates
   const Routes = _.mapValues(REST_API, (route) => {
@@ -155,26 +154,50 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
     });
   });
   // Request Functions
-  // Initialize ideas an collections
+  /**
+   * Creates a user
+   * @param {string} name
+   */
+  function createUser(next) {
+    if (!localStorage.getItem('UserKey')) {
+      reqwest({
+        url: Routes.createUser(),
+        method: REST_API.createUser[0],
+        data: { username: 'peter' },
+        success: (res) => {
+          // set url
+          localStorage.setItem('UserName', 'peter');
+          localStorage.setItem('UserKey', res);
+          next();
+        },
+      });
+    } else {
+      next();
+    }
+  }
   /**
    * Joins board of given id
    * @param {string} boardId
    */
   function joinBoard(boardId) {
-    currentBoardId = boardId;
-    socket.emit(EVENT_API.JOIN_ROOM, {boardId: currentBoardId});
+    createUser(() => {
+      currentBoardId = boardId;
+      socket.emit(EVENT_API.JOIN_ROOM, {boardId: currentBoardId});
+    });
   }
   /**
    * Create new board
    */
   function createBoard() {
-    reqwest({
-      url: Routes.createBoard(),
-      method: REST_API.createBoard[0],
-      success: (res) => {
-        // set url
-        joinBoard(res.boardId);
-      },
+    createUser(() => {
+      reqwest({
+        url: Routes.createBoard(),
+        method: REST_API.createBoard[0],
+        success: (res) => {
+          // set url
+          joinBoard(res.boardId);
+        },
+      });
     });
   }
   /**

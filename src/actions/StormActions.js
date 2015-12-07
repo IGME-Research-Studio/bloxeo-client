@@ -39,6 +39,12 @@ const StormActions = {
       actionType: StormConstants.END_LOAD_ANIMATION,
     });
   },
+  hideLoading: function() {
+    console.log("hideLoading");
+    AppDispatcher.dispatch({
+      actionType: StormConstants.HIDE_LOADING,
+    });
+  },
   /**
    * Dispatch change room name event
    * @param {string} roomName

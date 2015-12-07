@@ -5,6 +5,7 @@ module.exports = {
   TIMER_COUNTDOWN: 'TIMER_COUNTDOWN',
   TIMER_PAUSE: 'TIMER_PAUSE',
   END_LOAD_ANIMATION: 'END_LOAD_ANIMATION',
+  HIDE_LOADING: 'HIDE_LOADING',
   // Idea constants
   IDEA_CREATE: 'IDEA_CREATE',
   // Collection Constants

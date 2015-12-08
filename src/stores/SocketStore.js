@@ -34,11 +34,11 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
   /**
    * Checks to update the client to the server
    */
-  function updateClient() {
-    socket.emit(EVENT_API.GET_IDEAS, {boardId: currentBoardId});
-    socket.emit(EVENT_API.GET_COLLECTIONS, {boardId: currentBoardId});
-  }
-  window.setInterval(updateClient, 10000);
+  // function updateClient() {
+  //   socket.emit(EVENT_API.GET_IDEAS, {boardId: currentBoardId});
+  //   socket.emit(EVENT_API.GET_COLLECTIONS, {boardId: currentBoardId});
+  // }
+  // window.setInterval(updateClient, 10000);
 
   // // turn REST_API into route templates
   const Routes = _.mapValues(REST_API, (route) => {
@@ -84,8 +84,10 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
   socket.on(EVENT_API.RECEIVED_COLLECTIONS, (data) => {
     resolveSocketResponse(data)
     .then((res) => {
-      StormActions.receivedCollections(res.data, notReceived);
-      notReceived = false;
+      if (notReceived) {
+        StormActions.receivedCollections(res.data, notReceived);
+        notReceived = false;
+      }
     })
     .catch((res) => {
       console.error(`Error receiving collections: ${res.message}`);

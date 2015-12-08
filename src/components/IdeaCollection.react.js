@@ -17,6 +17,7 @@ const IdeaCollection = React.createClass({
     return {
       left: this.props.left,
       top: this.props.top,
+      height: 0,
       ideas: this.props.ideas,
       ideaID: this.props.ideaID,
     };
@@ -25,6 +26,7 @@ const IdeaCollection = React.createClass({
     CollectionStore.addChangeListener(this.ideasChange);
     const width = parseInt(ReactDOM.findDOMNode(this).offsetWidth, 10);
     const height = parseInt(ReactDOM.findDOMNode(this).offsetHeight, 10);
+    this.setState({height: height});
     CollectionStore.setCollectionRadius(this.props.ideaID, width, height);
   },
   componentWillUnmount: function() {
@@ -33,9 +35,12 @@ const IdeaCollection = React.createClass({
   _style: function() {
     const ss = this.squareSize();
     const width = (ss * 160) + 24;
+
     const styles = {
-      top: `${this.props.top}px`,
-      left: `${this.props.left}px`,
+      WebkitTransform: `translateX(${this.props.left - width / 2}px)
+        translateY(${this.props.top - this.state.height / 2}px)`,
+      transform: `translateX(${this.props.left - width / 2}px)
+        translateY(${this.props.top - this.state.height / 2}px)`,
       width: `${width}px`, // width of card + collection padding
       WebkitColumnCount: `${ss}`,
       WebkitColumnGap: `10px`,

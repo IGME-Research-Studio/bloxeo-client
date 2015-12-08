@@ -17,11 +17,9 @@ const layoutSize = {
 // D3 force layout stuff
 const force = d3.layout.force()
   .nodes(layoutObjs)
-  .charge((n) => {
-    return n.radius * n.radius * -0.1;
-  })
-  .gravity(0.1)
-  .friction(0.6);
+  .charge(function(d, i) { return i ? -30 : -2000; })
+  .gravity(0.05)
+  .friction(0.01);
 
 const CollectionStore = assign({}, EventEmitter.prototype, {
   /**
@@ -57,9 +55,10 @@ const CollectionStore = assign({}, EventEmitter.prototype, {
   removeChangeListener: function(callback) {
     this.removeListener(COLLECTION_CHANGE_EVENT, callback);
   },
-  setCollectionRadius: function(_key, r) {
+  setCollectionRadius: function(_key, width, height) {
     const d3Index = _.findIndex(layoutObjs, 'key', _key);
-    layoutObjs[d3Index].radius = r;
+    layoutObjs[d3Index].height = height + 15;
+    layoutObjs[d3Index].width = width + 15;
   },
 });
 function updateForce() {
@@ -106,9 +105,9 @@ function objectifyContent(cont) {
 /**
 * Create an idea group when an idea is dragged to the workspace
 */
-function createCollection(_key, cont, left, top) {
+function createCollection(_key, cont) {
   const content = objectifyContent(cont);
-  _collections[_key] = {content, x: left, y: top, votes: 0, key: _key};
+  _collections[_key] = {content, votes: 0, key: _key};
 }
 /**
 * Change the content of collection with given index
@@ -135,12 +134,7 @@ function receivedAllCollections(collections, reset) {
   let i = 0;
   for (const _key in collections) {
     if (_collections[_key] === undefined) {
-      createCollection(
-        _key,
-        collections[_key].ideas,
-        layoutSize.width / 2 + i * ( (i % 3) === 0 ? 1 : -1),
-        layoutSize.height / 2 + i * ( (i % 2) === 0 ? 1 : -1)
-      );
+      createCollection(_key, collections[_key].ideas);
       i++;
       // Retain old collection postion data
       const col = _collections[_key];
@@ -181,10 +175,57 @@ function setLayoutSize(width, height) {
 }
 
 // More d3
+function collide(node) {
+  return function(quad) {
+    let updated = false;
+    if (quad.point && (quad.point !== node)) {
+      let dx = node.x - quad.point.x;
+      let dy = node.y - quad.point.y;
+      const xSpacing = (quad.point.width + node.width) / 2;
+      const ySpacing = (quad.point.height + node.height) / 2;
+      const absX = Math.abs(dx);
+      const absY = Math.abs(dy);
+      let l = 0;
+      let lx = 0;
+      let ly = 0;
+
+      if (absX < xSpacing && absY < ySpacing) {
+        l = Math.sqrt(dx * dx + dy * dy);
+
+        lx = (absX - xSpacing) / l;
+        ly = (absY - ySpacing) / l;
+
+        // the one that's barely within the bounds probably triggered the collision
+        if (Math.abs(lx) > Math.abs(ly)) {
+          lx = 0;
+        } else {
+          ly = 0;
+        }
+
+        node.x -= dx *= lx;
+        node.y -= dy *= ly;
+        quad.point.x += dx;
+        quad.point.y += dy;
+
+        updated = true;
+      }
+    }
+    return updated;
+  };
+}
+// tick
 force.on('tick', function() {
-  layoutObjs.forEach(function(n) {
-    _collections[n.key].x = n.x;
-    _collections[n.key].y = n.y;
+  const q = d3.geom.quadtree(layoutObjs);
+  let i = 0;
+  const n = layoutObjs.length;
+
+  while (++i < n) {
+    q.visit(collide(layoutObjs[i]));
+  }
+
+  layoutObjs.forEach(function(obj) {
+    _collections[obj.key].x = obj.x;
+    _collections[obj.key].y = obj.y;
   });
   CollectionStore.emitChange();
 });

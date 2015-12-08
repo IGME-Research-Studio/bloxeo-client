@@ -1,39 +1,40 @@
 const React = require('react');
 const classNames = require('classnames');
 const StormActions = require('../../actions/StormActions');
-
-const ENTER_KEY_CODE = 13;
+const ModalHeader = require('../Modal/ModalHeader.react');
+const ModalFooter = require('../Modal/ModalFooter.react');
 
 const JoinModal = React.createClass({
   getInitialState: function() {
     return {
-      value: '',
+      name: '',
+      roomCode: '',
     };
   },
   /**
    * @param {object} event
    */
-  _onChange: function(event) {
+  _updateName: function(event) {
     this.setState({
-      value: event.target.value,
+      name: event.target.value,
     });
   },
   /**
    * @param {object} event
    */
-  _onKeyDown: function(event) {
-    if (event.keyCode === ENTER_KEY_CODE) {
-      this._onSubmit();
-    }
+  _updateCode: function(event) {
+    this.setState({
+      roomCode: event.target.value,
+    });
   },
   /**
-   * Handle submit and clear input box
+   * Handle submit
    */
   _onSubmit: function() {
-    if (this.state.value === '') {
+    if (this.state.name === '' || this.state.roomCode === '') {
       return;
     }
-    StormActions.joinBoard(this.state.value);
+    StormActions.joinBoard(this.state.roomCode);
   },
   /**
    * @return {object}
@@ -42,14 +43,34 @@ const JoinModal = React.createClass({
     const hasError = classNames('hasError', {hide: !this.props.error});
     return (
       <div className="joinModal">
-        <input
-          type="text"
-          placeholder="Enter room code"
-          value={this.state.value}
-          onChange={this._onChange}
-          onKeyDown={this._onKeyDown}
-        />
-        <span className={hasError} ref="error">{this.props.error}</span>
+        <ModalHeader title="User Options" close={this.props.close} />
+        <div className="modalContent">
+          <div className="modalSection">
+            <input
+              type="text"
+              className="modalInput"
+              placeholder="What's your name?"
+              value={this.state.name}
+              onChange={this._updateName}
+            />
+          </div>
+          <div className="modalSection">
+            <div className="modalUserText">Your unique user icon</div>
+            <span className="modalUserIcon">?</span>
+          </div>
+          <div className="modalBreak"></div>
+          <div className="modalSection">
+            <span className={hasError} ref="error">{this.props.error}</span>
+            <input
+              type="text"
+              className="modalInput"
+              placeholder="Enter room code"
+              value={this.state.roomCode}
+              onChange={this._updateCode}
+            />
+          </div>
+        </div>
+        <ModalFooter buttonText="Join Room" click={this._onSubmit} />
       </div>
     );
   },

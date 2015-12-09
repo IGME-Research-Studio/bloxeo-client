@@ -21,6 +21,14 @@ const StormActions = {
     });
   },
   /**
+  * Dispatch set bank loaded event
+  */
+  endLoadAnimation: function() {
+    AppDispatcher.dispatch({
+      actionType: StormConstants.END_LOAD_ANIMATION,
+    });
+  },
+  /**
    * Dispatch change room name event
    * @param {string} roomName
    */

@@ -1,4 +1,5 @@
 const React = require('react');
+const LoadingStore = require('../stores/LoadingStore');
 const classNames = require('classnames');
 
 const LoadingOverlay = React.createClass({
@@ -6,6 +7,12 @@ const LoadingOverlay = React.createClass({
     return {
       disabled: this.props.disabled,
     };
+  },
+  componentDidMount: function() {
+    LoadingStore.addLoadingListener(this.disable);
+  },
+  componentWillUnmount: function() {
+    LoadingStore.removeLoadingListener(this.disable);
   },
   disable: function() {
     this.state.disabled = true;

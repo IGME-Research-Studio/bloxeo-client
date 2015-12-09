@@ -4,7 +4,7 @@ const EventEmitter   = require('events').EventEmitter;
 const assign         = require('object-assign');
 
 const TIME_CHANGE_EVENT = 'time';
-const STATE_CHANGE_EVENT = 'state';
+const STATE_CHANGE_EVENT = 'TIMER_STATE';
 
 // total time in the timer
 const _time = {
@@ -20,7 +20,7 @@ const _timerStates = {
   adminSet: 'ADMIN_setTimer',
   adminRun: 'ADMIN_runTimer',
 };
-const _timerState = _timerStates.adminRun;
+let _timerState = _timerStates.adminAdd;
 
 const TimerStore = assign({}, EventEmitter.prototype, {
   /**
@@ -120,6 +120,23 @@ function pauseTimer(isPaused) {
   }
 }
 
+/**
+ * Change the state of the timer
+ */
+function changeTimerState() {
+  switch (_timerState) {
+  case _timerStates.adminAdd:
+    _timerState = _timerStates.adminSet;
+    break;
+  case _timerStates.adminSet:
+    _timerState = _timerStates.adminRun;
+    break;
+  case _timerStates.adminRun:
+    _timerState = _timerStates.adminAdd;
+    break;
+  }
+}
+
 AppDispatcher.register(function(action) {
   switch (action.actionType) {
   case StormConstants.TIMER_COUNTDOWN:
@@ -129,11 +146,9 @@ AppDispatcher.register(function(action) {
     pauseTimer(action.isPaused);
     TimerStore.emitTimeChange();
     break;
-  case StormConstants.TIMER_ADD:
-    break;
-  case StormConstants.TIMER_SET:
-    break;
-  case StormConstants.TIMER_STOP:
+  case StormConstants.TIMER_CHANGE:
+    changeTimerState();
+    TimerStore.emitStateChange();
     break;
   }
 });

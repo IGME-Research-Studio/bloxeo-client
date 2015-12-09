@@ -3,11 +3,7 @@ const StormActions = require('../../actions/StormActions');
 
 const TimerCheckBox = React.createClass({
   _onClick: function() {
-    if (this.props.timerStatus) {
-      StormActions.pauseTimer(false);
-    } else {
-      StormActions.pauseTimer(true);
-    }
+    StormActions.changeTimerState();
   },
   render: function() {
     if (this.props.timerState === 'ADMIN_addTimer') {

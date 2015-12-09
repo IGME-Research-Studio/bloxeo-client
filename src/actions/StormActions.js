@@ -87,6 +87,15 @@ const StormActions = {
       isPaused: isPaused,
     });
   },
+  /**
+   * Dispatch change timer state event
+   */
+  changeTimerState: function() {
+    AppDispatcher.dispatch({
+      actionType: StormConstants.TIMER_CHANGE,
+    });
+  },
+
   collectionCreate: function(idea, left, top) {
     AppDispatcher.dispatch({
       actionType: StormConstants.COLLECTION_CREATE,

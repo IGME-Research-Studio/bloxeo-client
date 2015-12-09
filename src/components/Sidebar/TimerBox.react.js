@@ -17,14 +17,20 @@ const TimerBox = React.createClass({
         </div>
         <TimerCheckBox timerStatus={this.props.timerStatus} timerState={this.props.timerState} />
       </div>
-    );} else if (this.props.timerState === 'ADMIN_addTimer') {
-      return (
-      <div className='timerBox'>
-        <TimerIcon />
-        <TimerCheckBox timerStatus={this.props.timerStatus} timerState={this.props.timerState} />
-      </div>
+      );} else if (this.props.timerState === 'ADMIN_addTimer') {
+        return (
+        <div className='timerBox'>
+          <TimerIcon />
+          <TimerCheckBox timerStatus={this.props.timerStatus} timerState={this.props.timerState} />
+        </div>
+      );} else if (this.props.timerState === 'ADMIN_setTimer') {
+        return (
+        <div className='timerBox'>
+          <TimerIcon />
+          <TimerCheckBox timerStatus={this.props.timerStatus} timerState={this.props.timerState} />
+        </div>
       );} else {
-      return (
+        return (
         <div className='timerBox'>
           <TimerIcon />
         </div>

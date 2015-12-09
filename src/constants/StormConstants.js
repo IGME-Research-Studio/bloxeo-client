@@ -5,9 +5,7 @@ module.exports = {
   // Timer constants
   TIMER_COUNTDOWN: 'TIMER_COUNTDOWN',
   TIMER_PAUSE: 'TIMER_PAUSE',
-  TIMER_ADD: 'TIMER_ADD',
-  TIMER_SET: 'TIMER_SET',
-  TIMER_STOP: 'TIMER_STOP',
+  TIMER_CHANGE: 'TIMER_CHANGE',
   // Idea constants
   IDEA_CREATE: 'IDEA_CREATE',
   // Collection Constants

@@ -414,7 +414,7 @@ img {
 
 /* Loading overlay */
 .loadingOverlay {
-  background-color: white;
+  background-color: #34578f;
   height: 100vh;
   width: 100vw;
   z-index: 1000;
@@ -437,7 +437,7 @@ img {
     width: 90px;
     .square {
       float: left;
-      background-color: #34578f;
+      background-color: #fff;
       width: 20px;
       height: 20px;
       margin: 5px;

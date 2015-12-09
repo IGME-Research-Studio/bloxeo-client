@@ -27,6 +27,21 @@ const TimerBox = React.createClass({
         return (
         <div className='timerBox'>
           <TimerIcon />
+          <input
+          type="text"
+          maxLength="2"
+          className="timer-set"
+          idName="minutes-set"
+          placeholder="Minutes"
+          />
+          <span>:</span>
+          <input
+          type="text"
+          maxLength="2"
+          className="timer-set"
+          idName="seconds-set"
+          placeholder="Seconds"
+          />
           <TimerCheckBox timerStatus={this.props.timerStatus} timerState={this.props.timerState} />
         </div>
       );} else {

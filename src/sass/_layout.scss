@@ -29,7 +29,7 @@
 
 .workspaceCard {
   color:black;
-  font-size:18px;
+  font-size:12px;
   background-color: white;
   text-align: center;
   border-radius: 3px;
@@ -42,7 +42,7 @@
 .ideaGroup {
   display:inline-block;
   position:absolute;
-  padding: 10px;
+  padding: 2px;
 }
 
 .collectionShadow {
@@ -52,9 +52,9 @@
 }
 
 .idea {
-  font-size: 15px;
+  font-size: 12px;
   word-wrap: break-word;
-  padding: 15px;
+  padding: 7px;
 
   &.deleting {
     background-color: red;

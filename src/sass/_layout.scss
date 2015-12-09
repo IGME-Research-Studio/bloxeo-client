@@ -7,9 +7,8 @@
 //import vars and mixins to use
 @import '_vars';
 @import '_mixins';
-
-
 /* SIDEBAR */
+
 #sidebar {
   display: flex;
   flex-direction: column;
@@ -18,7 +17,8 @@
   height: 100vh;
   background-color: $storm-blue;
   vertical-align: middle;
-  z-index:100;
+  position: relative;
+  z-index: 100;
 }
 
 .sidebar-brand {
@@ -28,8 +28,8 @@
 }
 
 .workspaceCard {
-  color:black;
-  font-size:18px;
+  color: black;
+  font-size: 18px;
   background-color: white;
   text-align: center;
   border-radius: 3px;
@@ -40,8 +40,8 @@
 }
 
 .ideaGroup {
-  display:inline-block;
-  position:absolute;
+  display: inline-block;
+  position: absolute;
   padding: 10px;
 }
 
@@ -55,13 +55,12 @@
   font-size: 15px;
   word-wrap: break-word;
   padding: 15px;
-
   &.deleting {
     background-color: red;
   }
 }
-
 /* Loading overlay */
+
 .loadingOverlay {
   background-color: #34578f;
   height: 100vh;
@@ -74,10 +73,9 @@
   justify-content: center;
   transition: top 1.0s ease-in-out;
   -webkit-transition: top 1.0s ease-in-out;
-  -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
-  -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
-  box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
-
+  -webkit-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
   &.active {
     top: 0px;
   }
@@ -96,41 +94,41 @@
       transform: scale(0.0);
       opacity: 0;
       animation: sizeSquare 3.2s ease infinite;
-
       /* delay each square */
-      &:nth-child(1){
+      
+      &:nth-child(1) {
         -webkit-animation-delay: 0.0s;
         animation-delay: 0.0s;
       }
-      &:nth-child(2){
+      &:nth-child(2) {
         -webkit-animation-delay: 0.2s;
         animation-delay: 0.2s;
       }
-      &:nth-child(3){
+      &:nth-child(3) {
         -webkit-animation-delay: 0.4s;
         animation-delay: 0.4s;
       }
-      &:nth-child(6){
+      &:nth-child(6) {
         -webkit-animation-delay: 0.6s;
         animation-delay: 0.6s;
       }
-      &:nth-child(5){
+      &:nth-child(5) {
         -webkit-animation-delay: 0.8s;
         animation-delay: 0.8s;
       }
-      &:nth-child(4){
+      &:nth-child(4) {
         -webkit-animation-delay: 1.0s;
         animation-delay: 1.0s;
       }
-      &:nth-child(7){
+      &:nth-child(7) {
         -webkit-animation-delay: 1.2s;
         animation-delay: 1.2s;
       }
-      &:nth-child(8){
+      &:nth-child(8) {
         -webkit-animation-delay: 1.4s;
         animation-delay: 1.4s;
       }
-      &:nth-child(9){
+      &:nth-child(9) {
         -webkit-animation-delay: 1.6s;
         animation-delay: 1.6s;
       }
@@ -138,7 +136,78 @@
   }
 }
 
+.appContainer {
+  display: flex;
+  flex-direction: row;
+  vertical-align: middle;
+  width: 100%;
+  height: 100%;
+}
+
+.navBar {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 2;
+  .navBarTab {
+    height: 35px;
+    width: 135px;
+    &:first-child {
+      margin-left: 40px;
+    }
+  }
+}
+/* WORKSPACE */
+
+.dragContainer,
+.workspace {
+  flex-grow: 1;
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+}
+
+.workspace {
+  height: 100vh;
+  width: 100%;
+}
+
+.trashCan {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  border-top-left-radius: 3px;
+}
+/* RESULTS */
+
+.results {
+  width: 100%;
+  height: 100vh;
+  .resultContainer {
+    display: inline-block;
+    vertical-align: top;
+    .resultGroup {
+      display: inline-block;
+    }
+    .resultVotes {
+      display: inline-block;
+      vertical-align: top;
+      .resultVotesStar {
+        color: gold;
+        font-size: 35px;
+        line-height: 1;
+        padding: 0 4px;
+        line-height: 0.8;
+      }
+      .resultVotesNumber {
+        position: relative;
+        top: -5px;
+      }
+    }
+  }
+}
 /* loading animation*/
+
 @-webkit-keyframes sizeSquare {
   0%, 15% {
     -webkit-transform: scale(0.0);
@@ -146,18 +215,25 @@
     transform: scale(0.0);
     opacity: 0;
   }
-
-  25%, 75% {
+  25%,
+  75% {
     -webkit-transform: scale(1.0);
     -ms-transform: scale(1.0);
     transform: scale(1.0);
     opacity: 1
   }
-
-  85%, 100% {
+  85%,
+  100% {
     -webkit-transform: scale(0.0);
     -ms-transform: scale(0.0);
     transform: scale(0.0);
     opacity: 0;
+  }
+  .resultsControls {
+    float: right;
+    margin-top: 40px;
+  }
+  .resultsHeading {
+    display: inline-block;
   }
 }

@@ -4,6 +4,7 @@ const EventEmitter   = require('events').EventEmitter;
 const assign         = require('object-assign');
 
 const TIME_CHANGE_EVENT = 'time';
+const STATE_CHANGE_EVENT = 'state';
 
 // total time in the timer
 const _time = {
@@ -14,6 +15,12 @@ let _timer = null;
 // if timer is paused
 let _timerStatus = false;
 const _totalTime = (_time.minutes * 60) + _time.seconds;
+const _timerStates = {
+  adminAdd: 'ADMIN_addTimer',
+  adminSet: 'ADMIN_setTimer',
+  adminRun: 'ADMIN_runTimer',
+};
+const _timerState = _timerStates.adminAdd;
 
 const TimerStore = assign({}, EventEmitter.prototype, {
   /**
@@ -37,9 +44,21 @@ const TimerStore = assign({}, EventEmitter.prototype, {
     return _timerStatus;
   },
 
+  /**
+   * @return {string}
+   */
+  getTimerState: function() {
+    return _timerState;
+  },
+
   emitTimeChange: function() {
     this.emit(TIME_CHANGE_EVENT);
   },
+
+  emitStateChange: function() {
+    this.emit(STATE_CHANGE_EVENT);
+  },
+
   /**
    * Add a change listener
    * @param {function} callback - event callback function
@@ -47,12 +66,21 @@ const TimerStore = assign({}, EventEmitter.prototype, {
   addChangeListener: function(callback) {
     this.on(TIME_CHANGE_EVENT, callback);
   },
+
+  addStateListener: function(callback) {
+    this.on(STATE_CHANGE_EVENT, callback);
+  },
+
   /**
    * Remove a change listener
    * @param {function} callback - callback to be removed
    */
   removeChangeListener: function(callback) {
     this.removeListener(TIME_CHANGE_EVENT, callback);
+  },
+
+  removeStateListener: function(callback) {
+    this.removeListener(STATE_CHANGE_EVENT, callback);
   },
 });
 
@@ -100,6 +128,12 @@ AppDispatcher.register(function(action) {
   case StormConstants.TIMER_PAUSE:
     pauseTimer(action.isPaused);
     TimerStore.emitTimeChange();
+    break;
+  case StormConstants.TIMER_ADD:
+    break;
+  case StormConstants.TIMER_SET:
+    break;
+  case StormConstants.TIMER_STOP:
     break;
   }
 });

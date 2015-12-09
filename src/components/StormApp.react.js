@@ -29,6 +29,7 @@ function getStormState() {
     tab: BoardOptionsStore.getSelectedTab(),
     time: TimerStore.getTime(),
     timerWidth: TimerStore.getTimerWidth(),
+    timerState: TimerStore.getTimerState(),
   };
 }
 
@@ -41,6 +42,7 @@ const StormApp = React.createClass({
     BoardOptionsStore.addTabChangeListener(this._onChange);
     CollectionStore.addChangeListener(this._onChange);
     TimerStore.addChangeListener(this._onChange);
+    TimerStore.addStateListener(this._onChange);
     IdeaStore.addChangeListener(this._onChange);
     // start timer countdown
     StormActions.countdown();
@@ -54,6 +56,7 @@ const StormApp = React.createClass({
     BoardOptionsStore.removeTabChangeListener(this._onChange);
     CollectionStore.removeChangeListener(this._onChange);
     TimerStore.removeChangeListener(this._onChange);
+    TimerStore.removeStateListener(this._onChange);
     IdeaStore.removeChangeListener(this._onChange);
   },
   /**

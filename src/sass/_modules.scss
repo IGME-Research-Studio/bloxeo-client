@@ -7,6 +7,7 @@
 //import vars and mixins to use
 @import '_vars';
 @import '_mixins';
+
 .modalHeader {
   display: block;
   text-align: center;
@@ -91,6 +92,20 @@
     &:focus {
       outline: none;
     }
+  }
+}
+
+.button {
+  display: inline-block;
+  color: white;
+  background-color: cornflowerblue;
+  cursor: pointer;
+  padding: 10px 50px;
+  border-radius: 3px;
+  margin-top: 20px;
+  font-size: 14px;
+  &:hover {
+    color: white;
   }
 }
 
@@ -246,7 +261,6 @@
     margin-right: 5px;
     border-radius: 5px;
     background-color: $storm-orange;
-    /* hardcoded for now, colors will have to be associated with users */
     &:nth-child(2) {
       background-color: $storm-cyan;
     }
@@ -273,13 +287,16 @@
     position: absolute;
     width: 100%;
     height: 100%;
-    overflow: auto;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    &:hover {
+     overflow-x: auto;
+    }
     .wordbankIdeas {
       position: absolute;
       width: 600px;
       flex-grow: 1;
       padding: 15px;
-      overflow: auto;
       text-align: center;
       -webkit-columns: auto 270px;
       -moz-columns: auto 270px;
@@ -927,7 +944,7 @@
 .createRoomButton a,
 .joinRoomButton a {
   font-size: 20px;
-  line-height: 45px;
+  line-height: 30px;
   color: #fffcf0;
   border-radius: 3px;
 }

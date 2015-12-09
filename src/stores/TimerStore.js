@@ -29,7 +29,18 @@ const TimerStore = assign({}, EventEmitter.prototype, {
   getTime: function() {
     return _time;
   },
-   /**
+
+  /**
+   * Set the values of the minutes
+   */
+  setMinutes: function(min) {
+    _time.minutes = min;
+  },
+
+  setSeconds: function(sec) {
+    _time.seconds = sec;
+  },
+/**
   * Calculate the width of the timer visual as a percentage
   */
   getTimerWidth: function() {
@@ -129,9 +140,25 @@ function changeTimerState() {
     _timerState = _timerStates.adminSet;
     break;
   case _timerStates.adminSet:
+    let minInput = document.getElementById('minutes-set').value;
+    let secInput = document.getElementById('seconds-set').value;
+
+    minInput === '' ? minInput = 0 : minInput;
+    if (minInput === 0) {
+      secInput === '' ? secInput = 30 : secInput;
+    } else {
+      secInput === '' ? secInput = 0 : secInput;
+    }
+    if (secInput < 10) {
+      secInput = '0' + secInput;
+    }
+
+    TimerStore.setMinutes(minInput);
+    TimerStore.setSeconds(secInput);
     _timerState = _timerStates.adminRun;
     break;
   case _timerStates.adminRun:
+    clearInterval(_timer);
     _timerState = _timerStates.adminAdd;
     break;
   }

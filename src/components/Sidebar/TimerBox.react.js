@@ -31,7 +31,7 @@ const TimerBox = React.createClass({
           type="text"
           maxLength="2"
           className="timer-set"
-          idName="minutes-set"
+          id="minutes-set"
           placeholder="Minutes"
           />
           <span>:</span>
@@ -39,7 +39,7 @@ const TimerBox = React.createClass({
           type="text"
           maxLength="2"
           className="timer-set"
-          idName="seconds-set"
+          id="seconds-set"
           placeholder="Seconds"
           />
           <TimerCheckBox timerStatus={this.props.timerStatus} timerState={this.props.timerState} />

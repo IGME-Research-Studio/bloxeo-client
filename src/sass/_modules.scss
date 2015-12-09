@@ -147,7 +147,6 @@
     border: none;
     outline: none;
     background-color: white;
-
     &.is-disabled {
       background-color: $storm-disabledGray;
       cursor: default;
@@ -248,7 +247,6 @@
     border-radius: 5px;
     background-color: $storm-orange;
     /* hardcoded for now, colors will have to be associated with users */
-    
     &:nth-child(2) {
       background-color: $storm-cyan;
     }

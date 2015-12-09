@@ -9,12 +9,12 @@
 //import vars and mixins to use
 @import '_vars';
 @import '_mixins';
-
 body {
-	overflow: hidden;
-	height: 100vh;
+  overflow: hidden;
+  height: 100vh;
   @include font-regular();
 }
+
 a:hover {
   text-decoration: none;
 }
@@ -22,6 +22,7 @@ a:hover {
 p {
   font-size: 14px;
 }
+
 html {
-	overflow: auto;
+  overflow: auto;
 }

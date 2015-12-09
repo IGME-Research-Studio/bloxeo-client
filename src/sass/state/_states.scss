@@ -1,6 +1,7 @@
 //import vars and mixins to use
 @import '../_vars';
 @import '../_mixins';
+
 .resultContainer.selectable {
   &.is-deselected {
     background-color: $storm-disabledGray;

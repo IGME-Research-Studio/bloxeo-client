@@ -4,6 +4,10 @@ const StormActions = require('../../actions/StormActions');
 const TimerCheckBox = React.createClass({
   _onClick: function() {
     StormActions.changeTimerState();
+    if (this.props.timerState === 'ADMIN_setTimer') {
+      // start timer countdown
+      StormActions.countdown();
+    }
   },
   render: function() {
     if (this.props.timerState === 'ADMIN_addTimer') {

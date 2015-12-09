@@ -11,7 +11,6 @@ const Results         = require('./Results/Results.react');
 const Sidebar         = require('./Sidebar/Sidebar.react');
 const Workspace       = require('./Workspace/Workspace.react');
 
-const StormActions    = require('../actions/StormActions');
 const NavBarConstants = require('../constants/NavBarConstants');
 
 const dragDropContext = require('react-dnd').DragDropContext;
@@ -44,8 +43,6 @@ const StormApp = React.createClass({
     TimerStore.addChangeListener(this._onChange);
     TimerStore.addStateListener(this._onChange);
     IdeaStore.addChangeListener(this._onChange);
-    // start timer countdown
-    StormActions.countdown();
 
     const ideasElement = document.querySelector('body');
     const hideScroll = 'overflow: hidden';

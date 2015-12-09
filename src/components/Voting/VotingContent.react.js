@@ -4,7 +4,7 @@ const BoardOptionsStore = require('../../stores/BoardOptionsStore');
 const CollectionStore = require('../../stores/CollectionStore');
 const NavBarConstants = require('../../constants/NavBarConstants');
 const VoteButton = require('./VoteButton.react');
-const VoteElement = require('./VoteElement.react');
+const VoteCollection = require('./VoteCollection.react');
 
 /**
  * Component for voting 'Yes' or 'No' and displaying results
@@ -125,6 +125,9 @@ const VotingContent = React.createClass({
    * @return {object}
    */
   render: function() {
+    const voteIndex = this.state.voteIndex;
+    const numCollections = Object.keys(this.state.collections).length;
+
     if (!this._getCurrentCollection()) {
       return (
         <p>There is nothing to vote on yet. Drag some ideas onto the board
@@ -134,9 +137,17 @@ const VotingContent = React.createClass({
 
     return (
       <div>
-        <VoteElement collection={this._getCurrentCollection()} />
-        <VoteButton data='true' changeState={this.handleStateChange} />
-        <VoteButton data='false' changeState={this.handleStateChange} />
+        <div className="modalHeading">
+          Voting
+          <span className="voteProgress">
+            {(voteIndex + 1) + '/' + numCollections} groups
+          </span>
+        </div>
+        <VoteCollection collection={this._getCurrentCollection()} />
+        <div className="voteButton-section">
+          <VoteButton data='true' changeState={this.handleStateChange} />
+          <VoteButton data='false' changeState={this.handleStateChange} />
+        </div>
       </div>
     );
   },

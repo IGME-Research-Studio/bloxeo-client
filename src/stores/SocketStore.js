@@ -136,8 +136,6 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       url: Routes.createBoard(),
       method: REST_API.createBoard[0],
       success: (res) => {
-        joinBoard(res.boardId
-        console.log('joined board');
         // set url
         joinBoard(res.boardId);
       },

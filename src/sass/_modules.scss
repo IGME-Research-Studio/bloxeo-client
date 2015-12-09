@@ -368,12 +368,16 @@
 }
 
 /* Voting */
-.votingContent {
+.votingModal {
   position: relative;
-  min-width: 320px;
-  min-height: 400px;
   background-color: white;
   text-align: center;
+}
+
+.votingModal-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .voteProgress {
@@ -385,8 +389,12 @@
 }
 
 .voteCollection {
-  padding: 13px 15px 0 15px;
+  padding: 13px 15px;
   text-align: left;
+  min-width: 320px;
+  min-height: 270px;
+  max-height: 370px;
+  overflow: auto;
 }
 
 .voteIdea {
@@ -399,15 +407,11 @@
   line-height: 1;
 }
 
-:voteIdea:last-child {
+.voteIdeaBlock:last-child > .voteIdea{
   margin-bottom: 0;
 }
 
 .voteButton-section {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  right: 0;
   border-top: 1px solid $storm-lightGray;
   padding: 10px;
 }

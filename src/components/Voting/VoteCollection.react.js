@@ -6,8 +6,8 @@ const VoteCollection = React.createClass({
       <div className="voteCollection">
         {this.props.collection.content.map(function(idea, i) {
           return (
-            <div className="voteIdeaBlock">
-              <div className="voteIdea" votekey={i}>{idea.text}</div>
+            <div className="voteIdeaBlock" key={i}>
+              <div className="voteIdea">{idea.text}</div>
             </div>
           );
         })}

@@ -128,13 +128,6 @@ const VotingContent = React.createClass({
     const voteIndex = this.state.voteIndex;
     const numCollections = Object.keys(this.state.collections).length;
 
-    if (!this._getCurrentCollection()) {
-      return (
-        <p>There is nothing to vote on yet. Drag some ideas onto the board
-        to start voting!</p>
-      );
-    }
-
     return (
       <div>
         <div className="modalHeading">
@@ -143,10 +136,12 @@ const VotingContent = React.createClass({
             {(voteIndex + 1) + '/' + numCollections} groups
           </span>
         </div>
-        <VoteCollection collection={this._getCurrentCollection()} />
-        <div className="voteButton-section">
-          <VoteButton data='true' changeState={this.handleStateChange} />
-          <VoteButton data='false' changeState={this.handleStateChange} />
+        <div className="votingModal-content">
+          <VoteCollection collection={this._getCurrentCollection()} />
+          <div className="voteButton-section">
+            <VoteButton data='true' changeState={this.handleStateChange} />
+            <VoteButton data='false' changeState={this.handleStateChange} />
+          </div>
         </div>
       </div>
     );

@@ -1,6 +1,7 @@
 const React = require('react');
 const Modal = require('react-modal');
 const VotingContent = require('./VotingContent.react');
+const CollectionStore = require('../../stores/CollectionStore');
 const StormConstants = require('../../constants/StormConstants.js');
 
 /**
@@ -16,7 +17,10 @@ const VotingModal = React.createClass({
    * Show voting modal
    */
   showModal: function() {
-    this.setState({showModal: true});
+    const collections = CollectionStore.getAllCollections();
+    if (Object.keys(collections).length > 0) {
+      this.setState({showModal: true});
+    }
   },
   /**
    * Hide voting modal
@@ -43,7 +47,7 @@ const VotingModal = React.createClass({
         <Modal isOpen={this.state.showModal}
           style={StormConstants.CUSTOM_MODAL_STYLES}
           onClick={this.hideModal}>
-          <div className="votingContent">
+          <div className="votingModal">
             <VotingContent hideModal={this.hideModal} />
           </div>
         </Modal>

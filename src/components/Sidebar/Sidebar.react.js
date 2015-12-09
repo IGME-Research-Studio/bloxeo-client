@@ -24,7 +24,8 @@ const Sidebar = React.createClass({
         <div>
           <TimerBox time={this.props.time}
             timerStatus={this.props.timerStatus}
-            timerWidth={this.props.timerWidth} />
+            timerWidth={this.props.timerWidth}
+            timerState={this.props.timerState}/>
           <IdeaCreate timerStatus={this.props.timerStatus} />
         </div>
       </div>

@@ -20,7 +20,7 @@ const _timerStates = {
   adminSet: 'ADMIN_setTimer',
   adminRun: 'ADMIN_runTimer',
 };
-const _timerState = _timerStates.adminAdd;
+const _timerState = _timerStates.adminRun;
 
 const TimerStore = assign({}, EventEmitter.prototype, {
   /**

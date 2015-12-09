@@ -2,11 +2,10 @@ const React = require('react');
 const Timer = require('./Timer.react');
 const TimerIcon = require('./TimerIcon.react');
 const TimerCheckBox = require('./TimerCheckBox.react');
-const timerExists = false;
 
 const TimerBox = React.createClass({
   render: function() {
-    if (timerExists) {
+    if (this.props.timerState === 'ADMIN_runTimer') {
       return (
       <div className='timerBox'>
         <TimerIcon />
@@ -16,14 +15,20 @@ const TimerBox = React.createClass({
             role="progressbar" style={{width: this.props.timerWidth + '%'}}>
           </div>
         </div>
-        <TimerCheckBox timerStatus={this.props.timerStatus} />
+        <TimerCheckBox timerStatus={this.props.timerStatus} timerState={this.props.timerState} />
       </div>
-    );} else {
+    );} else if (this.props.timerState === 'ADMIN_addTimer') {
       return (
       <div className='timerBox'>
         <TimerIcon />
+        <TimerCheckBox timerStatus={this.props.timerStatus} timerState={this.props.timerState} />
       </div>
-      );}
+      );} else {
+      return (
+        <div className='timerBox'>
+          <TimerIcon />
+        </div>
+        );}
   },
 });
 

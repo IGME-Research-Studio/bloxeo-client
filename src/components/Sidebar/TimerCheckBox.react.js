@@ -10,14 +10,22 @@ const TimerCheckBox = React.createClass({
     }
   },
   render: function() {
-    if (this.props.timerStatus) {
+    if (this.props.timerState === 'ADMIN_addTimer') {
       return (
-      <span onClick={this._onClick}>START</span>
+      <span onClick={this._onClick}>ADD TIMER</span>
     );
-    } else {
+    } else if (this.props.timerState === 'ADMIN_setTimer') {
+      return (
+      <span onClick={this._onClick}>SET</span>
+    );
+    } else if (this.props.timerState === 'ADMIN_runTimer') {
       return (
       <span onClick={this._onClick}>STOP</span>
     );
+    } else {
+      return (
+        <span></span>
+      );
     }
   },
 });

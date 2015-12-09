@@ -55,7 +55,7 @@ const CollectionStore = assign({}, EventEmitter.prototype, {
   removeChangeListener: function(callback) {
     this.removeListener(COLLECTION_CHANGE_EVENT, callback);
   },
-  setCollectionRadius: function(_key, width, height) {
+  setCollectionSize: function(_key, width, height) {
     const d3Index = _.findIndex(layoutObjs, 'key', _key);
     layoutObjs[d3Index].height = height + 15;
     layoutObjs[d3Index].width = width + 15;

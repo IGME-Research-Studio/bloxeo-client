@@ -27,7 +27,7 @@ const IdeaCollection = React.createClass({
     const width = parseInt(ReactDOM.findDOMNode(this).offsetWidth, 10);
     const height = parseInt(ReactDOM.findDOMNode(this).offsetHeight, 10);
     this.setState({height: height});
-    CollectionStore.setCollectionRadius(this.props.ideaID, width, height);
+    CollectionStore.setCollectionSize(this.props.ideaID, width, height);
   },
   componentWillUnmount: function() {
     CollectionStore.removeChangeListener(this.ideasChange);

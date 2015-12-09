@@ -40,12 +40,15 @@
 }
 
 .ideaGroup {
-  background-color: #e6e6e6;
   display:inline-block;
   position:absolute;
+  padding: 10px;
+}
+
+.collectionShadow {
+  background-color: #e6e6e6;
   border-radius: 3px;
   border: 2px solid #d9d9d9;
-  padding: 10px;
 }
 
 .idea {
@@ -158,4 +161,3 @@
     opacity: 0;
   }
 }
-

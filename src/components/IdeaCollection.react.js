@@ -6,6 +6,7 @@ const dragSource      = require('react-dnd').DragSource;
 const PropTypes       = React.PropTypes;
 const DnDTypes        = require('../constants/DragAndDropConstants');
 const Idea            = require('./Idea.react');
+const classNames      = require('classnames');
 
 const IdeaCollection = React.createClass({
   propTypes: {
@@ -75,16 +76,21 @@ const IdeaCollection = React.createClass({
     const connectDragSource = this.props.connectDragSource;
     const groupID = this.state.ideaID;
     const count = this.state.ideas ? this.state.ideas.content.length : 0;
+    const classes = classNames(
+      'ideaGroup',
+      'drop-zone',
+      {collectionShadow: (count > 1)}
+    );
     // Apply react DnD to element
     if (!this.state.ideas) {
       return connectDragSource(connectDropTarget(
-        <div className="ideaGroup drop-zone" style={this._style()}>
+        <div className={classes} style={this._style()}>
         </div>
         )
       );
     }
     return connectDragSource(connectDropTarget(
-      <div className="ideaGroup drop-zone" style={this._style()}>
+      <div className={classes} style={this._style()}>
         {this.state.ideas.content.map(function(idea, i) {
           return (
           <div key={i} className="workspaceCard draggable">

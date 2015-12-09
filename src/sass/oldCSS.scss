@@ -183,29 +183,3 @@ p {
 .resultsHeading {
   display: inline-block;
 }
-
-
-/* VOTING */
-.votingContent {
-  background-color: $voting-bgColor;
-  padding: 110px 30px;
-  text-align: center;
-}
-
-.votingResults {
-  background-color: $voting-bgColor;
-  padding: 40px;
-}
-
-.votingResults-ideas {
-  margin-bottom: 38px;
-}
-
-.yesButton {
-  background-color: green;
-  margin-right: 20px;
-}
-
-.noButton {
-  background-color: gray;
-}

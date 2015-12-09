@@ -5,10 +5,14 @@ module.exports = {
   TIMER_COUNTDOWN: 'TIMER_COUNTDOWN',
   TIMER_PAUSE: 'TIMER_PAUSE',
 <<<<<<< HEAD
+<<<<<<< HEAD
   END_LOAD_ANIMATION: 'END_LOAD_ANIMATION',
   HIDE_LOADING: 'HIDE_LOADING',
 =======
 >>>>>>> setting up animation listener
+=======
+  END_LOAD_ANIMATION: 'END_LOAD_ANIMATION',
+>>>>>>> add action to end loading animation
   // Idea constants
   IDEA_CREATE: 'IDEA_CREATE',
   // Collection Constants

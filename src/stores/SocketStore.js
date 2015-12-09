@@ -57,8 +57,7 @@ const SocketStore = assign({}, EventEmitter.prototype, {
 });
 /**
  * Checks a socket response for an error
- * @param {object} res: response data
- * @param {function} func: callback function
+ * @param {object} data: response data
  */
 function resolveSocketResponse(data) {
   return new Promise((resolve, reject) => {
@@ -83,12 +82,13 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
   // }
   // turn REST_API into route templates
   const Routes = _.mapValues(REST_API, (route) => {
-    return _.template(StormConstants.SERVER_URL_REVAMP + route[1]);
+    return _.template(StormConstants.SERVER_URL_DEV + route[1]);
   });
   // Socket Handlers
   // Idea was added or removed from collection
   socket.on(EVENT_API.UPDATED_COLLECTIONS, (data) => {
-    catchSocketError(data, (res) => {
+    resolveSocketResponse(data)
+    .then((res) => {
       StormActions.receivedCollections(
         _.omit(res.data, ['top', 'left', 'key']),
         false
@@ -100,7 +100,8 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
   });
   // Idea was added or removed
   socket.on(EVENT_API.UPDATED_IDEAS, (data) => {
-    catchSocketError(data, (res) => {
+    resolveSocketResponse(data)
+    .then((res) => {
       const ideas = res.data.map((idea) => {
         return idea.content;
       });
@@ -147,9 +148,11 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
     .catch((res) => {
       console.error(`Error receiving collections: ${res}`);
     });
+
   });
   socket.on(EVENT_API.RECEIVED_IDEAS, (data) => {
-    catchSocketError(data, (res) => {
+    resolveSocketResponse(data)
+    .then((res) => {
       const ideas = res.data.map((idea) => {
         return idea.content;
       });
@@ -231,6 +234,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
         boardId: currentBoardId,
         userToken: token,
       });
+    }
   }
   /**
    * Create new board

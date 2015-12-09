@@ -19,7 +19,7 @@ function resolveSocketResponse(data) {
     if (!(data.code >= 400)) {
       resolve(data);
     } else {
-      reject(data);
+      reject(new Error(data.message));
     }
   });
 }
@@ -34,11 +34,11 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
   /**
    * Checks to update the client to the server
    */
-  function updateClient() {
-    socket.emit(EVENT_API.GET_IDEAS, {boardId: currentBoardId});
-    socket.emit(EVENT_API.GET_COLLECTIONS, {boardId: currentBoardId});
-  }
-  window.setInterval(updateClient, 10000);
+  // function updateClient() {
+  //   socket.emit(EVENT_API.GET_IDEAS, {boardId: currentBoardId});
+  //   socket.emit(EVENT_API.GET_COLLECTIONS, {boardId: currentBoardId});
+  // }
+  // window.setInterval(updateClient, 10000);
 
   // // turn REST_API into route templates
   const Routes = _.mapValues(REST_API, (route) => {
@@ -55,7 +55,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       );
     })
     .catch((res) => {
-      console.error(`Error updating collections: ${res.message}`);
+      console.error(`Error updating collections: ${res}`);
     });
   });
   // Idea was added or removed
@@ -68,7 +68,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       StormActions.updatedIdeas(ideas);
     })
     .catch((res) => {
-      console.error(`Error updating ideas: ${res.message}`);
+      console.error(`Error updating ideas: ${res}`);
     });
   });
   socket.on(EVENT_API.JOINED_ROOM, (data) => {
@@ -77,18 +77,20 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       socket.emit(EVENT_API.GET_IDEAS, {boardId: currentBoardId});
       socket.emit(EVENT_API.GET_COLLECTIONS, {boardId: currentBoardId});
     })
-    .catch((res) => {
-      console.error(`Error joining a room: ${res.message}`);
+    .catch(() => {
+      console.error(`Error joining a room: ${res}`);
     });
   });
   socket.on(EVENT_API.RECEIVED_COLLECTIONS, (data) => {
     resolveSocketResponse(data)
     .then((res) => {
-      StormActions.receivedCollections(res.data, notReceived);
-      notReceived = false;
+      if (notReceived) {
+        StormActions.receivedCollections(res.data, notReceived);
+        notReceived = false;
+      }
     })
     .catch((res) => {
-      console.error(`Error receiving collections: ${res.message}`);
+      console.error(`Error receiving collections: ${res}`);
     });
 
   });
@@ -101,7 +103,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       StormActions.updatedIdeas(ideas);
     })
     .catch((res) => {
-      console.error(`Error receiving ideas: ${res.message}`);
+      console.error(`Error receiving ideas: ${res}`);
     });
   });
   // Request Functions

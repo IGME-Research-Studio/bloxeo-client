@@ -128,8 +128,19 @@ p {
   position: absolute;
   right: 0;
   bottom: 0;
-  width: 45px;
-  margin: 30px 20px 20px 30px;
+  font-size: 35px;
+  padding: 20px;
+  color: #b6b6b6;
+  border: 1px solid #e2e2e2;
+  border-top-left-radius: 3px;
+  
+  &.is-hover {
+   background: #f8f8f8; 
+  }
+  
+  &.is-deleting {
+    background: #f26d7d;
+  }
 }
 
 /* RESULTS */

@@ -3,6 +3,7 @@ const StormActions    = require('../../actions/StormActions');
 const dropTarget      = require('react-dnd').DropTarget;
 const PropTypes       = React.PropTypes;
 const DnDTypes        = require('../../constants/DragAndDropConstants');
+const classNames      = require('classnames');
 
 /**
  * TrashCan component which is a dragTarget for IdeaCollections
@@ -16,9 +17,10 @@ const TrashCan = React.createClass({
    * @return {object}
    */
   render: function() {
+    const trashIcon = classNames('fa fa-trash-o trashCan'); /* FIX , { 'fa-trash-o': true, 'fa-trash': drop}); */
     const connectDropTarget = this.props.connectDropTarget;
     return connectDropTarget(
-      <img className="trashCan" src="assets/trashCanIcon.png" />
+      <i className={trashIcon}></i>
     );
   },
 });

@@ -1,5 +1,4 @@
 const React = require('react');
-const classNames = require('classnames');
 const StormActions = require('../../actions/StormActions');
 
 const TimerCheckBox = React.createClass({
@@ -11,15 +10,15 @@ const TimerCheckBox = React.createClass({
     }
   },
   render: function() {
-    const timerIconClass = classNames({
-      'fa fa-clock-o timer-btn': true,
-      'start': this.props.timerStatus,
-      'stop': !this.props.timerStatus,
-    });
-
-    return (
-      <i className={timerIconClass} onClick={this._onClick}></i>
+    if (this.props.timerStatus) {
+      return (
+      <span onClick={this._onClick}>START</span>
     );
+    } else {
+      return (
+      <span onClick={this._onClick}>STOP</span>
+    );
+    }
   },
 });
 

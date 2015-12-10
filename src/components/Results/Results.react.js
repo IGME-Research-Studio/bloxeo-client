@@ -104,23 +104,25 @@ const Results = React.createClass({
           <h2 className="resultsHeading">The results are in!</h2>
           <div className="resultsControls">
             <a onClick={this.returnToWorkspace}
-                className={this.state.showReturnToWorkspace ? '' : 'is-disabled'}>
+                className={
+                  this.state.showReturnToWorkspace ? '' : 'is-disabled'
+                }>
               Return to Workspace
             </a>
           </div>
         </div>
         <p>Top 3</p>
-        {topResults.map(function(ideaCollection) {
+        {topResults.map(function(ideaCollection, i) {
           return (
-            <Result ideaCollection={ideaCollection}
-                handleSelect={that.handleSelect} />
+            <Result collection={ideaCollection.collection}
+                handleSelect={that.handleSelect} key={i} />
           );
         })}
         <p>Other Results</p>
-        {otherResults.map(function(ideaCollection) {
+        {otherResults.map(function(ideaCollection, i) {
           return (
-            <Result ideaCollection={ideaCollection}
-                handleSelect={that.handleSelect} />
+            <Result collection={ideaCollection.collection}
+                handleSelect={that.handleSelect} key={i} />
           );
         })}
       </div>

@@ -43,7 +43,7 @@ AppDispatcher.register(function(action) {
     _results = [];
     for (let i = 0; i < action.results.length; i++) {
       const result = action.results[i];
-      _results.push({content: result.content.slice()});
+      _results.push(result);
     }
     VotingResultsStore.emitResultsChange();
     break;

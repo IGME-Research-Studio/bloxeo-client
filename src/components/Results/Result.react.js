@@ -35,10 +35,10 @@ const Result = React.createClass({
     return (
       <div className="resultContainer" onClick={this.toggleSelected}>
         <div className={groupClass}>
-          {this.props.ideaCollection.content.map(function(idea) {
+          {this.props.collection.content.map(function(idea, i) {
             return (
-              <div className="resultGroupItem">
-                {idea}
+              <div className="resultGroupItem" key={i}>
+                {idea.text}
               </div>
             );
           })}
@@ -46,7 +46,7 @@ const Result = React.createClass({
         <div className="resultVotes">
           <span className="resultVotesStar">★</span>
           <span className="resultVotesNumber">
-            {this.props.ideaCollection.votes}
+            {this.props.collection.votes}
           </span>
         </div>
       </div>

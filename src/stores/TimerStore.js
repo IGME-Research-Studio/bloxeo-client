@@ -14,7 +14,7 @@ const _time = {
 let _timer = null;
 // if timer is paused
 let _timerStatus = false;
-const _totalTime = (_time.minutes * 60) + _time.seconds;
+let _totalTime = (_time.minutes * 60) + _time.seconds;
 const _timerStates = {
   adminAdd: 'ADMIN_addTimer',
   adminSet: 'ADMIN_setTimer',
@@ -44,8 +44,12 @@ const TimerStore = assign({}, EventEmitter.prototype, {
   * Calculate the width of the timer visual as a percentage
   */
   getTimerWidth: function() {
-    const timeLeft = _totalTime - ((_time.minutes * 60) + _time.seconds);
-    const timePassedPercent = (timeLeft / _totalTime) * 100;
+    const timeLeft = parseFloat((_time.minutes * 60)) + parseFloat(_time.seconds);
+    const timePassed = _totalTime - timeLeft;
+    const timePassedPercent = (timePassed / _totalTime) * 100;
+    console.log('Estimated Time: ' + ((_time.minutes * 60) + _time.seconds));
+    console.log('Time Passed: ' + timePassed);
+    console.log('Time Passed Percent: ' + timePassedPercent);
     return timePassedPercent;
   },
   /**
@@ -155,6 +159,9 @@ function changeTimerState() {
 
     TimerStore.setMinutes(minInput);
     TimerStore.setSeconds(secInput);
+
+    _totalTime = parseFloat((_time.minutes * 60)) + parseFloat(_time.seconds);
+
     _timerState = _timerStates.adminRun;
     break;
   case _timerStates.adminRun:

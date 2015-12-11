@@ -12,15 +12,30 @@ const TrashCan = React.createClass({
   propTypes: {
     connectDropTarget: PropTypes.func.isRequired,
   },
+  getInitialState: function() {
+    return {
+      hover: false,
+    };
+  },
+  _onMouseOn: function() {
+    this.setState({
+      hover: true,
+    });
+  },
+  _onMouseOff: function() {
+    this.setState({
+      hover: false,
+    });
+  },
   /**
    * Render TrashCan component as a DragTarget
    * @return {object}
    */
   render: function() {
-    const trashIcon = classNames('fa fa-trash-o trashCan'); /* FIX , { 'fa-trash-o': true, 'fa-trash': drop}); */
+    const trashIcon = classNames('fa trashCan', { 'fa-trash-o': true, 'fa-trash': this.state.hover});
     const connectDropTarget = this.props.connectDropTarget;
     return connectDropTarget(
-      <i className={trashIcon}></i>
+      <i className={trashIcon} onMouseOver={this._onMouseOn} onMouseLeave={this._onMouseOff}></i>
     );
   },
 });

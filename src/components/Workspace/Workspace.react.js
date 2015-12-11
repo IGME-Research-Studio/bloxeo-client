@@ -144,6 +144,10 @@ const workTarget = {
   drop: function(props, monitor, component) {
     const pos = monitor.getClientOffset();
     const idea = monitor.getItem();
+    // the difference in postion of the start and end of the drag
+    const difference = monitor.getDifferenceFromInitialOffset();
+    // position of the idea at the start of the drag
+    const lastLocation = monitor.getInitialSourceClientOffset();
     const hasDroppedOnChild = monitor.didDrop();
     // If a sub-element was dropped on, prevent bubbling
     if (hasDroppedOnChild) {
@@ -152,10 +156,12 @@ const workTarget = {
     const domNode = ReactDOM.findDOMNode(component).getBoundingClientRect();
     // If the collection is being moved do not create another
     if (monitor.getItem().type === DnDTypes.COLLECTION) {
+      const left = lastLocation.x - domNode.left + difference.x;
+      const top = lastLocation.y - domNode.top + difference.y;
       StormActions.moveCollection(
         monitor.getItem().id,
-        Math.round(pos.x) - (domNode.left) - component.state.x,
-        Math.round(pos.y) - (domNode.top) - component.state.y
+        left - component.state.x,
++       top - component.state.y
       );
     } else {
       StormActions.collectionCreate(

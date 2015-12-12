@@ -9,7 +9,9 @@
 @import '_mixins';
 /* SIDEBAR */
 
-#sidebar {
+.sidebar {
+  width: 300px;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   flex: 0 0 300px;
@@ -95,7 +97,7 @@
       opacity: 0;
       animation: sizeSquare 3.2s ease infinite;
       /* delay each square */
-      
+
       &:nth-child(1) {
         -webkit-animation-delay: 0.0s;
         animation-delay: 0.0s;
@@ -304,7 +306,7 @@ img {
 
 .page1 {
   /* Landing slide 1 header */
-  
+
   .header {
     display: flex;
     img {
@@ -324,7 +326,7 @@ img {
     }
   }
   /* Full content excluding images */
-  
+
   .content {
     display: flex;
     position: relative;
@@ -344,7 +346,7 @@ img {
     }
   }
   /* Cody and Doug images */
-  
+
   .images {
     height: 100%;
     .codyImg {
@@ -369,7 +371,7 @@ img {
     }
   }
   /* What is Bloxeo? Footer */
-  
+
   .footer {
     height: 50px;
     width: 100%;

@@ -105,22 +105,22 @@
   }
 }
 
-#sidebar-info {
+.sidebar-info {
   color: white;
   padding: 30px 26px 0;
   .sidebar-section {
     margin: 20px 0;
     /* Room Info Box */
 
-    #room-name {
+    .room-name {
       font-size: 18px;
       line-height: 1;
       margin-bottom: 5px;
     }
-    #room-description {
+
+    .room-description {
       @include font-light();
     }
-    /* Member List */
 
     .circleMemberIcon {
       width: 32px;
@@ -354,6 +354,100 @@
   -ms-transform: none !important;
   -webkit-transform: none !important;
   transform: none !important;
+}
+
+.roomOptions {
+  width: 250px;
+
+  .optionContent {
+    padding: 20px;
+
+    .optionTitle {
+      margin-bottom: 20px;
+    }
+
+    .optionSection {
+      vertical-align: middle;
+      margin: 15px 0;
+      height: 26px;
+
+      .optionText {
+        display: inline-block;
+        font-size: 10px;
+        width: 150px;
+      }
+
+      .optionInput {
+        text-align: center;
+        display: inline-block;
+        float: right;
+        width: 30px;
+        height: 26px;
+        font-size: 12px;
+        border: 1px solid #ccc;
+        border-radius: 2px;
+      }
+    }
+  }
+  .optionFooter {
+    width: 100%;
+
+    .optionButton {
+      text-transform: uppercase;
+      width: 100%;
+      border: 0px;
+      padding: 10px 0;
+      color: #fff;
+      background: $storm-green;
+      &:focus {
+        outline: 0;
+      }
+    }
+  }
+}
+
+.toggleButton {
+  display: inline-block;
+  position: relative;
+  float: right;
+  cursor: pointer;
+  margin: 10px 8px;
+
+  .toggleRadio {
+    width: 18px;
+    height: 7px;
+    border-radius: 50px;
+    opacity: 0.5;
+    &.enable {
+      background-color: $storm-green;
+    }
+    &.disable {
+      background-color: $storm-disabledGray;
+    }
+  }
+
+  .toggleSlider {
+    position: absolute;
+    top: -3px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50px;
+    -webkit-transition: all .4s ease;
+    -moz-transition: all .4s ease;
+    -o-transition: all .4s ease;
+    -ms-transition: all .4s ease;
+    transition: all .4s ease;
+    &.enable {
+      right: -3px;
+      background-color: $storm-green;
+      box-shadow: 1px 1px 1px #ddd;
+    }
+    &.disable {
+      left: -3px;
+      background-color: #fff;
+      box-shadow: -1px 1px 1px #ddd;
+    }
+  }
 }
 
 .workspaceCard {

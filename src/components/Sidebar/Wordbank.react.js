@@ -24,6 +24,10 @@ const Wordbank = React.createClass({
     window.addEventListener('resize', this.calcHeight);
     this.calcHeight();
   },
+  componentWillUnmount: function() {
+    IdeaStore.removeChangeListener(this.ideaAdd);
+    window.removeEventListener('resize', this.calcHeight);
+  },
   ideaAdd: function() {
     this.setState({
       ideaArray: IdeaStore.getAllIdeas(),

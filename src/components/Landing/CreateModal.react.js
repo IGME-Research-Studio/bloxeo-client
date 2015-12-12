@@ -4,12 +4,11 @@ const StormActions = require('../../actions/StormActions');
 const ModalHeader = require('../Modal/ModalHeader.react');
 const ModalFooter = require('../Modal/ModalFooter.react');
 
-const JoinModal = React.createClass({
+const CreateModal = React.createClass({
   getInitialState: function() {
     const name = localStorage.getItem('UserName');
     return {
       name: name,
-      roomCode: '',
     };
   },
   /**
@@ -21,22 +20,14 @@ const JoinModal = React.createClass({
     });
   },
   /**
-   * @param {object} event
-   */
-  _updateCode: function(event) {
-    this.setState({
-      roomCode: event.target.value,
-    });
-  },
-  /**
    * Handle submit
    */
   _onSubmit: function() {
-    if (!this.state.name || this.state.roomCode === '') {
+    if (!this.state.name) {
       // This should display an error
       return;
     }
-    StormActions.joinBoard(this.state.roomCode, this.state.name);
+    StormActions.createBoard(this.state.name);
   },
   /**
    * @return {object}
@@ -49,6 +40,7 @@ const JoinModal = React.createClass({
         <ModalHeader title="User Options" close={this.props.close} />
         <div className="modalContent">
           <div className="modalSection">
+            <span className={hasError} ref="error">{this.props.error}</span>
             <input
               type="text"
               className="modalInput"
@@ -61,22 +53,11 @@ const JoinModal = React.createClass({
             <div className="modalUserText">Your unique user icon</div>
             <span className="modalUserIcon">?</span>
           </div>
-          <div className="modalBreak"></div>
-          <div className="modalSection">
-            <span className={hasError} ref="error">{this.props.error}</span>
-            <input
-              type="text"
-              className="modalInput"
-              placeholder="Enter room code"
-              value={this.state.roomCode}
-              onChange={this._updateCode}
-            />
-          </div>
         </div>
-        <ModalFooter buttonText="Join Room" click={this._onSubmit} />
+        <ModalFooter buttonText="Create Room" click={this._onSubmit} />
       </div>
     );
   },
 });
 
-module.exports = JoinModal;
+module.exports = CreateModal;

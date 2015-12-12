@@ -5,14 +5,15 @@ const socketIO       = require('socket.io-client');
 const _              = require('lodash');
 const reqwest        = require('reqwest');
 const Promise        = require('bluebird');
+const assign         = require('object-assign');
+const EventEmitter   = require('events').EventEmitter;
 // Init socket.io connection
 const socket = socketIO.connect(StormConstants.SERVER_URL_DEV);
 let currentBoardId = 0;
 let notReceived = true;
 let notReceivedBank = true;
 
-const JOIN_CHANGE_EVENT = 'join';
-let _joinError = '';
+let token = '';
 
 let errorMsg = '';
 const ERROR_CHANGE_EVENT = 'JOIN_ERROR';
@@ -24,7 +25,6 @@ const SocketStore = assign({}, EventEmitter.prototype, {
   getErrorMessage: function() {
     return errorMsg;
   },
-
   emitChange: function() {
     this.emit(ERROR_CHANGE_EVENT);
   },
@@ -43,7 +43,6 @@ const SocketStore = assign({}, EventEmitter.prototype, {
     this.removeListener(ERROR_CHANGE_EVENT, callback);
   },
 });
-
 /**
  * Checks a socket response for an error
  * @param {object} data: response data
@@ -57,11 +56,9 @@ function resolveSocketResponse(data) {
     }
   });
 }
-
 socket.on('connect', () => {
   socket.emit('GET_CONSTANTS');
 });
-
 socket.on('RECEIVED_CONSTANTS', (body) => {
   const { EVENT_API, REST_API } = body;
   /**
@@ -71,8 +68,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
   //   socket.emit(EVENT_API.GET_IDEAS, {boardId: currentBoardId});
   //   socket.emit(EVENT_API.GET_COLLECTIONS, {boardId: currentBoardId});
   // }
-
-  // // turn REST_API into route templates
+  // turn REST_API into route templates
   const Routes = _.mapValues(REST_API, (route) => {
     return _.template(StormConstants.SERVER_URL_DEV + route[1]);
   });
@@ -158,16 +154,17 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
    * Creates a user
    * @param {string} name
    */
-  function createUser(next) {
-    if (!localStorage.getItem('UserKey')) {
+  function createUser(next, name) {
+    if (!localStorage.getItem('UserToken')) {
       reqwest({
         url: Routes.createUser(),
         method: REST_API.createUser[0],
-        data: { username: 'peter' },
+        data: { username: name },
         success: (res) => {
-          // set url
-          localStorage.setItem('UserName', 'peter');
-          localStorage.setItem('UserKey', res);
+          // store user stuff
+          localStorage.setItem('UserName', name);
+          localStorage.setItem('UserToken', res);
+          token = res;
           next();
         },
       });
@@ -176,29 +173,56 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
     }
   }
   /**
+   * Validates a user token
+   */
+  function validateUser() {
+    if (localStorage.getItem('UserToken')) {
+      reqwest({
+        url: Routes.validateUser(),
+        method: REST_API.validateUser[0],
+        data: { userToken: localStorage.getItem('UserToken')},
+        success: () => {
+          token = localStorage.getItem('UserToken');
+        },
+        error: () => {
+          localStorage.clear();
+        },
+      });
+    }
+    return false;
+  }
+  validateUser();
+  /**
    * Joins board of given id
    * @param {string} boardId
    */
-  function joinBoard(boardId) {
+  function joinBoard(boardId, name) {
     createUser(() => {
       currentBoardId = boardId;
-      socket.emit(EVENT_API.JOIN_ROOM, {boardId: currentBoardId});
-    });
+      socket.emit(
+        EVENT_API.JOIN_ROOM,
+        {
+          boardId: currentBoardId,
+          userToken: token,
+        });
+    },
+    name);
   }
   /**
    * Create new board
    */
-  function createBoard() {
+  function createBoard(userName) {
     createUser(() => {
       reqwest({
         url: Routes.createBoard(),
         method: REST_API.createBoard[0],
+        data: { userToken: token },
         success: (res) => {
-          // set url
           joinBoard(res.boardId);
         },
       });
-    });
+    },
+    userName);
   }
   /**
    * Make post request to server for idea creation
@@ -210,6 +234,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       {
         boardId: currentBoardId,
         content: content,
+        userToken: token,
       }
     );
   }
@@ -223,6 +248,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       {
         boardId: currentBoardId,
         content: content,
+        userToken: token,
         top: top,
         left: left,
       }
@@ -237,6 +263,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       EVENT_API.DESTROY_COLLECTION,
       {
         boardId: currentBoardId,
+        userToken: token,
         key: _key,
       }
     );
@@ -253,6 +280,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
         boardId: currentBoardId,
         key: _key,
         content: content,
+        userToken: token,
       }
     );
   }
@@ -267,6 +295,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       {
         boardId: currentBoardId,
         content: content,
+        userToken: token,
         key: _key,
       }
     );
@@ -276,10 +305,10 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
   AppDispatcher.register((action) => {
     switch (action.actionType) {
     case StormConstants.CREATE_BOARD:
-      createBoard();
+      createBoard(action.userName);
       break;
     case StormConstants.JOIN_BOARD:
-      joinBoard(action.boardId);
+      joinBoard(action.boardId, action.userName);
       break;
     case StormConstants.GET_IDEAS:
       socket.emit(EVENT_API.GET_IDEAS, {boardId: currentBoardId });

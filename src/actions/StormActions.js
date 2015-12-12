@@ -5,19 +5,21 @@ const StormActions = {
   /**
    * Dispatch create new board event
    */
-  createBoard: function() {
+  createBoard: function(userName) {
     AppDispatcher.dispatch({
       actionType: StormConstants.CREATE_BOARD,
+      userName: userName,
     });
   },
   /**
    * Dispatch join board event
    * @param {string} id of board to join
    */
-  joinBoard: function(boardId) {
+  joinBoard: function(boardId, userName) {
     AppDispatcher.dispatch({
       actionType: StormConstants.JOIN_BOARD,
       boardId: boardId,
+      userName: userName,
     });
   },
   /**

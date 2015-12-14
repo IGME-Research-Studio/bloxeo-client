@@ -3,6 +3,15 @@ const StormConstants = require('../constants/StormConstants');
 
 const StormActions = {
   /**
+   * Dispatch create new user
+   */
+  createUser: function(userName) {
+    AppDispatcher.dispatch({
+      actionType: StormConstants.CREATE_USER,
+      userName: userName,
+    });
+  },
+  /**
    * Dispatch create new board event
    */
   createBoard: function(userName) {

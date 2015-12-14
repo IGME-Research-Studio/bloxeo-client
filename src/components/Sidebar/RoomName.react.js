@@ -62,11 +62,20 @@ const RoomName = React.createClass({
   render: function() {
     if (this.state.isEditing) {
       return (
-        <input type="text" value={this.state.value} onChange={this._onChange} onKeyDown={this._onKeyDown} />
+        <input
+          type="text"
+          className="roomInfoInput room-name"
+          value={this.state.value}
+          onChange={this._onChange}
+          onKeyDown={this._onKeyDown} />
       );
     } else {
       return (
-        <h2 className="noMargin" id="room-name" onDoubleClick={this._onDoubleClick}>{this.state.name}</h2>
+        <h2
+          className="noMargin room-name"
+          onDoubleClick={this._onDoubleClick}>
+          {this.state.name}
+        </h2>
       );
     }
   },

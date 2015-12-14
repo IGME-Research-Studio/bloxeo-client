@@ -30,14 +30,23 @@
     margin: 20px 0;
 
     /* Room Info Box */
-    #room-name {
+    .room-name {
       font-size: 18px;
       line-height: 1;
       margin-bottom: 5px;
     }
 
-    #room-description {
+    .room-description {
       @include font-light();
+    }
+
+    .roomInfoInput {
+      color: $storm-primary;
+      width: 100%;
+      padding: 0 3px;
+      margin-bottom: 5px;
+      border: 0;
+      border-radius: 2px;
     }
 
     /* Member List */
@@ -143,7 +152,7 @@
 .sidebar-voteSection {
   text-align: center;
   margin: 15px 0;
-  height: 70px;
+  height: 60px;
 
   .callVoteButton {
     padding: 9px 20px;

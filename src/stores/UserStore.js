@@ -1,18 +1,13 @@
-const AppDispatcher  = require('../dispatcher/AppDispatcher');
-const StormConstants = require('../constants/StormConstants');
-const StormActions   = require('../actions/StormActions');
-const Promise        = require('bluebird');
 const assign         = require('object-assign');
 const EventEmitter   = require('events').EventEmitter;
 
-let errorMsg = '';
 const UserStore = assign({}, EventEmitter.prototype, {
   /**
    * Get join error message
    * @return {array}
    */
   getErrorMessage: function() {
-    return errorMsg;
+    return 'Username is undefined';
   },
   /**
    * Get server token

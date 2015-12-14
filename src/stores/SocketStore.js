@@ -7,7 +7,7 @@ const reqwest        = require('reqwest');
 const Promise        = require('bluebird');
 const assign         = require('object-assign');
 const EventEmitter   = require('events').EventEmitter;
-const UserStore      = require('UserStore');
+const UserStore      = require('./UserStore');
 // Init socket.io connection
 const socket = socketIO.connect(StormConstants.SERVER_URL_DEV);
 let currentBoardId = 0;
@@ -15,9 +15,11 @@ let notReceived = true;
 let notReceivedBank = true;
 
 let token = '';
-
+let errorMsg = '';
 const ERROR_CHANGE_EVENT = 'JOIN_ERROR';
+const VALIDATE_ERROR = 'VALIDATE_ERROR';
 const SocketStore = assign({}, EventEmitter.prototype, {
+  valid: true,
   /**
    * Get join error message
    * @return {array}
@@ -27,6 +29,9 @@ const SocketStore = assign({}, EventEmitter.prototype, {
   },
   emitChange: function() {
     this.emit(ERROR_CHANGE_EVENT);
+  },
+  emitValidError: function() {
+    this.emit(VALIDATE_ERROR);
   },
   /**
    * Add a change listener
@@ -41,6 +46,13 @@ const SocketStore = assign({}, EventEmitter.prototype, {
    */
   removeErrorListener: function(callback) {
     this.removeListener(ERROR_CHANGE_EVENT, callback);
+  },
+  addValidateListener: function(callback) {
+    this.on(VALIDATE_ERROR, callback);
+    if (!this.valid) this.emit(VALIDATE_ERROR);
+  },
+  removeValidateListener: function(callback) {
+    this.removeListener(VALIDATE_ERROR, callback);
   },
 });
 /**
@@ -78,7 +90,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
     resolveSocketResponse(data)
     .then((res) => {
       StormActions.receivedCollections(
-        _.omit(res.data, ['top', 'left']),
+        _.omit(res.data, ['top', 'left', 'key']),
         false
       );
     })
@@ -102,8 +114,12 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
   socket.on(EVENT_API.JOINED_ROOM, (data) => {
     resolveSocketResponse(data)
     .then(() => {
-      socket.emit(EVENT_API.GET_IDEAS, {boardId: currentBoardId});
-      socket.emit(EVENT_API.GET_COLLECTIONS, {boardId: currentBoardId});
+      const reqObj = {
+        boardId: currentBoardId,
+        userToken: token,
+      };
+      socket.emit(EVENT_API.GET_IDEAS, reqObj);
+      socket.emit(EVENT_API.GET_COLLECTIONS, reqObj);
       errorMsg = '';
       SocketStore.emitChange();
       // append the board id to the url upon joining a room if it is not already there
@@ -163,7 +179,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
           data: { username: name },
           success: (res) => {
             // store user stuff
-            UserStore.setUserData(name, res);
+            UserStore.setUserData(res, name);
             token = res;
             resolve(res);
           },
@@ -172,41 +188,51 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
           },
         });
       } else {
-        token = UserStore.getUserToken()
+        token = UserStore.getUserToken();
         resolve(token);
       }
-    }
+    });
   }
   /**
    * Validates a user token
    */
   function validateUser() {
-    if (UserStore.getUserToken()) {
-      reqwest({
-        url: Routes.validateUser(),
-        method: REST_API.validateUser[0],
-        data: { userToken: UserStore.getUserToken()},
-        success: () => token = UserStore.getUserToken();,
-        error: () => UserStore.resetUserData();,
-      });
-    }
-    return false;
+    return new Promise((resolve, reject) => {
+      if (UserStore.getUserToken()) {
+        reqwest({
+          url: Routes.validateUser(),
+          method: REST_API.validateUser[0],
+          data: { userToken: UserStore.getUserToken()},
+          success: () => {
+            console.log(UserStore.getUserToken());
+            token = UserStore.getUserToken();
+            SocketStore.valid = true;
+            resolve(true);
+          },
+          error: () => {
+            UserStore.clearUserData();
+            SocketStore.valid = false;
+            reject(new Error('User did not validate'));
+          },
+        });
+      } else {
+        reject(new Error('No cached user data'));
+      }
+    });
   }
-  validateUser();
   /**
    * Joins board of given id
    * @param {string} boardId
    */
   function joinBoard(boardId) {
-      token = userToken;
-      currentBoardId = boardId;
-      socket.emit(
-        EVENT_API.JOIN_ROOM,
-        {
-          boardId: currentBoardId,
-          userToken: token,
-        });
-    });
+    notReceived = true;
+    currentBoardId = boardId;
+    socket.emit(
+      EVENT_API.JOIN_ROOM,
+      {
+        boardId: currentBoardId,
+        userToken: token,
+      });
   }
   /**
    * Create new board
@@ -303,11 +329,11 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
     switch (action.actionType) {
     case StormConstants.CREATE_BOARD:
       createUser(action.userName)
-      .then(() => createBoard(););
+      .then(() => { createBoard();});
       break;
     case StormConstants.JOIN_BOARD:
       createUser(action.userName)
-      .then(() => joinBoard(action.boardId););
+      .then(() => { joinBoard(action.boardId);});
       break;
     case StormConstants.GET_IDEAS:
       socket.emit(EVENT_API.GET_IDEAS, {boardId: currentBoardId });
@@ -332,11 +358,15 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       break;
     }
   });
-  // if page is on the workspace, join the room on page load
-  if (window.location.hash.split('?')[0] === '#/workSpace') {
-    const roomid = window.location.hash.split('=')[1];
-    joinBoard(roomid);
-  }
+  validateUser()
+  .then(() => {
+    // if page is on the workspace, join the room on page load
+    if (window.location.hash.split('?')[0] === '#/workSpace') {
+      const roomid = window.location.hash.split('=')[1];
+      joinBoard(roomid);
+    }
+  })
+  .catch(() => { SocketStore.emitValidError();});
 });
 
 module.exports = SocketStore;

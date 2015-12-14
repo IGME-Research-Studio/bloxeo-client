@@ -27,7 +27,9 @@ const CreateModal = React.createClass({
       // This should display an error
       return;
     }
-    StormActions.createUser(this.state.name);
+    const roomid = window.location.hash.split('=')[1];
+    StormActions.joinBoard(roomid, this.state.name);
+    this.props.close();
   },
   /**
    * @return {object}
@@ -54,7 +56,7 @@ const CreateModal = React.createClass({
             <span className="modalUserIcon">?</span>
           </div>
         </div>
-        <ModalFooter buttonText="Create Room" click={this._onSubmit} />
+        <ModalFooter buttonText="Create User" click={this._onSubmit} />
       </div>
     );
   },

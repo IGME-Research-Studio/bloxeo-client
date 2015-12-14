@@ -36,7 +36,7 @@ const JoinRoom = React.createClass({
     };
 
     return (
-      <div className="joinRoom">
+      <div className="joinRoomButton">
         <a className="button" onClick={this.openModal}>Join a room</a>
 
         <Modal

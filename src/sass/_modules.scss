@@ -805,7 +805,12 @@
   background-color: #474b55;
   color: #fff;
   text-align: center;
-
+  
+  .contentContainer, 
+  .content {
+    background-color: #474b55;
+  }
+  
   p {
     font-size: 16px;
     line-height: 20px;

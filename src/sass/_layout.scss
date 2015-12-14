@@ -395,9 +395,11 @@ img {
       margin-bottom: 50px;
     }
   }
-
   .textContent {
     margin-bottom: 80px;
+  }
+  .NSA {
+    margin-top: 100px !important;
   }
   p {
     width: 320px;
@@ -444,6 +446,8 @@ img {
   }
 }
 
+
+/* Media queries for landing page */
 @media (max-width: 1440px) {
   .dougShoesImg, 
   .dougImg {
@@ -525,4 +529,26 @@ img {
     }
   }
 
+  .page2 {
+    .images {
+      margin-bottom: 0px !important;
+    }
+    .textContainer {
+      padding: 0px 20px !important
+      ;
+      h1 {
+        font-size: 30px !important;
+        line-height: 30px !important;
+      }
+      p {
+        font-size: 18px !important;
+      }
+    }
+  }
+  
+  .page5 {
+    .textContent {
+      font-size: 25px !important;
+    }
+  }
 }

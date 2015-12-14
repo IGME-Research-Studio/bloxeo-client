@@ -11,7 +11,7 @@
 @import '_mixins';
 
 body {
-	//overflow: auto;
+	overflow: auto;
   @include font-regular();
 }
 a:hover {

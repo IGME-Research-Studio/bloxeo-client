@@ -2,7 +2,6 @@ const React = require('react');
 const CreateRoom = require('./CreateRoom.react');
 const JoinRoom = require('./JoinRoom.react');
 const skrollr = require('../../../lib/skrollr.min.js');
-console.log(skrollr);
 const LandingPage = React.createClass({
   render: function() {
     return (
@@ -23,7 +22,7 @@ const LandingPage = React.createClass({
 					        </div>
 									<div className="contentRow row">
 				            <div className="textCopy">
-				              <h1> Lets make your Eureka moment happen. </h1>
+				              <h1> Let&rsquo;s make your Eureka moment happen. </h1>
 				            </div>
 				            <div className="joinLinks">
 				              <CreateRoom />
@@ -106,6 +105,7 @@ const LandingPage = React.createClass({
 				          <CreateRoom />
 				          <p> By creating a room you&rsquo;re agreeing to our <a className="termsOfService">Terms of Service </a>
 				          (It&rsquo;s a bit unethical).</p>
+				          <p className="NSA"> We&rsquo;re also selling your data to the NSA ;) </p>
 				         </div>
 			        </div>
 			      </div>

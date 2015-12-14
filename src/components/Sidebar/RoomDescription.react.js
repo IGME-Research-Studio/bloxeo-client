@@ -11,6 +11,11 @@ const RoomDesciption = React.createClass({
       isEditing: false,
     };
   },
+  componentDidUpdate: function() {
+    if (this.state.isEditing) {
+      document.getElementsByClassName('room-description')[0].focus();
+    }
+  },
   /**
    * Enable editing mode on double click
    */
@@ -32,28 +37,28 @@ const RoomDesciption = React.createClass({
    */
   _onKeyDown: function(event) {
     if (event.keyCode === ENTER_KEY_CODE) {
-      if (!this.state.value) {
-        this.setState({
-          value: this.state.description,
-          isEditing: false,
-        });
-        return;
-      } else {
-        this._onSave();
-      }
+      this._onSave();
     }
   },
   /**
    * Handle save and update room description
    */
   _onSave: function() {
-    // save room description to StormStore
-    StormActions.changeRoomDescription(this.state.value);
-    // update room description view
-    this.setState({
-      description: this.state.value,
-      isEditing: false,
-    });
+    if (!this.state.value) {
+      this.setState({
+        value: this.state.description,
+        isEditing: false,
+      });
+      return;
+    } else {
+      // save room description to StormStore
+      StormActions.changeRoomDescription(this.state.value);
+      // update room description view
+      this.setState({
+        description: this.state.value,
+        isEditing: false,
+      });
+    }
   },
   /**
    * @return {object}
@@ -65,7 +70,8 @@ const RoomDesciption = React.createClass({
           className="roomInfoInput room-description"
           defaultValue={this.state.value}
           onChange={this._onChange}
-          onKeyDown={this._onKeyDown}>
+          onKeyDown={this._onKeyDown}
+          onBlur={this._onSave}>
         </textarea>
       );
     } else {

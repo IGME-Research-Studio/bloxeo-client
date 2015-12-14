@@ -7,6 +7,7 @@ const reqwest        = require('reqwest');
 const Promise        = require('bluebird');
 const assign         = require('object-assign');
 const EventEmitter   = require('events').EventEmitter;
+const UserStore      = require('UserStore');
 // Init socket.io connection
 const socket = socketIO.connect(StormConstants.SERVER_URL_DEV);
 let currentBoardId = 0;
@@ -15,7 +16,6 @@ let notReceivedBank = true;
 
 let token = '';
 
-let errorMsg = '';
 const ERROR_CHANGE_EVENT = 'JOIN_ERROR';
 const SocketStore = assign({}, EventEmitter.prototype, {
   /**
@@ -154,39 +154,40 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
    * Creates a user
    * @param {string} name
    */
-  function createUser(next, name) {
-    if (!localStorage.getItem('UserToken')) {
-      reqwest({
-        url: Routes.createUser(),
-        method: REST_API.createUser[0],
-        data: { username: name },
-        success: (res) => {
-          // store user stuff
-          localStorage.setItem('UserName', name);
-          localStorage.setItem('UserToken', res);
-          token = res;
-          next();
-        },
-      });
-    } else {
-      next();
+  function createUser(name) {
+    return new Promise((resolve, reject) => {
+      if (!UserStore.getUserToken()) {
+        reqwest({
+          url: Routes.createUser(),
+          method: REST_API.createUser[0],
+          data: { username: name },
+          success: (res) => {
+            // store user stuff
+            UserStore.setUserData(name, res);
+            token = res;
+            resolve(res);
+          },
+          error: () => {
+            reject(new Error('User Creation Failed'));
+          },
+        });
+      } else {
+        token = UserStore.getUserToken()
+        resolve(token);
+      }
     }
   }
   /**
    * Validates a user token
    */
   function validateUser() {
-    if (localStorage.getItem('UserToken')) {
+    if (UserStore.getUserToken()) {
       reqwest({
         url: Routes.validateUser(),
         method: REST_API.validateUser[0],
-        data: { userToken: localStorage.getItem('UserToken')},
-        success: () => {
-          token = localStorage.getItem('UserToken');
-        },
-        error: () => {
-          localStorage.clear();
-        },
+        data: { userToken: UserStore.getUserToken()},
+        success: () => token = UserStore.getUserToken();,
+        error: () => UserStore.resetUserData();,
       });
     }
     return false;
@@ -196,8 +197,8 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
    * Joins board of given id
    * @param {string} boardId
    */
-  function joinBoard(boardId, name) {
-    createUser(() => {
+  function joinBoard(boardId) {
+      token = userToken;
       currentBoardId = boardId;
       socket.emit(
         EVENT_API.JOIN_ROOM,
@@ -205,24 +206,20 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
           boardId: currentBoardId,
           userToken: token,
         });
-    },
-    name);
+    });
   }
   /**
    * Create new board
    */
-  function createBoard(userName) {
-    createUser(() => {
-      reqwest({
-        url: Routes.createBoard(),
-        method: REST_API.createBoard[0],
-        data: { userToken: token },
-        success: (res) => {
-          joinBoard(res.boardId);
-        },
-      });
-    },
-    userName);
+  function createBoard() {
+    reqwest({
+      url: Routes.createBoard(),
+      method: REST_API.createBoard[0],
+      data: { userToken: token },
+      success: (res) => {
+        joinBoard(res.boardId);
+      },
+    });
   }
   /**
    * Make post request to server for idea creation
@@ -305,10 +302,12 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
   AppDispatcher.register((action) => {
     switch (action.actionType) {
     case StormConstants.CREATE_BOARD:
-      createBoard(action.userName);
+      createUser(action.userName)
+      .then(() => createBoard(););
       break;
     case StormConstants.JOIN_BOARD:
-      joinBoard(action.boardId, action.userName);
+      createUser(action.userName)
+      .then(() => joinBoard(action.boardId););
       break;
     case StormConstants.GET_IDEAS:
       socket.emit(EVENT_API.GET_IDEAS, {boardId: currentBoardId });

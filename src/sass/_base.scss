@@ -11,7 +11,8 @@
 @import '_mixins';
 
 body {
-	overflow: auto;
+	overflow: hidden;
+	height: 100vh;
   @include font-regular();
 }
 a:hover {
@@ -22,5 +23,5 @@ p {
   font-size: 14px;
 }
 html {
-	overflow: none;
+	overflow: auto;
 }

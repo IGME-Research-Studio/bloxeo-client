@@ -32,6 +32,7 @@ module.exports = function (grunt) {
         dest: 'build/assets/trashCanIcon.png'
       }, 
       images: {
+        expand: true,
         src: 'assets/*.png',
         dest: 'build/'
       },

@@ -9,7 +9,6 @@ const JoinRoom = React.createClass({
     };
   },
   openModal: function() {
-    console.log("openmodal")
     this.setState({ isOpen: true });
   },
   closeModal: function() {

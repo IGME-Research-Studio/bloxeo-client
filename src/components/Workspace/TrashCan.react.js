@@ -17,11 +17,6 @@ const TrashCan = React.createClass({
       hover: false,
     };
   },
-  _onMouseOn: function() {
-    this.setState({
-      hover: true,
-    });
-  },
   _onMouseOff: function() {
     this.setState({
       hover: false,
@@ -35,7 +30,7 @@ const TrashCan = React.createClass({
     const trashIcon = classNames('fa trashCan', { 'fa-trash-o': true, 'fa-trash': this.state.hover});
     const connectDropTarget = this.props.connectDropTarget;
     return connectDropTarget(
-      <i className={trashIcon} onMouseOver={this._onMouseOn} onMouseLeave={this._onMouseOff}></i>
+      <i className={trashIcon} onMouseLeave={this._onMouseOff}></i>
     );
   },
 });
@@ -65,6 +60,11 @@ const collectionTarget = {
     if (idea.type === DnDTypes.COLLECTION) {
       StormActions.removeCollection(idea.id);
     }
+  },
+  hover: function(props, monitor, component) {
+    component.setState({
+      hover: true,
+    });
   },
 };
 

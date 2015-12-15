@@ -8,20 +8,6 @@
 @import '_vars';
 @import '_mixins';
 
-.button {
-  display: inline-block;
-  color: white;
-  background-color: cornflowerblue;
-  cursor: pointer;
-  padding: 10px 50px;
-  border-radius: 3px;
-  margin-top: 20px;
-  font-size: 14px;
-  &:hover {
-    color: white;
-  }
-}
-
 .modalHeader {
   display: block;
   text-align: center;
@@ -738,7 +724,7 @@
     }
   }
   .textContainer {
-    
+
     h1 {
       font-size: 45px;
       font-weight: 400;
@@ -786,7 +772,7 @@
       font-size: 45px;
       color: #4f4f4f;
       @include font-light();
-    }  
+    }
   }
   .images {
     margin: 0 auto;
@@ -805,12 +791,12 @@
   background-color: #474b55;
   color: #fff;
   text-align: center;
-  
-  .contentContainer, 
+
+  .contentContainer,
   .content {
     background-color: #474b55;
   }
-  
+
   p {
     font-size: 16px;
     line-height: 20px;
@@ -831,7 +817,6 @@
     }
   }
 }
-
 
 .header {
   h1 {
@@ -863,11 +848,10 @@
   color: #4bc8f1;
 }
 
-
-.createRoomButton {
+.createRoomButton a {
   background-color: #4b7df1;
 }
 
-.joinRoomButton {
+.joinRoomButton a {
   background-color: #ff1e78;
 }

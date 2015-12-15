@@ -9,6 +9,7 @@ const JoinRoom = React.createClass({
     };
   },
   openModal: function() {
+    console.log("openmodal")
     this.setState({ isOpen: true });
   },
   closeModal: function() {
@@ -18,6 +19,7 @@ const JoinRoom = React.createClass({
     const customStyles = {
       overlay: {
         backgroundColor: 'rgba(0, 0, 0, 0.7)',
+        zIndex: 2000,
       },
       content: {
         top: '50%',

@@ -238,12 +238,7 @@
   }
 }
 
-.ideaGroup {
-  background-color: yellow;
-  display:inline-block;
-  position:relative;
-}
-
+/* Landing pages */
 
 /* Styles for landing page */
 .page {
@@ -419,7 +414,8 @@ img {
     display: block;
   }
 
-  .createRoomButton {
+  .createRoomButton a{
+    display: block;
     margin: 0 auto;
     margin-top: 40px;
     width: 320px;
@@ -427,8 +423,9 @@ img {
 }
 
 /* Landing create and join buttons */
-.createRoomButton, 
-.joinRoomButton {
+.createRoomButton a, 
+.joinRoomButton a {
+  display: block;
   height: 48px;
   margin-top: 20px;
   border-radius: 3px;
@@ -438,8 +435,9 @@ img {
 }
 
 .idea {
-  font-size: 18px;
+  font-size: 15px;
   word-wrap: break-word;
+  padding: 15px;
 
   &.deleting {
     background-color: red;

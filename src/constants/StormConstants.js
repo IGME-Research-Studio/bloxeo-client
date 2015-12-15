@@ -4,6 +4,7 @@ module.exports = {
   CHANGE_ROOM_DESCRIPTION: 'CHANGE_ROOM_DESCRIPTION',
   TIMER_COUNTDOWN: 'TIMER_COUNTDOWN',
   TIMER_PAUSE: 'TIMER_PAUSE',
+  END_LOAD_ANIMATION: 'END_LOAD_ANIMATION',
   // Idea constants
   IDEA_CREATE: 'IDEA_CREATE',
   // Collection Constants
@@ -21,7 +22,7 @@ module.exports = {
   STORE_WORKSPACE: 'STORE_WORKSPACE',
   STORE_MOVED_IDEA: 'STORE_MOVED_IDEA',
   // Server URL constants
-  SERVER_URL_DEV: 'http://storm-server-stage.herokuapp.com',
+  SERVER_URL_DEV: 'http://storm-server-fun.herokuapp.com',
   SERVER_URL_PROD: 'http://storm-server-prod.herokuapp.com',
   SERVER_URL_REVAMP: 'http://storm-server-fun.herokuapp.com',
   API_VERSION: '/v1',

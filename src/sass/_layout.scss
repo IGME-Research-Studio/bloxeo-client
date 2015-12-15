@@ -42,11 +42,30 @@
 }
 
 .timer-set {
-  color: black;
+  color: #333;
+  width: 30%;
+  height: 20px;
+  margin-right: 5px;
+  padding: 0 10px;
+  box-shadow: none;
+  border-radius: 2px;
+  border: none;
+  outline: none;
+  background-color: white;
+}
+
+#seconds-set {
+  margin: 0 5px;
 }
 
 .timer-icon {
   margin-right: 10px;
+}
+
+.timer-btn {
+  float: right;
+  font-size: 10px;
+  margin: 3px;
 }
 
 .ideaGroup {

@@ -4,7 +4,7 @@ const classNames = require('classnames');
 const TimerIcon = React.createClass({
   render: function() {
     const timerIconClass = classNames({
-      'fa fa-clock-o timer-btn': true,
+      'fa fa-clock-o timer-icon': true,
     });
 
     return (

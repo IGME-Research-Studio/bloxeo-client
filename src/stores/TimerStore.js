@@ -47,9 +47,6 @@ const TimerStore = assign({}, EventEmitter.prototype, {
     const timeLeft = parseFloat((_time.minutes * 60)) + parseFloat(_time.seconds);
     const timePassed = _totalTime - timeLeft;
     const timePassedPercent = (timePassed / _totalTime) * 100;
-    console.log('Estimated Time: ' + ((_time.minutes * 60) + _time.seconds));
-    console.log('Time Passed: ' + timePassed);
-    console.log('Time Passed Percent: ' + timePassedPercent);
     return timePassedPercent;
   },
   /**

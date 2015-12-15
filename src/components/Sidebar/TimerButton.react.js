@@ -1,7 +1,8 @@
 const React = require('react');
 const StormActions = require('../../actions/StormActions');
+const classNames = require('classnames');
 
-const TimerCheckBox = React.createClass({
+const TimerButton = React.createClass({
   _onClick: function() {
     StormActions.changeTimerState();
     if (this.props.timerState === 'ADMIN_setTimer') {
@@ -9,18 +10,23 @@ const TimerCheckBox = React.createClass({
       StormActions.countdown();
     }
   },
+
   render: function() {
+    const timerButtonClass = classNames({
+      'timer-btn': true,
+    });
+
     if (this.props.timerState === 'ADMIN_addTimer') {
       return (
-      <span onClick={this._onClick}>ADD TIMER</span>
+      <span onClick={this._onClick} className={timerButtonClass}>ADD TIMER</span>
     );
     } else if (this.props.timerState === 'ADMIN_setTimer') {
       return (
-      <span onClick={this._onClick}>SET</span>
+      <span onClick={this._onClick} className={timerButtonClass}>SET</span>
     );
     } else if (this.props.timerState === 'ADMIN_runTimer') {
       return (
-      <span onClick={this._onClick}>STOP</span>
+      <span onClick={this._onClick} className={timerButtonClass}>STOP</span>
     );
     } else {
       return (
@@ -30,4 +36,4 @@ const TimerCheckBox = React.createClass({
   },
 });
 
-module.exports = TimerCheckBox;
+module.exports = TimerButton;

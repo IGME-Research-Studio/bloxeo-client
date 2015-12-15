@@ -9,6 +9,7 @@ const Promise        = require('bluebird');
 const socket = socketIO.connect(StormConstants.SERVER_URL_DEV);
 let currentBoardId = 0;
 let notReceived = true;
+let notReceivedBank = true;
 
 /**
  * Checks a socket response for an error
@@ -30,7 +31,6 @@ socket.on('connect', () => {
 
 socket.on('RECEIVED_CONSTANTS', (body) => {
   const { EVENT_API, REST_API } = body;
-
   /**
    * Checks to update the client to the server
    */
@@ -87,12 +87,14 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       if (notReceived) {
         StormActions.receivedCollections(res.data, notReceived);
         notReceived = false;
+        if (!notReceivedBank && !notReceived) {
+          StormActions.endLoadAnimation();
+        }
       }
     })
     .catch((res) => {
       console.error(`Error receiving collections: ${res}`);
     });
-
   });
   socket.on(EVENT_API.RECEIVED_IDEAS, (data) => {
     resolveSocketResponse(data)
@@ -101,6 +103,10 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
         return idea.content;
       });
       StormActions.updatedIdeas(ideas);
+      notReceivedBank = false;
+      if (!notReceivedBank && !notReceived) {
+        StormActions.endLoadAnimation();
+      }
     })
     .catch((res) => {
       console.error(`Error receiving ideas: ${res}`);
@@ -206,6 +212,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       }
     );
   }
+
   // Set up action watchers
   AppDispatcher.register((action) => {
     switch (action.actionType) {

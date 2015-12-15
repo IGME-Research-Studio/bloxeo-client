@@ -267,6 +267,18 @@ const StormActions = {
       ideas: ideas,
     });
   },
+
+  readyUser: function() {
+    AppDispatcher.dispatch({
+      actionType: StormConstants.READY_USER,
+    });
+  },
+
+  getVotingItems: function() {
+    AppDispatcher.dispatch({
+      actionType: StormConstants.GET_VOTING_ITEMS,
+    });
+  },
 };
 
 module.exports = StormActions;

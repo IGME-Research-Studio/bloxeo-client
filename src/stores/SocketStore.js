@@ -166,6 +166,47 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       console.error(`Error receiving ideas: ${res}`);
     });
   });
+
+  socket.on(EVENT_API.READIED_USER, (data) => {
+    resolveSocketResponse(data)
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((res) => {
+      console.error(`Error receiving readied user event: ${res}`);
+    });
+  });
+
+  socket.on(EVENT_API.RECIEVED_VOTING_ITEMS, (data) => {
+    resolveSocketResponse(data)
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((res) => {
+      console.error(`Error receiving readied user event: ${res}`);
+    });
+  });
+
+  socket.on(EVENT_API.VOTED, (data) => {
+    resolveSocketResponse(data)
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((res) => {
+      console.error(`Error receiving readied user event: ${res}`);
+    });
+  });
+
+  socket.on(EVENT_API.RECIEVED_RESULTS, (data) => {
+    resolveSocketResponse(data)
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((res) => {
+      console.error(`Error receiving readied user event: ${res}`);
+    });
+  });
+
   // Request Functions
   /**
    * Creates a user
@@ -358,6 +399,15 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       break;
     case StormConstants.SEPARATE_IDEAS:
       removeIdeaFromCollection(action.groupID, action.ideaContent);
+      break;
+    case StormConstants.READY_USER:
+      socket.emit(EVENT_API.READY_USER, {boardId: currentBoardId});
+      break;
+    case StormConstants.GET_VOTING_ITEMS:
+      console.log('get voting items');
+      socket.emit(EVENT_API.GET_VOTING_ITEMS, {boardId: currentBoardId});
+      break;
+    default:
       break;
     }
   });

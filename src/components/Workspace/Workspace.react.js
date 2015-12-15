@@ -86,7 +86,8 @@ const Workspace = React.createClass({
   render: function() {
     const UserModalStyles = {
       overlay: {
-        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+        backgroundColor: 'rgba(0, 0, 0, 0.2)',
+        zIndex: 5000000,
       },
       content: {
         top: '50%',

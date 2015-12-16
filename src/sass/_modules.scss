@@ -357,3 +357,88 @@
      -moz-box-shadow: 0px 0px 6px -1px rgba(0,0,0,0.35);
           box-shadow: 0px 0px 6px -1px rgba(0,0,0,0.35);
 }
+
+/* Modals */
+.modalHeading {
+  position: relative;
+  font-size: 18px;
+  color: white;
+  background-color: $storm-darkGray;
+  padding: 10px 0;
+}
+
+/* Voting */
+.votingModal {
+  position: relative;
+  background-color: white;
+  text-align: center;
+}
+
+.votingModal-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.voteProgress {
+  position: absolute;
+  right: 0;
+  color: $storm-secondaryLightGrey;
+  font-size: 12px;
+  padding: 5px 10px 0 0;
+}
+
+.voteCollection {
+  padding: 13px 15px;
+  text-align: left;
+  min-width: 320px;
+  min-height: 270px;
+  max-height: 370px;
+  overflow: auto;
+}
+
+.voteIdea {
+  display: inline-block;
+  background-color: $storm-lightGray;
+  padding: 7px 13px;
+  border-radius: 3px;
+  margin-bottom: 7px;
+  font-size: 13px;
+  line-height: 1;
+}
+
+.voteIdeaBlock:last-child > .voteIdea{
+  margin-bottom: 0;
+}
+
+.voteButton-section {
+  border-top: 1px solid $storm-secondaryLightGrey;
+  padding: 10px;
+}
+
+.votingResults-ideas {
+  margin-bottom: 38px;
+}
+
+.yesButton {
+  background-color: $storm-green;
+  margin-right: 60px;
+}
+
+.noButton {
+  background-color: $storm-coral;
+}
+
+.yesButton, .noButton {
+  display: inline-block;
+  padding: 12px;
+  border-radius: 24px;
+  cursor: pointer;
+}
+
+.yesButton > i, .noButton > i {
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+  color: white;
+}

@@ -432,6 +432,7 @@
   -webkit-box-shadow: 0px 0px 6px -1px rgba(0, 0, 0, 0.35);
   -moz-box-shadow: 0px 0px 6px -1px rgba(0, 0, 0, 0.35);
   box-shadow: 0px 0px 6px -1px rgba(0, 0, 0, 0.35);
+  position: relative;
 }
 /**
   All code below transfered from OldCSS
@@ -480,6 +481,21 @@
 }
 
 .idea {
+  &:after {
+    transition: opacity .3s;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: "\f047";
+    font-family: FontAwesome;
+    font-size: 14px;
+    color: #b6b6b6;
+    padding: 5px;
+  }
+  &:hover:after {
+    opacity: 1;
+  }
   &.deleting {
     background-color: red;
   }

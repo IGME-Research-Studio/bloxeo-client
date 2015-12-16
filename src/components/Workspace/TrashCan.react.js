@@ -12,25 +12,15 @@ const TrashCan = React.createClass({
   propTypes: {
     connectDropTarget: PropTypes.func.isRequired,
   },
-  getInitialState: function() {
-    return {
-      hover: false,
-    };
-  },
-  _onMouseOff: function() {
-    this.setState({
-      hover: false,
-    });
-  },
   /**
    * Render TrashCan component as a DragTarget
    * @return {object}
    */
   render: function() {
-    const trashIcon = classNames('fa trashCan', { 'fa-trash-o': true, 'fa-trash': this.state.hover});
+    const trashIcon = classNames('fa fa-trash-o trashCan');
     const connectDropTarget = this.props.connectDropTarget;
     return connectDropTarget(
-      <i className={trashIcon} onMouseLeave={this._onMouseOff}></i>
+      <i className={trashIcon}></i>
     );
   },
 });
@@ -60,11 +50,6 @@ const collectionTarget = {
     if (idea.type === DnDTypes.COLLECTION) {
       StormActions.removeCollection(idea.id);
     }
-  },
-  hover: function(props, monitor, component) {
-    component.setState({
-      hover: true,
-    });
   },
 };
 

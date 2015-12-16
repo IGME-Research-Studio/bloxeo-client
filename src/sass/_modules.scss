@@ -7,7 +7,6 @@
 //import vars and mixins to use
 @import '_vars';
 @import '_mixins';
-
 .modalHeader {
   display: block;
   text-align: center;
@@ -17,14 +16,12 @@
   -moz-box-shadow: 0 1px 1px #888;
   -o-box-showdow: 0 1px 1px #888;
   box-shadow: 0 1px 1px #888;
-
   .modalTitle {
     display: inline-block;
     color: $storm-primary;
     width: 100%;
     padding: 10px 0;
   }
-
   .modalClose {
     display: inline-block;
     position: absolute;
@@ -37,27 +34,22 @@
 .modalContent {
   height: calc(100% - 160px);
   padding: 15px 30px;
-
   .modalBreak {
-    height:1px;
-    border-bottom:1px solid $storm-secondaryLightGrey;
+    height: 1px;
+    border-bottom: 1px solid $storm-secondaryLightGrey;
   }
-
   .modalSection {
     margin: 15px 0;
-
     .modalInput {
       width: 100%;
       padding: 6px 10px 5px 10px;
       border: 1px solid $storm-secondaryLightGrey;
       border-radius: 3px;
     }
-
     .modalUserText {
       display: inline-block;
       padding: 5px;
     }
-
     .modalUserIcon {
       display: inline-block;
       float: right;
@@ -83,16 +75,13 @@
   width: 100%;
   float: left;
   text-align: center;
-
   .modalTerms {
     text-align: center;
     padding: 0 30px 15px 30px;
-
     a {
       text-decoration: underline;
     }
   }
-
   .modalButton {
     width: 100%;
     padding: 15px 0;
@@ -111,17 +100,15 @@
   .sidebar-section {
     margin: 20px 0;
     /* Room Info Box */
-
     .room-name {
       font-size: 18px;
       line-height: 1;
       margin-bottom: 5px;
     }
-
     .room-description {
       @include font-light();
     }
-
+    /* Member List */
     .circleMemberIcon {
       width: 32px;
       height: 32px;
@@ -261,7 +248,7 @@
     border-radius: 5px;
     background-color: $storm-orange;
     /* hardcoded for now, colors will have to be associated with users */
-
+    
     &:nth-child(2) {
       background-color: $storm-cyan;
     }
@@ -566,9 +553,48 @@
   padding: 20px;
   color: #b6b6b6;
   border: 1px solid #e2e2e2;
+  background-color: $storm-workspace-bgColor;
 }
 
+/* RESULTS */
+
+.results {
+  padding: 60px 40px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  .resultContainer {
+    margin: 15px 90px 50px 0;
+    .resultGroup {
+      .resultGroupItem {
+        font-size: 25px;
+        text-align: center;
+        color: white;
+        background-color: MediumSeaGreen;
+        margin: 2px;
+        padding: 10px 30px;
+      }
+    }
+    .resultVotes {
+      color: $storm-primary;
+      margin-left: 5px;
+      .resultVotesStar {
+        color: gold;
+        font-size: 35px;
+        line-height: 1;
+        padding: 0 4px;
+        line-height: 0.8;
+      }
+    }
+  }
+}
+
+.resultsControls > a {
+  cursor: pointer;
+  margin-left: 25px;
+  color: dodgerblue;
+}
 /* Modals */
+
 .modalHeading {
   position: relative;
   font-size: 18px;
@@ -576,8 +602,8 @@
   background-color: $storm-darkGray;
   padding: 10px 0;
 }
-
 /* Voting */
+
 .votingModal {
   position: relative;
   background-color: white;
@@ -617,7 +643,7 @@
   line-height: 1;
 }
 
-.voteIdeaBlock:last-child > .voteIdea{
+.voteIdeaBlock:last-child > .voteIdea {
   margin-bottom: 0;
 }
 
@@ -639,21 +665,23 @@
   background-color: $storm-coral;
 }
 
-.yesButton, .noButton {
+.yesButton,
+.noButton {
   display: inline-block;
   padding: 12px;
   border-radius: 24px;
   cursor: pointer;
 }
 
-.yesButton > i, .noButton > i {
+.yesButton > i,
+.noButton > i {
   font-size: 24px;
   width: 24px;
   height: 24px;
   color: white;
 }
-
 /* Results */
+
 .results {
   display: flex;
   flex-direction: column;
@@ -741,38 +769,36 @@
   height: 14px;
   text-align: center;
 }
-
 /* Styles for landing page */
+
 .landingPage {
   height: 100vh;
 }
 
 .page1 {
   background-color: #fff;
-    .joinLinks {
-      p {
-        color:  #464a55;
-        font-size: 16px;
-        line-height: 20px;
-      }
+  .joinLinks {
+    p {
+      color: #464a55;
+      font-size: 16px;
+      line-height: 20px;
     }
-
-    .textCopy {
-      color: #474b55;
-      h1 {
-        font-size: 55px;
-        font-weight: 300;
-        line-height: 58px;
-      }
-
-      p {
-        font-size: 23px;
-        line-height: 28px;
-      }
+  }
+  .textCopy {
+    color: #474b55;
+    h1 {
+      font-size: 55px;
+      font-weight: 300;
+      line-height: 58px;
     }
+    p {
+      font-size: 23px;
+      line-height: 28px;
+    }
+  }
   .footer {
     background-color: #1cbbb4;
-    color:  #ffffff;
+    color: #ffffff;
     line-height: 48px;
     p {
       font-size: 16px;
@@ -785,18 +811,15 @@
   background-color: #1cbbb4;
   color: #ffffff;
   text-align: center;
-
   .images {
     width: 100%;
     margin-bottom: 85px;
-
     .laptopImg {
       width: 70%;
       margin: 0 auto;
     }
   }
   .textContainer {
-
     h1 {
       font-size: 45px;
       font-weight: 400;
@@ -811,6 +834,7 @@
     }
   }
 }
+
 .page3 {
   background-color: #282828;
   .images {
@@ -851,7 +875,6 @@
     .poweredByImg {
       height: 350px;
       width: 350px;
-
       &:nth-of-type(2) {
         margin: 0px 78px;
       }
@@ -863,12 +886,9 @@
   background-color: #474b55;
   color: #fff;
   text-align: center;
-
-  .contentContainer,
-  .content {
+  .contentContainer, .content {
     background-color: #474b55;
   }
-
   p {
     font-size: 16px;
     line-height: 20px;
@@ -882,7 +902,6 @@
     background-color: transparent;
     border: none;
     border-bottom: 2px solid grey;
-
     &:focus {
       outline: none;
       border-bottom: 2px solid #4b7df1;
@@ -897,10 +916,8 @@
     font-weight: 500;
     line-height: 48px;
   }
-
   .landingNav {
     list-style-type: none;
-
     li {
       color: #474b55;
       font-size: 20px;
@@ -914,8 +931,9 @@
   font-size: 20px;
   line-height: 45px;
   color: #fffcf0;
-  border-radius:3px;
+  border-radius: 3px;
 }
+
 .termsOfService {
   color: #4bc8f1;
 }

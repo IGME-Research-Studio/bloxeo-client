@@ -60,7 +60,7 @@ const LandingPage = React.createClass({
                       <CreateRoom />
                       <JoinRoom message={this.state.joinError} />
                       <p> By creating a room, you are agreeing to our
-                      (a bit unethical) <a className="termsOfService">Terms of Service</a></p>
+                       <a className="termsOfService">Terms of Service</a>.</p>
                     </div>
                   </div>
                 </div>
@@ -135,9 +135,7 @@ const LandingPage = React.createClass({
                   <input type="text" name="projectName" placeholder="What's your project name?"/>
                   <input type="text" name="projectName" placeholder="What's your name?"/>
                   <CreateRoom />
-                  <p> By creating a room you&rsquo;re agreeing to our <a className="termsOfService">Terms of Service </a>
-                  (It&rsquo;s a bit unethical).</p>
-                  <p className="NSA"> We&rsquo;re also selling your data to the NSA ;) </p>
+                  <p> By creating a room you&rsquo;re agreeing to our <a className="termsOfService">Terms of Service </a>.</p>
                  </div>
               </div>
             </div>

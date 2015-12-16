@@ -122,6 +122,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       };
       socket.emit(EVENT_API.GET_IDEAS, reqObj);
       socket.emit(EVENT_API.GET_COLLECTIONS, reqObj);
+      socket.emit(EVENT_API.GET_TIME_LEFT, reqObj);
       errorMsg = '';
       SocketStore.emitChange();
       // append the board id to the url upon joining a room if it is not already there
@@ -208,7 +209,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       console.log(res);
     })
     .catch((res) => {
-      console.error(`Error expiring timer: ${res.message}`);
+      console.error(`Error receiving time: ${res.message}`);
     });
   });
 
@@ -382,7 +383,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       {
         boardId: currentBoardId,
         timerLengthInMS: timeMS,
-        userToken: 'blah',
+        userToken: token,
       }
     );
   }
@@ -398,7 +399,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       {
         boardId: currentBoardId,
         eventId: currentEventId,
-        userToken: 'blah',
+        userToken: token,
       }
     );
   }
@@ -411,11 +412,10 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       EVENT_API.GET_TIME,
       {
         boardId: currentBoardId,
-        userToken: 'blah',
+        userToken: token,
       }
     );
   }
->>>>>>> Stashed changes
   // Set up action watchers
   AppDispatcher.register((action) => {
     switch (action.actionType) {

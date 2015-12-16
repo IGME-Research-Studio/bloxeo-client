@@ -96,6 +96,24 @@ const StormActions = {
     });
   },
 
+  /**
+   * Dispatch start server timer event
+   */
+  startTimer: function(timeMS) {
+    AppDispatcher.dispatch({
+      actionType: StormConstants.START_TIMER,
+      time: timeMS,
+    });
+  },
+  /**
+   * Dispatch disable server timer event
+   */
+  disableTimer: function() {
+    AppDispatcher.dispatch({
+      actionType: StormConstants.START_TIMER,
+    });
+  },
+
   collectionCreate: function(idea, left, top) {
     AppDispatcher.dispatch({
       actionType: StormConstants.COLLECTION_CREATE,

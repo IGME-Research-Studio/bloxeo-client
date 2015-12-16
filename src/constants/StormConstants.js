@@ -6,6 +6,9 @@ module.exports = {
   TIMER_COUNTDOWN: 'TIMER_COUNTDOWN',
   TIMER_PAUSE: 'TIMER_PAUSE',
   TIMER_CHANGE: 'TIMER_CHANGE',
+  START_TIMER: 'START_TIMER',
+  DISABLE_TIMER: 'DISABLE_TIMER',
+  GET_TIME_LEFT: 'GET_TIME_LEFT',
   // Idea constants
   IDEA_CREATE: 'IDEA_CREATE',
   // Collection Constants
@@ -23,7 +26,7 @@ module.exports = {
   STORE_WORKSPACE: 'STORE_WORKSPACE',
   STORE_MOVED_IDEA: 'STORE_MOVED_IDEA',
   // Server URL constants
-  SERVER_URL_DEV: 'http://storm-server-fun.herokuapp.com',
+  SERVER_URL_DEV: 'http://storm-server-will.herokuapp.com',
   SERVER_URL_PROD: 'http://storm-server-prod.herokuapp.com',
   SERVER_URL_REVAMP: 'http://storm-server-fun.herokuapp.com',
   API_VERSION: '/v1',

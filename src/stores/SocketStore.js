@@ -11,6 +11,7 @@ const UserStore      = require('./UserStore');
 // Init socket.io connection
 const socket = socketIO.connect(StormConstants.SERVER_URL_DEV);
 let currentBoardId = 0;
+let currentEventId = 0;
 let notReceived = true;
 let notReceivedBank = true;
 
@@ -64,6 +65,7 @@ function resolveSocketResponse(data) {
     if (!(data.code >= 400)) {
       resolve(data);
     } else {
+      console.log(data);
       reject(new Error(data.message));
     }
   });
@@ -165,6 +167,51 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       console.error(`Error receiving ideas: ${res}`);
     });
   });
+
+  socket.on(EVENT_API.STARTED_TIMER, (data) => {
+    // get boardId, eventId
+    resolveSocketResponse(data)
+    .then((res) => {
+      currentEventId = res.data.eventId;
+      console.log(res);
+    })
+    .catch((res) => {
+      console.error(`Error starting timer: ${res.message}`);
+    });
+  });
+  socket.on(EVENT_API.DISABLED_TIMER, (data) => {
+    // gets boardId, disabled bool (success)
+    resolveSocketResponse(data)
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((res) => {
+      console.error(`Error disabling timer: ${res.message}`);
+    });
+  });
+  socket.on(EVENT_API.TIMER_EXPIRED, (data) => {
+    // gets boardId, state (Object)
+    // state has createIdeas bool, createIdeaCollection bool, voting bool, results bool
+    resolveSocketResponse(data)
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((res) => {
+      console.error(`Error expiring timer: ${res.message}`);
+    });
+  });
+  socket.on(EVENT_API.RECEIVED_TIME, (data) => {
+    // gets back boardId, timeLeftInMS
+    // if timeLeftInMS = 0, Timer expired
+    resolveSocketResponse(data)
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((res) => {
+      console.error(`Error expiring timer: ${res.message}`);
+    });
+  });
+
   // Request Functions
   /**
    * Creates a user
@@ -324,6 +371,51 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
     );
   }
 
+  /**
+   * Starts the timer
+   * @param {number} timeMS : time in milliseconds
+   * @param {string} content : idea content
+   */
+  function startTimer(timeMS) {
+    socket.emit(
+      EVENT_API.START_TIMER,
+      {
+        boardId: currentBoardId,
+        timerLengthInMS: timeMS,
+        userToken: 'blah',
+      }
+    );
+  }
+
+  /**
+   * Disable the timer
+   * @param {number} index : collection index
+   * @param {string} content : idea content
+   */
+  function disableTimer() {
+    socket.emit(
+      EVENT_API.DISABLE_TIMER,
+      {
+        boardId: currentBoardId,
+        eventId: currentEventId,
+        userToken: 'blah',
+      }
+    );
+  }
+
+  /**
+   * Get time left in timer
+   */
+  function getTimeLeft() {
+    socket.emit(
+      EVENT_API.GET_TIME,
+      {
+        boardId: currentBoardId,
+        userToken: 'blah',
+      }
+    );
+  }
+>>>>>>> Stashed changes
   // Set up action watchers
   AppDispatcher.register((action) => {
     switch (action.actionType) {
@@ -355,6 +447,15 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       break;
     case StormConstants.SEPARATE_IDEAS:
       removeIdeaFromCollection(action.groupID, action.ideaContent);
+      break;
+    case StormConstants.START_TIMER:
+      startTimer(action.time);
+      break;
+    case StormConstants.DISABLE_TIMER:
+      disableTimer();
+      break;
+    case StormConstants.GET_TIME_LEFT:
+      getTimeLeft();
       break;
     }
   });

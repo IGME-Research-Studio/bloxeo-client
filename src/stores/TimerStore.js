@@ -159,10 +159,13 @@ function changeTimerState() {
 
     _totalTime = parseFloat((_time.minutes * 60)) + parseFloat(_time.seconds);
 
+    StormActions.startTimer(_totalTime * 1000);
+
     _timerState = _timerStates.adminRun;
     break;
   case _timerStates.adminRun:
     clearInterval(_timer);
+    StormActions.disableTimer();
     _timerState = _timerStates.adminAdd;
     break;
   }

@@ -3,17 +3,31 @@ const EventEmitter   = require('events').EventEmitter;
 const assign         = require('object-assign');
 const StormConstants = require('../constants/StormConstants');
 
+const VOTE_IDEAS_CHANGE_EVENT = 'VOTE_IDEAS_CHANGE_EVENT';
 const RESULTS_CHANGE_EVENT = 'RESULTS_CHANGE_EVENT';
 
+let _voteItems = {};
 let _results = [];
 
-const VotingResultsStore = assign({}, EventEmitter.prototype, {
+const VotingStore = assign({}, EventEmitter.prototype, {
+  getAllVoteItems: function() {
+    return _voteItems;
+  },
   /**
    * Get the entire array of collections
    * @return {array}
    */
   getResults: function() {
     return _results;
+  },
+  emitVoteIdeasChange: function() {
+    this.emit(VOTE_IDEAS_CHANGE_EVENT);
+  },
+  addVoteIdeasChangeListener: function(callback) {
+    this.on(VOTE_IDEAS_CHANGE_EVENT, callback);
+  },
+  removeVoteIdeasChangeListener: function(callback) {
+    this.removeListener(VOTE_IDEAS_CHANGE_EVENT, callback);
   },
   /**
    * Emit Results Change Event
@@ -45,11 +59,19 @@ AppDispatcher.register(function(action) {
       const result = action.results[i];
       _results.push(result);
     }
-    VotingResultsStore.emitResultsChange();
+    VotingStore.emitResultsChange();
+    break;
+  case StormConstants.STORE_RESULT:
+    _results = action.results;
+    VotingStore.emitResultsChange();
+    break;
+  case StormConstants.STORE_VOTE_ITEMS:
+    _voteItems = action.voteItems;
+    VotingStore.emitVoteIdeasChange();
     break;
   default:
     break;
   }
 });
 
-module.exports = VotingResultsStore;
+module.exports = VotingStore;

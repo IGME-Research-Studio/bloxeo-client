@@ -271,6 +271,32 @@ const StormActions = {
       actionType: StormConstants.GET_VOTING_ITEMS,
     });
   },
+
+  vote: function(collectionKey, increment) {
+    console.log(collectionKey);
+    console.log(increment);
+    AppDispatcher.dispatch({
+      actionType: StormConstants.VOTE,
+      increment: increment,
+      key: collectionKey,
+    });
+  },
+
+  storeVoteItems: function(voteItems) {
+    console.log(voteItems);
+    AppDispatcher.dispatch({
+      actionType: StormConstants.STORE_VOTE_ITEMS,
+      voteItems: voteItems,
+    });
+  },
+
+  storeResult: function(results) {
+    console.log(results);
+    AppDispatcher.dispatch({
+      actionType: StormConstants.STORE_RESULT,
+      results: results,
+    });
+  },
 };
 
 module.exports = StormActions;

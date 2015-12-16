@@ -5,6 +5,7 @@ const CollectionStore = require('../../stores/CollectionStore');
 const NavBarConstants = require('../../constants/NavBarConstants');
 const VoteButton = require('./VoteButton.react');
 const VoteCollection = require('./VoteCollection.react');
+const VotingStore = require('../../stores/VotingStore');
 
 /**
  * Component for voting 'Yes' or 'No' and displaying results
@@ -16,6 +17,7 @@ const VotingContent = React.createClass({
    */
   getInitialState: function() {
     return ({
+      voteItems: VotingStore.getAllVoteItems(),
       collections: CollectionStore.getAllCollections(),
       voteIndex: 0,
     });
@@ -24,12 +26,14 @@ const VotingContent = React.createClass({
    * Invoked before initial render occurs
    */
   componentDidMount: function() {
+    VotingStore.addVoteIdeasChangeListener(this._onChange);
     CollectionStore.addChangeListener(this._onChange);
   },
   /**
    * Invoked before component is unmounted from DOM
    */
   componentWillUnmount: function() {
+    VotingStore.removeVoteIdeasChangeListener(this._onChange);
     CollectionStore.removeChangeListener(this._onChange);
   },
   /**
@@ -118,6 +122,7 @@ const VotingContent = React.createClass({
       this.props.hideModal();
     } else {
       this.setState({voteIndex: this.state.voteIndex + 1});
+      StormActions.vote(collection.key, upvote);
     }
   },
   /**

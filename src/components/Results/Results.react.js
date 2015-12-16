@@ -4,16 +4,16 @@ const Masonry = require('react-masonry-component')(React);
 const Result = require('./Result.react');
 
 const BoardOptionsStore = require('../../stores/BoardOptionsStore');
-const VotingResultsStore = require('../../stores/VotingResultsStore');
+const VotingStore = require('../../stores/VotingStore');
 const StormActions = require('../../actions/StormActions');
 const NavBarConstants = require('../../constants/NavBarConstants');
 
 /**
- * Retrieve the current data from the VotingResultsStore
+ * Retrieve the current data from the VotingStore
  */
 function getStoreState() {
   return {
-    results: VotingResultsStore.getResults(),
+    results: VotingStore.getResults(),
     showReturnToWorkspace: false,
   };
 }
@@ -30,13 +30,13 @@ const Results = React.createClass({
     return getStoreState();
   },
   componentDidMount: function() {
-    VotingResultsStore.addResultsChangeListener(this._onChange);
+    VotingStore.addResultsChangeListener(this._onChange);
   },
   componentWillUnmount: function() {
-    VotingResultsStore.removeResultsChangeListener(this._onChange);
+    VotingStore.removeResultsChangeListener(this._onChange);
   },
   /**
-   * Event handler for 'change' events coming from the VotingResultsStore
+   * Event handler for 'change' events coming from the VotingStore
    */
   _onChange: function() {
     this.setState(getStoreState());

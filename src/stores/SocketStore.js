@@ -137,6 +137,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
   socket.on(EVENT_API.RECEIVED_COLLECTIONS, (data) => {
     resolveSocketResponse(data)
     .then((res) => {
+      console.log(res.data);
       if (notReceived) {
         StormActions.receivedCollections(res.data, notReceived);
         notReceived = false;
@@ -181,7 +182,8 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
   socket.on(EVENT_API.RECEIVED_VOTING_ITEMS, (data) => {
     resolveSocketResponse(data)
     .then((res) => {
-      console.log(res);
+      StormActions.storeVoteItems(res.data);
+      console.log(res.data);
     })
     .catch((res) => {
       console.error(`Error receiving readied user event: ${res}`);
@@ -197,9 +199,11 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       console.error(`Error receiving readied user event: ${res}`);
     });
   });
+
   socket.on(EVENT_API.RECEIVED_RESULTS, (data) => {
     resolveSocketResponse(data)
     .then((res) => {
+      StormActions.storeResult(res.data);
       console.log(res);
     })
     .catch((res) => {
@@ -417,10 +421,19 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       });
       break;
     case StormConstants.GET_VOTING_ITEMS:
-      console.log('get voting items', EVENT_API);
+      console.log('get voting items');
       socket.emit(EVENT_API.GET_VOTING_ITEMS, {
         boardId: currentBoardId,
         userToken: token,
+      });
+      break;
+    case StormConstants.VOTE:
+      console.log('voteeeee');
+      socket.emit(EVENT_API.VOTE, {
+        boardId: currentBoardId,
+        userToken: token,
+        key: action.key,
+        increment: action.increment,
       });
       break;
     default:

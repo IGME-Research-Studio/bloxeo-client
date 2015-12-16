@@ -122,7 +122,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       };
       socket.emit(EVENT_API.GET_IDEAS, reqObj);
       socket.emit(EVENT_API.GET_COLLECTIONS, reqObj);
-      socket.emit(EVENT_API.GET_TIME_LEFT, reqObj);
+      socket.emit(EVENT_API.GET_TIME, reqObj);
       errorMsg = '';
       SocketStore.emitChange();
       // append the board id to the url upon joining a room if it is not already there
@@ -174,6 +174,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
     resolveSocketResponse(data)
     .then((res) => {
       currentEventId = res.data.eventId;
+      StormActions.changeTimerState();
       console.log(res);
     })
     .catch((res) => {

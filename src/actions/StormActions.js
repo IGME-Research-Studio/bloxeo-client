@@ -94,6 +94,9 @@ const StormActions = {
     AppDispatcher.dispatch({
       actionType: StormConstants.TIMER_CHANGE,
     });
+    AppDispatcher.dispatch({
+      actionType: StormConstants.TIMER_SERVER_START,
+    });
   },
 
   /**

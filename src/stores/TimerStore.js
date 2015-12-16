@@ -2,6 +2,7 @@ const AppDispatcher  = require('../dispatcher/AppDispatcher');
 const StormConstants = require('../constants/StormConstants');
 const EventEmitter   = require('events').EventEmitter;
 const assign         = require('object-assign');
+const StormActions   = require('../actions/StormActions');
 
 const TIME_CHANGE_EVENT = 'time';
 const STATE_CHANGE_EVENT = 'TIMER_STATE';
@@ -19,6 +20,8 @@ const _timerStates = {
   adminAdd: 'ADMIN_addTimer',
   adminSet: 'ADMIN_setTimer',
   adminRun: 'ADMIN_runTimer',
+  userRun: 'USER_runTimer',
+  userNoTimer: 'USER_noTimer',
 };
 let _timerState = _timerStates.adminAdd;
 
@@ -94,6 +97,13 @@ const TimerStore = assign({}, EventEmitter.prototype, {
   removeStateListener: function(callback) {
     this.removeListener(STATE_CHANGE_EVENT, callback);
   },
+
+  /**
+   * Dispatch start timer server event
+   */
+  startServerTimer: function() {
+    StormActions.startTimer(_totalTime * 1000);
+  },
 });
 
 /**
@@ -159,14 +169,18 @@ function changeTimerState() {
 
     _totalTime = parseFloat((_time.minutes * 60)) + parseFloat(_time.seconds);
 
-    StormActions.startTimer(_totalTime * 1000);
-
     _timerState = _timerStates.adminRun;
     break;
   case _timerStates.adminRun:
     clearInterval(_timer);
     StormActions.disableTimer();
     _timerState = _timerStates.adminAdd;
+    break;
+  case _timerStates.userRun:
+    _timerState = _timerStates.userNoTimer;
+    break;
+  case _timerStates.userNoTimer:
+    _timerState = _timerStates.userRun;
     break;
   }
 }
@@ -183,6 +197,11 @@ AppDispatcher.register(function(action) {
   case StormConstants.TIMER_CHANGE:
     changeTimerState();
     TimerStore.emitStateChange();
+    break;
+  case StormConstants.TIMER_SERVER_START:
+    if (_timerState === _timerStates.adminRun) {
+      TimerStore.startServerTimer();
+    }
     break;
   }
 });

@@ -27,8 +27,16 @@ const NavBar = React.createClass({
     StormActions.selectTab(e.target.name);
   },
 
-  openRoomOptions: function() {
-    this.setState({ isOpen: true });
+  toggleRoomOptions: function() {
+    if (this.state.isOpen) {
+      this.setState({
+        isOpen: false,
+      });
+    } else {
+      this.setState({
+        isOpen: true,
+      });
+    }
   },
 
   closeRoomOptions: function() {
@@ -58,7 +66,25 @@ const NavBar = React.createClass({
         overflow: 'hidden',
       },
     };
-
+    const roomOptionsState = this.state.isOpen;
+    let cogStyle = {
+      WebkitTransform: 'rotate(0)',
+      msTransform: 'rotate(0)',
+      transform: 'rotate(0)',
+      WebkitTransition: 'all .2s',
+      msTransition: 'all .2s',
+      transition: 'all .2s',
+    };
+    if (roomOptionsState) {
+      cogStyle = {
+        WebkitTransform: 'rotate(18deg)',
+        msTransform: 'rotate(18deg)',
+        transform: 'rotate(18deg)',
+        WebkitTransition: 'all .2s',
+        msTransition: 'all .2s',
+        transition: 'all .2s',
+      };
+    }
     return (
       <div className="navBar">
         <a name={NavBarTypes.WORKSPACE_TAB}
@@ -77,7 +103,7 @@ const NavBar = React.createClass({
             onClick={this.selectTab}>
           Results
         </a>
-        <button onClick={this.openRoomOptions}>
+        <button onClick={this.toggleRoomOptions} style={cogStyle} className="cogButton">
           <FontAwesome name="cog" size="lg" />
         </button>
 

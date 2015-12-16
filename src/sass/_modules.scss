@@ -8,20 +8,6 @@
 @import '_vars';
 @import '_mixins';
 
-.button {
-  display: inline-block;
-  color: white;
-  background-color: cornflowerblue;
-  cursor: pointer;
-  padding: 10px 50px;
-  border-radius: 3px;
-  margin-top: 20px;
-  font-size: 14px;
-  &:hover {
-    color: white;
-  }
-}
-
 .modalHeader {
   display: block;
   text-align: center;
@@ -122,22 +108,20 @@
 #sidebar-info {
   color: white;
   padding: 30px 26px 0;
-
   .sidebar-section {
     margin: 20px 0;
-
     /* Room Info Box */
+
     #room-name {
       font-size: 18px;
       line-height: 1;
       margin-bottom: 5px;
     }
-
     #room-description {
       @include font-light();
     }
-
     /* Member List */
+
     .circleMemberIcon {
       width: 32px;
       height: 32px;
@@ -151,7 +135,6 @@
       border-radius: 50%;
       display: inline-block;
     }
-
     .circleMemberIcon:nth-child(2) {
       background-color: $storm-cyan;
     }
@@ -165,7 +148,6 @@
 .sidebar-create {
   display: flex;
   padding: 10px;
-
   .idea-create {
     padding: 0 10px;
     margin-right: 10px;
@@ -179,36 +161,31 @@
     outline: none;
     background-color: white;
   }
-
   .enterButton {
     background-color: $storm-green;
     padding: 5px 8.5px;
     border-radius: 2px;
     cursor: pointer;
-
     &.is-disabled {
       background-color: $storm-disabledGray;
       cursor: default;
     }
-
     i {
       color: white;
     }
   }
 }
-
 /* Timer */
+
 .timerBox {
   color: white;
   padding: 8px 10px 0;
-
   .timer {
     display: inline-block;
     margin-right: 10px;
     font-size: 10px;
     vertical-align: middle;
   }
-
   .progress {
     display: inline-block;
     width: 188px;
@@ -217,14 +194,12 @@
     background-color: $storm-blueGray;
     filter: brightness(100%);
     margin-bottom: 0;
-
     .progress-bar {
       background-color: $storm-coral;
       -webkit-transition: width 1s linear;
       transition: width 1s linear;
     }
   }
-
   .timer-btn {
     cursor: pointer;
     margin-right: 10px;
@@ -241,7 +216,6 @@
   text-align: center;
   margin: 15px 0;
   height: 70px;
-
   .callVoteButton {
     padding: 9px 20px;
     margin: 5px 0;
@@ -249,12 +223,10 @@
     font-size: 10px;
     background-color: $storm-green;
     text-transform: uppercase;
-
     &.is-disabled {
       background-color: $storm-blueGray;
     }
   }
-
   .waitingSection {
     font-size: 10px;
     margin-top: 7px;
@@ -262,25 +234,23 @@
       margin-left: 20px;
     }
   }
-
   .waitingText {
     margin-right: 14px;
   }
-
   .waitingCircle {
     width: 10px;
     height: 10px;
     margin-right: 5px;
     border-radius: 5px;
     background-color: $storm-orange;
-
     /* hardcoded for now, colors will have to be associated with users */
+
     &:nth-child(2) {
       background-color: $storm-cyan;
     }
   }
-
-  .waitingText, .waitingCircle {
+  .waitingText,
+  .waitingCircle {
     display: inline-block;
     vertical-align: middle;
   }
@@ -294,17 +264,14 @@
   z-index: 100;
   width: 100%;
   transition: width 0.5s ease-in-out;
-
   &.expanded {
     width: 200%;
   }
-
   .wordbankWrap {
     position: absolute;
     width: 100%;
     height: 100%;
     overflow: auto;
-
     .wordbankIdeas {
       position: absolute;
       width: 600px;
@@ -315,9 +282,28 @@
       -webkit-columns: auto 270px;
       -moz-columns: auto 270px;
       columns: auto 270px;
+      .bankCard {
+        color: white;
+        font-size: 13px;
+        padding: 8px 18px;
+        background-color: $storm-blueGray;
+        display: inline-block;
+        margin: 4px;
+        border-radius: 2px;
+        line-height: 1;
+        cursor: pointer;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        max-width: 230px;
+        overflow: hidden;
+        -o-transform: none !important;
+        -moz-transform: none !important;
+        -ms-transform: none !important;
+        -webkit-transform: none !important;
+        transform: none !important;
+      }
     }
   }
-
   .expandArrow {
     position: absolute;
     top: 45%;
@@ -353,9 +339,161 @@
 }
 
 .workspaceCard {
-  -webkit-box-shadow: 0px 0px 6px -1px rgba(0,0,0,0.35);
-     -moz-box-shadow: 0px 0px 6px -1px rgba(0,0,0,0.35);
-          box-shadow: 0px 0px 6px -1px rgba(0,0,0,0.35);
+  -webkit-box-shadow: 0px 0px 6px -1px rgba(0, 0, 0, 0.35);
+  -moz-box-shadow: 0px 0px 6px -1px rgba(0, 0, 0, 0.35);
+  box-shadow: 0px 0px 6px -1px rgba(0, 0, 0, 0.35);
+}
+/**
+  All code below transfered from OldCSS
+**/
+/* VOTING */
+
+.votingContent {
+  background-color: $storm-voting-bgColor;
+  padding: 110px 30px;
+  text-align: center;
+}
+
+.votingResults {
+  background-color: $storm-voting-bgColor;
+  padding: 40px;
+}
+
+.votingResults-ideas {
+  margin-bottom: 38px;
+}
+
+.yesButton {
+  background-color: green;
+  margin-right: 20px;
+}
+
+.noButton {
+  background-color: gray;
+}
+
+.noSelect {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.noMargin {
+  margin: 0;
+}
+
+.noPadding {
+  padding: 0;
+}
+
+.idea {
+  &.deleting {
+    background-color: red;
+  }
+}
+/* LANDING PAGE */
+
+.landingPage {
+  text-align: center;
+}
+/* NAVBAR */
+
+.navBar {
+  background-color: #2e373e;
+  .navBarTab {
+    text-align: center;
+    margin: 20px 0 0 14px;
+    border-radius: 3px 3px 0 0;
+    display: inline-block;
+    padding: 8px 33px;
+    font-size: 14px;
+    color: $storm-primary;
+    background-color: $storm-disabledGray;
+    cursor: pointer;
+  }
+  .btn-link {
+    color: $storm-primary;
+    &:hover, &:focus {
+      text-decoration: none;
+    }
+  }
+  #room-cog {
+    font-size: 15px;
+    padding: 17px 17px 0;
+    color: $storm-workspace-bgColor;
+    .caret {
+      display: none;
+    }
+  }
+}
+
+.dropdown-menu {
+  width: 200px;
+  .dropdown-item {
+    padding: 3px 20px;
+  }
+  .dropdown-text {
+    font-size: 10px;
+  }
+}
+/* WORKSPACE */
+
+.dragContainer,
+.workspace {
+  background-color: $storm-workspace-bgColor;
+}
+
+.workspace {
+  overflow: none;
+}
+
+.trashCan {
+  font-size: 35px;
+  padding: 20px;
+  color: #b6b6b6;
+  border: 1px solid #e2e2e2;
+}
+
+
+/* RESULTS */
+
+.results {
+  padding: 60px 40px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  .resultContainer {
+    margin: 15px 90px 50px 0;
+    .resultGroup {
+      .resultGroupItem {
+        font-size: 25px;
+        text-align: center;
+        color: white;
+        background-color: MediumSeaGreen;
+        margin: 2px;
+        padding: 10px 30px;
+      }
+    }
+    .resultVotes {
+      color: $storm-primary;
+      margin-left: 5px;
+      .resultVotesStar {
+        color: gold;
+        font-size: 35px;
+        line-height: 1;
+        padding: 0 4px;
+        line-height: 0.8;
+      }
+    }
+  }
+}
+
+.resultsControls > a {
+  cursor: pointer;
+  margin-left: 25px;
+  color: dodgerblue;
 }
 
 /* Modals */
@@ -530,4 +668,190 @@
   width: 14px;
   height: 14px;
   text-align: center;
+}
+
+/* Styles for landing page */
+.landingPage {
+  height: 100vh;
+}
+
+.page1 {
+  background-color: #fff;
+    .joinLinks {
+      p {
+        color:  #464a55;
+        font-size: 16px;
+        line-height: 20px;
+      }
+    }
+
+    .textCopy {
+      color: #474b55;
+      h1 {
+        font-size: 55px;
+        font-weight: 300;
+        line-height: 58px;
+      }
+
+      p {
+        font-size: 23px;
+        line-height: 28px;
+      }
+    }
+  .footer {
+    background-color: #1cbbb4;
+    color:  #ffffff;
+    line-height: 48px;
+    p {
+      font-size: 16px;
+      font-weight: 700;
+    }
+  }
+}
+
+.page2 {
+  background-color: #1cbbb4;
+  color: #ffffff;
+  text-align: center;
+
+  .images {
+    width: 100%;
+    margin-bottom: 85px;
+
+    .laptopImg {
+      width: 70%;
+      margin: 0 auto;
+    }
+  }
+  .textContainer {
+
+    h1 {
+      font-size: 45px;
+      font-weight: 400;
+      line-height: 50px;
+    }
+    p {
+      font-size: 23px;
+      line-height: 30px;
+      max-width: 1080px;
+      font-weight: 100;
+      margin: 0 auto;
+    }
+  }
+}
+.page3 {
+  background-color: #282828;
+  .images {
+    width: 768px;
+    max-width: 786px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    .whiteboardImg {
+      width: 100%;
+    }
+  }
+  .textContainer {
+    margin-right: 200px;
+    max-width: 320px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: white;
+    p {
+      font-size: 18px;
+    }
+  }
+}
+
+.page4 {
+  background-color: #fff;
+  .textContent {
+    text-align: center;
+    p {
+      font-size: 45px;
+      color: #4f4f4f;
+      @include font-light();
+    }
+  }
+  .images {
+    margin: 0 auto;
+    .poweredByImg {
+      height: 350px;
+      width: 350px;
+
+      &:nth-of-type(2) {
+        margin: 0px 78px;
+      }
+    }
+  }
+}
+
+.page5 {
+  background-color: #474b55;
+  color: #fff;
+  text-align: center;
+
+  .contentContainer,
+  .content {
+    background-color: #474b55;
+  }
+
+  p {
+    font-size: 16px;
+    line-height: 20px;
+  }
+  h1 {
+    font-size: 45px;
+    line-height: 55px;
+  }
+  input {
+    font-size: 20px;
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid grey;
+
+    &:focus {
+      outline: none;
+      border-bottom: 2px solid #4b7df1;
+    }
+  }
+}
+
+.header {
+  h1 {
+    color: #474b55;
+    font-size: 35px;
+    font-weight: 500;
+    line-height: 48px;
+  }
+
+  .landingNav {
+    list-style-type: none;
+
+    li {
+      color: #474b55;
+      font-size: 20px;
+      line-height: 48px;
+    }
+  }
+}
+
+.createRoomButton a,
+.joinRoomButton a {
+  font-size: 20px;
+  line-height: 45px;
+  color: #fffcf0;
+  border-radius:3px;
+}
+.termsOfService {
+  color: #4bc8f1;
+}
+
+.createRoomButton a {
+  background-color: #4b7df1;
+}
+
+.joinRoomButton a {
+  background-color: #ff1e78;
 }

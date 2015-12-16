@@ -18,6 +18,7 @@ const JoinRoom = React.createClass({
     const customStyles = {
       overlay: {
         backgroundColor: 'rgba(0, 0, 0, 0.7)',
+        zIndex: 2000,
       },
       content: {
         top: '50%',
@@ -36,7 +37,7 @@ const JoinRoom = React.createClass({
     };
 
     return (
-      <div className="joinRoom">
+      <div className="joinRoomButton">
         <a className="button" onClick={this.openModal}>Join a room</a>
 
         <Modal

@@ -7,9 +7,8 @@
 //import vars and mixins to use
 @import '_vars';
 @import '_mixins';
-
-
 /* SIDEBAR */
+
 #sidebar {
   display: flex;
   flex-direction: column;
@@ -18,7 +17,8 @@
   height: 100vh;
   background-color: $storm-blue;
   vertical-align: middle;
-  z-index:100;
+  position: relative;
+  z-index: 100;
 }
 
 .sidebar-brand {
@@ -28,8 +28,8 @@
 }
 
 .workspaceCard {
-  color:black;
-  font-size:18px;
+  color: black;
+  font-size: 18px;
   background-color: white;
   text-align: center;
   border-radius: 3px;
@@ -40,8 +40,8 @@
 }
 
 .ideaGroup {
-  display:inline-block;
-  position:absolute;
+  display: inline-block;
+  position: absolute;
   padding: 10px;
 }
 
@@ -55,13 +55,12 @@
   font-size: 15px;
   word-wrap: break-word;
   padding: 15px;
-
   &.deleting {
     background-color: red;
   }
 }
-
 /* Loading overlay */
+
 .loadingOverlay {
   background-color: #34578f;
   height: 100vh;
@@ -74,10 +73,9 @@
   justify-content: center;
   transition: top 1.0s ease-in-out;
   -webkit-transition: top 1.0s ease-in-out;
-  -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
-  -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
-  box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
-
+  -webkit-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
   &.active {
     top: 0px;
   }
@@ -96,41 +94,41 @@
       transform: scale(0.0);
       opacity: 0;
       animation: sizeSquare 3.2s ease infinite;
-
       /* delay each square */
-      &:nth-child(1){
+      
+      &:nth-child(1) {
         -webkit-animation-delay: 0.0s;
         animation-delay: 0.0s;
       }
-      &:nth-child(2){
+      &:nth-child(2) {
         -webkit-animation-delay: 0.2s;
         animation-delay: 0.2s;
       }
-      &:nth-child(3){
+      &:nth-child(3) {
         -webkit-animation-delay: 0.4s;
         animation-delay: 0.4s;
       }
-      &:nth-child(6){
+      &:nth-child(6) {
         -webkit-animation-delay: 0.6s;
         animation-delay: 0.6s;
       }
-      &:nth-child(5){
+      &:nth-child(5) {
         -webkit-animation-delay: 0.8s;
         animation-delay: 0.8s;
       }
-      &:nth-child(4){
+      &:nth-child(4) {
         -webkit-animation-delay: 1.0s;
         animation-delay: 1.0s;
       }
-      &:nth-child(7){
+      &:nth-child(7) {
         -webkit-animation-delay: 1.2s;
         animation-delay: 1.2s;
       }
-      &:nth-child(8){
+      &:nth-child(8) {
         -webkit-animation-delay: 1.4s;
         animation-delay: 1.4s;
       }
-      &:nth-child(9){
+      &:nth-child(9) {
         -webkit-animation-delay: 1.6s;
         animation-delay: 1.6s;
       }
@@ -138,7 +136,78 @@
   }
 }
 
+.appContainer {
+  display: flex;
+  flex-direction: row;
+  vertical-align: middle;
+  width: 100%;
+  height: 100%;
+}
+
+.navBar {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 2;
+  .navBarTab {
+    height: 35px;
+    width: 135px;
+    &:first-child {
+      margin-left: 40px;
+    }
+  }
+}
+/* WORKSPACE */
+
+.dragContainer,
+.workspace {
+  flex-grow: 1;
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+}
+
+.workspace {
+  height: 100vh;
+  width: 100%;
+}
+
+.trashCan {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  border-top-left-radius: 3px;
+}
+/* RESULTS */
+
+.results {
+  width: 100%;
+  height: 100vh;
+  .resultContainer {
+    display: inline-block;
+    vertical-align: top;
+    .resultGroup {
+      display: inline-block;
+    }
+    .resultVotes {
+      display: inline-block;
+      vertical-align: top;
+      .resultVotesStar {
+        color: gold;
+        font-size: 35px;
+        line-height: 1;
+        padding: 0 4px;
+        line-height: 0.8;
+      }
+      .resultVotesNumber {
+        position: relative;
+        top: -5px;
+      }
+    }
+  }
+}
 /* loading animation*/
+
 @-webkit-keyframes sizeSquare {
   0%, 15% {
     -webkit-transform: scale(0.0);
@@ -146,18 +215,338 @@
     transform: scale(0.0);
     opacity: 0;
   }
-
-  25%, 75% {
+  25%,
+  75% {
     -webkit-transform: scale(1.0);
     -ms-transform: scale(1.0);
     transform: scale(1.0);
     opacity: 1
   }
-
-  85%, 100% {
+  85%,
+  100% {
     -webkit-transform: scale(0.0);
     -ms-transform: scale(0.0);
     transform: scale(0.0);
     opacity: 0;
+  }
+  .resultsControls {
+    float: right;
+    margin-top: 40px;
+  }
+  .resultsHeading {
+    display: inline-block;
+  }
+}
+
+/* Landing pages */
+
+/* Styles for landing page */
+.page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* For all slides on landing page */
+.homeSlide {
+  position: absolute;
+  width: 100%;
+}
+
+/* Landing slides position and layering for parallax */
+#slide-1 {
+  z-index: 40;
+  top: 0;
+}
+#slide-2 {
+  z-index: 30;
+  margin-top: 100vh;
+}
+#slide-3 {
+  z-index: 10;
+  position: fixed;
+  top: 0px;
+}
+#slide-4 {
+  z-index: 30;
+  margin-top: 300vh;
+}
+#slide-5 {
+  z-index: 20;
+  margin-top: 400vh;
+}
+
+/* Centered landing content sections */
+.centered {
+  justify-content: center;
+}
+
+/* Landing content sections */
+.contentContainer {
+  display: flex;
+  height: calc(100vh - 50px);
+}
+
+/* Landing content sections displayed in a column */
+.column {
+  flex-direction: column !important;
+}
+/* Landing content sections displayed in a row */
+.row {
+  flex-direction: row !important;
+  margin: 0;
+}
+img {
+  vertical-align:bottom !important;
+}
+/* Landing slide1 content */
+.page1 {
+
+  /* Landing slide 1 header */
+  .header {
+    display: flex;
+    img {
+      width: 40px;
+      height: 40px;
+      position: relative;
+      top: 25px;
+      margin-right: 5px;
+    }
+    .landingNav {
+      margin: 0;
+      padding: 20px;
+
+      li {
+        display: inline-block;
+        padding: 0px 20px;
+      }
+    }
+  }
+
+  /* Full content excluding images */
+  .content {
+    display: flex;
+    position: relative;
+    text-align: left;
+    
+    .contentRow {
+      display: flex;
+      margin-top: 50px;
+    }
+    .joinLinks {
+      max-width: 275px;
+      p {
+        margin-top: 10px;
+      }
+    }
+
+    .textCopy {
+      max-width: 458px;
+    }
+  }
+
+  /* Cody and Doug images */
+  .images {
+    height: 100%;
+
+    .codyImg {
+      position: relative;
+      left: 0;
+      height: 100%;
+      bottom: 0;
+      padding-top: 24vh;
+    }
+    .dougImg {
+      position: relative;
+      height: 100%;
+      margin-left: 44px;
+      top: 0;
+      padding-bottom: 32vh;
+    }
+    .dougShoesImg {
+      bottom: 0;
+      position: relative;
+      width: 90px;
+      height: auto;
+    }
+  }
+
+  /* What is Bloxeo? Footer */
+  .footer {
+    height: 50px;
+    width: 100%;
+    text-align: center;
+    position: relative;
+  }
+}
+
+/* Landing slide 4 content */
+.page5 {
+  text-align: center;
+
+  .images {
+    .eggImg {
+      margin-top: 115px;
+      margin-bottom: 50px;
+    }
+  }
+  .textContent {
+    margin-bottom: 80px;
+  }
+  .NSA {
+    margin-top: 100px !important;
+  }
+  p {
+    width: 320px;
+    margin: 0 auto;
+    margin-top: 10px;
+  }
+
+  h1 {
+    margin: 0;
+  }
+
+  input {
+    width: 320px;
+    margin: 0 auto;
+    margin-top: 20px;
+    padding: 10px 0px;
+    display: block;
+  }
+
+  .createRoomButton a{
+    display: block;
+    margin: 0 auto;
+    margin-top: 40px;
+    width: 320px;
+  }
+}
+
+/* Landing create and join buttons */
+.createRoomButton a, 
+.joinRoomButton a {
+  display: block;
+  height: 48px;
+  margin-top: 20px;
+  border-radius: 3px;
+  text-align:center;
+  line-height: 45px;
+  color: white;
+}
+
+.idea {
+  font-size: 15px;
+  word-wrap: break-word;
+  padding: 15px;
+
+  &.deleting {
+    background-color: red;
+  }
+}
+
+
+/* Media queries for landing page */
+@media (max-width: 1440px) {
+  .dougShoesImg, 
+  .dougImg {
+    display: none;
+  }
+
+  .page3 {
+    .textContainer {
+      margin-right: 50px !important;
+    }
+  }
+  .page4 {
+    .poweredByImg {
+      width: 250px !important;
+      height: 250px !important;
+    }
+  }
+}
+
+@media (max-width: 1200px) {
+
+  .page1 {
+    .contentRow {
+      flex-direction: column !important;
+    }
+  }
+  .page2 {
+    .textContainer {
+      width: 100%;
+      padding: 0px 50px;
+      box-sizing: border-box;
+    }
+    .images {
+      .laptopImg {
+        width: 90% !important;
+      }
+    }
+  }
+
+  .page3 {
+    .contentContainer {
+      flex-direction: column !important;
+    }
+    .textContainer {
+      max-width: 100% !important;
+      margin-bottom: 50px;
+      padding: 0 5%;
+    }
+    .images {
+      width: 100% !important;
+      max-width: 100% !important;
+      .whiteboardImg {
+        width: 90%;
+        padding: 0 5%;
+      }
+    }
+  }
+  .page4 {
+    .textContent {
+      p {
+        font-size: 35px !important;
+      }
+    }
+    .poweredByImg {
+      display: block;
+      margin: 0 !important;
+    }
+  }
+}
+
+@media (max-width: 870px) {
+
+  .page1 {
+    .contentRow {
+      flex-direction: column !important;
+    }
+    .codyImg {
+      display: none;
+    }
+  }
+
+  .page2 {
+    .images {
+      margin-bottom: 0px !important;
+    }
+    .textContainer {
+      padding: 0px 20px !important
+      ;
+      h1 {
+        font-size: 30px !important;
+        line-height: 30px !important;
+      }
+      p {
+        font-size: 18px !important;
+      }
+    }
+  }
+  
+  .page5 {
+    .textContent {
+      font-size: 25px !important;
+    }
   }
 }

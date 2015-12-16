@@ -7,19 +7,6 @@
 //import vars and mixins to use
 @import '_vars';
 @import '_mixins';
-.button {
-  display: inline-block;
-  color: white;
-  background-color: cornflowerblue;
-  cursor: pointer;
-  padding: 10px 50px;
-  border-radius: 3px;
-  margin-top: 20px;
-  font-size: 14px;
-  &:hover {
-    color: white;
-  }
-}
 
 .modalHeader {
   display: block;
@@ -124,7 +111,7 @@
   .sidebar-section {
     margin: 20px 0;
     /* Room Info Box */
-    
+
     #room-name {
       font-size: 18px;
       line-height: 1;
@@ -134,7 +121,7 @@
       @include font-light();
     }
     /* Member List */
-    
+
     .circleMemberIcon {
       width: 32px;
       height: 32px;
@@ -257,7 +244,7 @@
     border-radius: 5px;
     background-color: $storm-orange;
     /* hardcoded for now, colors will have to be associated with users */
-    
+
     &:nth-child(2) {
       background-color: $storm-cyan;
     }
@@ -681,4 +668,190 @@
   width: 14px;
   height: 14px;
   text-align: center;
+}
+
+/* Styles for landing page */
+.landingPage {
+  height: 100vh;
+}
+
+.page1 {
+  background-color: #fff;
+    .joinLinks {
+      p {
+        color:  #464a55;
+        font-size: 16px;
+        line-height: 20px;
+      }
+    }
+
+    .textCopy {
+      color: #474b55;
+      h1 {
+        font-size: 55px;
+        font-weight: 300;
+        line-height: 58px;
+      }
+
+      p {
+        font-size: 23px;
+        line-height: 28px;
+      }
+    }
+  .footer {
+    background-color: #1cbbb4;
+    color:  #ffffff;
+    line-height: 48px;
+    p {
+      font-size: 16px;
+      font-weight: 700;
+    }
+  }
+}
+
+.page2 {
+  background-color: #1cbbb4;
+  color: #ffffff;
+  text-align: center;
+
+  .images {
+    width: 100%;
+    margin-bottom: 85px;
+
+    .laptopImg {
+      width: 70%;
+      margin: 0 auto;
+    }
+  }
+  .textContainer {
+
+    h1 {
+      font-size: 45px;
+      font-weight: 400;
+      line-height: 50px;
+    }
+    p {
+      font-size: 23px;
+      line-height: 30px;
+      max-width: 1080px;
+      font-weight: 100;
+      margin: 0 auto;
+    }
+  }
+}
+.page3 {
+  background-color: #282828;
+  .images {
+    width: 768px;
+    max-width: 786px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    .whiteboardImg {
+      width: 100%;
+    }
+  }
+  .textContainer {
+    margin-right: 200px;
+    max-width: 320px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: white;
+    p {
+      font-size: 18px;
+    }
+  }
+}
+
+.page4 {
+  background-color: #fff;
+  .textContent {
+    text-align: center;
+    p {
+      font-size: 45px;
+      color: #4f4f4f;
+      @include font-light();
+    }
+  }
+  .images {
+    margin: 0 auto;
+    .poweredByImg {
+      height: 350px;
+      width: 350px;
+
+      &:nth-of-type(2) {
+        margin: 0px 78px;
+      }
+    }
+  }
+}
+
+.page5 {
+  background-color: #474b55;
+  color: #fff;
+  text-align: center;
+
+  .contentContainer,
+  .content {
+    background-color: #474b55;
+  }
+
+  p {
+    font-size: 16px;
+    line-height: 20px;
+  }
+  h1 {
+    font-size: 45px;
+    line-height: 55px;
+  }
+  input {
+    font-size: 20px;
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid grey;
+
+    &:focus {
+      outline: none;
+      border-bottom: 2px solid #4b7df1;
+    }
+  }
+}
+
+.header {
+  h1 {
+    color: #474b55;
+    font-size: 35px;
+    font-weight: 500;
+    line-height: 48px;
+  }
+
+  .landingNav {
+    list-style-type: none;
+
+    li {
+      color: #474b55;
+      font-size: 20px;
+      line-height: 48px;
+    }
+  }
+}
+
+.createRoomButton a,
+.joinRoomButton a {
+  font-size: 20px;
+  line-height: 45px;
+  color: #fffcf0;
+  border-radius:3px;
+}
+.termsOfService {
+  color: #4bc8f1;
+}
+
+.createRoomButton a {
+  background-color: #4b7df1;
+}
+
+.joinRoomButton a {
+  background-color: #ff1e78;
 }

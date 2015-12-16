@@ -11,16 +11,17 @@
 @import '_mixins';
 
 body {
-  color: $storm-primary;
-  background-color: #fff;
-  overflow: hidden;
+	overflow: hidden;
+	height: 100vh;
   @include font-regular();
 }
-
 a:hover {
   text-decoration: none;
 }
 
 p {
   font-size: 14px;
+}
+html {
+	overflow: auto;
 }

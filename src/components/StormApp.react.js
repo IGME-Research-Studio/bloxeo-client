@@ -44,6 +44,10 @@ const StormApp = React.createClass({
     IdeaStore.addChangeListener(this._onChange);
     // start timer countdown
     StormActions.countdown();
+
+    const ideasElement = document.querySelector('body');
+    const hideScroll = 'overflow: hidden';
+    ideasElement.setAttribute('style', hideScroll);
   },
   componentWillUnmount: function() {
     BoardOptionsStore.removeNameListener(this._onChange);

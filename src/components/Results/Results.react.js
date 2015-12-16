@@ -1,4 +1,5 @@
 const React = require('react');
+const Masonry = require('react-masonry-component')(React);
 
 const Result = require('./Result.react');
 
@@ -87,44 +88,42 @@ const Results = React.createClass({
    */
   render: function() {
     const that = this;
-    const topResults = [];
-    const otherResults = [];
+    const numReturn = BoardOptionsStore.getNumReturnToWorkspace();
+    const results = this.state.results;
 
-    for (let i = 0; i < this.state.results.length; i++) {
-      if (i < BoardOptionsStore.getNumReturnToWorkspace()) {
-        topResults.push(this.state.results[i]);
+    results.sort(function(result1, result2) {
+      if (result1.collection.votes < result2.collection.votes) {
+        return 1;
+      } else if (result1.collection.votes === result2.collection.votes) {
+        return 0;
       } else {
-        otherResults.push(this.state.results[i]);
+        return -1;
       }
-    }
+    });
+
+    const resultElements = results.map(function(ideaCollection, i) {
+      return (
+        <Result collection={ideaCollection.collection}
+          handleSelect={that.handleSelect}
+          selectable={i < numReturn ? false : true}
+          key={i} />
+      );
+    });
 
     return (
       <div className="results">
-        <div>
-          <h2 className="resultsHeading">The results are in!</h2>
-          <div className="resultsControls">
-            <a onClick={this.returnToWorkspace}
-                className={
-                  this.state.showReturnToWorkspace ? '' : 'is-disabled'
-                }>
-              Return to Workspace
-            </a>
-          </div>
+        <h2 className="resultsHeading">Results</h2>
+        <div className="resultsRoomName">
+          {BoardOptionsStore.getRoomName()}
         </div>
-        <p>Top 3</p>
-        {topResults.map(function(ideaCollection, i) {
-          return (
-            <Result collection={ideaCollection.collection}
-                handleSelect={that.handleSelect} key={i} />
-          );
-        })}
-        <p>Other Results</p>
-        {otherResults.map(function(ideaCollection, i) {
-          return (
-            <Result collection={ideaCollection.collection}
-                handleSelect={that.handleSelect} key={i} />
-          );
-        })}
+        <div className="resultsVoteTime">
+          Voting Results for 11:00am on 11/2/15
+        </div>
+        <div className="resultsColumns">
+          <Masonry>
+            {resultElements}
+          </Masonry>
+        </div>
       </div>
     );
   },

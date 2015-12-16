@@ -18,6 +18,7 @@ const CreateRoom = React.createClass({
     const customStyles = {
       overlay: {
         backgroundColor: 'rgba(0, 0, 0, 0.7)',
+        zIndex: 2000,
       },
       content: {
         top: '50%',

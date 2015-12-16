@@ -1,29 +1,32 @@
-const Modal = require('boron/FadeModal');
 const React = require('react');
+const Modal = require('react-modal');
 const VotingContent = require('./VotingContent.react');
+const CollectionStore = require('../../stores/CollectionStore');
+const StormConstants = require('../../constants/StormConstants.js');
 
 /**
  * Component including a Vote button that opens the Voting modal
  */
 const VotingModal = React.createClass({
+  getInitialState: function() {
+    return {
+      showModal: false,
+    };
+  },
   /**
    * Show voting modal
    */
   showModal: function() {
-    this.refs.modal.show();
+    const collections = CollectionStore.getAllCollections();
+    if (Object.keys(collections).length > 0) {
+      this.setState({showModal: true});
+    }
   },
   /**
    * Hide voting modal
    */
   hideModal: function() {
-    this.refs.modal.hide();
-    this.uncheck();
-  },
-  /**
-   * Uncheck the 'Ready to Vote' checkbox
-   */
-  uncheck: function() {
-    this.refs.checkbox.checked = false;
+    this.setState({showModal: false});
   },
   /**
    * Render VotingModal component
@@ -41,8 +44,10 @@ const VotingModal = React.createClass({
           <span className="waitingCircle"></span>
         </div>
 
-        <Modal ref="modal" onHide={this.uncheck}>
-          <div className="votingContent">
+        <Modal isOpen={this.state.showModal}
+          style={StormConstants.CUSTOM_MODAL_STYLES}
+          onClick={this.hideModal}>
+          <div className="votingModal">
             <VotingContent hideModal={this.hideModal} />
           </div>
         </Modal>

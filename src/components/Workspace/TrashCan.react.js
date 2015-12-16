@@ -17,7 +17,7 @@ const TrashCan = React.createClass({
    * @return {object}
    */
   render: function() {
-    const trashIcon = classNames('fa fa-trash-o trashCan'); /* FIX , { 'fa-trash-o': true, 'fa-trash': drop}); */
+    const trashIcon = classNames('fa fa-trash-o trashCan');
     const connectDropTarget = this.props.connectDropTarget;
     return connectDropTarget(
       <i className={trashIcon}></i>

@@ -11,6 +11,11 @@ const RoomName = React.createClass({
       isEditing: false,
     };
   },
+  componentDidUpdate: function() {
+    if (this.state.isEditing) {
+      document.getElementsByClassName('room-name')[0].focus();
+    }
+  },
   /**
    * Enable editing mode on double click
    */
@@ -32,29 +37,29 @@ const RoomName = React.createClass({
    */
   _onKeyDown: function(event) {
     if (event.keyCode === ENTER_KEY_CODE) {
-      // check if room name is blank
-      if (!this.state.value) {
-        this.setState({
-          value: this.state.name,
-          isEditing: false,
-        });
-        return;
-      } else {
-        this._onSave();
-      }
+      this._onSave();
     }
   },
   /**
    * Handle save and update room name
    */
   _onSave: function() {
-    // save room name to StormStore
-    StormActions.changeRoomName(this.state.value);
-    // update room name view
-    this.setState({
-      name: this.state.value,
-      isEditing: false,
-    });
+    // check if room name is blank
+    if (!this.state.value) {
+      this.setState({
+        value: this.state.name,
+        isEditing: false,
+      });
+      return;
+    } else {
+      // save room name to StormStore
+      StormActions.changeRoomName(this.state.value);
+      // update room name view
+      this.setState({
+        name: this.state.value,
+        isEditing: false,
+      });
+    }
   },
   /**
    * @return {object}
@@ -64,9 +69,11 @@ const RoomName = React.createClass({
       return (
         <input
           type="text"
+          className="roomInfoInput room-name"
           value={this.state.value}
           onChange={this._onChange}
-          onKeyDown={this._onKeyDown} />
+          onKeyDown={this._onKeyDown}
+          onBlur={this._onSave} />
       );
     } else {
       return (

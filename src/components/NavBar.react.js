@@ -77,9 +77,9 @@ const NavBar = React.createClass({
             onClick={this.selectTab}>
           Results
         </a>
-        <button onClick={this.openRoomOptions}>
+        <a id="room-cog" onClick={this.openRoomOptions}>
           <FontAwesome name="cog" size="lg" />
-        </button>
+        </a>
 
         <Modal
           isOpen={this.state.isOpen}

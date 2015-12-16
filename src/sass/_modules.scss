@@ -7,6 +7,7 @@
 //import vars and mixins to use
 @import '_vars';
 @import '_mixins';
+
 .modalHeader {
   display: block;
   text-align: center;
@@ -108,7 +109,14 @@
     .room-description {
       @include font-light();
     }
-    /* Member List */
+    .roomInfoInput {
+      color: $storm-primary;
+      width: 100%;
+      padding: 0 3px;
+      margin-bottom: 5px;
+      border: 0;
+      border-radius: 2px;
+    }
     .circleMemberIcon {
       width: 32px;
       height: 32px;
@@ -147,7 +155,6 @@
     border: none;
     outline: none;
     background-color: white;
-
     &.is-disabled {
       background-color: $storm-disabledGray;
       cursor: default;
@@ -180,7 +187,6 @@
     }
   }
 }
-/* Timer */
 
 .timerBox {
   color: white;
@@ -220,7 +226,7 @@
 .sidebar-voteSection {
   text-align: center;
   margin: 15px 0;
-  height: 70px;
+  height: 60px;
   .callVoteButton {
     padding: 9px 20px;
     margin: 5px 0;
@@ -248,7 +254,6 @@
     border-radius: 5px;
     background-color: $storm-orange;
     /* hardcoded for now, colors will have to be associated with users */
-    
     &:nth-child(2) {
       background-color: $storm-cyan;
     }
@@ -344,25 +349,20 @@
 
 .roomOptions {
   width: 250px;
-
   .optionContent {
     padding: 20px;
-
     .optionTitle {
       margin-bottom: 20px;
     }
-
     .optionSection {
       vertical-align: middle;
       margin: 15px 0;
       height: 26px;
-
       .optionText {
         display: inline-block;
         font-size: 10px;
         width: 150px;
       }
-
       .optionInput {
         text-align: center;
         display: inline-block;
@@ -377,7 +377,6 @@
   }
   .optionFooter {
     width: 100%;
-
     .optionButton {
       text-transform: uppercase;
       width: 100%;
@@ -398,7 +397,6 @@
   float: right;
   cursor: pointer;
   margin: 10px 8px;
-
   .toggleRadio {
     width: 18px;
     height: 7px;
@@ -411,7 +409,6 @@
       background-color: $storm-disabledGray;
     }
   }
-
   .toggleSlider {
     position: absolute;
     top: -3px;
@@ -519,9 +516,11 @@
     }
   }
   #room-cog {
+    float: right;
     font-size: 15px;
     padding: 17px 17px 0;
     color: $storm-workspace-bgColor;
+    cursor: pointer;
     .caret {
       display: none;
     }

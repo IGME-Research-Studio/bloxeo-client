@@ -1,12 +1,9 @@
 const React = require('react');
-const Bootstrap = require('react-bootstrap');
+const Modal = require('react-modal');
 const FontAwesome = require('react-fontawesome');
-const NavBarTypes = require('../constants/NavBarConstants');
 const StormActions = require('../actions/StormActions');
-
-const DropdownButton = Bootstrap.DropdownButton;
-const MenuItem = Bootstrap.MenuItem;
-const cogIcon = <FontAwesome name="cog" size="lg" />;
+const NavBarTypes = require('../constants/NavBarConstants');
+const RoomOptions = require('./Modal/RoomOptions.react');
 
 /**
  * Navigation Bar Component
@@ -17,9 +14,10 @@ const NavBar = React.createClass({
    * @return {object} - initial state object
    */
   getInitialState: function() {
-    return ({
+    return {
       selectedTab: NavBarTypes.WORKSPACE_TAB,
-    });
+      isOpen: false,
+    };
   },
   /**
    * Select the tab that was clicked
@@ -28,6 +26,14 @@ const NavBar = React.createClass({
   selectTab: function(e) {
     StormActions.selectTab(e.target.name);
   },
+
+  openRoomOptions: function() {
+    this.setState({ isOpen: true });
+  },
+
+  closeRoomOptions: function() {
+    this.setState({ isOpen: false });
+  },
   /**
    * Render NavBar component
    * @return {object}
@@ -35,6 +41,23 @@ const NavBar = React.createClass({
   render: function() {
     const tabClass = 'navBarTab';
     const selectedTabClass = tabClass + ' is-selected';
+    const customStyles = {
+      overlay: {
+        backgroundColor: 'rgba(255, 255, 255 0)',
+      },
+      content: {
+        top: '44px',
+        left: 'auto',
+        right: '0',
+        bottom: 'auto',
+        width: '250px',
+        padding: '0',
+        border: '0',
+        borderRadius: '2px',
+        boxShadow: '-1px 1px 1px #ddd',
+        overflow: 'hidden',
+      },
+    };
 
     return (
       <div className="navBar">
@@ -54,46 +77,16 @@ const NavBar = React.createClass({
             onClick={this.selectTab}>
           Results
         </a>
-        <DropdownButton bsStyle="link" id="room-cog" title={cogIcon}
-        style={
-          {
-            float: 'right',
-            margin: '1px 0',
-          }
-        } pullRight>
-          <MenuItem header>Room Settings</MenuItem>
-          <li role="presentation" className="dropdown-item">
-            <input type="checkbox" />
-            <span className="dropdown-text">Choose color</span>
-          </li>
-          <MenuItem divider />
-          <li role="presentation" className="dropdown-item">
-            <input type="checkbox" />
-            <span className="dropdown-text">Allow invitations</span>
-          </li>
-          <MenuItem divider />
-          <li role="presentation" className="dropdown-item">
-            <input type="checkbox" />
-            <span className="dropdown-text">Disable timer restriction</span>
-          </li>
-          <MenuItem divider />
-          <li role="presentation" className="dropdown-item">
-            <input type="text"
-            style={
-              {
-                width: '30px',
-                border: 'none',
-                borderBottom: '1px solid',
-              }
-            } />
-            <span className="dropdown-text">Number of top results kept</span>
-          </li>
-          <MenuItem divider />
-          <li role="presentation" className="dropdown-item">
-            <input type="checkbox" />
-            <span className="dropdown-text">Vote initiated by admin only</span>
-          </li>
-        </DropdownButton>
+        <button onClick={this.openRoomOptions}>
+          <FontAwesome name="cog" size="lg" />
+        </button>
+
+        <Modal
+          isOpen={this.state.isOpen}
+          onRequestClose={this.closeRoomOptions}
+          style={customStyles}>
+          <RoomOptions />
+        </Modal>
       </div>
     );
   },

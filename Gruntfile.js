@@ -23,10 +23,19 @@ module.exports = function (grunt) {
         src: 'src/index.html',
         dest: 'build/index.html'
       },
+      landing: {
+        src: 'src/landing.html',
+        dest: 'build/landing.html'
+      },
       trashIcon: {
         src: 'assets/trashCanIcon.png',
         dest: 'build/assets/trashCanIcon.png'
-      }
+      }, 
+      images: {
+        expand: true,
+        src: 'assets/*.png',
+        dest: 'build/'
+      },
     },
     // Compile sass to css
     sass: {
@@ -86,7 +95,7 @@ module.exports = function (grunt) {
 
   // Load plugins
   require('load-grunt-tasks')(grunt);
-
+  
   grunt.registerTask('default', ['lint', 'build', 'test']);
 
   grunt.registerTask('build-dev', ['clean', 'browserify:dev', 'copy', 'sass']);

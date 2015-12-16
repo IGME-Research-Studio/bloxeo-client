@@ -47,7 +47,7 @@ const IdeaCreate = React.createClass({
         <input
           type="text"
           maxLength="30"
-          className="idea-create"
+          className={isTimerDisabled ? 'idea-create is-disabled' : 'idea-create'}
           placeholder="Idea spew!"
           value={this.state.value}
           onChange={this._onChange}

@@ -5,6 +5,7 @@ const CollectionStore   = require('../stores/CollectionStore');
 const TimerStore        = require('../stores/TimerStore');
 const IdeaStore         = require('../stores/IdeaStore');
 
+const LoadingOverlay  = require('./Loading.react');
 const NavBar          = require('./NavBar.react');
 const Results         = require('./Results/Results.react');
 const Sidebar         = require('./Sidebar/Sidebar.react');
@@ -43,6 +44,10 @@ const StormApp = React.createClass({
     IdeaStore.addChangeListener(this._onChange);
     // start timer countdown
     StormActions.countdown();
+
+    const ideasElement = document.querySelector('body');
+    const hideScroll = 'overflow: hidden';
+    ideasElement.setAttribute('style', hideScroll);
   },
   componentWillUnmount: function() {
     BoardOptionsStore.removeNameListener(this._onChange);
@@ -66,6 +71,7 @@ const StormApp = React.createClass({
   render: function() {
     return (
       <div className="appContainer">
+        <LoadingOverlay disabled={false}/>
         <Sidebar room={this.state.room} time={this.state.time} timerStatus={this.state.timerStatus} ideas={this.state.ideas} timerWidth={this.state.timerWidth}/>
         <div className="dragContainer">
           <NavBar selectedTab={this.state.tab} />

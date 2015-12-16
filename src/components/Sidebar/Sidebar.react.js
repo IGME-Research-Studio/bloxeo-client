@@ -13,18 +13,18 @@ const Sidebar = React.createClass({
    */
   render: function() {
     return (
-      <div id="sidebar">
-        <div id="sidebar-info">
+      <div className="sidebar">
+        <div className="sidebar-info">
           <Brand />
           <RoomInfoBox room={this.props.room} />
           <MembersList />
           <VotingModal />
         </div>
-        <Wordbank data={this.props.ideas}/>
+        <Wordbank data={this.props.ideas} />
         <div>
           <TimerBox time={this.props.time}
             timerStatus={this.props.timerStatus}
-            timerWidth={this.props.timerWidth}/>
+            timerWidth={this.props.timerWidth} />
           <IdeaCreate timerStatus={this.props.timerStatus} />
         </div>
       </div>

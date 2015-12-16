@@ -5,12 +5,56 @@ const socketIO       = require('socket.io-client');
 const _              = require('lodash');
 const reqwest        = require('reqwest');
 const Promise        = require('bluebird');
+const assign         = require('object-assign');
+const EventEmitter   = require('events').EventEmitter;
+const UserStore      = require('./UserStore');
 // Init socket.io connection
 const socket = socketIO.connect(StormConstants.SERVER_URL_DEV);
 let currentBoardId = 0;
 let notReceived = true;
 let notReceivedBank = true;
 
+let token = '';
+let errorMsg = '';
+const ERROR_CHANGE_EVENT = 'JOIN_ERROR';
+const VALIDATE_ERROR = 'VALIDATE_ERROR';
+const SocketStore = assign({}, EventEmitter.prototype, {
+  valid: true,
+  /**
+   * Get join error message
+   * @return {array}
+   */
+  getErrorMessage: function() {
+    return errorMsg;
+  },
+  emitChange: function() {
+    this.emit(ERROR_CHANGE_EVENT);
+  },
+  emitValidError: function() {
+    this.emit(VALIDATE_ERROR);
+  },
+  /**
+   * Add a change listener
+   * @param {function} callback - event callback function
+   */
+  addErrorListener: function(callback) {
+    this.on(ERROR_CHANGE_EVENT, callback);
+  },
+  /**
+   * Remove a change listener
+   * @param {function} callback - callback to be removed
+   */
+  removeErrorListener: function(callback) {
+    this.removeListener(ERROR_CHANGE_EVENT, callback);
+  },
+  addValidateListener: function(callback) {
+    this.on(VALIDATE_ERROR, callback);
+    if (!this.valid) this.emit(VALIDATE_ERROR);
+  },
+  removeValidateListener: function(callback) {
+    this.removeListener(VALIDATE_ERROR, callback);
+  },
+});
 /**
  * Checks a socket response for an error
  * @param {object} data: response data
@@ -24,14 +68,11 @@ function resolveSocketResponse(data) {
     }
   });
 }
-
 socket.on('connect', () => {
   socket.emit('GET_CONSTANTS');
 });
-
 socket.on('RECEIVED_CONSTANTS', (body) => {
   const { EVENT_API, REST_API } = body;
-
   /**
    * Checks to update the client to the server
    */
@@ -39,9 +80,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
   //   socket.emit(EVENT_API.GET_IDEAS, {boardId: currentBoardId});
   //   socket.emit(EVENT_API.GET_COLLECTIONS, {boardId: currentBoardId});
   // }
-  // window.setInterval(updateClient, 10000);
-
-  // // turn REST_API into route templates
+  // turn REST_API into route templates
   const Routes = _.mapValues(REST_API, (route) => {
     return _.template(StormConstants.SERVER_URL_DEV + route[1]);
   });
@@ -51,7 +90,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
     resolveSocketResponse(data)
     .then((res) => {
       StormActions.receivedCollections(
-        _.omit(res.data, ['top', 'left']),
+        _.omit(res.data, ['top', 'left', 'key']),
         false
       );
     })
@@ -75,11 +114,24 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
   socket.on(EVENT_API.JOINED_ROOM, (data) => {
     resolveSocketResponse(data)
     .then(() => {
-      socket.emit(EVENT_API.GET_IDEAS, {boardId: currentBoardId});
-      socket.emit(EVENT_API.GET_COLLECTIONS, {boardId: currentBoardId});
+      const reqObj = {
+        boardId: currentBoardId,
+        userToken: token,
+      };
+      socket.emit(EVENT_API.GET_IDEAS, reqObj);
+      socket.emit(EVENT_API.GET_COLLECTIONS, reqObj);
+      errorMsg = '';
+      SocketStore.emitChange();
+      // append the board id to the url upon joining a room if it is not already there
+      if (window.location.hash.split('?')[0] !== '#/workSpace') {
+        const newUrl = window.location.href.split('?')[0] + 'workSpace?roomId=' + currentBoardId;
+        window.location.href = newUrl;
+      }
     })
-    .catch(() => {
+    .catch((res) => {
       console.error(`Error joining a room: ${res}`);
+      errorMsg = res.message;
+      SocketStore.emitChange();
     });
   });
   socket.on(EVENT_API.RECEIVED_COLLECTIONS, (data) => {
@@ -94,7 +146,6 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
     .catch((res) => {
       console.error(`Error receiving collections: ${res}`);
     });
-
   });
   socket.on(EVENT_API.RECEIVED_IDEAS, (data) => {
     resolveSocketResponse(data)
@@ -113,20 +164,73 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
     });
   });
   // Request Functions
-  // Initialize ideas an collections
+  /**
+   * Creates a user
+   * @param {string} name
+   */
+  function createUser(name) {
+    return new Promise((resolve, reject) => {
+      if (!UserStore.getUserToken()) {
+        reqwest({
+          url: Routes.createUser(),
+          method: REST_API.createUser[0],
+          data: { username: name },
+          success: (res) => {
+            // store user stuff
+            UserStore.setUserData(res, name);
+            token = res;
+            resolve(res);
+          },
+          error: () => {
+            reject(new Error('User Creation Failed'));
+          },
+        });
+      } else {
+        token = UserStore.getUserToken();
+        resolve(token);
+      }
+    });
+  }
+  /**
+   * Validates a user token
+   */
+  function validateUser() {
+    return new Promise((resolve, reject) => {
+      if (UserStore.getUserToken()) {
+        reqwest({
+          url: Routes.validateUser(),
+          method: REST_API.validateUser[0],
+          data: { userToken: UserStore.getUserToken()},
+          success: () => {
+            console.log(UserStore.getUserToken());
+            token = UserStore.getUserToken();
+            SocketStore.valid = true;
+            resolve(true);
+          },
+          error: () => {
+            UserStore.clearUserData();
+            SocketStore.valid = false;
+            reject(new Error('User did not validate'));
+          },
+        });
+      } else {
+        reject(new Error('No cached user data'));
+      }
+    });
+  }
   /**
    * Joins board of given id
    * @param {string} boardId
    */
   function joinBoard(boardId) {
+    notReceived = true;
     currentBoardId = boardId;
-    // append the board id to the url upon joining a room if it is not already there
-    if (window.location.hash.split('?')[0] !== '#/workSpace') {
-      const newUrl = window.location.href.split('?')[0] + 'workSpace?roomId=' + currentBoardId;
-      window.location.href = newUrl;
-    }
-
-    socket.emit(EVENT_API.JOIN_ROOM, {boardId: currentBoardId});
+    socket.emit(
+      EVENT_API.JOIN_ROOM,
+      {
+        boardId: currentBoardId,
+        userToken: token,
+      });
   }
   /**
    * Create new board
@@ -135,8 +239,8 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
     reqwest({
       url: Routes.createBoard(),
       method: REST_API.createBoard[0],
+      data: { userToken: token },
       success: (res) => {
-        // set url
         joinBoard(res.boardId);
       },
     });
@@ -151,6 +255,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       {
         boardId: currentBoardId,
         content: content,
+        userToken: token,
       }
     );
   }
@@ -164,6 +269,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       {
         boardId: currentBoardId,
         content: content,
+        userToken: token,
         top: top,
         left: left,
       }
@@ -178,6 +284,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       EVENT_API.DESTROY_COLLECTION,
       {
         boardId: currentBoardId,
+        userToken: token,
         key: _key,
       }
     );
@@ -194,6 +301,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
         boardId: currentBoardId,
         key: _key,
         content: content,
+        userToken: token,
       }
     );
   }
@@ -208,6 +316,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       {
         boardId: currentBoardId,
         content: content,
+        userToken: token,
         key: _key,
       }
     );
@@ -217,10 +326,12 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
   AppDispatcher.register((action) => {
     switch (action.actionType) {
     case StormConstants.CREATE_BOARD:
-      createBoard();
+      createUser(action.userName)
+      .then(() => { createBoard();});
       break;
     case StormConstants.JOIN_BOARD:
-      joinBoard(action.boardId);
+      createUser(action.userName)
+      .then(() => { joinBoard(action.boardId);});
       break;
     case StormConstants.GET_IDEAS:
       socket.emit(EVENT_API.GET_IDEAS, {boardId: currentBoardId });
@@ -245,9 +356,15 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       break;
     }
   });
-  // if page is on the workspace, join the room on page load
-  if (window.location.hash.split('?')[0] === '#/workSpace') {
-    const roomid = window.location.hash.split('=')[1];
-    joinBoard(roomid);
-  }
+  validateUser()
+  .then(() => {
+    // if page is on the workspace, join the room on page load
+    if (window.location.hash.split('?')[0] === '#/workSpace') {
+      const roomid = window.location.hash.split('=')[1];
+      joinBoard(roomid);
+    }
+  })
+  .catch(() => { SocketStore.emitValidError();});
 });
+
+module.exports = SocketStore;

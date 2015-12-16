@@ -22,7 +22,7 @@ module.exports = {
   STORE_WORKSPACE: 'STORE_WORKSPACE',
   STORE_MOVED_IDEA: 'STORE_MOVED_IDEA',
   // Server URL constants
-  SERVER_URL_DEV: 'http://storm-server-stage.herokuapp.com',
+  SERVER_URL_DEV: 'http://storm-server-fun.herokuapp.com',
   SERVER_URL_PROD: 'http://storm-server-prod.herokuapp.com',
   SERVER_URL_REVAMP: 'http://storm-server-fun.herokuapp.com',
   API_VERSION: '/v1',
@@ -39,4 +39,20 @@ module.exports = {
   REMOVED_COLLECTION: 'REMOVED_COLLECTION',
   MODIFIED_COLLECTION: 'MODIFIED_COLLECTION',
   ADDED_COLLECTION: 'ADDED_COLLECTION',
+  CUSTOM_MODAL_STYLES: {
+    content: {
+      padding: '0',
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      transform: 'translate(-50%, -50%)',
+      border: '0',
+      borderRadius: '3px',
+    },
+    overlay: {
+      backgroundColor: 'rgba(51, 51, 51, 0.6)',
+      zIndex: '900',
+    },
+  },
 };

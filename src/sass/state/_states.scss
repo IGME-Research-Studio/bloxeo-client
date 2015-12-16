@@ -1,3 +1,17 @@
 //import vars and mixins to use
 @import '../_vars';
 @import '../_mixins';
+
+.resultContainer.selectable {
+  &.is-deselected {
+    background-color: $storm-disabledGray;
+
+    .resultIdea {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .resultVotesNumber, .resultPlusIcon {
+      color: $storm-disabledGray;
+    }
+  }
+}

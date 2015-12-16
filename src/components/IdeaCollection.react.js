@@ -34,7 +34,7 @@ const IdeaCollection = React.createClass({
   },
   _style: function() {
     const ss = this.squareSize();
-    const width = (ss * 160) + 24;
+    const width = (ss * 125) + (ss * 14);
 
     const styles = {
       WebkitTransform: `translateX(${this.props.left - width / 2}px)
@@ -43,11 +43,11 @@ const IdeaCollection = React.createClass({
         translateY(${this.props.top - this.state.height / 2}px)`,
       width: `${width}px`, // width of card + collection padding
       WebkitColumnCount: `${ss}`,
-      WebkitColumnGap: `10px`,
+      WebkitColumnGap: `2px`,
       MozColumnCount: `${ss}`,
-      MozColumnGap: `10px`,
+      MozColumnGap: `2px`,
       ColumnCount: `${ss}`,
-      ColumnGap: `10px`,
+      ColumnGap: `2px`,
       height: `auto`,
     };
     return styles;
@@ -57,7 +57,7 @@ const IdeaCollection = React.createClass({
     let value = 0;
     if (this.props.ideas.content.length > 0) { // TODO remove when empty collections are fixed
       this.props.ideas.content.forEach(function(item) {
-        if (item.text.length > 15) {
+        if (item.text.length > 18) {
           value += 1;
         } else {
           value += 0.5;

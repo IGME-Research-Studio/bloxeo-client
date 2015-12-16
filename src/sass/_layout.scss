@@ -152,9 +152,6 @@
   .navBarTab {
     height: 35px;
     width: 135px;
-    &:first-child {
-      margin-left: 40px;
-    }
   }
 }
 /* WORKSPACE */
@@ -237,72 +234,77 @@
     display: inline-block;
   }
 }
-
-/* Landing pages */
-
 /* Styles for landing page */
+
 .page {
   height: 100vh;
   display: flex;
   flex-direction: column;
 }
-
 /* For all slides on landing page */
+
 .homeSlide {
   position: absolute;
   width: 100%;
 }
-
 /* Landing slides position and layering for parallax */
+
 #slide-1 {
   z-index: 40;
   top: 0;
 }
+
 #slide-2 {
   z-index: 30;
   margin-top: 100vh;
 }
+
 #slide-3 {
   z-index: 10;
   position: fixed;
   top: 0px;
 }
+
 #slide-4 {
   z-index: 30;
   margin-top: 300vh;
 }
+
 #slide-5 {
   z-index: 20;
   margin-top: 400vh;
 }
-
 /* Centered landing content sections */
+
 .centered {
   justify-content: center;
 }
-
 /* Landing content sections */
+
 .contentContainer {
   display: flex;
   height: calc(100vh - 50px);
 }
-
 /* Landing content sections displayed in a column */
+
 .column {
   flex-direction: column !important;
 }
 /* Landing content sections displayed in a row */
+
 .row {
   flex-direction: row !important;
   margin: 0;
 }
+
 img {
-  vertical-align:bottom !important;
+  vertical-align: bottom !important;
 }
 /* Landing slide1 content */
-.page1 {
 
+.page1 {
   /* Landing slide 1 header */
+  
   .header {
     display: flex;
     img {
@@ -315,20 +317,18 @@ img {
     .landingNav {
       margin: 0;
       padding: 20px;
-
       li {
         display: inline-block;
         padding: 0px 20px;
       }
     }
   }
-
   /* Full content excluding images */
+  
   .content {
     display: flex;
     position: relative;
     text-align: left;
-    
     .contentRow {
       display: flex;
       margin-top: 50px;
@@ -339,16 +339,14 @@ img {
         margin-top: 10px;
       }
     }
-
     .textCopy {
       max-width: 458px;
     }
   }
-
   /* Cody and Doug images */
+  
   .images {
     height: 100%;
-
     .codyImg {
       position: relative;
       left: 0;
@@ -370,8 +368,8 @@ img {
       height: auto;
     }
   }
-
   /* What is Bloxeo? Footer */
+  
   .footer {
     height: 50px;
     width: 100%;
@@ -379,11 +377,10 @@ img {
     position: relative;
   }
 }
-
 /* Landing slide 4 content */
+
 .page5 {
   text-align: center;
-
   .images {
     .eggImg {
       margin-top: 115px;
@@ -401,11 +398,9 @@ img {
     margin: 0 auto;
     margin-top: 10px;
   }
-
   h1 {
     margin: 0;
   }
-
   input {
     width: 320px;
     margin: 0 auto;
@@ -413,23 +408,22 @@ img {
     padding: 10px 0px;
     display: block;
   }
-
-  .createRoomButton a{
+  .createRoomButton a {
     display: block;
     margin: 0 auto;
     margin-top: 40px;
     width: 320px;
   }
 }
-
 /* Landing create and join buttons */
-.createRoomButton a, 
+
+.createRoomButton a,
 .joinRoomButton a {
   display: block;
   height: 48px;
   margin-top: 20px;
   border-radius: 3px;
-  text-align:center;
+  text-align: center;
   line-height: 45px;
   color: white;
 }
@@ -438,20 +432,17 @@ img {
   font-size: 15px;
   word-wrap: break-word;
   padding: 15px;
-
   &.deleting {
     background-color: red;
   }
 }
-
-
 /* Media queries for landing page */
+
 @media (max-width: 1440px) {
-  .dougShoesImg, 
+  .dougShoesImg,
   .dougImg {
     display: none;
   }
-
   .page3 {
     .textContainer {
       margin-right: 50px !important;
@@ -466,7 +457,6 @@ img {
 }
 
 @media (max-width: 1200px) {
-
   .page1 {
     .contentRow {
       flex-direction: column !important;
@@ -484,7 +474,6 @@ img {
       }
     }
   }
-
   .page3 {
     .contentContainer {
       flex-direction: column !important;
@@ -517,7 +506,6 @@ img {
 }
 
 @media (max-width: 870px) {
-
   .page1 {
     .contentRow {
       flex-direction: column !important;
@@ -526,14 +514,12 @@ img {
       display: none;
     }
   }
-
   .page2 {
     .images {
       margin-bottom: 0px !important;
     }
     .textContainer {
-      padding: 0px 20px !important
-      ;
+      padding: 0px 20px !important;
       h1 {
         font-size: 30px !important;
         line-height: 30px !important;
@@ -543,7 +529,6 @@ img {
       }
     }
   }
-  
   .page5 {
     .textContent {
       font-size: 25px !important;

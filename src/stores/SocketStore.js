@@ -274,8 +274,8 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       {
         boardId: currentBoardId,
         userToken: token,
-      });
-    }
+      }
+    );
   }
   /**
    * Create new board
@@ -287,7 +287,6 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       data: { userToken: token },
       success: (res) => {
         joinBoard(res.boardId);
-        StormActions.hideLoading();
       },
     });
   }

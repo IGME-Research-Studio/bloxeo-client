@@ -2,7 +2,6 @@ const React = require('react');
 
 const BoardOptionsStore = require('../stores/BoardOptionsStore');
 const CollectionStore   = require('../stores/CollectionStore');
-const TimerStore        = require('../stores/TimerStore');
 const IdeaStore         = require('../stores/IdeaStore');
 
 const LoadingOverlay  = require('./Loading.react');
@@ -22,13 +21,10 @@ const HTML5Backend    = require('react-dnd-html5-backend');
  */
 function getStormState() {
   return {
-    timerStatus: TimerStore.getTimerStatus(),
     groups: CollectionStore.getAllCollections(),
     ideas: IdeaStore.getAllIdeas(),
     room: BoardOptionsStore.getRoomData(),
     tab: BoardOptionsStore.getSelectedTab(),
-    time: TimerStore.getTime(),
-    timerWidth: TimerStore.getTimerWidth(),
   };
 }
 
@@ -40,7 +36,6 @@ const StormApp = React.createClass({
     BoardOptionsStore.addNameListener(this._onChange);
     BoardOptionsStore.addTabChangeListener(this._onChange);
     CollectionStore.addChangeListener(this._onChange);
-    TimerStore.addChangeListener(this._onChange);
     IdeaStore.addChangeListener(this._onChange);
     // start timer countdown
     StormActions.countdown();
@@ -53,7 +48,6 @@ const StormApp = React.createClass({
     BoardOptionsStore.removeNameListener(this._onChange);
     BoardOptionsStore.removeTabChangeListener(this._onChange);
     CollectionStore.removeChangeListener(this._onChange);
-    TimerStore.removeChangeListener(this._onChange);
     IdeaStore.removeChangeListener(this._onChange);
   },
   /**

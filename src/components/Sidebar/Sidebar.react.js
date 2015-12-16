@@ -2,7 +2,6 @@ const React = require('react');
 const Brand = require('./Brand.react');
 const RoomInfoBox = require('./RoomInfoBox.react');
 const MembersList = require('./MembersList.react');
-const TimerBox = require('./TimerBox.react');
 const Wordbank = require('./Wordbank.react');
 const IdeaCreate = require('./IdeaCreate.react');
 const VotingModal = require('../Voting/VotingModal.react');
@@ -22,9 +21,6 @@ const Sidebar = React.createClass({
         </div>
         <Wordbank data={this.props.ideas} />
         <div>
-          <TimerBox time={this.props.time}
-            timerStatus={this.props.timerStatus}
-            timerWidth={this.props.timerWidth} />
           <IdeaCreate timerStatus={this.props.timerStatus} />
         </div>
       </div>

@@ -18,8 +18,8 @@ const VotingModal = React.createClass({
    */
   showModal: function() {
     StormActions.readyUser();
-    StormActions.getVotingItems();
-    this.setState({showModal: true});
+    // StormActions.getVotingItems();
+    // this.setState({showModal: true});
   },
   /**
    * Hide voting modal

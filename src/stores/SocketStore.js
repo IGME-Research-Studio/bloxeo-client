@@ -171,13 +171,14 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
     resolveSocketResponse(data)
     .then((res) => {
       console.log(res);
+      StormActions.getVotingItems();
     })
     .catch((res) => {
       console.error(`Error receiving readied user event: ${res}`);
     });
   });
 
-  socket.on(EVENT_API.RECIEVED_VOTING_ITEMS, (data) => {
+  socket.on(EVENT_API.RECEIVED_VOTING_ITEMS, (data) => {
     resolveSocketResponse(data)
     .then((res) => {
       console.log(res);
@@ -196,14 +197,22 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       console.error(`Error receiving readied user event: ${res}`);
     });
   });
-
-  socket.on(EVENT_API.RECIEVED_RESULTS, (data) => {
+  socket.on(EVENT_API.RECEIVED_RESULTS, (data) => {
     resolveSocketResponse(data)
     .then((res) => {
       console.log(res);
     })
     .catch((res) => {
       console.error(`Error receiving readied user event: ${res}`);
+    });
+  });
+  socket.on(EVENT_API.RECEIVED_STATE, (data) => {
+    resolveSocketResponse(data)
+    .then((res) => {
+      console.log('state', res);
+    })
+    .catch((res) => {
+      console.error(`Error receiving state: ${res}`);
     });
   });
 
@@ -267,6 +276,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
    * @param {string} boardId
    */
   function joinBoard(boardId) {
+    console.log(token);
     notReceived = true;
     currentBoardId = boardId;
     socket.emit(
@@ -400,11 +410,18 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       removeIdeaFromCollection(action.groupID, action.ideaContent);
       break;
     case StormConstants.READY_USER:
-      socket.emit(EVENT_API.READY_USER, {boardId: currentBoardId});
+      console.log('ready');
+      socket.emit(EVENT_API.READY_USER, {
+        boardId: currentBoardId,
+        userToken: token,
+      });
       break;
     case StormConstants.GET_VOTING_ITEMS:
-      console.log('get voting items');
-      socket.emit(EVENT_API.GET_VOTING_ITEMS, {boardId: currentBoardId});
+      console.log('get voting items', EVENT_API);
+      socket.emit(EVENT_API.GET_VOTING_ITEMS, {
+        boardId: currentBoardId,
+        userToken: token,
+      });
       break;
     default:
       break;

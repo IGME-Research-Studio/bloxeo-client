@@ -6,6 +6,8 @@ module.exports = {
   TIMER_PAUSE: 'TIMER_PAUSE',
   END_LOAD_ANIMATION: 'END_LOAD_ANIMATION',
   HIDE_LOADING: 'HIDE_LOADING',
+  READY_USER: 'READY_USER',
+  GET_VOTING_ITEMS: 'GET_VOTING_ITEMS',
   // Idea constants
   IDEA_CREATE: 'IDEA_CREATE',
   // Collection Constants
@@ -23,7 +25,7 @@ module.exports = {
   STORE_WORKSPACE: 'STORE_WORKSPACE',
   STORE_MOVED_IDEA: 'STORE_MOVED_IDEA',
   // Server URL constants
-  SERVER_URL_DEV: 'http://storm-server-fun.herokuapp.com',
+  SERVER_URL_DEV: 'http://127.0.0.1:1337', // 'http://storm-server-fun.herokuapp.com',
   SERVER_URL_PROD: 'http://storm-server-prod.herokuapp.com',
   SERVER_URL_REVAMP: 'http://storm-server-fun.herokuapp.com',
   API_VERSION: '/v1',

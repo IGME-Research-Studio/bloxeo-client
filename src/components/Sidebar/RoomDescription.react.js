@@ -61,11 +61,19 @@ const RoomDesciption = React.createClass({
   render: function() {
     if (this.state.isEditing) {
       return (
-        <textarea defaultValue={this.state.value} onChange={this._onChange} onKeyDown={this._onKeyDown}></textarea>
+        <textarea
+          defaultValue={this.state.value}
+          onChange={this._onChange}
+          onKeyDown={this._onKeyDown}>
+        </textarea>
       );
     } else {
       return (
-        <div id="room-description" onDoubleClick={this._onDoubleClick}>{this.state.description}</div>
+        <div
+          className="room-description"
+          onDoubleClick={this._onDoubleClick}>
+          {this.state.description}
+        </div>
       );
     }
   },

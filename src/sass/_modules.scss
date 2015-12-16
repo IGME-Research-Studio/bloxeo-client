@@ -383,7 +383,7 @@
 .voteProgress {
   position: absolute;
   right: 0;
-  color: $storm-lightGray;
+  color: $storm-secondaryLightGrey;
   font-size: 12px;
   padding: 5px 10px 0 0;
 }
@@ -399,7 +399,7 @@
 
 .voteIdea {
   display: inline-block;
-  background-color: $storm-paleGray;
+  background-color: $storm-lightGray;
   padding: 7px 13px;
   border-radius: 3px;
   margin-bottom: 7px;
@@ -412,7 +412,7 @@
 }
 
 .voteButton-section {
-  border-top: 1px solid $storm-lightGray;
+  border-top: 1px solid $storm-secondaryLightGrey;
   padding: 10px;
 }
 

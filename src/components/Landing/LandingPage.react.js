@@ -45,7 +45,7 @@ const LandingPage = React.createClass({
                 <div className="content column centered">
                   <div className="header">
                   <img className="poweredByImg" src="assets/bloxeo.png" />
-                    <h1 className="bloxeoTitle"> Bloxeo </h1>
+                    <h1 className="bloxeoTitle"> bloxeo </h1>
                     <ul className="landingNav">
                       <li className="landingNavEl"> Learn </li>
                       <li className="landingNavEl"> Blog </li>
@@ -82,7 +82,7 @@ const LandingPage = React.createClass({
                   <img className="laptopImg" src="assets/Laptop.png" />
                 </div>
                 <div className="textContainer">
-                  <h1> this is bloxeo </h1>
+                  <h1> This is Bloxeo </h1>
                   <p> Whether you need a new product, a sweet hackathon idea,
                    or you just want to make the world a better place, bloxeo
                    can help. Gather your team to create ideas and group them

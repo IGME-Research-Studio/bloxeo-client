@@ -97,9 +97,28 @@
 .sidebar-info {
   color: white;
   padding: 30px 26px 0;
+  .sidebar-input {
+    &:before {
+      content: "\f040";
+      font-family: FontAwesome;
+      position: absolute;
+      left: 0;
+      margin: 13px 5px;
+      font-size: 12px;
+    }
+    &:after {
+      content: "\f00c";
+      font-family: FontAwesome;
+      font-size: 12px;
+      position: absolute;
+      right: 0;
+      margin: -30px 5px;
+    }
+  }
   .sidebar-section {
     margin: 20px 0;
     /* Room Info Box */
+    
     .room-name {
       font-size: 18px;
       line-height: 1;
@@ -109,6 +128,7 @@
       @include font-light();
     }
     /* Member List */
+    
     .circleMemberIcon {
       width: 32px;
       height: 32px;
@@ -147,11 +167,9 @@
     border: none;
     outline: none;
     background-color: white;
-
     &.is-disabled {
       background-color: $storm-disabledGray;
       cursor: default;
-
       &::-webkit-input-placeholder {
         color: white;
       }
@@ -344,25 +362,20 @@
 
 .roomOptions {
   width: 250px;
-
   .optionContent {
     padding: 20px;
-
     .optionTitle {
       margin-bottom: 20px;
     }
-
     .optionSection {
       vertical-align: middle;
       margin: 15px 0;
       height: 26px;
-
       .optionText {
         display: inline-block;
         font-size: 10px;
         width: 150px;
       }
-
       .optionInput {
         text-align: center;
         display: inline-block;
@@ -377,7 +390,6 @@
   }
   .optionFooter {
     width: 100%;
-
     .optionButton {
       text-transform: uppercase;
       width: 100%;
@@ -398,7 +410,6 @@
   float: right;
   cursor: pointer;
   margin: 10px 8px;
-
   .toggleRadio {
     width: 18px;
     height: 7px;
@@ -411,7 +422,6 @@
       background-color: $storm-disabledGray;
     }
   }
-
   .toggleSlider {
     position: absolute;
     top: -3px;
@@ -555,7 +565,6 @@
   border: 1px solid #e2e2e2;
   background-color: $storm-workspace-bgColor;
 }
-
 /* RESULTS */
 
 .results {

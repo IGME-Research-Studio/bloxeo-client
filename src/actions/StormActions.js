@@ -259,19 +259,27 @@ const StormActions = {
       ideas: ideas,
     });
   },
-
+  /**
+   * Dispatch event to mark user as ready
+   */
   readyUser: function() {
     AppDispatcher.dispatch({
       actionType: StormConstants.READY_USER,
     });
   },
-
+  /**
+   * Dispatch event to get voting items from the server
+   */
   getVotingItems: function() {
     AppDispatcher.dispatch({
       actionType: StormConstants.GET_VOTING_ITEMS,
     });
   },
-
+  /**
+   * Dispatch event to process a vote to the server
+   * @param {string} collectionKey - the key of the collection voted on
+   * @param {boolean} increment - true denotes increment vote count by 1
+   */
   vote: function(collectionKey, increment) {
     console.log(collectionKey);
     console.log(increment);
@@ -281,7 +289,12 @@ const StormActions = {
       key: collectionKey,
     });
   },
-
+  /**
+   * Dispatch event to store vote items recieved from the Server in
+   * VotingStore
+   * @param {object} voteItems - an object containing vote items, this
+   * should be the same format as idea collections
+   */
   storeVoteItems: function(voteItems) {
     console.log(voteItems);
     AppDispatcher.dispatch({
@@ -289,7 +302,18 @@ const StormActions = {
       voteItems: voteItems,
     });
   },
-
+  /**
+   * Dispatch event to the Server to get results
+   */
+  getResults: function() {
+    AppDispatcher.dispatch({
+      actionType: StormConstants.GET_RESULTS,
+    });
+  },
+  /**
+   * Store results retrieved from the Server in VotingStore
+   * @param {array} results - An array of result objects
+   */
   storeResult: function(results) {
     console.log(results);
     AppDispatcher.dispatch({

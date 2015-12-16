@@ -427,6 +427,9 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
         userToken: token,
       });
       break;
+    case StormConstants.GET_RESULTS:
+      console.log('get resultsss');
+      socket.emit(EVENT_API.GET_RESULTS, {boardId: currentBoardId});
     case StormConstants.VOTE:
       console.log('voteeeee');
       socket.emit(EVENT_API.VOTE, {

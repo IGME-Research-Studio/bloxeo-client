@@ -29,9 +29,15 @@ const Results = React.createClass({
   getInitialState: function() {
     return getStoreState();
   },
+  /**
+   * Invoked before initial render occurs
+   */
   componentDidMount: function() {
     VotingStore.addResultsChangeListener(this._onChange);
   },
+  /**
+   * Invoked before component is unmounted from DOM
+   */
   componentWillUnmount: function() {
     VotingStore.removeResultsChangeListener(this._onChange);
   },

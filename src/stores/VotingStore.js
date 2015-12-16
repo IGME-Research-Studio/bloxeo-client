@@ -10,6 +10,10 @@ let _voteItems = {};
 let _results = [];
 
 const VotingStore = assign({}, EventEmitter.prototype, {
+  /**
+   * Get the entire array of vote items
+   * @return {object} voteItems - an object containing vote items
+   */
   getAllVoteItems: function() {
     return _voteItems;
   },
@@ -20,12 +24,23 @@ const VotingStore = assign({}, EventEmitter.prototype, {
   getResults: function() {
     return _results;
   },
+  /**
+   * Emit Vote Ideas change event
+   */
   emitVoteIdeasChange: function() {
     this.emit(VOTE_IDEAS_CHANGE_EVENT);
   },
+  /**
+   * Add vote ideas change listener
+   * @param {function} callback - event callback function
+   */
   addVoteIdeasChangeListener: function(callback) {
     this.on(VOTE_IDEAS_CHANGE_EVENT, callback);
   },
+  /**
+   * Remove vote ideas change listener
+   * @param {function} callback - event callback function
+   */
   removeVoteIdeasChangeListener: function(callback) {
     this.removeListener(VOTE_IDEAS_CHANGE_EVENT, callback);
   },

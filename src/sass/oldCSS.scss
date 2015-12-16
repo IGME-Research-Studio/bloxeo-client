@@ -56,46 +56,7 @@ p {
 }
 /* NAVBAR */
 
-.navBar {
-  position: absolute;
-  top: 0;
-  width: 100%;
-  background-color: #2e373e;
-  z-index: 2;
-  .navBarTab {
-    height: 35px;
-    width: 135px;
-    text-align: center;
-    margin: 20px 0 0 14px;
-    border-radius: 3px 3px 0 0;
-    display: inline-block;
-    padding: 8px 33px;
-    font-size: 14px;
-    color: $storm-primary;
-    background-color: $storm-disabledGray;
-    cursor: pointer;
-    &:first-child {
-      margin-left: 40px;
-    }
-    &.is-selected {
-      background-color: $workspace-bgColor;
-    }
-  }
-  .btn-link {
-    color: $primary-color;
-    &:hover, &:focus {
-      text-decoration: none;
-    }
-  }
-  #room-cog {
-    font-size: 15px;
-    padding: 17px 17px 0;
-    color: $workspace-bgColor;
-    .caret {
-      display: none;
-    }
-  }
-}
+
 /* dropdown menu */
 
 .dropdown-menu {

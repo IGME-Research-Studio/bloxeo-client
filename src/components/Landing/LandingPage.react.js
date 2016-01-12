@@ -45,7 +45,7 @@ const LandingPage = React.createClass({
                 <div className="content column centered">
                   <div className="header">
                   <img className="poweredByImg" src="assets/bloxeo.png" />
-                    <h1 className="bloxeoTitle"> Bloxeo </h1>
+                    <h1 className="bloxeoTitle"> bloxeo </h1>
                     <ul className="landingNav">
                       <li className="landingNavEl"> Learn </li>
                       <li className="landingNavEl"> Blog </li>
@@ -60,7 +60,7 @@ const LandingPage = React.createClass({
                       <CreateRoom />
                       <JoinRoom message={this.state.joinError} />
                       <p> By creating a room, you are agreeing to our
-                      (a bit unethical) <a className="termsOfService">Terms of Service</a></p>
+                       <a className="termsOfService">Terms of Service</a>.</p>
                     </div>
                   </div>
                 </div>
@@ -82,7 +82,7 @@ const LandingPage = React.createClass({
                   <img className="laptopImg" src="assets/Laptop.png" />
                 </div>
                 <div className="textContainer">
-                  <h1> this is bloxeo </h1>
+                  <h1> This is Bloxeo </h1>
                   <p> Whether you need a new product, a sweet hackathon idea,
                    or you just want to make the world a better place, bloxeo
                    can help. Gather your team to create ideas and group them
@@ -135,9 +135,7 @@ const LandingPage = React.createClass({
                   <input type="text" name="projectName" placeholder="What's your project name?"/>
                   <input type="text" name="projectName" placeholder="What's your name?"/>
                   <CreateRoom />
-                  <p> By creating a room you&rsquo;re agreeing to our <a className="termsOfService">Terms of Service </a>
-                  (It&rsquo;s a bit unethical).</p>
-                  <p className="NSA"> We&rsquo;re also selling your data to the NSA ;) </p>
+                  <p> By creating a room you&rsquo;re agreeing to our <a className="termsOfService">Terms of Service </a>.</p>
                  </div>
               </div>
             </div>

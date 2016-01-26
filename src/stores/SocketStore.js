@@ -11,8 +11,8 @@ const UserStore      = require('./UserStore');
 // Init socket.io connection
 const socket = socketIO.connect(StormConstants.SERVER_URL_DEV);
 let currentBoardId = 0;
-let notReceived = true;
-let notReceivedBank = true;
+let receivedIdeas = false;
+let receivedCollections = false;
 
 let token = '';
 let errorMsg = '';
@@ -137,12 +137,11 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
   socket.on(EVENT_API.RECEIVED_COLLECTIONS, (data) => {
     resolveSocketResponse(data)
     .then((res) => {
-      if (notReceived) {
-        StormActions.receivedCollections(res.data, notReceived);
-        notReceived = false;
-        if (!notReceivedBank && !notReceived) {
-          StormActions.endLoadAnimation();
-        }
+      StormActions.receivedCollections(res.data, receivedCollections);
+
+      receivedCollections = true;
+      if (receivedIdeas) {
+        StormActions.endLoadAnimation();
       }
     })
     .catch((res) => {
@@ -156,8 +155,9 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
         return idea.content;
       });
       StormActions.updatedIdeas(ideas);
-      notReceivedBank = false;
-      if (!notReceivedBank && !notReceived) {
+
+      receivedIdeas = true;
+      if (receivedCollections) {
         StormActions.endLoadAnimation();
       }
     })
@@ -225,7 +225,8 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
    * @param {string} boardId
    */
   function joinBoard(boardId) {
-    notReceived = true;
+    // @XXX WUT?
+    receivedCollections = false;
     currentBoardId = boardId;
     socket.emit(
       EVENT_API.JOIN_ROOM,

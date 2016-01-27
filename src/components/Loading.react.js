@@ -15,7 +15,7 @@ const LoadingOverlay = React.createClass({
     LoadingStore.removeLoadingListener(this.disable);
   },
   disable: function() {
-    this.state.disabled = true;
+    this.setState({disabled: true});
   },
   render: function() {
     const classToAdd = classNames('loadingOverlay', {active: !this.state.disabled});

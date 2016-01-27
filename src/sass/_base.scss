@@ -9,12 +9,12 @@
 //import vars and mixins to use
 @import '_vars';
 @import '_mixins';
-
 body {
-	overflow: hidden;
-	height: 100vh;
+  overflow: hidden;
+  height: 100vh;
   @include font-regular();
 }
+
 a:hover {
   text-decoration: none;
 }
@@ -22,6 +22,29 @@ a:hover {
 p {
   font-size: 14px;
 }
+
 html {
-	overflow: auto;
+  overflow: auto;
+}
+
+//Scrollbar styles
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar {
+  width: 20px;
+  height: 20px;
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: rgba(215, 215, 215, .3);
+  background-clip: padding-box;
+  border: 8px solid rgba(0, 0, 0, 0);
+  &:hover {
+    background-color: rgba(215, 215, 215, .7);    
+    border: 7px solid rgba(0, 0, 0, 0);
+  }
 }

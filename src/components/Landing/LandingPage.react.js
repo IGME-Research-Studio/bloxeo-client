@@ -46,11 +46,6 @@ const LandingPage = React.createClass({
                   <div className="header">
                   <img className="poweredByImg" src="assets/bloxeo.png" />
                     <h1 className="bloxeoTitle"> bloxeo </h1>
-                    <ul className="landingNav">
-                      <li className="landingNavEl"> Learn </li>
-                      <li className="landingNavEl"> Blog </li>
-                      <li className="landingNavEl"> Who We Are </li>
-                    </ul>
                   </div>
                   <div className="contentRow row">
                     <div className="textCopy">
@@ -59,8 +54,7 @@ const LandingPage = React.createClass({
                     <div className="joinLinks">
                       <CreateRoom />
                       <JoinRoom message={this.state.joinError} />
-                      <p> By creating a room, you are agreeing to our
-                       <a className="termsOfService">Terms of Service</a>.</p>
+                      <p> By creating a room, you are agreeing to our <a className="termsOfService">Terms of Service</a>.</p>
                     </div>
                   </div>
                 </div>
@@ -132,8 +126,6 @@ const LandingPage = React.createClass({
                     <h1>What are you waiting for?</h1>
                     <h1>Get started.</h1>
                   </div>
-                  <input type="text" name="projectName" placeholder="What's your project name?"/>
-                  <input type="text" name="projectName" placeholder="What's your name?"/>
                   <CreateRoom />
                   <p> By creating a room you&rsquo;re agreeing to our <a className="termsOfService">Terms of Service </a>.</p>
                  </div>

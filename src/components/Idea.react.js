@@ -10,6 +10,7 @@ const Idea = React.createClass({
   propTypes: {
     connectDragSource: PropTypes.func.isRequired,
   },
+
   getInitialState: function() {
     return {
       content: this.props.content,
@@ -20,6 +21,7 @@ const Idea = React.createClass({
       canDrag: false,
     };
   },
+
   _onMouseDown: function() {
     const that = this;
     holdTimeout = setTimeout(function() {
@@ -28,19 +30,23 @@ const Idea = React.createClass({
       }
     }, 1500);
   },
+
   _onMouseUp: function() {
     const that = this;
     clearTimeout(holdTimeout);
     that.setCanDrag(false);
   },
+
   _onMouseLeave: function() {
     const that = this;
     clearTimeout(holdTimeout);
     that.setCanDrag(false);
   },
+
   _onMouseMove: function() {
     clearTimeout(holdTimeout);
   },
+
   _style: function() {
     let big = false;
     if (this.state.content.length > 15) {
@@ -60,6 +66,7 @@ const Idea = React.createClass({
       };
     }
   },
+
   /**
     * Set draggable
     * @param <Boolean> draggable
@@ -121,6 +128,7 @@ const ideaSource = {
       ideaCount: 1,
     };
   },
+
   endDrag: function(props, monitor, component) {
     const dropped = monitor.didDrop();
     if (dropped) {
@@ -131,6 +139,7 @@ const ideaSource = {
     }
   },
 };
+
 function dragCollect(connect, monitor) {
   return {
     connectDragSource: connect.dragSource(),

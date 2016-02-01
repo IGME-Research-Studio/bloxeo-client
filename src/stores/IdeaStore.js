@@ -34,6 +34,7 @@ const IdeaStore = assign({}, EventEmitter.prototype, {
     this.removeListener(IDEA_CHANGE_EVENT, callback);
   },
 });
+
 /**
  * Set idea array on response from server
  * @param {array} ideas

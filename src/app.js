@@ -1,6 +1,4 @@
-/*eslint-disable */
-const React = require('react');
-/*eslint-enable */
+require('react');
 const ReactDOM = require('react-dom');
 const StormApp = require('./components/StormApp.react');
 const LandingPage = require('./components/Landing/LandingPage.react');

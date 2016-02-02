@@ -195,7 +195,8 @@ function collide(node) {
         lx = (absX - xSpacing) / l;
         ly = (absY - ySpacing) / l;
 
-        // the one that's barely within the bounds probably triggered the collision
+        // the one that's barely within the bounds probably triggered
+        // the collision
         if (Math.abs(lx) > Math.abs(ly)) {
           lx = 0;
         } else {

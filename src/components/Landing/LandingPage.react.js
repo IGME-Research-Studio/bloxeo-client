@@ -1,7 +1,6 @@
 const React = require('react');
 const CreateRoom = require('./CreateRoom.react');
 const JoinRoom = require('./JoinRoom.react');
-const skrollr = require('../../../lib/skrollr.min.js');
 const SocketStore = require('../../stores/SocketStore');
 
 function getStates() {
@@ -18,13 +17,6 @@ const LandingPage = React.createClass({
 
   componentDidMount: function() {
     SocketStore.addErrorListener(this._onChange);
-
-    if (skrollr.get()) {
-      skrollr.get().destroy();
-    }
-    skrollr.init({
-      smoothScrolling: false,
-    });
   },
 
   componentWillUnmount: function() {

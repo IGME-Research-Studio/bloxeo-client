@@ -12,4 +12,4 @@ deployment:
   master:
     branch: master
     heroku:
-      appname: the-storm
+      appname: bloxeo

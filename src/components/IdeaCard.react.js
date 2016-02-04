@@ -37,6 +37,7 @@ const IdeaCard = React.createClass({
     );
   },
 });
+
 // REACT-DnD
 // DragSource parameters
 const cardSource = {
@@ -47,6 +48,7 @@ const cardSource = {
     };
   },
 };
+
 function dragCollect(connect, monitor) {
   return {
     connectDragSource: connect.dragSource(),

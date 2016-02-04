@@ -9,7 +9,7 @@ const assign         = require('object-assign');
 const EventEmitter   = require('events').EventEmitter;
 const UserStore      = require('./UserStore');
 // Init socket.io connection
-const socket = socketIO.connect(StormConstants.SERVER_URL_DEV);
+const socket = socketIO.connect(StormConstants.SERVER_URL);
 let currentBoardId = 0;
 let receivedIdeas = false;
 let receivedCollections = false;
@@ -82,7 +82,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
   // }
   // turn REST_API into route templates
   const Routes = _.mapValues(REST_API, (route) => {
-    return _.template(StormConstants.SERVER_URL_DEV + route[1]);
+    return _.template(StormConstants.SERVER_URL + route[1]);
   });
   // Socket Handlers
   // Idea was added or removed from collection

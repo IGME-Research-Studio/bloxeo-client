@@ -1,4 +1,6 @@
-require('react');
+/*eslint-disable */
+const React = require('react');
+/*eslint-enable */
 const ReactDOM = require('react-dom');
 const StormApp = require('./components/StormApp.react');
 const LandingPage = require('./components/Landing/LandingPage.react');
@@ -15,8 +17,9 @@ window.onload = function() {
   // renders the routing path
   ReactDOM.render((
     <Router history={history}>
-      <Route path="/" component={LandingPage}/>
-      <Route path="workSpace" component={StormApp}/>
+      <Route path="/" component={LandingPage}>
+        <Route path="workSpace" component={StormApp}/>
+      </Route>
     </Router>
   ), body);
 };

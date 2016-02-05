@@ -17,9 +17,8 @@ window.onload = function() {
   // renders the routing path
   ReactDOM.render((
     <Router history={history}>
-      <Route path="/" component={LandingPage}>
-        <Route path="workSpace" component={StormApp}/>
-      </Route>
+      <Route path="/" component={LandingPage}/>
+      <Route path="workSpace" component={StormApp}/>
     </Router>
   ), body);
 };

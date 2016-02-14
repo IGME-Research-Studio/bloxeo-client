@@ -8,6 +8,7 @@ const Promise        = require('bluebird');
 const assign         = require('object-assign');
 const EventEmitter   = require('events').EventEmitter;
 const UserStore      = require('./UserStore');
+
 // Init socket.io connection
 const socket = socketIO.connect(StormConstants.SERVER_URL);
 let currentBoardId = 0;
@@ -122,9 +123,12 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       socket.emit(EVENT_API.GET_COLLECTIONS, reqObj);
       errorMsg = '';
       SocketStore.emitChange();
-      // append the board id to the url upon joining a room if it is not already there
+      // @XXX we shouldn't just set the href like this
+      // Append the board id to the url upon joining a room
+      // if it is not already there
       if (window.location.hash.split('?')[0] !== '#/workSpace') {
-        const newUrl = window.location.href.split('?')[0] + 'workSpace?roomId=' + currentBoardId;
+        const newUrl = window.location.href.split('?')[0] +
+          `workSpace?roomId=${currentBoardId}`;
         window.location.href = newUrl;
       }
     })

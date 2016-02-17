@@ -3,12 +3,16 @@
   "plugins": [
     "react"
   ],
+  "parser": "babel-eslint",
   "rules": {
     "func-names": 0,
     "default-case": 1,
     "no-else-return": 0,
     "padded-blocks": 0,
-    "max-len": [1, 80, 2]
+    "max-len": [1, 80, 2],
+    "react/jsx-uses-vars": 1,
+    "react/jsx-uses-react": 1,
+    "react/react-in-jsx-scope": 1
   },
   "ecmaFeatures": {
     "jsx": true

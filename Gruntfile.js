@@ -56,7 +56,7 @@ module.exports = function (grunt) {
       test: {
         options: {
           require: [
-            'babel/register'
+            'babel-core/register'
           ]
         },
         src: testFiles
@@ -68,7 +68,6 @@ module.exports = function (grunt) {
     browserify: {
       options: {
         transform: [
-          'reactify',
           'babelify',
         ]
       },

@@ -101,6 +101,7 @@ AppDispatcher.register(function(action) {
     pauseTimer(action.isPaused);
     TimerStore.emitTimeChange();
     break;
+  default:
   }
 });
 

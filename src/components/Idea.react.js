@@ -68,9 +68,9 @@ const Idea = React.createClass({
   },
 
   /**
-    * Set draggable
-    * @param <Boolean> draggable
-    */
+   * Set draggable
+   * @param <Boolean> draggable
+   */
   setCanDrag: function(draggable) {
     if (this.isMounted()) {
       this.setState({

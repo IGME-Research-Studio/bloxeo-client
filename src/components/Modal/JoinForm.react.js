@@ -1,17 +1,21 @@
-const React = require('react');
-const classNames = require('classnames');
-const StormActions = require('../../actions/StormActions');
-const ModalHeader = require('../Modal/ModalHeader.react');
-const ModalFooter = require('../Modal/ModalFooter.react');
+import React, { PropTypes }  from 'react';
+import classNames from 'classnames';
+import StormActions from '../../actions/StormActions';
+import ModalFooter from '../Modal/ModalFooter.react';
 
-const JoinModal = React.createClass({
+const propTypes = {
+  boardId: PropTypes.string,
+  error: PropTypes.string,
+};
+
+const JoinForm = React.createClass({
   getInitialState: function() {
-    const name = localStorage.getItem('UserName');
     return {
-      name: name,
-      roomCode: '',
+      name: localStorage.getItem('UserName') || '',
+      boardId: this.props.boardId || '',
     };
   },
+
   /**
    * @param {object} event
    */
@@ -20,33 +24,36 @@ const JoinModal = React.createClass({
       name: event.target.value,
     });
   },
+
   /**
    * @param {object} event
    */
   _updateCode: function(event) {
     this.setState({
-      roomCode: event.target.value,
+      boardId: event.target.value,
     });
   },
+
   /**
    * Handle submit
    */
   _onSubmit: function() {
-    if (!this.state.name || this.state.roomCode === '') {
+    if (!this.state.name || this.state.boardId === '') {
       // This should display an error
       return;
     }
-    StormActions.joinBoard(this.state.roomCode, this.state.name);
+    StormActions.joinBoard(this.state.boardId, this.state.name);
   },
+
   /**
    * @return {object}
    */
   render: function() {
     const hasError = classNames('hasError', {hide: !this.props.error});
-    const placeholder = this.state.name ? this.state.name : `What's your name?`;
+    const placeholder = `What's your name?`;
+
     return (
       <div className="joinModal">
-        <ModalHeader title="User Options" close={this.props.close} />
         <div className="modalContent">
           <div className="modalSection">
             <input
@@ -57,10 +64,12 @@ const JoinModal = React.createClass({
               onChange={this._updateName}
             />
           </div>
+
           <div className="modalSection">
-            <div className="modalUserText">Your unique user icon</div>
+            <div className="modalUserText">Your user icon</div>
             <span className="modalUserIcon">?</span>
           </div>
+
           <div className="modalBreak"></div>
           <div className="modalSection">
             <span className={hasError} ref="error">{this.props.error}</span>
@@ -68,15 +77,23 @@ const JoinModal = React.createClass({
               type="text"
               className="modalInput"
               placeholder="Enter room code"
-              value={this.state.roomCode}
+              value={this.state.boardId}
               onChange={this._updateCode}
             />
           </div>
+          <p className="modalTerms">
+            Logging in confirms your agreement to <a href="#">our EULA</a>.
+          </p>
         </div>
-        <ModalFooter buttonText="Join Room" click={this._onSubmit} />
+
+        <ModalFooter
+          onSubmit={this._onSubmit}
+          buttonText='Join room'
+        />
       </div>
     );
   },
 });
 
-module.exports = JoinModal;
+JoinForm.propTypes = propTypes;
+module.exports = JoinForm;

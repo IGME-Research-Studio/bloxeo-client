@@ -1,23 +1,16 @@
-var fs = require('fs');
-var path = require('path');
-var express = require('express');
-var bodyParser = require('body-parser');
-var app = express();
+const express = require('express');
+const path = require('path');
+const port = process.env.PORT || 3000;
+const app = express();
 
-var port = process.env.PORT || 3000;
-app.set('port', port);
+// serve static assets normally
+app.use(express.static(__dirname + '/build'));
 
-app.use('/', express.static(path.join(__dirname, 'build/')));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
+// handle every other route with index.html, which will contain
+// a script tag to your application's JavaScript file(s).
+app.get('*', function(request, response) {
+  response.sendFile(path.resolve(__dirname, 'build', 'index.html'))
+})
 
-app.get('/account.json', function(req, res) {
-  fs.readFile('account.json', function(err, data) {
-    res.setHeader('Cache-Control', 'no-cache');
-    res.json(JSON.parse(data));
-  });
-});
-
-app.listen(app.get('port'), function() {
-  console.log('Server started: http://localhost:' + app.get('port') + '/');
-});
+app.listen(port);
+console.log("server started on port " + port);

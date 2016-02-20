@@ -1,7 +1,7 @@
-const React = require('react');
-const CreateRoom = require('./CreateRoom.react');
-const JoinRoom = require('./JoinRoom.react');
-const SocketStore = require('../../stores/SocketStore');
+import React from 'react';
+import { Link } from 'react-router';
+
+import SocketStore from '../stores/SocketStore';
 
 function getStates() {
   return {
@@ -9,7 +9,7 @@ function getStates() {
   };
 }
 
-const LandingPage = React.createClass({
+const LandingContainer = React.createClass({
 
   getInitialState: function() {
     return getStates();
@@ -31,12 +31,13 @@ const LandingPage = React.createClass({
     return (
       <div classNameName="landingPage">
         <main>
+
           <section id="slide-1" className="homeSlide">
             <div className="page bcg page1">
               <div className="contentContainer hscontainer centered">
                 <div className="content column centered">
                   <div className="header">
-                  <img className="poweredByImg" src="assets/bloxeo.png" />
+                    <img className="poweredByImg" src="/assets/bloxeo.png" />
                     <h1 className="bloxeoTitle"> bloxeo </h1>
                   </div>
                   <div className="contentRow row">
@@ -44,16 +45,21 @@ const LandingPage = React.createClass({
                       <h1> Let&rsquo;s make your Eureka moment happen. </h1>
                     </div>
                     <div className="joinLinks">
-                      <CreateRoom />
-                      <JoinRoom message={this.state.joinError} />
-                      <p> By creating a room, you are agreeing to our <a className="termsOfService">Terms of Service</a>.</p>
+
+                      <Link to="/room/join">Join Modal</Link>
+                      <Link to="/room/create">Create Modal</Link>
+
+                      <p>
+                        By creating a room, you are agreeing to our
+                        <a className="termsOfService">Terms of Service</a>.
+                      </p>
                     </div>
                   </div>
                 </div>
                 <div className="images">
-                  <img className="codyImg" src="assets/Cody.png" />
-                  <img className="dougImg" src="assets/Doug.png" />
-                  <img className="dougShoesImg" src="assets/DougShoes.png" />
+                  <img className="codyImg" src="/assets/Cody.png" />
+                  <img className="dougImg" src="/assets/Doug.png" />
+                  <img className="dougShoesImg" src="/assets/DougShoes.png" />
                 </div>
                </div>
               <div className="footer">
@@ -61,11 +67,12 @@ const LandingPage = React.createClass({
               </div>
             </div>
           </section>
-          <section id="slide-2" className="homeSlide" data-anchor-target="#slide-1" data-center-center="top:-100%;" data-top-bottom="top:0%;">
+
+          <section id="slide-2" className="homeSlide" >
             <div className="page page2 bcg">
               <div className="contentContainer hsContainer column centered">
                 <div className="images">
-                  <img className="laptopImg" src="assets/Laptop.png" />
+                  <img className="laptopImg" src="/assets/Laptop.png" />
                 </div>
                 <div className="textContainer">
                   <h1> This is Bloxeo </h1>
@@ -78,19 +85,23 @@ const LandingPage = React.createClass({
               </div>
             </div>
           </section>
+
           <section id="slide-3" className="homeSlide">
             <div className="page page3 bcg">
               <div className="contentContainer hsContainer row centered">
                 <div className="textContainer">
                   <h1> Drag & Drop Ideas </h1>
-                  <p>Generate ideas to be added to a growing bank of idea blocks.</p>
+                  <p>
+                    Generate ideas to be added to a growing bank of idea blocks.
+                  </p>
                 </div>
                 <div className="images">
-                  <img className="whiteboardImg" src="assets/Whiteboard.png" />
+                  <img className="whiteboardImg" src="/assets/Whiteboard.png" />
                </div>
               </div>
             </div>
           </section>
+
           <section id="slide-4" className="homeSlide">
             <div className="page page4 bcg">
               <div className="contentContainer hsContainer column centered">
@@ -100,34 +111,45 @@ const LandingPage = React.createClass({
                   </div>
                 </div>
                 <div className="images">
-                  <img className="poweredByImg" src="assets/MAGIC.png" />
-                  <img className="poweredByImg" src="assets/IGM.png" />
-                  <img className="poweredByImg" src="assets/NMD.png" />
+                  <img className="poweredByImg" src="/assets/MAGIC.png" />
+                  <img className="poweredByImg" src="/assets/IGM.png" />
+                  <img className="poweredByImg" src="/assets/NMD.png" />
                 </div>
               </div>
             </div>
           </section>
-          <section id="slide-5" className="homeSlide" data-anchor-target="#slide-4" data-top-top="top:-85%;" data-top-bottom="top:4%;">
+
+          <section id="slide-5" className="homeSlide" >
+
             <div className="page page5 bcg">
-              <div className="contentContainer hsContainer column homeSlide" data-anchor-target="#slide-4" data-top-top="opacity: 0.0;" data-top-bottom="opacity: 1;">
+              <div className="contentContainer hsContainer column homeSlide" >
+
                 <div className="images">
-                  <img className="eggImg" src="assets/Egg.png" />
+                  <img className="eggImg" src="/assets/Egg.png" />
                 </div>
                 <div className="content">
                   <div className="textContent">
                     <h1>What are you waiting for?</h1>
                     <h1>Get started.</h1>
                   </div>
-                  <CreateRoom />
-                  <p> By creating a room you&rsquo;re agreeing to our <a className="termsOfService">Terms of Service </a>.</p>
+
+                  <Link to="/room/join">Join Modal</Link>
+                  <Link to="/room/create">Create Modal</Link>
+
+                  <p>
+                    By creating a room you&rsquo;re agreeing to our
+                    <a className="termsOfService">Terms of Service</a>.
+                  </p>
                  </div>
               </div>
             </div>
           </section>
         </main>
+
+        {this.props.children}
       </div>
     );
   },
 });
 
-module.exports = LandingPage;
+module.exports = LandingContainer;

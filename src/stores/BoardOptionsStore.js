@@ -125,7 +125,6 @@ AppDispatcher.register(function(action) {
     BoardOptionsStore.emitTabChange();
     break;
   default:
-    break;
   }
 });
 

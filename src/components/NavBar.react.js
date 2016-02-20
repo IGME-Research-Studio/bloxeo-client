@@ -95,6 +95,7 @@ const NavBar = React.createClass({
             onClick={this.selectTab}>
           Workspace
         </a>
+
         <a name={NavBarTypes.RESULTS_TAB}
             className={
               this.props.selectedTab === NavBarTypes.RESULTS_TAB ?
@@ -103,7 +104,12 @@ const NavBar = React.createClass({
             onClick={this.selectTab}>
           Results
         </a>
-        <button onClick={this.toggleRoomOptions} style={cogStyle} className="cogButton">
+
+        <button
+          onClick={this.toggleRoomOptions}
+          style={cogStyle}
+          className="cogButton">
+
           <FontAwesome name="cog" size="lg" />
         </button>
 

@@ -1,20 +1,19 @@
-const React = require('react');
+import React from 'react';
+import { DragDropContext as dragDropContext } from 'react-dnd';
+import HTML5Backend    from 'react-dnd-html5-backend';
 
-const BoardOptionsStore = require('../stores/BoardOptionsStore');
-const CollectionStore   = require('../stores/CollectionStore');
-const IdeaStore         = require('../stores/IdeaStore');
+import BoardOptionsStore from '../stores/BoardOptionsStore';
+import CollectionStore   from '../stores/CollectionStore';
+import IdeaStore         from '../stores/IdeaStore';
 
-const LoadingOverlay  = require('./Loading.react');
-const NavBar          = require('./NavBar.react');
-const Results         = require('./Results/Results.react');
-const Sidebar         = require('./Sidebar/Sidebar.react');
-const Workspace       = require('./Workspace/Workspace.react');
+import LoadingOverlay  from '../components/Loading.react';
+import NavBar          from '../components/NavBar.react';
+import Results         from '../components/Results/Results.react';
+import Sidebar         from '../components/Sidebar/Sidebar.react';
+import Workspace       from '../components/Workspace/Workspace.react';
 
-const StormActions    = require('../actions/StormActions');
-const NavBarConstants = require('../constants/NavBarConstants');
-
-const dragDropContext = require('react-dnd').DragDropContext;
-const HTML5Backend    = require('react-dnd-html5-backend');
+import StormActions    from '../actions/StormActions';
+import NavBarConstants from '../constants/NavBarConstants';
 
 /**
  * Retrieve the current data from the StormStore
@@ -28,11 +27,13 @@ function getStormState() {
   };
 }
 
-const StormApp = React.createClass({
-  getInitialState: function() {
+class RoomContainer extends React.Component {
+
+  getInitialState() {
     return getStormState();
-  },
-  componentDidMount: function() {
+  }
+
+  componentDidMount() {
     BoardOptionsStore.addNameListener(this._onChange);
     BoardOptionsStore.addTabChangeListener(this._onChange);
     CollectionStore.addChangeListener(this._onChange);
@@ -43,30 +44,36 @@ const StormApp = React.createClass({
     const ideasElement = document.querySelector('body');
     const hideScroll = 'overflow: hidden';
     ideasElement.setAttribute('style', hideScroll);
-  },
-  componentWillUnmount: function() {
+  }
+
+  componentWillUnmount() {
     BoardOptionsStore.removeNameListener(this._onChange);
     BoardOptionsStore.removeTabChangeListener(this._onChange);
     CollectionStore.removeChangeListener(this._onChange);
     IdeaStore.removeChangeListener(this._onChange);
-  },
+  }
+
   /**
    * Event handler for 'change' events coming from the StormStore
    */
-  _onChange: function() {
+  _onChange = () => {
     if (this.isMounted()) {
       this.setState(getStormState());
     }
-  },
+  }
+
   /**
-   * Render StormApp component
    * @return {object}
    */
-  render: function() {
+  render() {
     return (
       <div className="appContainer">
         <LoadingOverlay disabled={false}/>
-        <Sidebar room={this.state.room} time={this.state.time} timerStatus={this.state.timerStatus} ideas={this.state.ideas} timerWidth={this.state.timerWidth}/>
+        <Sidebar room={this.state.room}
+        time={this.state.time}
+        timerStatus={this.state.timerStatus}
+        ideas={this.state.ideas}
+        timerWidth={this.state.timerWidth}/>
         <div className="dragContainer">
           <NavBar selectedTab={this.state.tab} />
           {(() => {
@@ -82,7 +89,7 @@ const StormApp = React.createClass({
         </div>
       </div>
     );
-  },
-});
+  }
+}
 
-module.exports = dragDropContext(HTML5Backend)(StormApp);
+module.exports = dragDropContext(HTML5Backend)(RoomContainer);

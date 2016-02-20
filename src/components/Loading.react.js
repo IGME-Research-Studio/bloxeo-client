@@ -18,7 +18,8 @@ const LoadingOverlay = React.createClass({
     this.setState({disabled: true});
   },
   render: function() {
-    const classToAdd = classNames('loadingOverlay', {active: !this.state.disabled});
+    const classToAdd = classNames('loadingOverlay',
+                                  {active: !this.state.disabled});
     return (
       <section className={classToAdd}>
         <div className="loadingAnimation">

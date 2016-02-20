@@ -271,7 +271,6 @@ AppDispatcher.register(function(action) {
     CollectionStore.emitChange();
     break;
   default:
-    break;
   }
 });
 

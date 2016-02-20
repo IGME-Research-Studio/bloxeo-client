@@ -1,3 +1,4 @@
+import { browserHistory } from 'react-router';
 const AppDispatcher  = require('../dispatcher/AppDispatcher');
 const StormConstants = require('../constants/StormConstants');
 const StormActions   = require('../actions/StormActions');
@@ -19,6 +20,7 @@ let token = '';
 let errorMsg = '';
 const ERROR_CHANGE_EVENT = 'JOIN_ERROR';
 const VALIDATE_ERROR = 'VALIDATE_ERROR';
+
 const SocketStore = assign({}, EventEmitter.prototype, {
   valid: true,
   /**
@@ -56,6 +58,7 @@ const SocketStore = assign({}, EventEmitter.prototype, {
     this.removeListener(VALIDATE_ERROR, callback);
   },
 });
+
 /**
  * Checks a socket response for an error
  * @param {object} data: response data
@@ -69,11 +72,14 @@ function resolveSocketResponse(data) {
     }
   });
 }
+
 socket.on('connect', () => {
   socket.emit('GET_CONSTANTS');
 });
+
 socket.on('RECEIVED_CONSTANTS', (body) => {
   const { EVENT_API, REST_API } = body;
+
   /**
    * Checks to update the client to the server
    */
@@ -85,6 +91,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
   const Routes = _.mapValues(REST_API, (route) => {
     return _.template(StormConstants.SERVER_URL + route[1]);
   });
+
   // Socket Handlers
   // Idea was added or removed from collection
   socket.on(EVENT_API.UPDATED_COLLECTIONS, (data) => {
@@ -99,6 +106,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       console.error(`Error updating collections: ${res}`);
     });
   });
+
   // Idea was added or removed
   socket.on(EVENT_API.UPDATED_IDEAS, (data) => {
     resolveSocketResponse(data)
@@ -112,7 +120,9 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       console.error(`Error updating ideas: ${res}`);
     });
   });
+
   socket.on(EVENT_API.JOINED_ROOM, (data) => {
+    console.log(data);
     resolveSocketResponse(data)
     .then(() => {
       const reqObj = {
@@ -123,14 +133,19 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       socket.emit(EVENT_API.GET_COLLECTIONS, reqObj);
       errorMsg = '';
       SocketStore.emitChange();
-      // @XXX we shouldn't just set the href like this
-      // Append the board id to the url upon joining a room
-      // if it is not already there
-      if (window.location.hash.split('?')[0] !== '#/workSpace') {
-        const newUrl = window.location.href.split('?')[0] +
-          `workSpace?roomId=${currentBoardId}`;
-        window.location.href = newUrl;
+
+      if (window.location.hash.split('?')[0] !== '/room') {
+        browserHistory.push(`/room?roomId=${currentBoardId}`);
       }
+
+      // // @XXX we shouldn't just set the href like this
+      // // Append the board id to the url upon joining a room
+      // // if it is not already there
+      // if (window.location.hash.split('?')[0] !== '#/workSpace') {
+      //   const newUrl = window.location.href.split('?')[0] +
+      //     `workSpace?roomId=${currentBoardId}`;
+      //   window.location.href = newUrl;
+      // }
     })
     .catch((res) => {
       console.error(`Error joining a room: ${res}`);
@@ -138,6 +153,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       SocketStore.emitChange();
     });
   });
+
   socket.on(EVENT_API.RECEIVED_COLLECTIONS, (data) => {
     resolveSocketResponse(data)
     .then((res) => {
@@ -152,6 +168,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       console.error(`Error receiving collections: ${res}`);
     });
   });
+
   socket.on(EVENT_API.RECEIVED_IDEAS, (data) => {
     resolveSocketResponse(data)
     .then((res) => {
@@ -169,6 +186,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       console.error(`Error receiving ideas: ${res}`);
     });
   });
+
   // Request Functions
   /**
    * Creates a user
@@ -197,6 +215,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       }
     });
   }
+
   /**
    * Validates a user token
    */
@@ -224,6 +243,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       }
     });
   }
+
   /**
    * Joins board of given id
    * @param {string} boardId
@@ -239,6 +259,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
         userToken: token,
       });
   }
+
   /**
    * Create new board
    */
@@ -252,6 +273,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       },
     });
   }
+
   /**
    * Make post request to server for idea creation
    * @param {string} ideaContent
@@ -266,6 +288,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       }
     );
   }
+
   /**
    * Creates a collection with the given idea
    * @param {string} collection content from first idea added to collection
@@ -282,6 +305,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       }
     );
   }
+
   /**
    * Remove collection of given index from board
    * @param {number} index
@@ -296,6 +320,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       }
     );
   }
+
   /**
    * Adds an idea to a collection
    * @param {number} index : collection index
@@ -312,6 +337,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       }
     );
   }
+
   /**
    * Removes an idea from a collection
    * @param {number} index : collection index
@@ -361,8 +387,11 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
     case StormConstants.SEPARATE_IDEAS:
       removeIdeaFromCollection(action.groupID, action.ideaContent);
       break;
+    default:
     }
   });
+
+  // @XXX client should handle failure instead of active checking
   validateUser()
   .then(() => {
     // if page is on the workspace, join the room on page load

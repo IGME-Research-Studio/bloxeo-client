@@ -23,6 +23,7 @@ const Workspace = React.createClass({
     isOver: PropTypes.bool.isRequired,
     isOverCurrent: PropTypes.bool.isRequired,
   },
+
   // set state to the first element of the array
   getInitialState: function() {
     return ({
@@ -33,18 +34,22 @@ const Workspace = React.createClass({
       isOpen: false,
     });
   },
+
   openModal: function() {
     this.setState({ isOpen: true });
   },
+
   closeModal: function() {
     this.setState({ isOpen: false });
   },
+
   componentDidMount: function() {
     CollectionStore.addChangeListener(this.collectionChange);
     const domNode = ReactDOM.findDOMNode(this);
     StormActions.setLayoutSize(domNode.offsetWidth, domNode.offsetHeight);
     SocketStore.addValidateListener(this.openModal);
   },
+
   _onDrag: function(e) {
     if (this.state.panning === true) {
       this.setState({
@@ -53,11 +58,13 @@ const Workspace = React.createClass({
       });
     }
   },
+
   _onMouseUp: function() {
     this.setState({
       panning: false,
     });
   },
+
   _onMouseDown: function(e) {
     if (e.nativeEvent.target.className.indexOf('workspace') > -1) {
       this.setState({
@@ -65,21 +72,25 @@ const Workspace = React.createClass({
       });
     }
   },
+
   _onMouseLeave: function() {
     this.setState({
       panning: false,
     });
   },
+
   componentWillUnmount: function() {
     CollectionStore.removeChangeListener(this.collectionChange);
     SocketStore.removeValidateListener(this.openModal);
   },
+
   /** Reset state to align with StormStore */
   collectionChange: function() {
     this.setState({
       ideaCollections: CollectionStore.getAllCollections(),
     });
   },
+
   /**
    * @return {object}
    */
@@ -104,6 +115,7 @@ const Workspace = React.createClass({
         transform: 'translate(-50%, -50%)',
       },
     };
+
     // Grab connectDropTarget function to wrap element with
     const connectDropTarget = this.props.connectDropTarget;
     const that = this;
@@ -137,18 +149,20 @@ const Workspace = React.createClass({
     );
   },
 });
+
 // REACT-DnD parameters
 const dropTypes = [DnDTypes.CARD, DnDTypes.COLLECTION, DnDTypes.IDEA];
+
 // Workspace DropTarget options
 const workTarget = {
   drop: function(props, monitor, component) {
     const pos = monitor.getClientOffset();
     const idea = monitor.getItem();
     const hasDroppedOnChild = monitor.didDrop();
+
     // If a sub-element was dropped on, prevent bubbling
-    if (hasDroppedOnChild) {
-      return;
-    }
+    if (hasDroppedOnChild) return;
+
     const domNode = ReactDOM.findDOMNode(component).getBoundingClientRect();
     // If the collection is being moved do not create another
     if (monitor.getItem().type === DnDTypes.COLLECTION) {
@@ -166,6 +180,7 @@ const workTarget = {
     }
   },
 };
+
 function collectTarget(connect, monitor) {
   return {
     connectDropTarget: connect.dropTarget(),

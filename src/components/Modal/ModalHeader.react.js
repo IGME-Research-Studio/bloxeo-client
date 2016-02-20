@@ -1,18 +1,23 @@
-const React = require('react');
-const FontAwesome = require('react-fontawesome');
+import React, { PropTypes }  from 'react';
+import FontAwesome from 'react-fontawesome';
 
-const ModalHeader = React.createClass({
-  render: function() {
-    return (
-      <div className="modalHeader">
-        <div className="modalTitle">{this.props.title}</div>
-        <FontAwesome
-          name="times"
-          className="modalClose"
-          onClick={this.props.close} />
-      </div>
-    );
-  },
-});
+const propTypes = {
+  onClose: PropTypes.func.isRequired,
+  title: PropTypes.string.isRequired,
+};
 
-module.exports = ModalHeader;
+const ModalHeader = ({onClose, title}) => (
+  <div className="modalHeader">
+    <div className="modalTitle">{title}</div>
+
+    <span onClick={onClose}>
+      <FontAwesome
+        name="times"
+        className="modalClose"
+      />
+    </span>
+  </div>
+);
+
+ModalHeader.propTypes = propTypes;
+export default ModalHeader;

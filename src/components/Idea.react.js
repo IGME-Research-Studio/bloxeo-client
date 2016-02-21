@@ -22,37 +22,30 @@ const Idea = React.createClass({
     };
   },
 
-  _onMouseDown: function() {
-    const that = this;
-    holdTimeout = setTimeout(function() {
+  _onMouseDown: () => {
+    holdTimeout = setTimeout(() => {
       if (that.props.collectionCount > 1) {
-        that.setCanDrag(true);
+        this.setCanDrag(true);
       }
     }, 1500);
   },
 
-  _onMouseUp: function() {
-    const that = this;
+  _onMouseUp: () => {
     clearTimeout(holdTimeout);
-    that.setCanDrag(false);
+    this.setCanDrag(false);
   },
 
-  _onMouseLeave: function() {
-    const that = this;
+  _onMouseLeave: () => {
     clearTimeout(holdTimeout);
-    that.setCanDrag(false);
+    this.setCanDrag(false);
   },
 
-  _onMouseMove: function() {
+  _onMouseMove: () => {
     clearTimeout(holdTimeout);
   },
 
   _style: function() {
-    let big = false;
     if (this.state.content.length > 15) {
-      big = true;
-    }
-    if (big) {
       return {
         width: `150px`,
         height: `125px`,

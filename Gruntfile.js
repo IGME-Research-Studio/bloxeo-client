@@ -33,7 +33,7 @@ module.exports = function (grunt) {
     sass: {
       dist: {
         files: {
-          'build/style.css': 'src/sass/theme.scss'
+          'build/style.css': 'src/sass/theme.scss',
         }
       }
     },
@@ -58,35 +58,32 @@ module.exports = function (grunt) {
     // Write node require() code in the browser
     // Convert ES6 to ES5 before hand with Babel
     browserify: {
-      options: {
-        transform: [
-          'babelify',
-        ],
-        keepAlive: true,
-        watch: true,
-        browserifyOptions: {
-          fast: true,
-        },
-      },
       dev: {
+        options: {
+          transform: [
+            'babelify',
+          ],
+          keepAlive: true,
+          watch: true,
+          browserifyOptions: {
+            fast: true,
+          },
+        },
         files: {
           'build/app.js': srcFiles
         }
       },
       prod: {
+        options: {
+          transform: [
+            'babelify',
+          ],
+        },
         files: {
           'build/app.js': srcFiles
         }
       }
     },
-
-    watch: {
-      js: {
-        options: { spawn: false, },
-        files: watchFiles,
-        tasks: ['default']
-      }
-    }
   });
 
   // Load plugins
@@ -96,6 +93,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build-dev', ['clean', 'copy', 'sass', 'browserify:dev']);
   grunt.registerTask('build-prod', ['clean', 'copy', 'sass', 'browserify:prod']);
+  grunt.registerTask('build-watch', 'build-dev');
   grunt.registerTask('build', 'build-dev');
 
   grunt.registerTask('lint', ['eslint']);

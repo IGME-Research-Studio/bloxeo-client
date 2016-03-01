@@ -65,9 +65,10 @@ const SocketStore = assign({}, EventEmitter.prototype, {
  */
 function resolveSocketResponse(data) {
   return new Promise((resolve, reject) => {
-    if (!(data.code >= 400)) {
+    if (data.code < 300) {
       resolve(data);
-    } else {
+    }
+    else {
       reject(new Error(data.message));
     }
   });

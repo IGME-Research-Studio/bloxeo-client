@@ -94,9 +94,11 @@ const Results = React.createClass({
     results.sort(function(result1, result2) {
       if (result1.collection.votes < result2.collection.votes) {
         return 1;
-      } else if (result1.collection.votes === result2.collection.votes) {
+      }
+      else if (result1.collection.votes === result2.collection.votes) {
         return 0;
-      } else {
+      }
+      else {
         return -1;
       }
     });

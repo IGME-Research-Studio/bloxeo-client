@@ -75,8 +75,8 @@ const LandingContainer = React.createClass({
                   <img className="laptopImg" src="/assets/Laptop.png" />
                 </div>
                 <div className="textContainer">
-                  <h1> This is Bloxeo </h1>
-                  <p> Whether you need a new product, a sweet hackathon idea,
+                  <h1>This is Bloxeo </h1>
+                  <p>Whether you need a new product, a sweet hackathon idea,
                    or you just want to make the world a better place, bloxeo
                    can help. Gather your team to create ideas and group them
                    together. Once you have your groupings, vote or agree on

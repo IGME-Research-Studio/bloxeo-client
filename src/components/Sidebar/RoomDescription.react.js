@@ -50,7 +50,8 @@ const RoomDesciption = React.createClass({
         isEditing: false,
       });
       return;
-    } else {
+    }
+    else {
       // save room description to StormStore
       StormActions.changeRoomDescription(this.state.value);
       // update room description view
@@ -74,7 +75,8 @@ const RoomDesciption = React.createClass({
           onBlur={this._onSave}>
         </textarea>
       );
-    } else {
+    }
+    else {
       return (
         <div
           className="room-description"

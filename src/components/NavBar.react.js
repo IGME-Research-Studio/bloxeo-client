@@ -32,7 +32,8 @@ const NavBar = React.createClass({
       this.setState({
         isOpen: false,
       });
-    } else {
+    }
+    else {
       this.setState({
         isOpen: true,
       });

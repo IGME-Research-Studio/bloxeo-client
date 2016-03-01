@@ -64,7 +64,8 @@ function countdown() {
     if (_time.minutes <= 0 && _time.seconds <= 0) {
       clearInterval(_timer);
       _timerStatus = true;
-    } else {
+    }
+    else {
       _time.seconds --;
       if (_time.seconds <= -1) {
         _time.minutes --;
@@ -86,7 +87,8 @@ function pauseTimer(isPaused) {
   if (isPaused) {
     clearInterval(_timer);
     _timerStatus = isPaused;
-  } else {
+  }
+  else {
     _timerStatus = isPaused;
     countdown();
   }

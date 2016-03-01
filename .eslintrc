@@ -5,6 +5,8 @@
   ],
   "parser": "babel-eslint",
   "rules": {
+    "brace-style": [2, "stroustrup", { "allowSingleLine": true }],
+    "no-unused-vars": [2, {"args": "after-used", "argsIgnorePattern": "^__"}],
     "func-names": 0,
     "default-case": 1,
     "no-else-return": 0,

@@ -51,7 +51,8 @@ const Idea = React.createClass({
         height: `125px`,
         overflow: `ellipsis`,
       };
-    } else {
+    }
+    else {
       return {
         width: `150px`,
         height: `75px`,
@@ -94,7 +95,8 @@ const Idea = React.createClass({
           {ideaString}
         </div>
       );
-    } else {
+    }
+    else {
       return (
         <div className={classToAdd}
         canDrag={draggableState} id={id}

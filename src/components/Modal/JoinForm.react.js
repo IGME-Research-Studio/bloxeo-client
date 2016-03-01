@@ -49,7 +49,8 @@ const JoinForm = React.createClass({
    * @return {object}
    */
   render: function() {
-    const hasError = classNames('hasError', {hide: !this.props.error});
+    const { error, boardId } = this.props;
+    const hasError = classNames('hasError', {hide: !error});
     const placeholder = `What's your name?`;
 
     return (
@@ -72,7 +73,7 @@ const JoinForm = React.createClass({
 
           <div className="modalBreak"></div>
           <div className="modalSection">
-            <span className={hasError} ref="error">{this.props.error}</span>
+            <span className={hasError} ref="error">{error}</span>
             <input
               type="text"
               className="modalInput"

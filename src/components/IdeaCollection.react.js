@@ -60,7 +60,8 @@ const IdeaCollection = React.createClass({
       this.props.ideas.content.forEach(function(item) {
         if (item.text.length > 15) {
           value += 1;
-        } else {
+        }
+        else {
           value += 0.5;
         }
       });

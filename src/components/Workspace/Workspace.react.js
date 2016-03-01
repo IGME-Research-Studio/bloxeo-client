@@ -171,7 +171,8 @@ const workTarget = {
         Math.round(pos.x) - (domNode.left) - component.state.x,
         Math.round(pos.y) - (domNode.top) - component.state.y
       );
-    } else {
+    }
+    else {
       StormActions.collectionCreate(
         idea,
         Math.round(pos.x) - (domNode.left) - component.state.x,

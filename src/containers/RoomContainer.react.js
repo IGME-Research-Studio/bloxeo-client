@@ -28,9 +28,9 @@ function getStormState() {
 }
 
 class RoomContainer extends React.Component {
-
-  getInitialState() {
-    return getStormState();
+  constructor(props) {
+    super(props);
+    this.state = getStormState();
   }
 
   componentDidMount() {
@@ -57,8 +57,15 @@ class RoomContainer extends React.Component {
    * Event handler for 'change' events coming from the StormStore
    */
   _onChange = () => {
-    if (this.isMounted()) {
-      this.setState(getStormState());
+    this.setState(getStormState());
+  }
+
+  _switchTab = () => {
+    if (this.state.tab === NavBarConstants.WORKSPACE_TAB) {
+      return <Workspace />;
+    }
+    else {
+      return <Results />;
     }
   }
 
@@ -67,25 +74,21 @@ class RoomContainer extends React.Component {
    */
   render() {
     return (
-      <div className="appContainer">
-        <LoadingOverlay disabled={false}/>
-        <Sidebar room={this.state.room}
-        time={this.state.time}
-        timerStatus={this.state.timerStatus}
-        ideas={this.state.ideas}
-        timerWidth={this.state.timerWidth}/>
-        <div className="dragContainer">
-          <NavBar selectedTab={this.state.tab} />
-          {(() => {
-            switch (this.state.tab) {
-            case NavBarConstants.WORKSPACE_TAB:
-              return <Workspace />;
-            case NavBarConstants.RESULTS_TAB:
-              return <Results />;
-            default:
-              break;
-            }
-          })()}
+        <div className="appContainer">
+
+          <LoadingOverlay disabled={false}/>
+
+          <Sidebar room={this.state.room}
+            time={this.state.time}
+            timerStatus={this.state.timerStatus}
+            ideas={this.state.ideas}
+            timerWidth={this.state.timerWidth}
+          />
+
+          <div className="dragContainer">
+            <NavBar selectedTab={this.state.tab} />
+            {(this._switchTab())}
+          </div>
         </div>
       </div>
     );

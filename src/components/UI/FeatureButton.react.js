@@ -17,10 +17,10 @@ const defaultProps = {
 };
 
 const buttonStyle = {
-  textAlign: 'center'
+  textAlign: 'center',
 };
 const labelStyle = {
-  textTransform: 'none'
+  textTransform: 'none',
 };
 
 const FeatureButton = ({url, label, primary, secondary, fullWidth}) => (

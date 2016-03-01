@@ -1,6 +1,8 @@
 import React from 'react';
 import { DragDropContext as dragDropContext } from 'react-dnd';
 import HTML5Backend    from 'react-dnd-html5-backend';
+import MuiThemeProvider from 'material-ui/lib/MuiThemeProvider';
+import colorTheme from '../colorTheme';
 
 import BoardOptionsStore from '../stores/BoardOptionsStore';
 import CollectionStore   from '../stores/CollectionStore';
@@ -74,6 +76,7 @@ class RoomContainer extends React.Component {
    */
   render() {
     return (
+      <MuiThemeProvider muiTheme={colorTheme}>
         <div className="appContainer">
 
           <LoadingOverlay disabled={false}/>
@@ -90,7 +93,7 @@ class RoomContainer extends React.Component {
             {(this._switchTab())}
           </div>
         </div>
-      </div>
+      </MuiThemeProvider>
     );
   }
 }

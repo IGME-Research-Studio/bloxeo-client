@@ -1,6 +1,8 @@
 import React from 'react';
-import { Link } from 'react-router';
+import MuiThemeProvider from 'material-ui/lib/MuiThemeProvider';
+import colorTheme from '../colorTheme';
 
+import FeatureButton from '../components/UI/FeatureButton.react';
 import SocketStore from '../stores/SocketStore';
 
 function getStates() {
@@ -29,6 +31,8 @@ const LandingContainer = React.createClass({
 
   render: function() {
     return (
+      <MuiThemeProvider muiTheme={colorTheme}>
+
       <div classNameName="landingPage">
         <main>
 
@@ -46,8 +50,17 @@ const LandingContainer = React.createClass({
                     </div>
                     <div className="joinLinks">
 
-                      <Link to="/room/join">Join Modal</Link>
-                      <Link to="/room/create">Create Modal</Link>
+                      <FeatureButton
+                        secondary
+                        url='/create'
+                        label='Create a room'
+                      />
+
+                      <FeatureButton
+                        primary
+                        url='/join'
+                        label='Join a room'
+                      />
 
                       <p>
                         By creating a room, you are agreeing to our
@@ -127,14 +140,21 @@ const LandingContainer = React.createClass({
                 <div className="images">
                   <img className="eggImg" src="/assets/Egg.png" />
                 </div>
+
                 <div className="content">
                   <div className="textContent">
                     <h1>What are you waiting for?</h1>
                     <h1>Get started.</h1>
                   </div>
 
-                  <Link to="/room/join">Join Modal</Link>
-                  <Link to="/room/create">Create Modal</Link>
+                  <div>
+                    <FeatureButton
+                      secondary
+                      fullWidth={false}
+                      url='/create'
+                      label='Create a room'
+                    />
+                  </div>
 
                   <p>
                     By creating a room you&rsquo;re agreeing to our
@@ -145,9 +165,10 @@ const LandingContainer = React.createClass({
             </div>
           </section>
         </main>
-
         {this.props.children}
       </div>
+
+    </MuiThemeProvider>
     );
   },
 });

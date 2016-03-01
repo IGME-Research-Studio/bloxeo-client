@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import classNames from 'classnames';
 
 import StormActions from '../../actions/StormActions';
-import ModalHeader from './ModalHeader.react';
 import ModalFooter from './ModalFooter.react';
 
-const CreateModal = React.createClass({
+const propTypes = {
+  error: PropTypes.string,
+};
+
+const CreateForm = React.createClass({
 
   getInitialState: function() {
     const name = localStorage.getItem('UserName');
@@ -43,7 +46,6 @@ const CreateModal = React.createClass({
 
     return (
       <div className="joinModal">
-        <ModalHeader title="User Options" onClose={this.props.onClose} />
         <div className="modalContent">
           <div className="modalSection">
             <span className={hasError} ref="error">{this.props.error}</span>
@@ -72,4 +74,5 @@ const CreateModal = React.createClass({
   },
 });
 
-module.exports = CreateModal;
+CreateForm.propTypes = propTypes;
+module.exports = CreateForm;

@@ -1,22 +1,15 @@
 import React from 'react';
 
+import ModalContainer from './ModalContainer.react';
 import CreateForm from '../components/Modal/CreateForm.react';
-import StatelessModal from '../components/StatelessModal.react';
-import { browserHistory } from 'react-router';
 
-const CreateRoomContainer = React.createClass({
+const CreateRoomContainer = () => (
+  <ModalContainer
+    headerText='Create a room'
+    restorePath='/'
+  >
+    <CreateForm />
+  </ModalContainer>
+);
 
-  closeModal: function() {
-    browserHistory.goBack();
-  },
-
-  render: function() {
-    return (
-      <StatelessModal onClose={this.closeModal}>
-        <CreateForm onClose={this.closeModal} />
-      </StatelessModal>
-    );
-  },
-});
-
-module.exports = CreateRoomContainer;
+export default CreateRoomContainer;

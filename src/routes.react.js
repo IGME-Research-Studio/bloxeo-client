@@ -5,35 +5,33 @@ import RoomContainer from './containers/RoomContainer.react';
 import LandingContainer from './containers/LandingContainer.react';
 import CreateRoomContainer from './containers/CreateRoomContainer.react';
 import JoinRoomContainer from './containers/JoinRoomContainer.react';
+import NotFoundContainer from './containers/NotFoundContainer.react';
 
 const renderRoutes = (history) => {
   return (
     <Router history={history}>
       <Route
-        name="root"
         path="/"
         component={LandingContainer}>
 
         <Route
-          path="room/join/:boardId"
+          path="join/:boardId"
           component={JoinRoomContainer} />
         <Route
-          path="room/join"
+          path="join"
           component={JoinRoomContainer} />
         <Route
-          path="room/create"
+          path="create"
           component={CreateRoomContainer} />
       </Route>
 
       <Route
-        name="join-room"
-        path="room"
+        path="/room/:boardId"
         component={RoomContainer} />
 
       <Route
-        name="specific-room"
-        path="room/:boardId"
-        component={RoomContainer} />
+        path="*"
+        component={NotFoundContainer} />
     </Router>
   );
 };

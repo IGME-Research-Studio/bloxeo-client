@@ -1,18 +1,22 @@
+import _ from 'lodash';
+// import io from 'socket.io-client';
+import reqwest from 'reqwest';
+import Promise from 'bluebird';
+import assign from 'object-assign';
 import { browserHistory } from 'react-router';
-const AppDispatcher  = require('../dispatcher/AppDispatcher');
-const StormConstants = require('../constants/StormConstants');
-const StormActions   = require('../actions/StormActions');
-const socketIO       = require('socket.io-client');
-const _              = require('lodash');
-const reqwest        = require('reqwest');
-const Promise        = require('bluebird');
-const assign         = require('object-assign');
-const EventEmitter   = require('events').EventEmitter;
-const UserStore      = require('./UserStore');
+import { equals, and, not, isNil } from 'ramda';
+import { EventEmitter } from 'events';
+
+import io from '../io';
+import AppDispatcher from '../dispatcher/AppDispatcher';
+import StormConstants from '../constants/StormConstants';
+import StormActions from '../actions/StormActions';
+import UserStore from './UserStore';
 
 // Init socket.io connection
-const socket = socketIO.connect(StormConstants.SERVER_URL);
-let currentBoardId = 0;
+// const socket = io.connect(StormConstants.SERVER_URL);
+const socket = io;
+let currentBoardId = '';
 let receivedIdeas = false;
 let receivedCollections = false;
 
@@ -83,12 +87,8 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
 
   /**
    * Checks to update the client to the server
+   * turn REST_API into route templates
    */
-  // function updateClient() {
-  //   socket.emit(EVENT_API.GET_IDEAS, {boardId: currentBoardId});
-  //   socket.emit(EVENT_API.GET_COLLECTIONS, {boardId: currentBoardId});
-  // }
-  // turn REST_API into route templates
   const Routes = _.mapValues(REST_API, (route) => {
     return _.template(StormConstants.SERVER_URL + route[1]);
   });
@@ -136,12 +136,14 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       SocketStore.emitChange();
 
       if (window.location.hash.split('?')[0] !== '/room') {
-        browserHistory.push(`/room?roomId=${currentBoardId}`);
+        browserHistory.push(`/room/${currentBoardId}`);
       }
 
-      // // @XXX we shouldn't just set the href like this
-      // // Append the board id to the url upon joining a room
-      // // if it is not already there
+      // @XXX we shouldn't just set the href like this
+      // removed it bc I can't think of a case where this is necessary
+      //
+      // Append the board id to the url upon joining a room
+      // if it is not already there
       // if (window.location.hash.split('?')[0] !== '#/workSpace') {
       //   const newUrl = window.location.href.split('?')[0] +
       //     `workSpace?roomId=${currentBoardId}`;
@@ -188,62 +190,73 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
     });
   });
 
-  // Request Functions
   /**
-   * Creates a user
-   * @param {string} name
+   * API call to create a user
+   * @returns {Promise<Object|Error>}
    */
   function createUser(name) {
-    return new Promise((resolve, reject) => {
-      if (!UserStore.getUserToken()) {
-        reqwest({
-          url: Routes.createUser(),
-          method: REST_API.createUser[0],
-          data: { username: name },
-          success: (res) => {
-            // store user stuff
-            UserStore.setUserData(res, name);
-            token = res;
-            resolve(res);
-          },
-          error: () => {
-            reject(new Error('User Creation Failed'));
-          },
-        });
-      } else {
-        token = UserStore.getUserToken();
-        resolve(token);
-      }
+    return reqwest({
+      url: Routes.createUser(),
+      method: REST_API.createUser[0],
+      data: { username: name },
+    })
+    .then((res) => {
+      console.dir(res);
+      UserStore.setUserData(res.token, name);
+      token = res;
+      return res;
+    })
+    .fail((err, res) => {
+      console.error(err, res);
+      throw new Error(err);
     });
+  }
+
+  /**
+   * Request Functions
+   * Creates a user
+   * @param {string} name
+   * @returns {Promise}
+   */
+  function getOrCreateUser(name) {
+    console.log(name);
+    if (!UserStore.getUserToken()) {
+      return createUser(name);
+    }
+    else {
+      token = UserStore.getUserToken();
+      return Promise.resolve(token);
+    }
   }
 
   /**
    * Validates a user token
    */
-  function validateUser() {
-    return new Promise((resolve, reject) => {
-      if (UserStore.getUserToken()) {
-        reqwest({
-          url: Routes.validateUser(),
-          method: REST_API.validateUser[0],
-          data: { userToken: UserStore.getUserToken()},
-          success: () => {
-            console.log(UserStore.getUserToken());
-            token = UserStore.getUserToken();
-            SocketStore.valid = true;
-            resolve(true);
-          },
-          error: () => {
-            UserStore.clearUserData();
-            SocketStore.valid = false;
-            reject(new Error('User did not validate'));
-          },
-        });
-      } else {
-        reject(new Error('No cached user data'));
-      }
-    });
-  }
+  // function validateUser() {
+  //   return new Promise((resolve, reject) => {
+  //     if (UserStore.getUserToken()) {
+  //       reqwest({
+  //         url: Routes.validateUser(),
+  //         method: REST_API.validateUser[0],
+  //         data: { userToken: UserStore.getUserToken()},
+  //         success: () => {
+  //           console.log(UserStore.getUserToken());
+  //           token = UserStore.getUserToken();
+  //           SocketStore.valid = true;
+  //           resolve(true);
+  //         },
+  //         error: () => {
+  //           UserStore.clearUserData();
+  //           SocketStore.valid = false;
+  //           reject(new Error('User did not validate'));
+  //         },
+  //       });
+  //     }
+  //     else {
+  //       reject(new Error('No cached user data'));
+  //     }
+  //   });
+  // }
 
   /**
    * Joins board of given id
@@ -251,8 +264,9 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
    */
   function joinBoard(boardId) {
     // @XXX WUT?
-    receivedCollections = false;
+    [receivedCollections, receivedIdeas] = [false, false];
     currentBoardId = boardId;
+    console.log('This boardId ', boardId, token);
     socket.emit(
       EVENT_API.JOIN_ROOM,
       {
@@ -265,7 +279,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
    * Create new board
    */
   function createBoard() {
-    reqwest({
+    return reqwest({
       url: Routes.createBoard(),
       method: REST_API.createBoard[0],
       data: { userToken: token },
@@ -360,11 +374,11 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
   AppDispatcher.register((action) => {
     switch (action.actionType) {
     case StormConstants.CREATE_BOARD:
-      createUser(action.userName)
-      .then(() => { createBoard();});
+      getOrCreateUser(action.userName)
+      .then(() => createBoard());
       break;
     case StormConstants.JOIN_BOARD:
-      createUser(action.userName)
+      getOrCreateUser(action.userName)
       .then(() => { joinBoard(action.boardId);});
       break;
     case StormConstants.GET_IDEAS:
@@ -393,15 +407,24 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
   });
 
   // @XXX client should handle failure instead of active checking
-  validateUser()
-  .then(() => {
-    // if page is on the workspace, join the room on page load
-    if (window.location.hash.split('?')[0] === '#/workSpace') {
-      const roomid = window.location.hash.split('=')[1];
-      joinBoard(roomid);
-    }
-  })
-  .catch(() => { SocketStore.emitValidError();});
+  // validateUser()
+  // .then(() => {
+
+  const namespace = window.location.pathname.split('/')[1];
+  const boardId = window.location.pathname.split('/')[2];
+
+  // console.log(`pathname`);
+  // console.log(window.location.pathname.split('/'));
+  // console.log(`namespace ${namespace}`);
+  // console.log(`boardId ${boardId}`);
+
+  // If boardId exists e.g. not just /room
+  if (and(equals(namespace, 'room'), not(isNil(boardId)))) {
+    console.log('doing the thing', boardId);
+    joinBoard(boardId);
+  }
+  // })
+  // .catch(() => { SocketStore.emitValidError();});
 });
 
 module.exports = SocketStore;

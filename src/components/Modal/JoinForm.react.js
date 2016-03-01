@@ -1,5 +1,7 @@
 import React, { PropTypes }  from 'react';
 import classNames from 'classnames';
+import { defaultTo } from 'ramda';
+
 import StormActions from '../../actions/StormActions';
 import ModalFooter from '../Modal/ModalFooter.react';
 
@@ -8,11 +10,13 @@ const propTypes = {
   error: PropTypes.string,
 };
 
+const stateOrProp = (subState, subProp) => defaultTo(subProp)(subState);
+
 const JoinForm = React.createClass({
   getInitialState: function() {
     return {
       name: localStorage.getItem('UserName') || '',
-      boardId: this.props.boardId || '',
+      // boardId: this.props.boardId || '',
     };
   },
 
@@ -78,7 +82,7 @@ const JoinForm = React.createClass({
               type="text"
               className="modalInput"
               placeholder="Enter room code"
-              value={this.state.boardId}
+              value={stateOrProp(this.state.boardId, boardId)}
               onChange={this._updateCode}
             />
           </div>

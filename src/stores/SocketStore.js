@@ -13,20 +13,22 @@ import StormConstants from '../constants/StormConstants';
 import StormActions from '../actions/StormActions';
 import UserStore from './UserStore';
 
-// Init socket.io connection
-// const socket = io.connect(StormConstants.SERVER_URL);
+// A socket.io connection singleton
 const socket = io;
+const isntNil = compose(not, isNil);
+
 let currentBoardId = '';
 let receivedIdeas = false;
 let receivedCollections = false;
-
 let token = '';
 let errorMsg = '';
+
 const ERROR_CHANGE_EVENT = 'JOIN_ERROR';
 const VALIDATE_ERROR = 'VALIDATE_ERROR';
 
 const SocketStore = assign({}, EventEmitter.prototype, {
   valid: true,
+
   /**
    * Get join error message
    * @return {array}
@@ -34,12 +36,15 @@ const SocketStore = assign({}, EventEmitter.prototype, {
   getErrorMessage: function() {
     return errorMsg;
   },
+
   emitChange: function() {
     this.emit(ERROR_CHANGE_EVENT);
   },
+
   emitValidError: function() {
     this.emit(VALIDATE_ERROR);
   },
+
   /**
    * Add a change listener
    * @param {function} callback - event callback function
@@ -47,6 +52,7 @@ const SocketStore = assign({}, EventEmitter.prototype, {
   addErrorListener: function(callback) {
     this.on(ERROR_CHANGE_EVENT, callback);
   },
+
   /**
    * Remove a change listener
    * @param {function} callback - callback to be removed
@@ -54,10 +60,12 @@ const SocketStore = assign({}, EventEmitter.prototype, {
   removeErrorListener: function(callback) {
     this.removeListener(ERROR_CHANGE_EVENT, callback);
   },
+
   addValidateListener: function(callback) {
     this.on(VALIDATE_ERROR, callback);
     if (!this.valid) this.emit(VALIDATE_ERROR);
   },
+
   removeValidateListener: function(callback) {
     this.removeListener(VALIDATE_ERROR, callback);
   },
@@ -270,7 +278,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
     socket.emit(
       EVENT_API.JOIN_ROOM,
       {
-        boardId: currentBoardId,
+        boardId: boardId,
         userToken: token,
       });
   }
@@ -379,7 +387,7 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
       break;
     case StormConstants.JOIN_BOARD:
       getOrCreateUser(action.userName)
-      .then(() => { joinBoard(action.boardId);});
+      .then(() => joinBoard(action.boardId));
       break;
     case StormConstants.GET_IDEAS:
       socket.emit(EVENT_API.GET_IDEAS, {boardId: currentBoardId });
@@ -410,8 +418,8 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
   // validateUser()
   // .then(() => {
 
-  const namespace = window.location.pathname.split('/')[1];
-  const boardId = window.location.pathname.split('/')[2];
+  // const namespace = window.location.pathname.split('/')[1];
+  // const boardId = window.location.pathname.split('/')[2];
 
   // console.log(`pathname`);
   // console.log(window.location.pathname.split('/'));
@@ -419,10 +427,10 @@ socket.on('RECEIVED_CONSTANTS', (body) => {
   // console.log(`boardId ${boardId}`);
 
   // If boardId exists e.g. not just /room
-  if (and(equals(namespace, 'room'), not(isNil(boardId)))) {
-    console.log('doing the thing', boardId);
-    joinBoard(boardId);
-  }
+  // if (and(equals(namespace, 'room'), not(isNil(boardId)))) {
+  //   console.log('doing the thing', boardId);
+  //   joinBoard(boardId);
+  // }
   // })
   // .catch(() => { SocketStore.emitValidError();});
 });

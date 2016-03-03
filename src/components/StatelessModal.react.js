@@ -19,7 +19,6 @@ const customStyles = {
     bottom: 'auto',
     overflow: 'hidden',
     width: '28%',
-    height: '40%',
     border: '0',
     marginRight: '-50%',
     padding: '0',

@@ -32,8 +32,10 @@ const CreateForm = React.createClass({
   _onSubmit: function() {
     if (!this.state.name) {
       // This should display an error
+      console.error('Validation error');
       return;
     }
+
     StormActions.createBoard(this.state.name);
   },
 

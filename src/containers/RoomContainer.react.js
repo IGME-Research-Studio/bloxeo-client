@@ -1,18 +1,19 @@
 import React from 'react';
 import { DragDropContext as dragDropContext } from 'react-dnd';
-import HTML5Backend    from 'react-dnd-html5-backend';
+import HTML5Backend from 'react-dnd-html5-backend';
 import MuiThemeProvider from 'material-ui/lib/MuiThemeProvider';
 import colorTheme from '../colorTheme';
 
 import BoardOptionsStore from '../stores/BoardOptionsStore';
-import CollectionStore   from '../stores/CollectionStore';
-import IdeaStore         from '../stores/IdeaStore';
+import CollectionStore from '../stores/CollectionStore';
+import IdeaStore from '../stores/IdeaStore';
+import LoadingStore from '../stores/LoadingStore';
 
-import LoadingOverlay  from '../components/Loading.react';
-import NavBar          from '../components/NavBar.react';
-import Results         from '../components/Results/Results.react';
-import Sidebar         from '../components/Sidebar/Sidebar.react';
-import Workspace       from '../components/Workspace/Workspace.react';
+import LoadingOverlay from '../components/LoadingOverlay.react';
+import NavBar from '../components/NavBar.react';
+import Results from '../components/Results/Results.react';
+import Sidebar from '../components/Sidebar/Sidebar.react';
+import Workspace from '../components/Workspace/Workspace.react';
 
 import StormActions    from '../actions/StormActions';
 import NavBarConstants from '../constants/NavBarConstants';

@@ -1,6 +1,6 @@
-const React = require('react');
-const LoadingStore = require('../stores/LoadingStore');
-const classNames = require('classnames');
+import React from 'react';
+import classNames from 'classnames';
+import LoadingStore from '../stores/LoadingStore';
 
 const LoadingOverlay = React.createClass({
   getInitialState: function() {

@@ -16,7 +16,6 @@ const JoinForm = React.createClass({
   getInitialState: function() {
     return {
       name: localStorage.getItem('UserName') || '',
-      // boardId: this.props.boardId || '',
     };
   },
 
@@ -43,7 +42,7 @@ const JoinForm = React.createClass({
    */
   _onSubmit: function() {
     if (!this.state.name || this.state.boardId === '') {
-      // This should display an error
+      // @TODO This should display an error
       return;
     }
     StormActions.joinBoard(this.state.boardId, this.state.name);

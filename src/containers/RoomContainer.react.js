@@ -15,14 +15,30 @@ import Results from '../components/Results/Results.react';
 import Sidebar from '../components/Sidebar/Sidebar.react';
 import Workspace from '../components/Workspace/Workspace.react';
 
-import StormActions    from '../actions/StormActions';
-import NavBarConstants from '../constants/NavBarConstants';
+import { countdown, joinBoard } from '../actions/StormActions';
+import { WORKSPACE_TAB, RESULTS_TAB } from '../constants/NavBarConstants';
+
+/**
+ * Set the initial state of the app before any data is received
+ */
+function getInitialState() {
+  return {
+    loading: true,
+    groups: CollectionStore.getAllCollections(),
+    ideas: IdeaStore.getAllIdeas(),
+    room: BoardOptionsStore.getRoomData(),
+    tab: BoardOptionsStore.getSelectedTab(),
+  }
+}
 
 /**
  * Retrieve the current data from the StormStore
+ * @param {Object} prevState
+ * @returns {Object} new state object
  */
-function getStormState() {
+function getRoomState(prevState) {
   return {
+    ...prevState,
     groups: CollectionStore.getAllCollections(),
     ideas: IdeaStore.getAllIdeas(),
     room: BoardOptionsStore.getRoomData(),
@@ -30,19 +46,32 @@ function getStormState() {
   };
 }
 
+const tabMap = {
+  WORKSPACE_TAB: <Workspace />,
+  RESULTS_TAB: <Results />,
+};
+
 class RoomContainer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = getStormState();
+
+    this.state = getInitialState();
+    this._joinBoard(this.props.params.boardId)
+
+    console.log(`RoomContainer constructed ${this.props.params.boardID}`);
   }
 
   componentDidMount() {
+    console.log('RoomContainer did mount');
+
     BoardOptionsStore.addNameListener(this._onChange);
     BoardOptionsStore.addTabChangeListener(this._onChange);
     CollectionStore.addChangeListener(this._onChange);
     IdeaStore.addChangeListener(this._onChange);
+
+    LoadingStore.addLoadingListener(this._onLoad);
     // start timer countdown
-    StormActions.countdown();
+    // countdown();
 
     const ideasElement = document.querySelector('body');
     const hideScroll = 'overflow: hidden';
@@ -54,23 +83,18 @@ class RoomContainer extends React.Component {
     BoardOptionsStore.removeTabChangeListener(this._onChange);
     CollectionStore.removeChangeListener(this._onChange);
     IdeaStore.removeChangeListener(this._onChange);
+
+    LoadingStore.removeLoadingListener(this._onLoad);
   }
 
   /**
    * Event handler for 'change' events coming from the StormStore
    */
-  _onChange = () => {
-    this.setState(getStormState());
-  }
+  _onChange = () => this.setState(getRoomState(this.state))
+  _onLoad = () => this.setState({loading: false})
 
-  _switchTab = () => {
-    if (this.state.tab === NavBarConstants.WORKSPACE_TAB) {
-      return <Workspace />;
-    }
-    else {
-      return <Results />;
-    }
-  }
+  _switchTab = (tabState) => tabMap[tabState] || <Workspace />
+  _joinBoard = (boardId) => joinBoard(boardId)
 
   /**
    * @return {object}
@@ -80,7 +104,7 @@ class RoomContainer extends React.Component {
       <MuiThemeProvider muiTheme={colorTheme}>
         <div className="appContainer">
 
-          <LoadingOverlay disabled={false}/>
+          <LoadingOverlay enabled={this.state.loading}/>
 
           <Sidebar room={this.state.room}
             time={this.state.time}
@@ -91,7 +115,7 @@ class RoomContainer extends React.Component {
 
           <div className="dragContainer">
             <NavBar selectedTab={this.state.tab} />
-            {(this._switchTab())}
+            {(this._switchTab(this.state.tab))}
           </div>
         </div>
       </MuiThemeProvider>

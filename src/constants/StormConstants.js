@@ -22,7 +22,8 @@ module.exports = {
   STORE_WORKSPACE: 'STORE_WORKSPACE',
   STORE_MOVED_IDEA: 'STORE_MOVED_IDEA',
   // Server URL constants
-  SERVER_URL: 'http://storm-server-stage.herokuapp.com',
+  // SERVER_URL: 'http://storm-server-stage.herokuapp.com',
+  SERVER_URL: 'http://localhost:1337',
   API_VERSION: '/v1',
   TEST_BOARD: '4yibJDO4l',
   // Server requests

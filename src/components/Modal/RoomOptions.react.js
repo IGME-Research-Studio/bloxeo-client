@@ -3,11 +3,11 @@ const ToggleButton = require('./ToggleButton.react');
 
 const RoomOptions = React.createClass({
   _onClick: function() {
-    console.log('apply changes');
+    // console.log('apply changes');
   },
 
-  handleToggle: function(buttonStatus) {
-    console.log('enable ' + buttonStatus);
+  handleToggle: function(/* buttonStatus */) {
+    // console.log('enable ' + buttonStatus);
   },
 
   render: function() {
@@ -20,7 +20,9 @@ const RoomOptions = React.createClass({
             <input type="text" className="optionInput" />
           </div>
           <div className="optionSection">
-            <div className="optionText">Room Option with not enough room for one line</div>
+            <div className="optionText">
+              <p>Room Option with not enough room for one line</p>
+            </div>
             <input type="text" className="optionInput" />
           </div>
           <div className="optionSection">
@@ -30,7 +32,7 @@ const RoomOptions = React.createClass({
         </div>
         <div className="optionFooter">
           <button className="optionButton" onClick={this._onClick}>
-            APPLY CHANGES
+            Apply changes
           </button>
         </div>
       </div>

@@ -199,7 +199,8 @@ function collide(node) {
         // the collision
         if (Math.abs(lx) > Math.abs(ly)) {
           lx = 0;
-        } else {
+        }
+        else {
           ly = 0;
         }
 
@@ -271,7 +272,6 @@ AppDispatcher.register(function(action) {
     CollectionStore.emitChange();
     break;
   default:
-    break;
   }
 });
 

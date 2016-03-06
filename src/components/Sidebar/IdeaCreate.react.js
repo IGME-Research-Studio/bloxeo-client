@@ -47,7 +47,8 @@ const IdeaCreate = React.createClass({
         <input
           type="text"
           maxLength="30"
-          className={isTimerDisabled ? 'idea-create is-disabled' : 'idea-create'}
+          className={isTimerDisabled ?
+            'idea-create is-disabled' : 'idea-create'}
           placeholder='Enter your ideas here'
           value={this.state.value}
           onChange={this._onChange}
@@ -55,7 +56,8 @@ const IdeaCreate = React.createClass({
           disabled={isTimerDisabled}
           autoFocus={!isTimerDisabled}
         />
-        <a className={isTimerDisabled ? 'enterButton is-disabled' : 'enterButton'}
+        <a className={isTimerDisabled ?
+          'enterButton is-disabled' : 'enterButton'}
           onClick={this._onSave}>
           <i className="fa fa-arrow-up"></i>
         </a>

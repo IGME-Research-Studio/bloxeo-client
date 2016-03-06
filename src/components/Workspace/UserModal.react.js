@@ -4,7 +4,7 @@ const StormActions = require('../../actions/StormActions');
 const ModalHeader = require('../Modal/ModalHeader.react');
 const ModalFooter = require('../Modal/ModalFooter.react');
 
-const CreateModal = React.createClass({
+const UserModal = React.createClass({
   getInitialState: function() {
     const name = localStorage.getItem('UserName');
     return {
@@ -62,4 +62,4 @@ const CreateModal = React.createClass({
   },
 });
 
-module.exports = CreateModal;
+module.exports = UserModal;

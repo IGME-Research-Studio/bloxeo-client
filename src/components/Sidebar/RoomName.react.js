@@ -51,7 +51,8 @@ const RoomName = React.createClass({
         isEditing: false,
       });
       return;
-    } else {
+    }
+    else {
       // save room name to StormStore
       StormActions.changeRoomName(this.state.value);
       // update room name view
@@ -75,7 +76,8 @@ const RoomName = React.createClass({
           onKeyDown={this._onKeyDown}
           onBlur={this._onSave} />
       );
-    } else {
+    }
+    else {
       return (
         <h2
           className="noMargin room-name"

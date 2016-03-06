@@ -1,24 +1,14 @@
-/*eslint-disable */
-const React = require('react');
-/*eslint-enable */
-const ReactDOM = require('react-dom');
-const StormApp = require('./components/StormApp.react');
-const LandingPage = require('./components/Landing/LandingPage.react');
-const ReactRouter = require('react-router');
-const Router = ReactRouter.Router;
-const Route = ReactRouter.Route;
-const createHistory = require('history/lib/createHashHistory.js');
-const history = createHistory({
-  queryKey: false,
-});
+import { render } from 'react-dom';
+import { browserHistory } from 'react-router';
+import injectTapEventPlugin from 'react-tap-event-plugin';
 
-window.onload = function() {
-  const body = document.querySelector('#app_space');
-  // renders the routing path
-  ReactDOM.render((
-    <Router history={history}>
-      <Route path="/" component={LandingPage}/>
-      <Route path="workSpace" component={StormApp}/>
-    </Router>
-  ), body);
+import renderRoutes from './routes.react';
+
+// Needed for onTouchTap
+// Can go away when react 1.0 release
+// https://github.com/zilverline/react-tap-event-plugin
+injectTapEventPlugin();
+
+window.onload = () => {
+  render(renderRoutes(browserHistory), document.querySelector('#mount'));
 };

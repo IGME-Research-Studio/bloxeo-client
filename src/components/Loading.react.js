@@ -1,6 +1,6 @@
-const React = require('react');
-const LoadingStore = require('../stores/LoadingStore');
-const classNames = require('classnames');
+import React from 'react';
+import classNames from 'classnames';
+import LoadingStore from '../stores/LoadingStore';
 
 const LoadingOverlay = React.createClass({
   getInitialState: function() {
@@ -18,7 +18,8 @@ const LoadingOverlay = React.createClass({
     this.setState({disabled: true});
   },
   render: function() {
-    const classToAdd = classNames('loadingOverlay', {active: !this.state.disabled});
+    const classToAdd = classNames('loadingOverlay',
+                                  {active: !this.state.disabled});
     return (
       <section className={classToAdd}>
         <div className="loadingAnimation">

@@ -30,6 +30,7 @@ AppDispatcher.register(function(action) {
   case StormConstants.END_LOAD_ANIMATION:
     LoadingStore.emitChange();
     break;
+  default:
   }
 });
 

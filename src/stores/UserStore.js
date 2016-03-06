@@ -2,6 +2,7 @@ const assign         = require('object-assign');
 const EventEmitter   = require('events').EventEmitter;
 
 const UserStore = assign({}, EventEmitter.prototype, {
+
   /**
    * Get join error message
    * @return {array}

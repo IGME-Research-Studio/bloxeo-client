@@ -97,7 +97,7 @@ module.exports = function (grunt) {
   grunt.registerTask('build', 'build-dev');
 
   grunt.registerTask('lint', ['eslint']);
-  grunt.registerTask('test', ['mochaTest']);
+  grunt.registerTask('test', ['eslint', 'mochaTest']);
 
   grunt.registerTask('prod', ['lint', 'build-prod', 'test']);
 };

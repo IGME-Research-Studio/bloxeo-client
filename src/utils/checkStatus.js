@@ -1,21 +1,28 @@
 import { __, both, gte, lt } from 'ramda';
 
-const self = {}
+const self = {};
 
-self.successfulStatus = (statusCode) => both(gte(__, 200), lt(__, 300));
+/**
+ * @param {Number} statusCode
+ * @returns {Boolean} true if the status code is ok
+ */
+self.successfulStatus = both(gte(__, 200), lt(__, 300));
 
+/**
+ * @param {String} url
+ * @param {Obj} data Stringify-able body
+ * @return {Promise}
+ */
 self.post = (url, data) => {
   return fetch(url, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify(data),
   });
 };
-
-self.toJson = (res) => res.json();
 
 self.checkHTTPStatus = (res) => {
   if (self.successfulStatus(res.status)) {
@@ -31,7 +38,7 @@ self.checkHTTPStatus = (res) => {
 self.checkSocketStatus = (res) => {
   return new Promise((resolve, reject) => {
     if (self.successfulStatus(res.code)) {
-      resolve(data);
+      resolve(res);
     }
     else {
       reject(new Error(res.message));

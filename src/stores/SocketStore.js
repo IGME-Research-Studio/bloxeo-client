@@ -1,11 +1,10 @@
 import 'whatwg-fetch';
 import _ from 'lodash';
-import reqwest from 'reqwest';
 import Promise from 'bluebird';
 import assign from 'object-assign';
-import { browserHistory } from 'react-router';
-import { equals, either, and, not, compose, isNil } from 'ramda';
+import { equals, either, not, compose, isNil } from 'ramda';
 import { EventEmitter } from 'events';
+import { browserHistory } from 'react-router';
 
 import io from '../io';
 import AppDispatcher from '../dispatcher/AppDispatcher';
@@ -13,7 +12,7 @@ import StormActions from '../actions/StormActions';
 import UserStore from './UserStore';
 import StormConstants from '../constants/StormConstants';
 import API from '../constants/APIConstants';
-import { post, toJson, checkSocketStatus,
+import { post, checkSocketStatus,
   checkHTTPStatus } from '../utils/checkStatus';
 
 // A socket.io connection singleton
@@ -83,32 +82,10 @@ const SocketStore = assign({}, EventEmitter.prototype, {
   },
 });
 
-/**
- * Checks a socket response for an error
- * @param {object} data: response data
- */
-function resolveSocketResponse(data) {
-  return new Promise((resolve, reject) => {
-    if (data.code < 300) {
-      resolve(data);
-    }
-    else {
-      reject(new Error(data.message));
-    }
-  });
-}
-
-socket.on('connect', () => { console.log(socket.id); });
-socket.on('disconnect', () => {
-  if (isntNil(currentBoardId)) {
-    leaveBoard(currentBoardId);
-  }
-});
-
 // Socket Handlers
 // Idea was added or removed from collection
 socket.on(EVENT_API.UPDATED_COLLECTIONS, (data) => {
-  resolveSocketResponse(data)
+  checkSocketStatus(data)
   .then((res) => {
     StormActions.receivedCollections(
       _.omit(res.data, ['top', 'left', 'key']),
@@ -122,7 +99,7 @@ socket.on(EVENT_API.UPDATED_COLLECTIONS, (data) => {
 
 // Idea was added or removed
 socket.on(EVENT_API.UPDATED_IDEAS, (data) => {
-  resolveSocketResponse(data)
+  checkSocketStatus(data)
   .then((res) => {
     const ideas = res.data.map((idea) => {
       return idea.content;
@@ -135,32 +112,20 @@ socket.on(EVENT_API.UPDATED_IDEAS, (data) => {
 });
 
 socket.on(EVENT_API.JOINED_ROOM, (data) => {
-  console.log('Socket, JOINED_ROOM ', data);
-  resolveSocketResponse(data)
+
+  checkSocketStatus(data)
   .then(() => {
     const reqObj = {
       boardId: currentBoardId,
       userToken: UserStore.getUserToken(),
     };
+    errorMsg = undefined;
+
     socket.emit(EVENT_API.GET_IDEAS, reqObj);
     socket.emit(EVENT_API.GET_COLLECTIONS, reqObj);
-    errorMsg = '';
     SocketStore.emitChange();
 
-    if (window.location.hash.split('?')[0] !== '/room') {
-      browserHistory.push(`/room/${currentBoardId}`);
-    }
-
-    // @XXX we shouldn't just set the href like this
-    // removed it bc I can't think of a case where this is necessary
-    //
-    // Append the board id to the url upon joining a room
-    // if it is not already there
-    // if (window.location.hash.split('?')[0] !== '#/workSpace') {
-    //   const newUrl = window.location.href.split('?')[0] +
-    //     `workSpace?roomId=${currentBoardId}`;
-    //   window.location.href = newUrl;
-    // }
+    browserHistory.push(`/room/${currentBoardId}`);
   })
   .catch((res) => {
     console.error(`Error joining a room: ${res}`);
@@ -170,7 +135,7 @@ socket.on(EVENT_API.JOINED_ROOM, (data) => {
 });
 
 socket.on(EVENT_API.RECEIVED_COLLECTIONS, (data) => {
-  resolveSocketResponse(data)
+  checkSocketStatus(data)
   .then((res) => {
     StormActions.receivedCollections(res.data, receivedCollections);
 
@@ -185,7 +150,7 @@ socket.on(EVENT_API.RECEIVED_COLLECTIONS, (data) => {
 });
 
 socket.on(EVENT_API.RECEIVED_IDEAS, (data) => {
-  resolveSocketResponse(data)
+  checkSocketStatus(data)
   .then((res) => {
     const ideas = res.data.map((idea) => {
       return idea.content;
@@ -203,33 +168,6 @@ socket.on(EVENT_API.RECEIVED_IDEAS, (data) => {
 });
 
 /**
- * Validates a user token
- */
-function validateUser() {
-  return new Promise((resolve, reject) => {
-    if (UserStore.getUserToken()) {
-      fetch(Routes.validateUser(), {
-        method: REST_API.validateUser[0],
-        data: {userToken: UserStore.getUserToken()},
-      })
-      .then(checkHTTPStatus)
-      .then((res) => {
-        SocketStore.valid = true;
-        resolve(true);
-      })
-      .catch((res) => {
-        UserStore.clearUserData();
-        SocketStore.valid = false;
-        reject(new Error('User invalid'));
-      });
-    }
-    else {
-      reject(new Error('No cached user data'));
-    }
-  });
-}
-
-/**
  * Joins board of given id
  * @param {string} boardId
  */
@@ -237,7 +175,7 @@ function joinBoard(boardId) {
   // @XXX WUT?
   [receivedCollections, receivedIdeas] = [false, false];
   currentBoardId = boardId;
-  console.log('Socket#joinBoard emitted', boardId, UserStore.getUserToken());
+
   socket.emit(
     EVENT_API.JOIN_ROOM,
     {
@@ -254,7 +192,7 @@ function leaveBoard(boardId) {
   // @XXX WUT?
   [receivedCollections, receivedIdeas] = [false, false];
   currentBoardId = undefined;
-  console.log('Socket#leaveBoard emitted', boardId, UserStore.getUserToken());
+
   socket.emit(
     EVENT_API.LEAVE_ROOM,
     {
@@ -267,9 +205,10 @@ function leaveBoard(boardId) {
  * Create new board
  */
 function createBoard() {
-  console.log('Socket#createBoard', UserStore.getUserToken());
-  return post(Routes.createBoard(), { userToken: UserStore.getUserToken()})
-  .then(checkHTTPStatus)
+
+  return post(Routes.createBoard(),
+              { userToken: UserStore.getUserToken()})
+  .then(checkHTTPStatus);
 }
 
 /**
@@ -277,14 +216,10 @@ function createBoard() {
  * @returns {Promise<Object|Error>}
  */
 function createUser(name) {
-  console.log(name);
-  console.log(Routes.createUser());
-  console.log(REST_API.createUser[0]);
 
   return post(Routes.createUser(), { username: name })
     .then(checkHTTPStatus)
     .then((res) => {
-      console.log(res);
       UserStore.setUserData(res.token, name);
       return res;
     })
@@ -392,6 +327,18 @@ function removeIdeaFromCollection(_key, content) {
     }
   );
 }
+
+socket.on('connect', () => {
+  console.info(socket.id);
+});
+
+socket.on('disconnect', () => {
+  console.info('disconnected');
+
+  if (isntNil(currentBoardId)) {
+    leaveBoard(currentBoardId);
+  }
+});
 
 // Set up action watchers
 AppDispatcher.register((action) => {

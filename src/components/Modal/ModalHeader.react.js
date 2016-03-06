@@ -1,18 +1,32 @@
-const React = require('react');
-const FontAwesome = require('react-fontawesome');
+import React, { PropTypes }  from 'react';
 
-const ModalHeader = React.createClass({
-  render: function() {
-    return (
-      <div className="modalHeader">
-        <div className="modalTitle">{this.props.title}</div>
-        <FontAwesome
-          name="times"
-          className="modalClose"
-          onClick={this.props.close} />
-      </div>
-    );
-  },
-});
+import IconButton from 'material-ui/lib/icon-button';
+import NavigationClose from 'material-ui/lib/svg-icons/navigation/close';
 
-module.exports = ModalHeader;
+const propTypes = {
+  onClose: PropTypes.func.isRequired,
+  title: PropTypes.string.isRequired,
+};
+
+const absolute = {
+  position: 'absolute',
+};
+
+const ModalHeader = ({onClose, title}) => (
+  <div className="modalHeader">
+    <span className="modalTitle">{title}</span>
+
+    <span className='modalClose'>
+      <IconButton
+        className='modalClose'
+        style={absolute}
+        onClick={onClose}
+      >
+        <NavigationClose />
+      </IconButton>
+    </span>
+  </div>
+);
+
+ModalHeader.propTypes = propTypes;
+export default ModalHeader;

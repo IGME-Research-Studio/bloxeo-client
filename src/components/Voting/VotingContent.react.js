@@ -64,9 +64,11 @@ const VotingContent = React.createClass({
     sorted.sort(function(idea1, idea2) {
       if (idea1.votes < idea2.votes) {
         return 1;
-      } else if (idea1.votes === idea2.votes) {
+      }
+      else if (idea1.votes === idea2.votes) {
         return 0;
-      } else {
+      }
+      else {
         return -1;
       }
     });
@@ -116,7 +118,8 @@ const VotingContent = React.createClass({
       StormActions.selectTab(NavBarConstants.RESULTS_TAB);
 
       this.props.hideModal();
-    } else {
+    }
+    else {
       this.setState({voteIndex: this.state.voteIndex + 1});
     }
   },

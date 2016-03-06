@@ -9,6 +9,11 @@
 //import vars and mixins to use
 @import '_vars';
 @import '_mixins';
+
+* {
+  box-sizing: border-box;
+}
+
 body {
   overflow: hidden;
   height: 100vh;

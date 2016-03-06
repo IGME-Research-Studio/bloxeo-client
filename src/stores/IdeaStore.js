@@ -49,6 +49,7 @@ AppDispatcher.register(function(action) {
     setIdeas(action.ideas);
     IdeaStore.emitChange();
     break;
+  default:
   }
 });
 

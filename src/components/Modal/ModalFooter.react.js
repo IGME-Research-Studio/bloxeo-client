@@ -1,20 +1,21 @@
-const React = require('react');
+import React, { PropTypes } from 'react';
+// import { RaisedButton } from 'material-ui';
 
-const ModalFooter = React.createClass({
-  render: function() {
-    return (
-      <div className="modalFooter">
-        <div className="modalTerms">
-          Logging in confirms your agreement to <a href="#">our EULA</a>.
-        </div>
-        <button
-          className="modalButton"
-          onClick={this.props.click}>
-          {this.props.buttonText}
-        </button>
-      </div>
-    );
-  },
-});
+const propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+  buttonText: PropTypes.string.isRequired,
+};
 
-module.exports = ModalFooter;
+const ModalFooter = ({onSubmit, buttonText}) => (
+  <div className="modalFooter">
+    <button
+      className="modalButton"
+      onClick={onSubmit}
+    >
+      {buttonText}
+    </button>
+  </div>
+);
+
+ModalFooter.propTypes = propTypes;
+export default ModalFooter;

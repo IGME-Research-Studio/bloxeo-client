@@ -2,7 +2,6 @@ const React = require('react');
 const StormActions = require('../../actions/StormActions');
 const BoardOptionsStore = require('../../stores/BoardOptionsStore');
 const CollectionStore = require('../../stores/CollectionStore');
-const NavBarConstants = require('../../constants/NavBarConstants');
 const VoteButton = require('./VoteButton.react');
 const VoteCollection = require('./VoteCollection.react');
 
@@ -115,7 +114,7 @@ const VotingContent = React.createClass({
       StormActions.hideCollections(hideIds);
 
       // show results tab
-      StormActions.selectTab(NavBarConstants.RESULTS_TAB);
+      StormActions.toggleWorkspace(false);
 
       this.props.hideModal();
     }

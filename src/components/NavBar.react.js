@@ -15,17 +15,16 @@ const NavBar = React.createClass({
    */
   getInitialState: function() {
     return {
-      selectedTab: NavBarTypes.WORKSPACE_TAB,
       isOpen: false,
     };
   },
-  /**
-   * Select the tab that was clicked
-   * @param {object} - click event object
-   */
-  selectTab: function(e) {
-    StormActions.selectTab(e.target.name);
+
+  propTypes: {
+    isOnWorkspace: React.PropTypes.bool.isRequired,
   },
+
+  goToWorkspace: () => StormActions.toggleWorkspace(true),
+  goToResults: () => StormActions.toggleWorkspace(false),
 
   toggleRoomOptions: function() {
     if (this.state.isOpen) {
@@ -43,6 +42,7 @@ const NavBar = React.createClass({
   closeRoomOptions: function() {
     this.setState({ isOpen: false });
   },
+
   /**
    * Render NavBar component
    * @return {object}
@@ -67,6 +67,7 @@ const NavBar = React.createClass({
         overflow: 'hidden',
       },
     };
+
     const roomOptionsState = this.state.isOpen;
     let cogStyle = {
       WebkitTransform: 'rotate(0)',
@@ -86,23 +87,22 @@ const NavBar = React.createClass({
         transition: 'all .2s',
       };
     }
+
     return (
       <div className="navBar">
         <a name={NavBarTypes.WORKSPACE_TAB}
             className={
-              this.props.selectedTab === NavBarTypes.WORKSPACE_TAB ?
-              selectedTabClass : tabClass
+              this.props.isOnWorkspace === true ? selectedTabClass : tabClass
             }
-            onClick={this.selectTab}>
+            onClick={this.goToWorkspace}>
           Workspace
         </a>
 
         <a name={NavBarTypes.RESULTS_TAB}
             className={
-              this.props.selectedTab === NavBarTypes.RESULTS_TAB ?
-              selectedTabClass : tabClass
+              this.props.isOnWorkspace === false ? selectedTabClass : tabClass
             }
-            onClick={this.selectTab}>
+            onClick={this.goToResults}>
           Results
         </a>
 
@@ -118,7 +118,9 @@ const NavBar = React.createClass({
           isOpen={this.state.isOpen}
           onRequestClose={this.closeRoomOptions}
           style={customStyles}>
-          <RoomOptions />
+          <RoomOptions
+            onSubmit={this.closeRoomOptions}
+          />
         </Modal>
       </div>
     );

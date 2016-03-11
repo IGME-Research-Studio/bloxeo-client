@@ -4,7 +4,7 @@ const BoardOptionsStore = require('../../stores/BoardOptionsStore');
 const MembersList = React.createClass({
   getInitialState: function() {
     return {
-      members: BoardOptionsStore.getAllMembers(),
+      members: BoardOptionsStore.getUsers(),
     };
   },
 

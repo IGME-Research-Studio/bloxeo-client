@@ -123,6 +123,7 @@ socket.on(EVENT_API.JOINED_ROOM, (data) => {
 
     socket.emit(EVENT_API.GET_IDEAS, reqObj);
     socket.emit(EVENT_API.GET_COLLECTIONS, reqObj);
+    socket.emit(EVENT_API.GET_OPTIONS, reqObj);
     SocketStore.emitChange();
 
     browserHistory.push(`/room/${currentBoardId}`);
@@ -167,6 +168,17 @@ socket.on(EVENT_API.RECEIVED_IDEAS, (data) => {
   });
 });
 
+socket.on(EVENT_API.RECEIVED_OPTIONS, (data) => {
+  checkSocketStatus(data)
+  .then((res) => {
+    console.log(res);
+    StormActions.changeRoomOptions(res.data);
+  })
+  .catch((res) => {
+    console.error(`Error receiving options: ${res}`);
+  });
+});
+
 /**
  * Joins board of given id
  * @param {string} boardId
@@ -204,10 +216,13 @@ function leaveBoard(boardId) {
 /**
  * Create new board
  */
-function createBoard() {
+function createBoard(boardName, boardDesc) {
 
   return post(Routes.createBoard(),
-              { userToken: UserStore.getUserToken()})
+              { userToken: UserStore.getUserToken(),
+                name: boardName,
+                description: boardDesc,
+              })
   .then(checkHTTPStatus);
 }
 
@@ -225,7 +240,7 @@ function createUser(name) {
     })
     .catch((err) => {
       console.error(err.stack);
-      throw new Error(res);
+      throw new Error(err);
     });
 }
 
@@ -344,8 +359,8 @@ socket.on('disconnect', () => {
 AppDispatcher.register((action) => {
   switch (action.actionType) {
   case StormConstants.CREATE_BOARD:
-    getOrCreateUser(action.userName)
-    .then(() => createBoard())
+    getOrCreateUser(action.username)
+    .then(() => createBoard(action.boardName, action.boardDesc))
     .then((res) => joinBoard(res.boardId))
     .catch((e) => {
       console.error(e);
@@ -353,16 +368,20 @@ AppDispatcher.register((action) => {
     break;
 
   case StormConstants.JOIN_BOARD:
-    getOrCreateUser(action.userName)
+    getOrCreateUser(action.username)
     .then(() => joinBoard(action.boardId));
     break;
 
+  case StormConstants.LEAVE_BOARD:
+    socket.emit(EVENT_API.LEAVE_BOARD, { boardId: currentBoardId });
+    break;
+
   case StormConstants.GET_IDEAS:
-    socket.emit(EVENT_API.GET_IDEAS, {boardId: currentBoardId });
+    socket.emit(EVENT_API.GET_IDEAS, { boardId: currentBoardId });
     break;
 
   case StormConstants.GET_COLLECTIONS:
-    socket.emit(EVENT_API.GET_COLLECTIONS, {boardId: currentBoardId });
+    socket.emit(EVENT_API.GET_COLLECTIONS, { boardId: currentBoardId });
     break;
 
   case StormConstants.IDEA_CREATE:

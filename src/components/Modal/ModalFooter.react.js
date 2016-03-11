@@ -1,20 +1,30 @@
 import React, { PropTypes } from 'react';
-// import { RaisedButton } from 'material-ui';
+import { FlatButton } from 'material-ui';
+import { green300, green500 } from 'material-ui/lib/styles/colors';
 
 const propTypes = {
   onSubmit: PropTypes.func.isRequired,
   buttonText: PropTypes.string.isRequired,
 };
 
+const buttonStyle = {
+  width: '100%',
+  textAlign: 'center',
+};
+const labelStyle = {
+  color: 'white',
+};
+
 const ModalFooter = ({onSubmit, buttonText}) => (
-  <div className="modalFooter">
-    <button
-      className="modalButton"
-      onClick={onSubmit}
-    >
-      {buttonText}
-    </button>
-  </div>
+  <FlatButton
+    disableTouchRipple
+    backgroundColor={green500}
+    hoverColor={green300}
+    onTouchTap={onSubmit}
+    style={buttonStyle}
+    label={buttonText}
+    labelStyle={labelStyle}
+  />
 );
 
 ModalFooter.propTypes = propTypes;

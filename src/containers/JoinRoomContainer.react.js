@@ -3,7 +3,7 @@ import React from 'react';
 import ModalContainer from './ModalContainer.react';
 import JoinForm from '../components/Modal/JoinForm.react';
 
-const JoinRoomContainer = ({boardId}) => (
+const JoinRoomContainer = ({params: {boardId}}) => (
   <ModalContainer
     headerText='Join a room'
     restorePath='/'

@@ -32,11 +32,6 @@ $modal-header-height: 48px;
     line-height: $modal-header-height;
 
     color: $storm-primary;
-    // box-flex: 1;
-    // flex: 1;
-    // display: inline-block;
-    // width: 100%;
-    // padding: 10px 0;
   }
 
   .modalClose {
@@ -50,10 +45,12 @@ $modal-header-height: 48px;
 .modalContent {
   height: calc(100% - 160px);
   padding: 15px 30px;
+
   .modalBreak {
     height: 1px;
     border-bottom: 1px solid $storm-secondaryLightGrey;
   }
+
   .modalSection {
     margin: 15px 0;
     .modalInput {
@@ -69,17 +66,7 @@ $modal-header-height: 48px;
     .modalUserIcon {
       display: inline-block;
       float: right;
-      width: 30px;
-      height: 30px;
-      text-align: center;
-      line-height: 1;
-      font-size: 10px;
-      padding-top: 10px;
-      margin: 0 2px;
-      color: $storm-textWhite;
-      background-color: $storm-secondaryLightGrey;
-      border-radius: 50%;
-      display: inline-block;
+      text-transform: uppercase;
     }
   }
 }

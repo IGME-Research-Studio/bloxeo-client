@@ -11,11 +11,13 @@ const RoomName = React.createClass({
       isEditing: false,
     };
   },
+
   componentDidUpdate: function() {
     if (this.state.isEditing) {
       document.getElementsByClassName('room-name')[0].focus();
     }
   },
+
   /**
    * Enable editing mode on double click
    */
@@ -24,6 +26,7 @@ const RoomName = React.createClass({
       isEditing: true,
     });
   },
+
   /**
    * @param {object} event
    */
@@ -32,6 +35,7 @@ const RoomName = React.createClass({
       value: event.target.value,
     });
   },
+
   /**
    * @param {object} event
    */
@@ -40,6 +44,7 @@ const RoomName = React.createClass({
       this._onSave();
     }
   },
+
   /**
    * Handle save and update room name
    */
@@ -62,6 +67,7 @@ const RoomName = React.createClass({
       });
     }
   },
+
   /**
    * @return {object}
    */

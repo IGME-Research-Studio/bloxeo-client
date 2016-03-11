@@ -22,6 +22,7 @@ const Workspace = React.createClass({
     connectDropTarget: PropTypes.func.isRequired,
     isOver: PropTypes.bool.isRequired,
     isOverCurrent: PropTypes.bool.isRequired,
+    boardId: PropTypes.string.isRequired,
   },
 
   // set state to the first element of the array
@@ -48,6 +49,11 @@ const Workspace = React.createClass({
     const domNode = ReactDOM.findDOMNode(this);
     StormActions.setLayoutSize(domNode.offsetWidth, domNode.offsetHeight);
     SocketStore.addValidateListener(this.openModal);
+  },
+
+  componentWillUnmount: function() {
+    CollectionStore.removeChangeListener(this.collectionChange);
+    SocketStore.removeValidateListener(this.openModal);
   },
 
   _onDrag: function(e) {
@@ -77,11 +83,6 @@ const Workspace = React.createClass({
     this.setState({
       panning: false,
     });
-  },
-
-  componentWillUnmount: function() {
-    CollectionStore.removeChangeListener(this.collectionChange);
-    SocketStore.removeValidateListener(this.openModal);
   },
 
   /** Reset state to align with StormStore */

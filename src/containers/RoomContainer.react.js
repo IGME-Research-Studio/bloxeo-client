@@ -16,7 +16,6 @@ import Sidebar from '../components/Sidebar/Sidebar.react';
 import Workspace from '../components/Workspace/Workspace.react';
 
 import { joinBoard } from '../actions/StormActions';
-import { WORKSPACE_TAB, RESULTS_TAB } from '../constants/NavBarConstants';
 
 /**
  * Set the initial state of the app before any data is received
@@ -26,8 +25,8 @@ function getInitialState() {
     loading: true,
     groups: CollectionStore.getAllCollections(),
     ideas: IdeaStore.getAllIdeas(),
-    room: BoardOptionsStore.getRoomData(),
-    tab: BoardOptionsStore.getSelectedTab(),
+    room: BoardOptionsStore.getBoardOptions(),
+    onWorkspace: BoardOptionsStore.getIsOnWorkspace(),
   };
 }
 
@@ -41,26 +40,28 @@ function getRoomState(prevState) {
     ...prevState,
     groups: CollectionStore.getAllCollections(),
     ideas: IdeaStore.getAllIdeas(),
-    room: BoardOptionsStore.getRoomData(),
-    tab: BoardOptionsStore.getSelectedTab(),
+    room: BoardOptionsStore.getBoardOptions(),
+    onWorkspace: BoardOptionsStore.getIsOnWorkspace(),
   };
 }
-
-const tabMap = new Map([
-  [WORKSPACE_TAB, <Workspace />],
-  [RESULTS_TAB, <Results />],
-]);
 
 class RoomContainer extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = getInitialState();
+
+    this._onChange = () => this.setState(getRoomState(this.state));
+    this._onLoad = () => this.setState({loading: false});
+    this._joinBoard = (boardId) => joinBoard(boardId);
+    this._switchTab = (isOnWorkspace) => (
+      isOnWorkspace ?
+        <Workspace boardId={this.props.params.boardId} /> :
+        <Results />
+    );
   }
 
   componentDidMount() {
-    BoardOptionsStore.addNameListener(this._onChange);
-    BoardOptionsStore.addTabChangeListener(this._onChange);
+    BoardOptionsStore.addUpdateListener(this._onChange);
     CollectionStore.addChangeListener(this._onChange);
     IdeaStore.addChangeListener(this._onChange);
 
@@ -74,26 +75,13 @@ class RoomContainer extends React.Component {
   }
 
   componentWillUnmount() {
-    BoardOptionsStore.removeNameListener(this._onChange);
-    BoardOptionsStore.removeTabChangeListener(this._onChange);
+    BoardOptionsStore.removeUpdateListener(this._onChange);
     CollectionStore.removeChangeListener(this._onChange);
     IdeaStore.removeChangeListener(this._onChange);
 
     LoadingStore.removeLoadingListener(this._onLoad);
   }
 
-  /**
-   * Event handler for 'change' events coming from the StormStore
-   */
-  _onChange = () => this.setState(getRoomState(this.state))
-  _onLoad = () => this.setState({loading: false})
-
-  _switchTab = (tabState) => tabMap.get(tabState) || <Workspace />
-  _joinBoard = (boardId) => joinBoard(boardId)
-
-  /**
-   * @return {object}
-   */
   render() {
     return (
       <MuiThemeProvider muiTheme={colorTheme}>
@@ -109,8 +97,8 @@ class RoomContainer extends React.Component {
           />
 
           <div className="dragContainer">
-            <NavBar selectedTab={this.state.tab} />
-            {(this._switchTab(this.state.tab))}
+            <NavBar isOnWorkspace={this.state.onWorkspace} />
+            {( this._switchTab(this.state.onWorkspace) )}
           </div>
         </div>
       </MuiThemeProvider>

@@ -1,72 +1,103 @@
-import React, { PropTypes } from 'react';
-import classNames from 'classnames';
+import React from 'react';
+import { TextField, Avatar } from 'material-ui';
 
 import StormActions from '../../actions/StormActions';
 import ModalFooter from './ModalFooter.react';
-
-const propTypes = {
-  error: PropTypes.string,
-};
+import UserStore from '../../stores/UserStore';
+import { firstChar, isntNilorEmpty, isntEmptyValidator,
+  updateValues, updateValuesWithError } from '../../utils/helpers';
 
 const CreateForm = React.createClass({
 
   getInitialState: function() {
-    const name = localStorage.getItem('UserName');
     return {
-      name: name,
+      values: {
+        username: UserStore.getUserName(),
+        boardName: '',
+        boardDesc: '',
+      },
+      errors: {
+        username: '',
+      },
     };
   },
 
   /**
    * @param {object} event
    */
-  _updateName: function(event) {
-    this.setState({
-      name: event.target.value,
-    });
+  _updateName: function({target: { value }}) {
+    const errMsg = isntEmptyValidator('Username is required', value);
+
+    this.setState(
+      updateValuesWithError('username', value, errMsg, this.state)
+    );
+  },
+  _updateBoardName: function({target: { value }}) {
+    this.setState(updateValues('boardName', value, this.state));
+  },
+  _updateBoardDesc: function({target: { value }}) {
+    this.setState(updateValues('boardDesc', value, this.state));
   },
 
   /**
    * Handle submit
    */
   _onSubmit: function() {
-    if (!this.state.name) {
-      // This should display an error
-      console.error('Validation error');
-      return;
+    if (isntNilorEmpty(this.state.values.username)) {
+      const { username, boardName, boardDesc } = this.state.values;
+      StormActions.createBoard({ username, boardName, boardDesc });
     }
-
-    StormActions.createBoard(this.state.name);
   },
 
   /**
    * @return {object}
    */
   render: function() {
-    const hasError = classNames('hasError', {hide: !this.props.error});
-    const placeholder = this.state.name || `What's your name?`;
+    const firstLetter = firstChar(this.state.values.username);
 
     return (
       <div className="joinModal">
         <div className="modalContent">
+          <TextField
+            fullWidth
+            hintText='Your username'
+            value={this.state.values.username}
+            errorText={this.state.errors.username}
+            onChange={this._updateName}
+          />
+
+          <TextField
+            fullWidth
+            hintText='Project name (optional)'
+            value={this.state.values.boardName}
+            onChange={this._updateBoardName}
+          />
+
+          <TextField
+            fullWidth
+            multiLine
+            rows={2}
+            hintText={"Project description (optional)"}
+            value={this.state.values.boardDesc}
+            onChange={this._updateBoardDesc}
+          />
+
           <div className="modalSection">
-            <span className={hasError} ref="error">{this.props.error}</span>
-            <input
-              type="text"
-              className="modalInput"
-              placeholder={placeholder}
-              value={this.state.name}
-              onChange={this._updateName}
-            />
+            <div className="modalUserText">Your user icon</div>
+
+            <Avatar
+              size={30}
+              className='modalUserIcon'>
+
+              {firstLetter}
+            </Avatar>
           </div>
-          <div className="modalSection">
-            <div className="modalUserText">Your unique user icon</div>
-            <span className="modalUserIcon">?</span>
-          </div>
+
           <p className="modalTerms">
             Logging in confirms your agreement to <a href="#">our EULA</a>.
           </p>
         </div>
+
         <ModalFooter
           onSubmit={this._onSubmit}
           buttonText='Create room'
@@ -76,5 +107,4 @@ const CreateForm = React.createClass({
   },
 });
 
-CreateForm.propTypes = propTypes;
 module.exports = CreateForm;

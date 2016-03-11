@@ -1,31 +1,33 @@
-const React = require('react');
-const Brand = require('./Brand.react');
-const RoomInfoBox = require('./RoomInfoBox.react');
-const MembersList = require('./MembersList.react');
-const Wordbank = require('./Wordbank.react');
-const IdeaCreate = require('./IdeaCreate.react');
-const VotingModal = require('../Voting/VotingModal.react');
+import React, { PropTypes } from 'react';
+import Brand from './Brand.react';
+import RoomInfoBox from './RoomInfoBox.react';
+import MembersList from './MembersList.react';
+import Wordbank from './Wordbank.react';
+import IdeaCreate from './IdeaCreate.react';
+import VotingModal from '../Voting/VotingModal.react';
 
-const Sidebar = React.createClass({
-  /**
-   * @return {object}
-   */
-  render: function() {
-    return (
-      <div className="sidebar">
-        <div className="sidebar-info">
-          <Brand />
-          <RoomInfoBox room={this.props.room} />
-          <MembersList />
-          <VotingModal />
-        </div>
-        <Wordbank data={this.props.ideas} />
-        <div>
-          <IdeaCreate timerStatus={this.props.timerStatus} />
-        </div>
-      </div>
-    );
-  },
-});
+const propTypes = {
+  room: PropTypes.object.isRequired,
+  ideas: PropTypes.array.isRequired,
+  timerStatus: PropTypes.object,
+};
 
-module.exports = Sidebar;
+const Sidebar = ({room, ideas, timerStatus}) => (
+  <div className="sidebar">
+    <div className="sidebar-info">
+      <Brand />
+      <RoomInfoBox room={room} />
+      <MembersList />
+      <VotingModal />
+    </div>
+
+    <Wordbank data={ideas} />
+
+    <div>
+      <IdeaCreate timerStatus={timerStatus} />
+    </div>
+  </div>
+);
+
+Sidebar.propTypes = propTypes;
+export default Sidebar;

@@ -1,9 +1,12 @@
 import React, { PropTypes }  from 'react';
-import classNames from 'classnames';
-import { defaultTo } from 'ramda';
+import { TextField, Avatar } from 'material-ui';
+import { defaultTo, all, values } from 'ramda';
 
 import StormActions from '../../actions/StormActions';
 import ModalFooter from '../Modal/ModalFooter.react';
+import UserStore from '../../stores/UserStore';
+import { firstChar, isntNilorEmpty,
+  isntEmptyValidator, updateValuesWithError } from '../../utils/helpers';
 
 const propTypes = {
   boardId: PropTypes.string,
@@ -15,76 +18,82 @@ const stateOrProp = (subState, subProp) => defaultTo(subProp)(subState);
 const JoinForm = React.createClass({
   getInitialState: function() {
     return {
-      name: localStorage.getItem('UserName') || '',
+      values: {
+        username: UserStore.getUserName(),
+        boardId: '',
+      },
+      errors: {
+        username: '',
+        boardId: '',
+      },
     };
   },
 
-  /**
-   * @param {object} event
-   */
-  _updateName: function(event) {
-    this.setState({
-      name: event.target.value,
-    });
+  _updateName: function({target: { value }}) {
+    const errMsg = isntEmptyValidator('Username is required', value);
+
+    this.setState(
+      updateValuesWithError('username', value, errMsg, this.state)
+    );
   },
 
-  /**
-   * @param {object} event
-   */
-  _updateCode: function(event) {
-    this.setState({
-      boardId: event.target.value,
-    });
+  _updateCode: function({target: { value }}) {
+    const errMsg = isntEmptyValidator('Room code is required', value);
+
+    this.setState(
+      updateValuesWithError('boardId', value, errMsg, this.state)
+    );
   },
 
   /**
    * Handle submit
    */
   _onSubmit: function() {
-    if (!this.state.name || this.state.boardId === '') {
-      // @TODO This should display an error
-      return;
+    if (all(isntNilorEmpty, values(this.state.values))) {
+      StormActions.joinBoard(this.state.values.boardId,
+                             this.state.values.username);
     }
-    StormActions.joinBoard(this.state.boardId, this.state.name);
   },
 
   /**
    * @return {object}
    */
   render: function() {
-    const { error, boardId } = this.props;
-    const hasError = classNames('hasError', {hide: !error});
-    const placeholder = `What's your name?`;
+    const { boardId } = this.props;
+    const firstLetter = firstChar(this.state.values.username);
 
     return (
       <div className="joinModal">
         <div className="modalContent">
-          <div className="modalSection">
-            <input
-              type="text"
-              className="modalInput"
-              placeholder={placeholder}
-              value={this.state.name}
-              onChange={this._updateName}
-            />
-          </div>
+          <TextField
+            fullWidth
+            hintText='Your username'
+            value={this.state.values.username}
+            errorText={this.state.errors.username}
+            onChange={this._updateName}
+            onBlur={this._updateName}
+          />
+
+          <TextField
+            fullWidth
+            hintText='Room code'
+            value={stateOrProp(this.state.values.boardId, boardId)}
+            errorText={this.state.errors.boardId}
+            onChange={this._updateCode}
+            onBlur={this._updateCode}
+          />
 
           <div className="modalSection">
             <div className="modalUserText">Your user icon</div>
-            <span className="modalUserIcon">?</span>
+
+            <Avatar
+              size={30}
+              className='modalUserIcon'>
+
+              {firstLetter}
+            </Avatar>
           </div>
 
-          <div className="modalBreak"></div>
-          <div className="modalSection">
-            <span className={hasError} ref="error">{error}</span>
-            <input
-              type="text"
-              className="modalInput"
-              placeholder="Enter room code"
-              value={stateOrProp(this.state.boardId, boardId)}
-              onChange={this._updateCode}
-            />
-          </div>
           <p className="modalTerms">
             Logging in confirms your agreement to <a href="#">our EULA</a>.
           </p>

@@ -373,7 +373,10 @@ AppDispatcher.register((action) => {
     break;
 
   case StormConstants.LEAVE_BOARD:
-    socket.emit(EVENT_API.LEAVE_BOARD, { boardId: currentBoardId });
+    socket.emit(EVENT_API.LEAVE_ROOM, {
+      boardId: action.boardId,
+      userToken: UserStore.getUserToken(),
+    });
     break;
 
   case StormConstants.GET_IDEAS:

@@ -35,11 +35,10 @@ const StormActions = {
     });
   },
 
-  leaveBoard: function(boardId, username) {
+  leaveBoard: function(boardId) {
     AppDispatcher.dispatch({
       actionType: StormConstants.LEAVE_BOARD,
       boardId: boardId,
-      username: username,
     });
   },
 

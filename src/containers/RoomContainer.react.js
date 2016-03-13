@@ -18,19 +18,6 @@ import Workspace from '../components/Workspace/Workspace.react';
 import { joinBoard } from '../actions/StormActions';
 
 /**
- * Set the initial state of the app before any data is received
- */
-function getInitialState() {
-  return {
-    loading: true,
-    groups: CollectionStore.getAllCollections(),
-    ideas: IdeaStore.getAllIdeas(),
-    room: BoardOptionsStore.getBoardOptions(),
-    onWorkspace: BoardOptionsStore.getIsOnWorkspace(),
-  };
-}
-
-/**
  * Retrieve the current data from the StormStore
  * @param {Object} prevState
  * @returns {Object} new state object
@@ -48,7 +35,7 @@ function getRoomState(prevState) {
 class RoomContainer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = getInitialState();
+    this.state = getRoomState({loading: true});
 
     this._onChange = () => this.setState(getRoomState(this.state));
     this._onLoad = () => this.setState({loading: false});
@@ -78,8 +65,9 @@ class RoomContainer extends React.Component {
     BoardOptionsStore.removeUpdateListener(this._onChange);
     CollectionStore.removeChangeListener(this._onChange);
     IdeaStore.removeChangeListener(this._onChange);
-
     LoadingStore.removeLoadingListener(this._onLoad);
+
+    StormActions.leaveBoard(this.props.params.boardId);
   }
 
   render() {

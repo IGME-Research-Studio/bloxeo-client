@@ -50,7 +50,7 @@ const RoomOptions = React.createClass({
     );
 
   },
-  _updateUserColorsEnabled: function({target: { value, checked } }) {
+  _updateUserColorsEnabled: function() {
     this.setState(updateValues('userColorsEnabled',
                                checked, this.state));
   },

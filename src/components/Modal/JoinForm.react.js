@@ -1,6 +1,6 @@
 import React, { PropTypes }  from 'react';
 import { TextField, Avatar } from 'material-ui';
-import { defaultTo, all, values } from 'ramda';
+import { ifElse, isEmpty, always, all, values } from 'ramda';
 
 import StormActions from '../../actions/StormActions';
 import ModalFooter from '../Modal/ModalFooter.react';
@@ -13,7 +13,9 @@ const propTypes = {
   error: PropTypes.string,
 };
 
-const stateOrProp = (subState, subProp) => defaultTo(subProp)(subState);
+const ifEmptyDefault = (maybe, def) => (
+  ifElse(isEmpty, always(def), always(maybe))(maybe)
+);
 
 const JoinForm = React.createClass({
   getInitialState: function() {
@@ -77,7 +79,7 @@ const JoinForm = React.createClass({
           <TextField
             fullWidth
             hintText='Room code'
-            value={stateOrProp(this.state.values.boardId, boardId)}
+            value={ifEmptyDefault(this.state.values.boardId, boardId)}
             errorText={this.state.errors.boardId}
             onChange={this._updateCode}
             onBlur={this._updateCode}

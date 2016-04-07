@@ -17,7 +17,7 @@ const Sidebar = ({room, ideas, timerStatus}) => (
     <div className="sidebar-info">
       <Brand />
       <RoomInfoBox room={room} />
-      <MembersList />
+      <MembersList users={room.users}/>
       <VotingModal />
     </div>
 

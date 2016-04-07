@@ -1,31 +1,15 @@
-const React = require('react');
-const BoardOptionsStore = require('../../stores/BoardOptionsStore');
+import React, { PropTypes }  from 'react';
+import Avatar from '../Avatar.react';
 
-const MembersList = React.createClass({
-  getInitialState: function() {
-    return {
-      members: BoardOptionsStore.getUsers(),
-    };
-  },
+const propTypes = {
+  users: PropTypes.array.isRequired,
+};
 
-  /**
-   * @return {object}
-   */
-  render: function() {
-    // get each idea content
-    const members = this.state.members.map(function(member) {
-      return (
-        // member id in the store?
-        <div key={member} className="circleMemberIcon">{member}</div>
-      );
-    });
-    // put all ideas in ideaList
-    return (
-      <div className="sidebar-section">
-        {members}
-      </div>
-    );
-  },
-});
+const MembersList = ({users}) => (
+  <div className="sidebar-section">
+    {users.map((member) => <Avatar name={member.username} /> )}
+  </div>
+);
 
-module.exports = MembersList;
+MembersList.propTypes = propTypes;
+export default MembersList;

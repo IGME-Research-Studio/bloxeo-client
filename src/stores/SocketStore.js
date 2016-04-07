@@ -2,7 +2,7 @@ import 'whatwg-fetch';
 import _ from 'lodash';
 import Promise from 'bluebird';
 import assign from 'object-assign';
-import { equals, either, not, compose, isNil } from 'ramda';
+import { equals, either, not, compose, isNil, map } from 'ramda';
 import { EventEmitter } from 'events';
 import { browserHistory } from 'react-router';
 
@@ -29,8 +29,6 @@ const Routes = _.mapValues(REST_API, (route) => {
   return _.template(StormConstants.SERVER_URL + route[1]);
 });
 
-let receivedIdeas = false;
-let receivedCollections = false;
 let currentBoardId = undefined;
 let errorMsg = undefined;
 
@@ -101,9 +99,7 @@ socket.on(EVENT_API.UPDATED_COLLECTIONS, (data) => {
 socket.on(EVENT_API.UPDATED_IDEAS, (data) => {
   checkSocketStatus(data)
   .then((res) => {
-    const ideas = res.data.map((idea) => {
-      return idea.content;
-    });
+    const ideas = res.data.map((idea) => idea.content);
     StormActions.updatedIdeas(ideas);
   })
   .catch((res) => {
@@ -114,19 +110,14 @@ socket.on(EVENT_API.UPDATED_IDEAS, (data) => {
 socket.on(EVENT_API.JOINED_ROOM, (data) => {
 
   checkSocketStatus(data)
-  .then(() => {
-    const reqObj = {
-      boardId: currentBoardId,
-      userToken: UserStore.getUserToken(),
-    };
-    errorMsg = undefined;
-
-    socket.emit(EVENT_API.GET_IDEAS, reqObj);
-    socket.emit(EVENT_API.GET_COLLECTIONS, reqObj);
-    socket.emit(EVENT_API.GET_OPTIONS, reqObj);
-    SocketStore.emitChange();
+  .then((res) => {
+    const ideas = map((idea) => idea.content, res.data.ideas);
+    StormActions.updatedIdeas(ideas);
+    StormActions.receivedCollections(res.data.collections, false);
+    StormActions.changeRoomOptions(res.data.room);
 
     browserHistory.push(`/room/${currentBoardId}`);
+    StormActions.endLoadAnimation();
   })
   .catch((res) => {
     console.error(`Error joining a room: ${res}`);
@@ -138,12 +129,8 @@ socket.on(EVENT_API.JOINED_ROOM, (data) => {
 socket.on(EVENT_API.RECEIVED_COLLECTIONS, (data) => {
   checkSocketStatus(data)
   .then((res) => {
-    StormActions.receivedCollections(res.data, receivedCollections);
 
-    receivedCollections = true;
-    if (receivedIdeas) {
-      StormActions.endLoadAnimation();
-    }
+    StormActions.receivedCollections(res.data, receivedCollections);
   })
   .catch((res) => {
     console.error(`Error receiving collections: ${res}`);
@@ -156,12 +143,8 @@ socket.on(EVENT_API.RECEIVED_IDEAS, (data) => {
     const ideas = res.data.map((idea) => {
       return idea.content;
     });
-    StormActions.updatedIdeas(ideas);
 
-    receivedIdeas = true;
-    if (receivedCollections) {
-      StormActions.endLoadAnimation();
-    }
+    StormActions.updatedIdeas(ideas);
   })
   .catch((res) => {
     console.error(`Error receiving ideas: ${res}`);
@@ -171,7 +154,6 @@ socket.on(EVENT_API.RECEIVED_IDEAS, (data) => {
 socket.on(EVENT_API.RECEIVED_OPTIONS, (data) => {
   checkSocketStatus(data)
   .then((res) => {
-    console.log(res);
     StormActions.changeRoomOptions(res.data);
   })
   .catch((res) => {
@@ -185,7 +167,6 @@ socket.on(EVENT_API.RECEIVED_OPTIONS, (data) => {
  */
 function joinBoard(boardId) {
   // @XXX WUT?
-  [receivedCollections, receivedIdeas] = [false, false];
   currentBoardId = boardId;
 
   socket.emit(
@@ -201,8 +182,6 @@ function joinBoard(boardId) {
  * @param {string} boardId
  */
 function leaveBoard(boardId) {
-  // @XXX WUT?
-  [receivedCollections, receivedIdeas] = [false, false];
   currentBoardId = undefined;
 
   socket.emit(
@@ -344,7 +323,7 @@ function removeIdeaFromCollection(_key, content) {
 }
 
 socket.on('connect', () => {
-  console.info(socket.id);
+  console.info(`Connection ${socket.id}`);
 });
 
 socket.on('disconnect', () => {
@@ -352,6 +331,14 @@ socket.on('disconnect', () => {
 
   if (isntNil(currentBoardId)) {
     leaveBoard(currentBoardId);
+  }
+});
+
+socket.on('reconnect', () => {
+  console.info(`Reconnection ${socket.id}`);
+
+  if (isntNil(currentBoardId)) {
+    joinBoard(currentBoardId);
   }
 });
 

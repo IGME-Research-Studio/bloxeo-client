@@ -1,10 +1,11 @@
 import React from 'react';
-import { TextField, Avatar } from 'material-ui';
+import { TextField } from 'material-ui';
 
 import StormActions from '../../actions/StormActions';
 import ModalFooter from './ModalFooter.react';
+import Avatar from '../Avatar.react';
 import UserStore from '../../stores/UserStore';
-import { firstChar, isntNilorEmpty, isntEmptyValidator,
+import { isntNilorEmpty, isntEmptyValidator,
   updateValues, updateValuesWithError } from '../../utils/helpers';
 
 const CreateForm = React.createClass({
@@ -53,7 +54,6 @@ const CreateForm = React.createClass({
    * @return {object}
    */
   render: function() {
-    const firstLetter = firstChar(this.state.values.username);
 
     return (
       <div className="joinModal">
@@ -85,12 +85,7 @@ const CreateForm = React.createClass({
           <div className="modalSection">
             <div className="modalUserText">Your user icon</div>
 
-            <Avatar
-              size={30}
-              className='modalUserIcon'>
-
-              {firstLetter}
-            </Avatar>
+            <Avatar name={this.state.values.username}/>
           </div>
 
           <p className="modalTerms">

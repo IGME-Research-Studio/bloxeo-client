@@ -15,7 +15,7 @@ import Results from '../components/Results/Results.react';
 import Sidebar from '../components/Sidebar/Sidebar.react';
 import Workspace from '../components/Workspace/Workspace.react';
 
-import { joinBoard } from '../actions/StormActions';
+import { joinBoard, leaveBoard } from '../actions/StormActions';
 
 /**
  * Retrieve the current data from the StormStore
@@ -67,7 +67,7 @@ class RoomContainer extends React.Component {
     IdeaStore.removeChangeListener(this._onChange);
     LoadingStore.removeLoadingListener(this._onLoad);
 
-    StormActions.leaveBoard(this.props.params.boardId);
+    leaveBoard(this.props.params.boardId);
   }
 
   render() {

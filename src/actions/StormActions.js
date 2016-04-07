@@ -51,10 +51,10 @@ const StormActions = {
     });
   },
 
-  changeRoomOptions: function(updateObj) {
+  changeRoomOptions: function(updates) {
     AppDispatcher.dispatch({
       actionType: StormConstants.CHANGE_ROOM_OPTS,
-      updates: updateObj,
+      updates: updates,
     });
   },
 

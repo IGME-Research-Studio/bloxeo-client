@@ -1,11 +1,12 @@
 import React, { PropTypes }  from 'react';
-import { TextField, Avatar } from 'material-ui';
+import { TextField } from 'material-ui';
 import { ifElse, isEmpty, always, all, values } from 'ramda';
 
 import StormActions from '../../actions/StormActions';
 import ModalFooter from '../Modal/ModalFooter.react';
+import Avatar from '../Avatar.react';
 import UserStore from '../../stores/UserStore';
-import { firstChar, isntNilorEmpty,
+import { isntNilorEmpty,
   isntEmptyValidator, updateValuesWithError } from '../../utils/helpers';
 
 const propTypes = {
@@ -62,7 +63,6 @@ const JoinForm = React.createClass({
    */
   render: function() {
     const { boardId } = this.props;
-    const firstLetter = firstChar(this.state.values.username);
 
     return (
       <div className="joinModal">
@@ -88,12 +88,7 @@ const JoinForm = React.createClass({
           <div className="modalSection">
             <div className="modalUserText">Your user icon</div>
 
-            <Avatar
-              size={30}
-              className='modalUserIcon'>
-
-              {firstLetter}
-            </Avatar>
+            <Avatar name={this.state.values.username} />
           </div>
 
           <p className="modalTerms">

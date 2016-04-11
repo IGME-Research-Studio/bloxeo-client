@@ -1,10 +1,10 @@
 import {
   is, isNil, isEmpty,
   ifElse, cond, either, anyPass, always,
-  T, F, not, equals, complement,
-  compose, map, pipe,
-  head, toLower,
-  assocPath } from 'ramda';
+  T, F, not, equals, propEq, complement,
+  compose, map, pipe, curry,
+  head, flatten, transpose, splitEvery, sortBy,
+  assocPath, toLower } from 'ramda';
 
 const self = {};
 
@@ -77,5 +77,50 @@ self.isntEmpty = compose(not, isEmpty);
 self.isNilorEmpty = either(isNil, isEmpty);
 
 self.isntNilorEmpty = compose(not, either(isNil, isEmpty));
+
+/**
+ * Curried
+ * @param {Type} x
+ * @param {Type} y
+ * @return Boolean
+ */
+self.isntEqual = curry(compose(not, equals));
+
+/**
+ * @param {String} prop
+ * @param {Object} x
+ * @param {Object} y
+ */
+self.propIsntEqual = (prop, value) => compose(not, propEq(prop, value));
+
+self.moveToHead = (value, list) => (
+  sortBy(self.isntEqual(value), list)
+);
+
+/**
+ * @param {String} prop
+ * @param {Array<Object>} list
+ */
+self.moveToHeadByProp = (prop, value, list) => (
+  sortBy(self.propIsntEqual(prop, value), list)
+);
+
+self.sqrtInt = (integer) => Math.ceil(Math.sqrt(integer));
+
+/**
+ * Takes a gradient of values, and distributes them 'evenly'
+ * Create a 'squarish' matrix
+ * Transpose the matrix
+ * Flatten it
+ * [1, 2, 3, 4, 5, 6, 7, 8, 9] ->
+ * [[1,2,3], [4,5,6], [7,8,9]] ->
+ * [[1,4,7], [2,5,8], [3,6,9]] ->
+ * [1, 4, 7, 2, 5, 8, 3, 6, 9]
+ * @param {Array} list sorted range [0,1,2,..,n]
+ * @param {Array} list 'evenly' distributed range
+ */
+self.gradientToDiscrete = (list) => {
+  return flatten(transpose(splitEvery(self.sqrtInt(list.length), list)));
+};
 
 module.exports = self;

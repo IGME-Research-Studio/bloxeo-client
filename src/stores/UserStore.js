@@ -22,6 +22,10 @@ const UserStore = assign({}, EventEmitter.prototype, {
     return localStorage.getItem('UserName');
   },
 
+  getUserId: function() {
+    return localStorage.getItem('UserId');
+  },
+
   clearUserData: function() {
     localStorage.clear();
   },
@@ -31,9 +35,10 @@ const UserStore = assign({}, EventEmitter.prototype, {
    * @param {string} token - user token string from server
    * @param {string} name - user name from client
    */
-  setUserData: function(token, name) {
+  setUserData: function({token, username, userId}) {
     localStorage.setItem('UserToken', token);
-    localStorage.setItem('UserName', name);
+    localStorage.setItem('UserName', username);
+    localStorage.setItem('UserId', userId);
   },
 
   emitChange: function() {

@@ -7,7 +7,13 @@ const propTypes = {
 
 const MembersList = ({users}) => (
   <div className="sidebar-section">
-    {users.map((member) => <Avatar name={member.username} /> )}
+  {users.map((member) => (
+    <Avatar
+      name={member.username}
+      key={member.userId}
+      color={member.color}
+      />
+  ))}
   </div>
 );
 

@@ -214,7 +214,9 @@ function createUser(name) {
   return post(Routes.createUser(), { username: name })
     .then(checkHTTPStatus)
     .then((res) => {
-      UserStore.setUserData(res.token, name);
+      UserStore.setUserData({token: res.token,
+                            userId: res.userId,
+                            username: name});
       return res;
     })
     .catch((err) => {

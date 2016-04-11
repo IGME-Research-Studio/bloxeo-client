@@ -1,13 +1,19 @@
+import { map, lensProp, set } from 'ramda';
+import { EventEmitter } from 'events';
+import assign from 'object-assign';
+import sloth from 'sloth';
+import materialColors from 'material-color';
+
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import { WORKSPACE_TAB } from '../constants/NavBarConstants';
 import StormConstants from '../constants/StormConstants';
-import { EventEmitter } from 'events';
-import assign from 'object-assign';
+import { gradientToDiscrete } from '../utils/helpers';
 
 const MEMBER_CHANGE_EVENT = 'MEMBER_CHANGE_EVENT';
 const NAME_CHANGE_EVENT = 'NAME_CHANGE_EVENT';
 const TAB_CHANGE_EVENT = 'TAB_CHANGE_EVENT';
 const UPDATE_EVENT = 'UPDATE_EVENT';
+const COLORS = gradientToDiscrete(materialColors['300']);
 
 let boardOptions = {
   name: '',
@@ -37,6 +43,15 @@ const BoardOptionsStore = assign({}, EventEmitter.prototype, {
       name: this.getRoomName(),
       description: this.getRoomDescription(),
     };
+  },
+
+  /*
+   * @param {Array<Object>}
+   * @return {Array<Object>>}
+   */
+  updateUsers: function(users) {
+    return map(([color, user]) => set(lensProp('color'), color, user),
+               sloth.ify(COLORS).cycle().zip(users).force());
   },
 
   /**
@@ -117,7 +132,10 @@ const BoardOptionsStore = assign({}, EventEmitter.prototype, {
 AppDispatcher.register(function(action) {
   switch (action.actionType) {
   case StormConstants.CHANGE_ROOM_OPTS:
-    boardOptions = { ...boardOptions, ...action.updates };
+    const updates = set(lensProp('users'),
+                        BoardOptionsStore.updateUsers(action.updates.users),
+                        action.updates);
+    boardOptions = { ...boardOptions, ...updates };
     BoardOptionsStore.emitUpdate();
     break;
 

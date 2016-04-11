@@ -22,12 +22,20 @@ const VotingModal = React.createClass({
       this.setState({showModal: true});
     }
   },
+
   /**
    * Hide voting modal
    */
   hideModal: function() {
     this.setState({showModal: false});
   },
+
+  // <div className="waitingSection">
+  //   <span className="waitingText">Waiting on</span>
+  //   <span className="waitingCircle"></span>
+  //   <span className="waitingCircle"></span>
+  // </div>
+
   /**
    * Render VotingModal component
    * @return {object}
@@ -38,11 +46,6 @@ const VotingModal = React.createClass({
         <a className="button callVoteButton" onClick={this.showModal}>
           Call Vote
         </a>
-        <div className="waitingSection">
-          <span className="waitingText">Waiting on</span>
-          <span className="waitingCircle"></span>
-          <span className="waitingCircle"></span>
-        </div>
 
         <Modal isOpen={this.state.showModal}
           style={StormConstants.CUSTOM_MODAL_STYLES}

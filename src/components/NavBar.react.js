@@ -1,7 +1,6 @@
 import React from 'react';
 import Modal from 'react-modal';
 import FontAwesome from 'react-fontawesome';
-import { when } from 'ramda';
 
 import StormActions from '../actions/StormActions';
 import NavBarTypes from '../constants/NavBarConstants';

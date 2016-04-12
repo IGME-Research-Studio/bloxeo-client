@@ -9,7 +9,6 @@ import BoardOptionsStore from '../stores/BoardOptionsStore';
 import CollectionStore from '../stores/CollectionStore';
 import IdeaStore from '../stores/IdeaStore';
 import LoadingStore from '../stores/LoadingStore';
-import { getUserId } from '../stores/UserStore';
 
 import LoadingOverlay from '../components/LoadingOverlay.react';
 import NavBar from '../components/NavBar.react';
@@ -87,7 +86,6 @@ class RoomContainer extends React.Component {
           <LoadingOverlay enabled={this.state.loading}/>
 
           <Sidebar
-            userId={getUserId()}
             room={this.state.room}
             ideas={this.state.ideas}
             time={this.state.time}

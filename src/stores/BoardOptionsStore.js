@@ -7,7 +7,8 @@ import materialColors from 'material-color';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import { WORKSPACE_TAB } from '../constants/NavBarConstants';
 import StormConstants from '../constants/StormConstants';
-import { gradientToDiscrete } from '../utils/helpers';
+import { gradientToDiscrete, moveToHeadByProp } from '../utils/helpers';
+import { getUserId } from '../stores/UserStore';
 
 const MEMBER_CHANGE_EVENT = 'MEMBER_CHANGE_EVENT';
 const NAME_CHANGE_EVENT = 'NAME_CHANGE_EVENT';
@@ -51,8 +52,13 @@ const BoardOptionsStore = assign({}, EventEmitter.prototype, {
    */
   updateUsers: function(users) {
     const colors = boardOptions.userColorsEnabled ? COLORS : ['DDD'];
-    return map(([color, user]) => set(lensProp('color'), color, user),
-               sloth.ify(colors).cycle().zip(users).force());
+    const headedUsers = moveToHeadByProp('userId', getUserId(), users);
+    return map(([color, user]) =>
+               set(lensProp('color'), color, user),
+               sloth.ify(colors)
+                 .cycle()
+                 .zip(headedUsers).force()
+              );
   },
 
   /**

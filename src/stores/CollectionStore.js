@@ -147,6 +147,7 @@ function receivedAllCollections(collections, reset) {
     }
   }
 }
+
 /**
  * Remove idea collection at specified key
  */
@@ -154,6 +155,7 @@ function removeCollection(_key) {
   _collections = _omit(_collections, _key);
   updateForce();
 }
+
 /**
  * Set specified collection's position
  */
@@ -215,6 +217,7 @@ function collide(node) {
     return updated;
   };
 }
+
 // tick
 force.on('tick', function() {
   const q = d3.geom.quadtree(layoutObjs);
@@ -239,27 +242,33 @@ AppDispatcher.register(function(action) {
     CollectionStore.emitChange();
     updateForce();
     break;
+
   case StormConstants.MODIFIED_COLLECTION:
     updateCollection(action.index, action.content);
     CollectionStore.emitChange();
     updateForce();
     break;
+
   case StormConstants.HIDE_COLLECTIONS:
     hideCollections(action.ids);
     CollectionStore.emitChange();
     break;
+
   case StormConstants.REMOVED_COLLECTION:
     removeCollection(action.index);
     CollectionStore.emitChange();
     break;
+
   case StormConstants.MOVE_COLLECTION:
     moveCollection(action.id, action.left, action.top);
     CollectionStore.emitChange();
     updateForce();
     break;
+
   case StormConstants.SET_LAYOUT_SIZE:
     setLayoutSize(action.width, action.height);
     break;
+
   case StormConstants.RECEIVED_COLLECTIONS:
     receivedAllCollections(action.collections, action.reset);
     CollectionStore.emitChange();
@@ -267,10 +276,12 @@ AppDispatcher.register(function(action) {
       updateForce();
     }
     break;
+
   case StormConstants.RETURN_RESULTS:
     returnResults(action.results);
     CollectionStore.emitChange();
     break;
+
   default:
   }
 });

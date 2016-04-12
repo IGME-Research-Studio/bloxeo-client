@@ -5,20 +5,21 @@ const StormActions = {
   /**
    * Dispatch create new user
    */
-  createUser: function(userName) {
+  createUser: function(username) {
     AppDispatcher.dispatch({
       actionType: StormConstants.CREATE_USER,
-      userName: userName,
+      username: username,
     });
   },
 
   /**
    * Dispatch create new board event
+   * @param {Object} requestData { username, boardName, boardDesc }
    */
-  createBoard: function(userName) {
+  createBoard: function(requestData) {
     AppDispatcher.dispatch({
       actionType: StormConstants.CREATE_BOARD,
-      userName: userName,
+      ...requestData,
     });
   },
 
@@ -26,11 +27,18 @@ const StormActions = {
    * Dispatch join board event
    * @param {string} id of board to join
    */
-  joinBoard: function(boardId, userName) {
+  joinBoard: function(boardId, username) {
     AppDispatcher.dispatch({
       actionType: StormConstants.JOIN_BOARD,
       boardId: boardId,
-      userName: userName,
+      username: username,
+    });
+  },
+
+  leaveBoard: function(boardId) {
+    AppDispatcher.dispatch({
+      actionType: StormConstants.LEAVE_BOARD,
+      boardId: boardId,
     });
   },
 
@@ -40,6 +48,13 @@ const StormActions = {
   endLoadAnimation: function() {
     AppDispatcher.dispatch({
       actionType: StormConstants.END_LOAD_ANIMATION,
+    });
+  },
+
+  changeRoomOptions: function(updates) {
+    AppDispatcher.dispatch({
+      actionType: StormConstants.CHANGE_ROOM_OPTS,
+      updates: updates,
     });
   },
 
@@ -164,10 +179,10 @@ const StormActions = {
   /**
    * Dispatch event to select a tab
    */
-  selectTab: function(tab) {
+  toggleWorkspace: function(isOnWorkspace) {
     AppDispatcher.dispatch({
       actionType: StormConstants.SELECT_TAB,
-      selectedTab: tab,
+      isOnWorkspace,
     });
   },
 

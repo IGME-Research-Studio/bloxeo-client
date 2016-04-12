@@ -6,7 +6,6 @@ import MembersList from './MembersList.react';
 import Wordbank from './Wordbank.react';
 import IdeaCreate from './IdeaCreate.react';
 import VotingModal from '../Voting/VotingModal.react';
-import { getUserId } from '../../stores/UserStore';
 import { moveToHeadByProp } from '../../utils/helpers';
 
 const propTypes = {
@@ -15,13 +14,13 @@ const propTypes = {
   timerStatus: PropTypes.object,
 };
 
-const Sidebar = ({room, ideas, timerStatus}) => (
+const Sidebar = ({userId, room, ideas, timerStatus}) => (
   <div className="sidebar">
     <div className="sidebar-info">
       <Brand />
       <RoomInfoBox room={room} />
       <MembersList
-        users={moveToHeadByProp('userId', getUserId(), room.users)}/>
+        users={moveToHeadByProp('userId', userId, room.users)}/>
       <VotingModal />
     </div>
 

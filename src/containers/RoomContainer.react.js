@@ -3,11 +3,13 @@ import { DragDropContext as dragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import MuiThemeProvider from 'material-ui/lib/MuiThemeProvider';
 import colorTheme from '../colorTheme';
+import { find, propEq, pipe } from 'ramda';
 
 import BoardOptionsStore from '../stores/BoardOptionsStore';
 import CollectionStore from '../stores/CollectionStore';
 import IdeaStore from '../stores/IdeaStore';
 import LoadingStore from '../stores/LoadingStore';
+import { getUserId } from '../stores/UserStore';
 
 import LoadingOverlay from '../components/LoadingOverlay.react';
 import NavBar from '../components/NavBar.react';
@@ -45,6 +47,13 @@ class RoomContainer extends React.Component {
         <Workspace boardId={this.props.params.boardId} /> :
         <Results />
     );
+
+    this._isAdmin = () => (
+      pipe(
+        find(propEq('userId', getUserId())),
+        propEq('isAdmin', true)
+      )(this.state.room.users)
+    );
   }
 
   componentDidMount() {
@@ -77,15 +86,20 @@ class RoomContainer extends React.Component {
 
           <LoadingOverlay enabled={this.state.loading}/>
 
-          <Sidebar room={this.state.room}
+          <Sidebar
+            userId={getUserId()}
+            room={this.state.room}
+            ideas={this.state.ideas}
             time={this.state.time}
             timerStatus={this.state.timerStatus}
-            ideas={this.state.ideas}
             timerWidth={this.state.timerWidth}
           />
 
           <div className="dragContainer">
-            <NavBar isOnWorkspace={this.state.onWorkspace} />
+            <NavBar
+              isOnWorkspace={this.state.onWorkspace}
+              isAdmin={this._isAdmin()}
+            />
             {( this._switchTab(this.state.onWorkspace) )}
           </div>
         </div>

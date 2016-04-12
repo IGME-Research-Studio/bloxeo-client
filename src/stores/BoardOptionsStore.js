@@ -50,8 +50,9 @@ const BoardOptionsStore = assign({}, EventEmitter.prototype, {
    * @return {Array<Object>>}
    */
   updateUsers: function(users) {
+    const colors = boardOptions.userColorsEnabled ? COLORS : ['DDD'];
     return map(([color, user]) => set(lensProp('color'), color, user),
-               sloth.ify(COLORS).cycle().zip(users).force());
+               sloth.ify(colors).cycle().zip(users).force());
   },
 
   /**

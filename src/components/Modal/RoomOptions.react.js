@@ -6,7 +6,7 @@ import StormActions from '../../actions/StormActions';
 import ModalFooter from './ModalFooter.react';
 import { getBoardOptions } from '../../stores/BoardOptionsStore';
 import { isntPosIntValidator, updateValues,
-  updateValuesWithError  } from '../../utils/helpers';
+  updateValuesWithError, isNilorEmpty  } from '../../utils/helpers';
 
 const RoomOptions = React.createClass({
 
@@ -50,7 +50,7 @@ const RoomOptions = React.createClass({
     );
 
   },
-  _updateUserColorsEnabled: function() {
+  _updateUserColorsEnabled: function({target: { checked }}) {
     this.setState(updateValues('userColorsEnabled',
                                checked, this.state));
   },

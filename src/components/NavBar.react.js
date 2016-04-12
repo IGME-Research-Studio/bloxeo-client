@@ -1,9 +1,11 @@
-const React = require('react');
-const Modal = require('react-modal');
-const FontAwesome = require('react-fontawesome');
-const StormActions = require('../actions/StormActions');
-const NavBarTypes = require('../constants/NavBarConstants');
-const RoomOptions = require('./Modal/RoomOptions.react');
+import React from 'react';
+import Modal from 'react-modal';
+import FontAwesome from 'react-fontawesome';
+import { when } from 'ramda';
+
+import StormActions from '../actions/StormActions';
+import NavBarTypes from '../constants/NavBarConstants';
+import RoomOptions from './Modal/RoomOptions.react';
 
 /**
  * Navigation Bar Component
@@ -21,6 +23,7 @@ const NavBar = React.createClass({
 
   propTypes: {
     isOnWorkspace: React.PropTypes.bool.isRequired,
+    isAdmin: React.PropTypes.bool.isRequired,
   },
 
   goToWorkspace: () => StormActions.toggleWorkspace(true),
@@ -106,22 +109,28 @@ const NavBar = React.createClass({
           Results
         </a>
 
-        <button
-          onClick={this.toggleRoomOptions}
-          style={cogStyle}
-          className="cogButton">
+        {this.props.isAdmin ?
+          <span>
+            <button
+              onClick={this.toggleRoomOptions}
+              style={cogStyle}
+              className="cogButton">
 
-          <FontAwesome name="cog" size="lg" />
-        </button>
+              <FontAwesome name="cog" size="lg" />
+            </button>
 
-        <Modal
-          isOpen={this.state.isOpen}
-          onRequestClose={this.closeRoomOptions}
-          style={customStyles}>
-          <RoomOptions
-            onSubmit={this.closeRoomOptions}
-          />
-        </Modal>
+            <Modal
+              isOpen={this.state.isOpen}
+              onRequestClose={this.closeRoomOptions}
+              style={customStyles}>
+              <RoomOptions
+                onSubmit={this.closeRoomOptions}
+              />
+            </Modal>
+          </span>
+        :
+          null
+        }
       </div>
     );
   },

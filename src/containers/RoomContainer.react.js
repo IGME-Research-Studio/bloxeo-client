@@ -3,12 +3,13 @@ import { DragDropContext as dragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import MuiThemeProvider from 'material-ui/lib/MuiThemeProvider';
 import colorTheme from '../colorTheme';
-import { find, propEq, pipe } from 'ramda';
+import { find, propEq, pipe, ifElse, F, isNil } from 'ramda';
 
 import BoardOptionsStore from '../stores/BoardOptionsStore';
 import CollectionStore from '../stores/CollectionStore';
 import IdeaStore from '../stores/IdeaStore';
 import LoadingStore from '../stores/LoadingStore';
+import { getUserId } from '../stores/UserStore';
 
 import LoadingOverlay from '../components/LoadingOverlay.react';
 import NavBar from '../components/NavBar.react';
@@ -50,7 +51,9 @@ class RoomContainer extends React.Component {
     this._isAdmin = () => (
       pipe(
         find(propEq('userId', getUserId())),
-        propEq('isAdmin', true)
+        ifElse(
+          isNil, F,
+          propEq('isAdmin', true))
       )(this.state.room.users)
     );
   }

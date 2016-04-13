@@ -1,6 +1,6 @@
 import React from 'react';
 import { TextField, Toggle } from 'material-ui';
-import { any } from 'ramda';
+import { any, values } from 'ramda';
 
 import StormActions from '../../actions/StormActions';
 import ModalFooter from './ModalFooter.react';
@@ -11,12 +11,12 @@ import { isntPosIntValidator, updateValues,
 const RoomOptions = React.createClass({
 
   getInitialState: function() {
-    const { name, description, userColorsEnabled,
+    const { boardName, boardDesc, userColorsEnabled,
       numResultsShown, numResultsReturn } = getBoardOptions();
 
     return {
       values: {
-        boardName: name, boardDesc: description,
+        boardName, boardDesc,
         userColorsEnabled, numResultsShown, numResultsReturn,
       },
       errors: {
@@ -57,12 +57,9 @@ const RoomOptions = React.createClass({
 
   _onSubmit: function() {
     if (any(isNilorEmpty, values(this.state.errors))) {
-      StormActions.changeRoomOptions({ boardName: name,
-                                     boardDesc: description,
-                                     userColorsEnabled, numResultsShown,
-                                     numResultsReturn });
-      this.props.onSubmit();
+      StormActions.updateBoard(this.state.values);
     }
+    this.props.onSubmit();
   },
 
   render: function() {

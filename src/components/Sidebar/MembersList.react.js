@@ -12,7 +12,7 @@ const MembersList = ({users}) => (
       name={member.username}
       key={member.userId}
       color={member.color}
-      />
+    />
   ))}
   </div>
 );

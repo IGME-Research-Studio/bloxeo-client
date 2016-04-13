@@ -3,7 +3,6 @@ const ReactDOM = require('react-dom');
 
 const CollectionStore = require('../../stores/CollectionStore');
 const StormActions    = require('../../actions/StormActions');
-const SocketStore  = require('../../stores/SocketStore');
 
 const IdeaCollection = require('../IdeaCollection.react');
 const TrashCan       = require('./TrashCan.react');
@@ -12,8 +11,6 @@ const dropTarget   = require('react-dnd').DropTarget;
 const PropTypes    = React.PropTypes;
 const DnDTypes     = require('../../constants/DragAndDropConstants');
 const _            = require('lodash');
-const UserModal    = require('./UserModal.react');
-const Modal        = require('react-modal');
 
 const Workspace = React.createClass({
 
@@ -32,28 +29,17 @@ const Workspace = React.createClass({
       x: 0,
       y: 0,
       panning: false,
-      isOpen: false,
     });
-  },
-
-  openModal: function() {
-    this.setState({ isOpen: true });
-  },
-
-  closeModal: function() {
-    this.setState({ isOpen: false });
   },
 
   componentDidMount: function() {
     CollectionStore.addChangeListener(this.collectionChange);
     const domNode = ReactDOM.findDOMNode(this);
     StormActions.setLayoutSize(domNode.offsetWidth, domNode.offsetHeight);
-    SocketStore.addValidateListener(this.openModal);
   },
 
   componentWillUnmount: function() {
     CollectionStore.removeChangeListener(this.collectionChange);
-    SocketStore.removeValidateListener(this.openModal);
   },
 
   _onDrag: function(e) {
@@ -96,36 +82,19 @@ const Workspace = React.createClass({
    * @return {object}
    */
   render: function() {
-    const UserModalStyles = {
-      overlay: {
-        backgroundColor: 'rgba(0, 0, 0, 0.2)',
-        zIndex: 5000000,
-      },
-      content: {
-        top: '50%',
-        left: '50%',
-        right: 'auto',
-        bottom: 'auto',
-        overflow: 'hidden',
-        width: '28%',
-        height: '40%',
-        border: '0',
-        marginRight: '-50%',
-        padding: '0',
-        borderRadius: '3px',
-        transform: 'translate(-50%, -50%)',
-      },
-    };
 
     // Grab connectDropTarget function to wrap element with
     const connectDropTarget = this.props.connectDropTarget;
     const that = this;
     return connectDropTarget(
-      <div className="droppable workspace" draggable='true'
-      onMouseMove={this._onDrag}
-      onMouseUp={this._onMouseUp}
-      onMouseDown={this._onMouseDown}
-      onMouseLeave={this._onMouseLeave}>
+      <div
+        className="droppable workspace"
+        draggable='true'
+        onMouseMove={this._onDrag}
+        onMouseUp={this._onMouseUp}
+        onMouseDown={this._onMouseDown}
+        onMouseLeave={this._onMouseLeave}
+      >
         <div>
           {_.values(this.state.ideaCollections).map(function(group, i) {
             const left = Math.round(group.x) + (that.state.x);
@@ -140,12 +109,6 @@ const Workspace = React.createClass({
           })}
         </div>
         <TrashCan />
-        <Modal
-          isOpen={this.state.isOpen}
-          onRequestClose={this.closeModal}
-          style={UserModalStyles}>
-          <UserModal error={this.props.message} close={this.closeModal} />
-        </Modal>
       </div>
     );
   },

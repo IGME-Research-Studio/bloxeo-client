@@ -8,37 +8,49 @@
 @import '_vars';
 @import '_mixins';
 
+$modal-header-height: 48px;
+
 .modalHeader {
-  display: block;
+  min-height: $modal-header-height;
   text-align: center;
   vertical-align: middle;
   width: 100%;
-  -webkit-box-shadow: 0 1px 1px #888;
-  -moz-box-shadow: 0 1px 1px #888;
-  -o-box-showdow: 0 1px 1px #888;
   box-shadow: 0 1px 1px #888;
+  -webkit-box-shadow: 0 1px 1px #888;
+     -moz-box-shadow: 0 1px 1px #888;
+       -o-box-shadow: 0 1px 1px #888;
+
   .modalTitle {
-    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    margin: 0;
+    padding-top: 0;
+    letter-spacing: 0;
+    font-size: 20px;
+    line-height: $modal-header-height;
+
     color: $storm-primary;
-    width: 100%;
-    padding: 10px 0;
   }
+
   .modalClose {
-    display: inline-block;
-    position: absolute;
+    height: $modal-header-height;
+    width: $modal-header-height;
     right: 0;
-    cursor: pointer;
-    margin: 13px 20px 7px 20px;
+    top: 0;
   }
 }
 
 .modalContent {
   height: calc(100% - 160px);
   padding: 15px 30px;
+
   .modalBreak {
     height: 1px;
     border-bottom: 1px solid $storm-secondaryLightGrey;
   }
+
   .modalSection {
     margin: 15px 0;
     .modalInput {
@@ -54,35 +66,28 @@
     .modalUserIcon {
       display: inline-block;
       float: right;
-      width: 30px;
-      height: 30px;
-      text-align: center;
-      line-height: 1;
-      font-size: 10px;
-      padding-top: 10px;
-      margin: 0 2px;
-      color: $storm-textWhite;
-      background-color: $storm-secondaryLightGrey;
-      border-radius: 50%;
-      display: inline-block;
+      text-transform: uppercase;
     }
+  }
+}
+
+.modalTerms {
+  text-align: center;
+  padding: 0 30px;
+
+  a {
+    text-decoration: underline;
   }
 }
 
 .modalFooter {
   display: block;
-  position: absolute;
-  bottom: 0;
+  position: relative;
+  // bottom: 0;
   width: 100%;
   float: left;
   text-align: center;
-  .modalTerms {
-    text-align: center;
-    padding: 0 30px 15px 30px;
-    a {
-      text-decoration: underline;
-    }
-  }
+
   .modalButton {
     width: 100%;
     padding: 15px 0;
@@ -135,7 +140,7 @@
     }
 
     /* Member List */
-    
+
     .circleMemberIcon {
       width: 32px;
       height: 32px;
@@ -362,11 +367,11 @@
   text-overflow: ellipsis;
   max-width: 230px;
   overflow: hidden;
-  -o-transform: none !important;
-  -moz-transform: none !important;
-  -ms-transform: none !important;
-  -webkit-transform: none !important;
   transform: none !important;
+  -webkit-transform: none !important;
+     -moz-transform: none !important;
+      -ms-transform: none !important;
+       -o-transform: none !important;
 }
 
 .roomOptions {
@@ -562,7 +567,7 @@
       color: $storm-workspace-bgColor;
     }
     &:focus {
-     outline: none; 
+     outline: none;
     }
   }
 }

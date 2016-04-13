@@ -1,45 +1,82 @@
-const AppDispatcher  = require('../dispatcher/AppDispatcher');
-const NavBarConstants = require('../constants/NavBarConstants');
-const StormConstants = require('../constants/StormConstants');
-const EventEmitter   = require('events').EventEmitter;
-const assign         = require('object-assign');
+import { EventEmitter } from 'events';
+import assign from 'object-assign';
+import { ify as lazy } from 'sloth';
+import materialColors from 'material-color';
+import { map, lensProp, set, pipe } from 'ramda';
 
-const MEMBER_CHANGE_EVENT = 'member';
-const NAME_CHANGE_EVENT = 'name';
-const TAB_CHANGE_EVENT = 'tab';
-const NUM_RETURN_TO_WORKSPACE = 3;
+import AppDispatcher from '../dispatcher/AppDispatcher';
+import { WORKSPACE_TAB } from '../constants/NavBarConstants';
+import StormConstants from '../constants/StormConstants';
+import { gradientToDiscrete, moveToHeadByProp } from '../utils/helpers';
+import { getUserId } from '../stores/UserStore';
 
-let _boardName = 'Project Title';
-let _description = 'This is the description.';
-let _selectedTab = NavBarConstants.WORKSPACE_TAB;
-const _members = ['AZ', 'GH'];
+const MEMBER_CHANGE_EVENT = 'MEMBER_CHANGE_EVENT';
+const NAME_CHANGE_EVENT = 'NAME_CHANGE_EVENT';
+const TAB_CHANGE_EVENT = 'TAB_CHANGE_EVENT';
+const UPDATE_EVENT = 'UPDATE_EVENT';
+const COLORS = gradientToDiscrete(materialColors['300']);
 
-const BoardOptionsStore = assign({}, EventEmitter.prototype, {
+let boardOptions = {
+  boardName: '',
+  boardDesc: '',
+  selectedTab: WORKSPACE_TAB,
+  isOnWorkspace: true,
+  users: [],
+  userColorsEnabled: true,
+  numResultsShown: 25,
+  numResultsReturn: 5,
+};
+
+const self = assign({}, EventEmitter.prototype, {
+
+  getBoardOptions: () => boardOptions,
+
   /**
    * Get the entire collection of room members
    * @return {array}
    */
-  getAllMembers: function() {
-    return _members;
+  getUsers: function() {
+    return boardOptions.users;
   },
+
   getRoomData: function() {
     return {
-      name: this.getRoomName(),
-      description: this.getRoomDescription(),
+      boardName: this.getRoomName(),
+      boardDesc: this.getRoomDescription(),
     };
   },
+
+  /*
+   * @param {Array<Object>}
+   * @return {Array<Object>>}
+   */
+  updateUsers: function(users, enabled) {
+    const colors = enabled ? COLORS : ['#AAAAAA'];
+    const headedUsers = moveToHeadByProp('userId', getUserId(), users);
+
+    return pipe(
+      (infinite, finite) => lazy(infinite).cycle().zip(finite).force(),
+      map(([color, user]) => set(lensProp('color'), color, user)),
+    )(colors, headedUsers);
+  },
+
+  updateBoardUsers: function(data) {
+    return set(lensProp('users'),
+               self.updateUsers(data.users, data.userColorsEnabled), data);
+  },
+
   /**
    * @return {string}
    */
   getRoomName: function() {
-    return _boardName;
+    return boardOptions.boardName;
   },
 
   /**
    * @return {string}
    */
   getRoomDescription: function() {
-    return _description;
+    return boardOptions.boardDesc;
   },
 
   /**
@@ -48,28 +85,22 @@ const BoardOptionsStore = assign({}, EventEmitter.prototype, {
    * @return {number}
    */
   getNumReturnToWorkspace: function() {
-    return NUM_RETURN_TO_WORKSPACE;
+    return boardOptions.numResultsReturn;
   },
 
-  /**
-   * Get the selected tab
-   * @return {array}
-   */
-  getSelectedTab: function() {
-    return _selectedTab;
+  getIsOnWorkspace: function() {
+    return boardOptions.isOnWorkspace;
   },
 
+  emitUpdate: function() {
+    this.emit(UPDATE_EVENT);
+  },
   emitNameChange: function() {
     this.emit(NAME_CHANGE_EVENT);
   },
-
   emitMemberChange: function() {
     this.emit(MEMBER_CHANGE_EVENT);
   },
-
-  /**
-   * Emit Tab Change Event
-   */
   emitTabChange: function() {
     this.emit(TAB_CHANGE_EVENT);
   },
@@ -78,9 +109,19 @@ const BoardOptionsStore = assign({}, EventEmitter.prototype, {
    * Add a change listener
    * @param {function} callback - event callback function
    */
+  addUpdateListener: function(callback) {
+    this.on(UPDATE_EVENT, callback);
+  },
   addNameListener: function(callback) {
     this.on(NAME_CHANGE_EVENT, callback);
   },
+  addMemberListener: function(callback) {
+    this.on(MEMBER_CHANGE_EVENT, callback);
+  },
+  addTabChangeListener: function(callback) {
+    this.on(TAB_CHANGE_EVENT, callback);
+  },
+
   /**
    * Remove a change listener
    * @param {function} callback - callback to be removed
@@ -88,23 +129,12 @@ const BoardOptionsStore = assign({}, EventEmitter.prototype, {
   removeNameListener: function(callback) {
     this.removeListener(NAME_CHANGE_EVENT, callback);
   },
-  addMemberListener: function(callback) {
-    this.on(MEMBER_CHANGE_EVENT, callback);
+  removeUpdateListener: function(callback) {
+    this.removeListener(UPDATE_EVENT, callback);
   },
   removeMemberListener: function(callback) {
     this.removeListener(MEMBER_CHANGE_EVENT, callback);
   },
-  /**
-   * Add tab change listener
-   * @param {function} callback - event callback function
-   */
-  addTabChangeListener: function(callback) {
-    this.on(TAB_CHANGE_EVENT, callback);
-  },
-  /**
-   * Remove tab change listener
-   * @param {function} callback - callback to be removed
-   */
   removeTabChangeListener: function(callback) {
     this.removeListener(TAB_CHANGE_EVENT, callback);
   },
@@ -112,21 +142,29 @@ const BoardOptionsStore = assign({}, EventEmitter.prototype, {
 
 AppDispatcher.register(function(action) {
   switch (action.actionType) {
+  case StormConstants.CHANGE_ROOM_OPTS:
+    boardOptions = self.updateBoardUsers({ ...boardOptions,
+                                           ...action.updates });
+    self.emitUpdate();
+    break;
+
   case StormConstants.CHANGE_ROOM_NAME:
-    _boardName = action.roomName.trim();
-    BoardOptionsStore.emitNameChange();
+    boardOptions.boardName = action.roomName.trim();
+    self.emitNameChange();
     break;
+
   case StormConstants.CHANGE_ROOM_DESCRIPTION:
-    _description = action.roomDesc.trim();
-    BoardOptionsStore.emitNameChange();
+    boardOptions.boardDesc = action.roomDesc.trim();
+    self.emitNameChange();
     break;
+
   case StormConstants.SELECT_TAB:
-    _selectedTab = action.selectedTab;
-    BoardOptionsStore.emitTabChange();
+    boardOptions.isOnWorkspace = action.isOnWorkspace;
+    self.emitUpdate();
     break;
+
   default:
-    break;
   }
 });
 
-module.exports = BoardOptionsStore;
+module.exports = self;

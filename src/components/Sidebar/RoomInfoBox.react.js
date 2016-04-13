@@ -1,19 +1,22 @@
-const React = require('react');
-const RoomName = require('./RoomName.react');
-const RoomDesciption = require('./RoomDescription.react');
+import React, { PropTypes } from 'react';
 
-const RoomInfoBox = React.createClass({
-  /**
-   * @return {object}
-   */
-  render: function() {
-    return (
-      <div className="sidebar-section">
-        <RoomName name={this.props.room.name} />
-        <RoomDesciption description={this.props.room.description} />
-      </div>
-    );
-  },
-});
+const propTypes = {
+  room: PropTypes.shape({
+    boardName: PropTypes.string.isRequired,
+    boardDesc: PropTypes.string.isRequired,
+  }),
+};
 
-module.exports = RoomInfoBox;
+const RoomInfoBox = ({room}) => (
+  <div className="sidebar-section">
+
+    <h2>{room.boardName}</h2>
+
+    <div className='room-description'>
+      {room.boardDesc}
+    </div>
+  </div>
+);
+
+RoomInfoBox.propTypes = propTypes;
+export default RoomInfoBox;

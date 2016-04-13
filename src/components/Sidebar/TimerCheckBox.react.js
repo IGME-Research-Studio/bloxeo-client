@@ -6,7 +6,8 @@ const TimerCheckBox = React.createClass({
   _onClick: function() {
     if (this.props.timerStatus) {
       StormActions.pauseTimer(false);
-    } else {
+    }
+    else {
       StormActions.pauseTimer(true);
     }
   },

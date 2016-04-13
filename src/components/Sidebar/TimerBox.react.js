@@ -7,7 +7,10 @@ const TimerBox = React.createClass({
     return (
       <div className='timerBox'>
         <TimerCheckBox timerStatus={this.props.timerStatus} />
-        <Timer minutes={this.props.time.minutes} seconds={this.props.time.seconds} />
+        <Timer
+          minutes={this.props.time.minutes}
+          seconds={this.props.time.seconds} />
+
         <div className="progress">
           <div className="progress-bar progress-bar-info"
             role="progressbar" style={{width: this.props.timerWidth + '%'}}>

@@ -1,20 +1,31 @@
-const React = require('react');
+import React, { PropTypes } from 'react';
+import { FlatButton } from 'material-ui';
+import { green300, green500 } from 'material-ui/lib/styles/colors';
 
-const ModalFooter = React.createClass({
-  render: function() {
-    return (
-      <div className="modalFooter">
-        <div className="modalTerms">
-          Logging in confirms your agreement to <a href="#">our EULA</a>.
-        </div>
-        <button
-          className="modalButton"
-          onClick={this.props.click}>
-          {this.props.buttonText}
-        </button>
-      </div>
-    );
-  },
-});
+const propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+  buttonText: PropTypes.string.isRequired,
+};
 
-module.exports = ModalFooter;
+const buttonStyle = {
+  width: '100%',
+  textAlign: 'center',
+};
+const labelStyle = {
+  color: 'white',
+};
+
+const ModalFooter = ({onSubmit, buttonText}) => (
+  <FlatButton
+    disableTouchRipple
+    backgroundColor={green500}
+    hoverColor={green300}
+    onTouchTap={onSubmit}
+    style={buttonStyle}
+    label={buttonText}
+    labelStyle={labelStyle}
+  />
+);
+
+ModalFooter.propTypes = propTypes;
+export default ModalFooter;

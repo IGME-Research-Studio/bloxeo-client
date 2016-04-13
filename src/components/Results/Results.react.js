@@ -6,7 +6,6 @@ const Result = require('./Result.react');
 const BoardOptionsStore = require('../../stores/BoardOptionsStore');
 const VotingResultsStore = require('../../stores/VotingResultsStore');
 const StormActions = require('../../actions/StormActions');
-const NavBarConstants = require('../../constants/NavBarConstants');
 
 /**
  * Retrieve the current data from the VotingResultsStore
@@ -75,7 +74,7 @@ const Results = React.createClass({
     const results = this._getSelectedResults();
     if (results.length > 0) {
       StormActions.returnResults(results);
-      StormActions.selectTab(NavBarConstants.WORKSPACE_TAB);
+      StormActions.toggleWorkspace(true);
 
       for (let i = 0; i < results.length; i++) {
         results[i].selected = false;
@@ -94,9 +93,11 @@ const Results = React.createClass({
     results.sort(function(result1, result2) {
       if (result1.collection.votes < result2.collection.votes) {
         return 1;
-      } else if (result1.collection.votes === result2.collection.votes) {
+      }
+      else if (result1.collection.votes === result2.collection.votes) {
         return 0;
-      } else {
+      }
+      else {
         return -1;
       }
     });

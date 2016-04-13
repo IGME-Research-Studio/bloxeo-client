@@ -2,7 +2,6 @@ const React = require('react');
 const StormActions = require('../../actions/StormActions');
 const BoardOptionsStore = require('../../stores/BoardOptionsStore');
 const CollectionStore = require('../../stores/CollectionStore');
-const NavBarConstants = require('../../constants/NavBarConstants');
 const VoteButton = require('./VoteButton.react');
 const VoteCollection = require('./VoteCollection.react');
 
@@ -64,9 +63,11 @@ const VotingContent = React.createClass({
     sorted.sort(function(idea1, idea2) {
       if (idea1.votes < idea2.votes) {
         return 1;
-      } else if (idea1.votes === idea2.votes) {
+      }
+      else if (idea1.votes === idea2.votes) {
         return 0;
-      } else {
+      }
+      else {
         return -1;
       }
     });
@@ -113,10 +114,11 @@ const VotingContent = React.createClass({
       StormActions.hideCollections(hideIds);
 
       // show results tab
-      StormActions.selectTab(NavBarConstants.RESULTS_TAB);
+      StormActions.toggleWorkspace(false);
 
       this.props.hideModal();
-    } else {
+    }
+    else {
       this.setState({voteIndex: this.state.voteIndex + 1});
     }
   },

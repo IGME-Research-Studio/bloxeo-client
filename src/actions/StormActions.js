@@ -1,36 +1,54 @@
-const AppDispatcher  = require('../dispatcher/AppDispatcher');
-const StormConstants = require('../constants/StormConstants');
+import AppDispatcher from '../dispatcher/AppDispatcher';
+import StormConstants from '../constants/StormConstants';
 
 const StormActions = {
   /**
    * Dispatch create new user
    */
-  createUser: function(userName) {
+  createUser: function(username) {
     AppDispatcher.dispatch({
       actionType: StormConstants.CREATE_USER,
-      userName: userName,
+      username: username,
     });
   },
+
   /**
    * Dispatch create new board event
+   * @param {Object} requestData { username, boardName, boardDesc }
    */
-  createBoard: function(userName) {
+  createBoard: function(requestData) {
     AppDispatcher.dispatch({
       actionType: StormConstants.CREATE_BOARD,
-      userName: userName,
+      ...requestData,
     });
   },
+
+  updateBoard: function(requestData) {
+    AppDispatcher.dispatch({
+      actionType: StormConstants.UPDATE_BOARD,
+      updates: requestData,
+    });
+  },
+
   /**
    * Dispatch join board event
    * @param {string} id of board to join
    */
-  joinBoard: function(boardId, userName) {
+  joinBoard: function(boardId, username) {
     AppDispatcher.dispatch({
       actionType: StormConstants.JOIN_BOARD,
       boardId: boardId,
-      userName: userName,
+      username: username,
     });
   },
+
+  leaveBoard: function(boardId) {
+    AppDispatcher.dispatch({
+      actionType: StormConstants.LEAVE_BOARD,
+      boardId: boardId,
+    });
+  },
+
   /**
   * Dispatch set bank loaded event
   */
@@ -39,6 +57,14 @@ const StormActions = {
       actionType: StormConstants.END_LOAD_ANIMATION,
     });
   },
+
+  changeRoomOptions: function(updates) {
+    AppDispatcher.dispatch({
+      actionType: StormConstants.CHANGE_ROOM_OPTS,
+      updates: updates,
+    });
+  },
+
   /**
    * Dispatch change room name event
    * @param {string} roomName
@@ -49,6 +75,7 @@ const StormActions = {
       roomName: roomName,
     });
   },
+
   /**
    * Dispatch change room description event
    * @param {string} description
@@ -59,6 +86,7 @@ const StormActions = {
       roomDesc: roomDesc,
     });
   },
+
   /**
    * Dispatch idea create event
    * @param {string} ideaContent
@@ -69,6 +97,7 @@ const StormActions = {
       ideaContent: ideaContent,
     });
   },
+
   /**
    * Dispatch timer countdown event
    */
@@ -77,6 +106,7 @@ const StormActions = {
       actionType: StormConstants.TIMER_COUNTDOWN,
     });
   },
+
   /**
    * Dispatch pause timer event
    * @param {boolean} pause
@@ -87,6 +117,7 @@ const StormActions = {
       isPaused: isPaused,
     });
   },
+
   collectionCreate: function(idea, left, top) {
     AppDispatcher.dispatch({
       actionType: StormConstants.COLLECTION_CREATE,
@@ -95,12 +126,14 @@ const StormActions = {
       top: top,
     });
   },
+
   storeWorkspace: function(workspace) {
     AppDispatcher.dispatch({
       actionType: StormConstants.STORE_WORKSPACE,
       workspace: workspace,
     });
   },
+
   groupIdea: function(id, idea) {
     AppDispatcher.dispatch({
       actionType: StormConstants.GROUP_IDEAS,
@@ -108,6 +141,7 @@ const StormActions = {
       id: id,
     });
   },
+
   separateIdeas: function(groupID, ideaContent) {
     AppDispatcher.dispatch({
       actionType: StormConstants.SEPARATE_IDEAS,
@@ -115,6 +149,7 @@ const StormActions = {
       ideaContent: ideaContent,
     });
   },
+
   /**
    * Dispatch event to hide collections with the given ids
    * @param {number[]} ids - array of ids to hide
@@ -125,6 +160,7 @@ const StormActions = {
       ids: ids,
     });
   },
+
   /**
    * Dispatch event to set voting results
    * @param {object[]} results - voting results
@@ -135,6 +171,7 @@ const StormActions = {
       results: results,
     });
   },
+
   /**
    * Dispatch event return results to the workspace
    * @param {object[]} results - voting results
@@ -145,15 +182,17 @@ const StormActions = {
       results: results,
     });
   },
+
   /**
    * Dispatch event to select a tab
    */
-  selectTab: function(tab) {
+  toggleWorkspace: function(isOnWorkspace) {
     AppDispatcher.dispatch({
       actionType: StormConstants.SELECT_TAB,
-      selectedTab: tab,
+      isOnWorkspace,
     });
   },
+
   /**
    * Dispatch event to move a collection
    * @param {number} ids - collection to move
@@ -168,6 +207,7 @@ const StormActions = {
       top: top,
     });
   },
+
   /**
    * Dispatch event to remove a collection with given id
    * @param {number} id - collection to remove
@@ -178,6 +218,7 @@ const StormActions = {
       id: id,
     });
   },
+
   /**
    * Dispatch event add idea collections
    * @param {object[]} collections - collections to add
@@ -188,6 +229,7 @@ const StormActions = {
       collections: collections,
     });
   },
+
   /**
    * Dispatch event to remove a collection with given id
    * @param {number} id - collection to remove
@@ -199,6 +241,7 @@ const StormActions = {
       height: height,
     });
   },
+
   // SOCKET ACTIONS
   // Collections
   /**
@@ -215,6 +258,7 @@ const StormActions = {
       left: left,
     });
   },
+
   /**
    * Dispatch event to update a collection
    * @param {number} index - position in collections array
@@ -227,6 +271,7 @@ const StormActions = {
       content: content,
     });
   },
+
   /**
    * Dispatch event to remove a collection
    * @param {number} index - position in collections array
@@ -237,6 +282,7 @@ const StormActions = {
       index: index,
     });
   },
+
   /**
    * Dispatch event to update collections
    * @param {array} collections - all collections
@@ -248,6 +294,7 @@ const StormActions = {
       reset: reset,
     });
   },
+
   // IDEAS
   /**
    * Dispatch event to update ideas

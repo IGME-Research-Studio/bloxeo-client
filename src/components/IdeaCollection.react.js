@@ -55,11 +55,13 @@ const IdeaCollection = React.createClass({
   squareSize: function() {
     let sizeCount = 1;
     let value = 0;
-    if (this.props.ideas.content.length > 0) { // TODO remove when empty collections are fixed
+    // TODO remove when empty collections are fixed
+    if (this.props.ideas.content.length > 0) {
       this.props.ideas.content.forEach(function(item) {
         if (item.text.length > 15) {
           value += 1;
-        } else {
+        }
+        else {
           value += 0.5;
         }
       });

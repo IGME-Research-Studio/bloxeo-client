@@ -11,11 +11,13 @@ const RoomName = React.createClass({
       isEditing: false,
     };
   },
+
   componentDidUpdate: function() {
     if (this.state.isEditing) {
       document.getElementsByClassName('room-name')[0].focus();
     }
   },
+
   /**
    * Enable editing mode on double click
    */
@@ -24,6 +26,7 @@ const RoomName = React.createClass({
       isEditing: true,
     });
   },
+
   /**
    * @param {object} event
    */
@@ -32,6 +35,7 @@ const RoomName = React.createClass({
       value: event.target.value,
     });
   },
+
   /**
    * @param {object} event
    */
@@ -40,6 +44,7 @@ const RoomName = React.createClass({
       this._onSave();
     }
   },
+
   /**
    * Handle save and update room name
    */
@@ -51,7 +56,8 @@ const RoomName = React.createClass({
         isEditing: false,
       });
       return;
-    } else {
+    }
+    else {
       // save room name to StormStore
       StormActions.changeRoomName(this.state.value);
       // update room name view
@@ -61,6 +67,7 @@ const RoomName = React.createClass({
       });
     }
   },
+
   /**
    * @return {object}
    */
@@ -75,7 +82,8 @@ const RoomName = React.createClass({
           onKeyDown={this._onKeyDown}
           onBlur={this._onSave} />
       );
-    } else {
+    }
+    else {
       return (
         <h2
           className="noMargin room-name"

@@ -2,18 +2,18 @@ import React, { PropTypes } from 'react';
 
 const propTypes = {
   room: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
+    boardName: PropTypes.string.isRequired,
+    boardDesc: PropTypes.string.isRequired,
   }),
 };
 
 const RoomInfoBox = ({room}) => (
   <div className="sidebar-section">
 
-    <h2>{room.name}</h2>
+    <h2>{room.boardName}</h2>
 
     <div className='room-description'>
-      {room.description}
+      {room.boardDesc}
     </div>
   </div>
 );

@@ -113,7 +113,8 @@ const NavBar = React.createClass({
             <button
               onClick={this.toggleRoomOptions}
               style={cogStyle}
-              className="cogButton">
+              className="cogButton"
+            >
 
               <FontAwesome name="cog" size="lg" />
             </button>

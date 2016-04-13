@@ -151,6 +151,16 @@ socket.on(EVENT_API.RECEIVED_IDEAS, (data) => {
   });
 });
 
+socket.on(EVENT_API.UPDATED_BOARD, (data) => {
+  checkSocketStatus(data)
+  .then((res) => {
+    StormActions.changeRoomOptions(res.data);
+  })
+  .catch((res) => {
+    console.error(`Error receiving update: ${res}`);
+  });
+});
+
 socket.on(EVENT_API.RECEIVED_OPTIONS, (data) => {
   checkSocketStatus(data)
   .then((res) => {
@@ -365,6 +375,14 @@ AppDispatcher.register((action) => {
     socket.emit(EVENT_API.LEAVE_ROOM, {
       boardId: action.boardId,
       userToken: UserStore.getUserToken(),
+    });
+    break;
+
+  case StormConstants.UPDATE_BOARD:
+    socket.emit(EVENT_API.UPDATE_BOARD, {
+      boardId: currentBoardId,
+      userToken: UserStore.getUserToken(),
+      updates: action.updates,
     });
     break;
 

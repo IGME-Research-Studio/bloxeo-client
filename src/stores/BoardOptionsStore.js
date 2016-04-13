@@ -1,8 +1,8 @@
-import { map, lensProp, set } from 'ramda';
 import { EventEmitter } from 'events';
 import assign from 'object-assign';
-import sloth from 'sloth';
+import { ify as lazy } from 'sloth';
 import materialColors from 'material-color';
+import { map, lensProp, set, pipe } from 'ramda';
 
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import { WORKSPACE_TAB } from '../constants/NavBarConstants';
@@ -17,8 +17,8 @@ const UPDATE_EVENT = 'UPDATE_EVENT';
 const COLORS = gradientToDiscrete(materialColors['300']);
 
 let boardOptions = {
-  name: '',
-  description: '',
+  boardName: '',
+  boardDesc: '',
   selectedTab: WORKSPACE_TAB,
   isOnWorkspace: true,
   users: [],
@@ -27,7 +27,7 @@ let boardOptions = {
   numResultsReturn: 5,
 };
 
-const BoardOptionsStore = assign({}, EventEmitter.prototype, {
+const self = assign({}, EventEmitter.prototype, {
 
   getBoardOptions: () => boardOptions,
 
@@ -41,8 +41,8 @@ const BoardOptionsStore = assign({}, EventEmitter.prototype, {
 
   getRoomData: function() {
     return {
-      name: this.getRoomName(),
-      description: this.getRoomDescription(),
+      boardName: this.getRoomName(),
+      boardDesc: this.getRoomDescription(),
     };
   },
 
@@ -50,29 +50,33 @@ const BoardOptionsStore = assign({}, EventEmitter.prototype, {
    * @param {Array<Object>}
    * @return {Array<Object>>}
    */
-  updateUsers: function(users) {
-    const colors = boardOptions.userColorsEnabled ? COLORS : ['DDD'];
+  updateUsers: function(users, enabled) {
+    const colors = enabled ? COLORS : ['#AAAAAA'];
     const headedUsers = moveToHeadByProp('userId', getUserId(), users);
-    return map(([color, user]) =>
-               set(lensProp('color'), color, user),
-               sloth.ify(colors)
-                 .cycle()
-                 .zip(headedUsers).force()
-              );
+
+    return pipe(
+      (infinite, finite) => lazy(infinite).cycle().zip(finite).force(),
+      map(([color, user]) => set(lensProp('color'), color, user)),
+    )(colors, headedUsers);
+  },
+
+  updateBoardUsers: function(data) {
+    return set(lensProp('users'),
+               self.updateUsers(data.users, data.userColorsEnabled), data);
   },
 
   /**
    * @return {string}
    */
   getRoomName: function() {
-    return boardOptions.name;
+    return boardOptions.boardName;
   },
 
   /**
    * @return {string}
    */
   getRoomDescription: function() {
-    return boardOptions.description;
+    return boardOptions.boardDesc;
   },
 
   /**
@@ -139,30 +143,28 @@ const BoardOptionsStore = assign({}, EventEmitter.prototype, {
 AppDispatcher.register(function(action) {
   switch (action.actionType) {
   case StormConstants.CHANGE_ROOM_OPTS:
-    const updates = set(lensProp('users'),
-                        BoardOptionsStore.updateUsers(action.updates.users),
-                        action.updates);
-    boardOptions = { ...boardOptions, ...updates };
-    BoardOptionsStore.emitUpdate();
+    boardOptions = self.updateBoardUsers({ ...boardOptions,
+                                           ...action.updates });
+    self.emitUpdate();
     break;
 
   case StormConstants.CHANGE_ROOM_NAME:
-    boardOptions.name = action.roomName.trim();
-    BoardOptionsStore.emitNameChange();
+    boardOptions.boardName = action.roomName.trim();
+    self.emitNameChange();
     break;
 
   case StormConstants.CHANGE_ROOM_DESCRIPTION:
-    boardOptions.description = action.roomDesc.trim();
-    BoardOptionsStore.emitNameChange();
+    boardOptions.boardDesc = action.roomDesc.trim();
+    self.emitNameChange();
     break;
 
   case StormConstants.SELECT_TAB:
     boardOptions.isOnWorkspace = action.isOnWorkspace;
-    BoardOptionsStore.emitUpdate();
+    self.emitUpdate();
     break;
 
   default:
   }
 });
 
-module.exports = BoardOptionsStore;
+module.exports = self;

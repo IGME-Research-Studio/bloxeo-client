@@ -1,5 +1,5 @@
-const AppDispatcher  = require('../dispatcher/AppDispatcher');
-const StormConstants = require('../constants/StormConstants');
+import AppDispatcher from '../dispatcher/AppDispatcher';
+import StormConstants from '../constants/StormConstants';
 
 const StormActions = {
   /**
@@ -20,6 +20,13 @@ const StormActions = {
     AppDispatcher.dispatch({
       actionType: StormConstants.CREATE_BOARD,
       ...requestData,
+    });
+  },
+
+  updateBoard: function(requestData) {
+    AppDispatcher.dispatch({
+      actionType: StormConstants.UPDATE_BOARD,
+      updates: requestData,
     });
   },
 

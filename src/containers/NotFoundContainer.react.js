@@ -5,7 +5,7 @@ import JoinRoomContainer from './JoinRoomContainer.react';
 
 const NotFoundContainer = () => (
   <LandingContainer>
-    <JoinRoomContainer />
+    <JoinRoomContainer params={{boardId: null}} />
   </LandingContainer>
 );
 

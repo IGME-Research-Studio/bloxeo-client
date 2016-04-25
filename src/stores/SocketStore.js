@@ -2,7 +2,7 @@ import 'whatwg-fetch';
 import _ from 'lodash';
 import Promise from 'bluebird';
 import assign from 'object-assign';
-import { equals, either, not, compose, isNil, map } from 'ramda';
+import { equals, or, not, compose, isNil } from 'ramda';
 import { EventEmitter } from 'events';
 import { browserHistory } from 'react-router';
 
@@ -99,7 +99,6 @@ socket.on(EVENT_API.UPDATED_COLLECTIONS, (data) => {
 socket.on(EVENT_API.UPDATED_IDEAS, (data) => {
   checkSocketStatus(data)
   .then((res) => {
-    // const ideas = res.data.map((idea) => idea.content);
     StormActions.updatedIdeas(res.data);
   })
   .catch((res) => {
@@ -139,7 +138,6 @@ socket.on(EVENT_API.RECEIVED_COLLECTIONS, (data) => {
 socket.on(EVENT_API.RECEIVED_IDEAS, (data) => {
   checkSocketStatus(data)
   .then((res) => {
-
     StormActions.updatedIdeas(res.data);
   })
   .catch((res) => {
@@ -205,8 +203,8 @@ function createBoard(boardName, boardDesc) {
 
   return post(Routes.createBoard(),
               { userToken: UserStore.getUserToken(),
-                name: boardName,
-                description: boardDesc,
+                boardName,
+                boardDesc,
               })
   .then(checkHTTPStatus);
 }
@@ -226,7 +224,6 @@ function createUser(name) {
       return res;
     })
     .catch((err) => {
-      console.error(err.stack);
       throw new Error(err);
     });
 }
@@ -241,7 +238,7 @@ function getOrCreateUser(name) {
   const maybeToken = UserStore.getUserToken();
   const maybeName = UserStore.getUserName();
 
-  if (either(isNil(maybeToken), not(equals(maybeName, name)))) {
+  if (or(isNil(maybeToken), not(equals(maybeName, name)))) {
     return createUser(name);
   }
   else {
@@ -335,7 +332,7 @@ socket.on('connect', () => {
 });
 
 socket.on('disconnect', () => {
-  console.info('disconnected');
+  console.info(`Disconnected, was on ${currentBoardId}`);
 
   if (isntNil(currentBoardId)) {
     leaveBoard(currentBoardId);
@@ -343,7 +340,7 @@ socket.on('disconnect', () => {
 });
 
 socket.on('reconnect', () => {
-  console.info(`Reconnection ${socket.id}`);
+  console.info(`Reconnection ${socket.id}, was on ${currentBoardId}`);
 
   if (isntNil(currentBoardId)) {
     joinBoard(currentBoardId);

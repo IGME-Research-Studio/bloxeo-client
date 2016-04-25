@@ -44,7 +44,7 @@ function setIdeas(ideas) {
 }
 
 AppDispatcher.register(function(action) {
-  switch (action.actionType) {
+  switch (action.type) {
   case StormConstants.UPDATED_IDEAS:
     setIdeas(action.ideas);
     IdeaStore.emitChange();

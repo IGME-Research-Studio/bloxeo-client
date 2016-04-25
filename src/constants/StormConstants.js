@@ -10,8 +10,8 @@ module.exports = {
   // Idea constants
   IDEA_CREATE: 'IDEA_CREATE',
   // Collection Constants
-  COLLECTION_CREATE: 'COLLECTION_CREATE',
   REMOVE_COLLECTION: 'REMOVE_COLLECTION',
+  CREATE_COLLECTION: 'CREATE_COLLECTION',
   SEPARATE_IDEAS: 'SEPARATE_IDEAS',
   GROUP_IDEAS: 'GROUP_IDEAS',
   // Misc Constants
@@ -27,7 +27,6 @@ module.exports = {
   SERVER_URL: 'http://storm-server-stage.herokuapp.com',
   // SERVER_URL: 'http://localhost:1337',
   API_VERSION: '/v1',
-  TEST_BOARD: '4yibJDO4l',
   // Server requests
   CREATE_BOARD: 'CREATE_BOARD',
   JOIN_BOARD: 'JOIN_BOARD',

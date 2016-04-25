@@ -20,6 +20,7 @@ const IdeaCollection = React.createClass({
       top: this.props.top,
       height: 0,
       ideas: this.props.ideas,
+      // @XXX this is actually the collection id?
       ideaID: this.props.ideaID,
     };
   },
@@ -140,17 +141,20 @@ const collectionTarget = {
     const idea = monitor.getItem();
     return (idea.ideaCount === 1);
   },
+
   // Group ideas on drop
   drop: function(props, monitor) {
-    const idea = monitor.getItem();
+    const item = monitor.getItem();
+    console.log(item, props.ideaID);
     // Do not execute drop on self
-    if (props.ideaID === idea.id && idea.type !== 'IDEA') {
+    if (props.ideaID === item.id && item.type !== 'IDEA') {
       return;
     }
-    StormActions.groupIdea(props.ideaID, idea);
+
+    StormActions.groupIdea(props.ideaID, item);
     // Remove combined collection
-    if (idea.type === DnDTypes.COLLECTION) {
-      StormActions.removeCollection(idea.id);
+    if (item.type === DnDTypes.COLLECTION) {
+      StormActions.removeCollection(item.id);
     }
   },
 };

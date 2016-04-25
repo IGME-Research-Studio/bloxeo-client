@@ -1,13 +1,15 @@
-import AppDispatcher from '../dispatcher/AppDispatcher';
-import StormConstants from '../constants/StormConstants';
+import { createAction } from 'redux-actions';
+
+import Dispatcher from '../dispatcher/AppDispatcher';
+import ActTypes from '../constants/StormConstants';
 
 const StormActions = {
   /**
    * Dispatch create new user
    */
   createUser: function(username) {
-    AppDispatcher.dispatch({
-      actionType: StormConstants.CREATE_USER,
+    Dispatcher.dispatch({
+      type: ActTypes.CREATE_USER,
       username: username,
     });
   },
@@ -17,15 +19,15 @@ const StormActions = {
    * @param {Object} requestData { username, boardName, boardDesc }
    */
   createBoard: function(requestData) {
-    AppDispatcher.dispatch({
-      actionType: StormConstants.CREATE_BOARD,
+    Dispatcher.dispatch({
+      type: ActTypes.CREATE_BOARD,
       ...requestData,
     });
   },
 
   updateBoard: function(requestData) {
-    AppDispatcher.dispatch({
-      actionType: StormConstants.UPDATE_BOARD,
+    Dispatcher.dispatch({
+      type: ActTypes.UPDATE_BOARD,
       updates: requestData,
     });
   },
@@ -35,16 +37,16 @@ const StormActions = {
    * @param {string} id of board to join
    */
   joinBoard: function(boardId, username) {
-    AppDispatcher.dispatch({
-      actionType: StormConstants.JOIN_BOARD,
+    Dispatcher.dispatch({
+      type: ActTypes.JOIN_BOARD,
       boardId: boardId,
       username: username,
     });
   },
 
   leaveBoard: function(boardId) {
-    AppDispatcher.dispatch({
-      actionType: StormConstants.LEAVE_BOARD,
+    Dispatcher.dispatch({
+      type: ActTypes.LEAVE_BOARD,
       boardId: boardId,
     });
   },
@@ -53,14 +55,14 @@ const StormActions = {
   * Dispatch set bank loaded event
   */
   endLoadAnimation: function() {
-    AppDispatcher.dispatch({
-      actionType: StormConstants.END_LOAD_ANIMATION,
+    Dispatcher.dispatch({
+      type: ActTypes.END_LOAD_ANIMATION,
     });
   },
 
   changeRoomOptions: function(updates) {
-    AppDispatcher.dispatch({
-      actionType: StormConstants.CHANGE_ROOM_OPTS,
+    Dispatcher.dispatch({
+      type: ActTypes.CHANGE_ROOM_OPTS,
       updates: updates,
     });
   },
@@ -70,8 +72,8 @@ const StormActions = {
    * @param {string} roomName
    */
   changeRoomName: function(roomName) {
-    AppDispatcher.dispatch({
-      actionType: StormConstants.CHANGE_ROOM_NAME,
+    Dispatcher.dispatch({
+      type: ActTypes.CHANGE_ROOM_NAME,
       roomName: roomName,
     });
   },
@@ -81,8 +83,8 @@ const StormActions = {
    * @param {string} description
    */
   changeRoomDescription: function(roomDesc) {
-    AppDispatcher.dispatch({
-      actionType: StormConstants.CHANGE_ROOM_DESCRIPTION,
+    Dispatcher.dispatch({
+      type: ActTypes.CHANGE_ROOM_DESCRIPTION,
       roomDesc: roomDesc,
     });
   },
@@ -92,8 +94,8 @@ const StormActions = {
    * @param {string} ideaContent
    */
   ideaCreate: function(ideaContent) {
-    AppDispatcher.dispatch({
-      actionType: StormConstants.IDEA_CREATE,
+    Dispatcher.dispatch({
+      type: ActTypes.IDEA_CREATE,
       ideaContent: ideaContent,
     });
   },
@@ -102,8 +104,8 @@ const StormActions = {
    * Dispatch timer countdown event
    */
   countdown: function() {
-    AppDispatcher.dispatch({
-      actionType: StormConstants.TIMER_COUNTDOWN,
+    Dispatcher.dispatch({
+      type: ActTypes.TIMER_COUNTDOWN,
     });
   },
 
@@ -112,39 +114,36 @@ const StormActions = {
    * @param {boolean} pause
    */
   pauseTimer: function(isPaused) {
-    AppDispatcher.dispatch({
-      actionType: StormConstants.TIMER_PAUSE,
+    Dispatcher.dispatch({
+      type: ActTypes.TIMER_PAUSE,
       isPaused: isPaused,
     });
   },
 
-  collectionCreate: function(idea, left, top) {
-    AppDispatcher.dispatch({
-      actionType: StormConstants.COLLECTION_CREATE,
-      idea: idea,
-      left: left,
-      top: top,
-    });
+  createCollection: function({ideaContent, left, top}) {
+    Dispatcher.dispatch(
+      createAction(ActTypes.CREATE_COLLECTION)({ideaContent, left, top})
+    );
   },
 
   storeWorkspace: function(workspace) {
-    AppDispatcher.dispatch({
-      actionType: StormConstants.STORE_WORKSPACE,
+    Dispatcher.dispatch({
+      type: ActTypes.STORE_WORKSPACE,
       workspace: workspace,
     });
   },
 
   groupIdea: function(id, idea) {
-    AppDispatcher.dispatch({
-      actionType: StormConstants.GROUP_IDEAS,
+    Dispatcher.dispatch({
+      type: ActTypes.GROUP_IDEAS,
       idea: idea,
       id: id,
     });
   },
 
   separateIdeas: function(groupID, ideaContent) {
-    AppDispatcher.dispatch({
-      actionType: StormConstants.SEPARATE_IDEAS,
+    Dispatcher.dispatch({
+      type: ActTypes.SEPARATE_IDEAS,
       groupID: groupID,
       ideaContent: ideaContent,
     });
@@ -155,8 +154,8 @@ const StormActions = {
    * @param {number[]} ids - array of ids to hide
    */
   hideCollections: function(ids) {
-    AppDispatcher.dispatch({
-      actionType: StormConstants.HIDE_COLLECTIONS,
+    Dispatcher.dispatch({
+      type: ActTypes.HIDE_COLLECTIONS,
       ids: ids,
     });
   },
@@ -166,8 +165,8 @@ const StormActions = {
    * @param {object[]} results - voting results
    */
   storeResults: function(results) {
-    AppDispatcher.dispatch({
-      actionType: StormConstants.STORE_RESULTS,
+    Dispatcher.dispatch({
+      type: ActTypes.STORE_RESULTS,
       results: results,
     });
   },
@@ -177,8 +176,8 @@ const StormActions = {
    * @param {object[]} results - voting results
    */
   returnResults: function(results) {
-    AppDispatcher.dispatch({
-      actionType: StormConstants.RETURN_RESULTS,
+    Dispatcher.dispatch({
+      type: ActTypes.RETURN_RESULTS,
       results: results,
     });
   },
@@ -187,8 +186,8 @@ const StormActions = {
    * Dispatch event to select a tab
    */
   toggleWorkspace: function(isOnWorkspace) {
-    AppDispatcher.dispatch({
-      actionType: StormConstants.SELECT_TAB,
+    Dispatcher.dispatch({
+      type: ActTypes.SELECT_TAB,
       isOnWorkspace,
     });
   },
@@ -200,8 +199,8 @@ const StormActions = {
    * @param {number} right - collection new right
    */
   moveCollection: function(id, left, top) {
-    AppDispatcher.dispatch({
-      actionType: StormConstants.MOVE_COLLECTION,
+    Dispatcher.dispatch({
+      type: ActTypes.MOVE_COLLECTION,
       id: id,
       left: left,
       top: top,
@@ -213,8 +212,8 @@ const StormActions = {
    * @param {number} id - collection to remove
    */
   removeCollection: function(id) {
-    AppDispatcher.dispatch({
-      actionType: StormConstants.REMOVE_COLLECTION,
+    Dispatcher.dispatch({
+      type: ActTypes.REMOVE_COLLECTION,
       id: id,
     });
   },
@@ -224,8 +223,8 @@ const StormActions = {
    * @param {object[]} collections - collections to add
    */
   addCollections: function(collections) {
-    AppDispatcher.dispatch({
-      actionType: StormConstants.ADD_COllECTIONS,
+    Dispatcher.dispatch({
+      type: ActTypes.ADD_COllECTIONS,
       collections: collections,
     });
   },
@@ -235,8 +234,8 @@ const StormActions = {
    * @param {number} id - collection to remove
    */
   setLayoutSize: function(width, height) {
-    AppDispatcher.dispatch({
-      actionType: StormConstants.SET_LAYOUT_SIZE,
+    Dispatcher.dispatch({
+      type: ActTypes.SET_LAYOUT_SIZE,
       width: width,
       height: height,
     });
@@ -250,8 +249,8 @@ const StormActions = {
    * @param {array} content - content of collection
    */
   addedCollection: function(index, content, left, top) {
-    AppDispatcher.dispatch({
-      actionType: StormConstants.ADDED_COLLECTION,
+    Dispatcher.dispatch({
+      type: ActTypes.ADDED_COLLECTION,
       index: index,
       content: content,
       top: top,
@@ -265,8 +264,8 @@ const StormActions = {
    * @param {array} content - content of collection
    */
   modifiedCollection: function(index, content) {
-    AppDispatcher.dispatch({
-      actionType: StormConstants.MODIFIED_COLLECTION,
+    Dispatcher.dispatch({
+      type: ActTypes.MODIFIED_COLLECTION,
       index: index,
       content: content,
     });
@@ -277,8 +276,8 @@ const StormActions = {
    * @param {number} index - position in collections array
    */
   removedCollection: function(index) {
-    AppDispatcher.dispatch({
-      actionType: StormConstants.REMOVED_COLLECTION,
+    Dispatcher.dispatch({
+      type: ActTypes.REMOVED_COLLECTION,
       index: index,
     });
   },
@@ -288,8 +287,8 @@ const StormActions = {
    * @param {array} collections - all collections
    */
   receivedCollections: function(collections, reset) {
-    AppDispatcher.dispatch({
-      actionType: StormConstants.RECEIVED_COLLECTIONS,
+    Dispatcher.dispatch({
+      type: ActTypes.RECEIVED_COLLECTIONS,
       collections: collections,
       reset: reset,
     });
@@ -301,8 +300,8 @@ const StormActions = {
    * @param {array} ideas - all ideas
    */
   updatedIdeas: function(ideas) {
-    AppDispatcher.dispatch({
-      actionType: StormConstants.UPDATED_IDEAS,
+    Dispatcher.dispatch({
+      type: ActTypes.UPDATED_IDEAS,
       ideas: ideas,
     });
   },

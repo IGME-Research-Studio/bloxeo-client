@@ -138,11 +138,11 @@ const workTarget = {
       );
     }
     else {
-      StormActions.collectionCreate(
-        idea.content,
-        Math.round(pos.x) - (domNode.left) - component.state.x,
-        Math.round(pos.y) - (domNode.top) - component.state.y
-      );
+      StormActions.createCollection({
+        ideaContent: idea.content,
+        left: Math.round(pos.x) - (domNode.left) - component.state.x,
+        top: Math.round(pos.y) - (domNode.top) - component.state.y,
+      });
     }
   },
 };

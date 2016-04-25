@@ -148,7 +148,7 @@ const self = assign({}, EventEmitter.prototype, {
 });
 
 AppDispatcher.register(function(action) {
-  switch (action.actionType) {
+  switch (action.type) {
   case StormConstants.CHANGE_ROOM_OPTS:
     boardOptions = self.updateBoardUsers({ ...boardOptions,
                                            ...action.updates });

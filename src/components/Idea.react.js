@@ -10,15 +10,14 @@ let holdTimeout = 0;
 const Idea = React.createClass({
   propTypes: {
     connectDragSource: PropTypes.func.isRequired,
+    content: PropTypes.string.isRequired,
+    // @XXX actually the index?
+    ideaID: PropTypes.number.isRequired,
+    groupID: PropTypes.string.isRequired,
   },
 
   getInitialState: function() {
     return {
-      content: this.props.content,
-      ideaID: this.props.ideaID,
-      groupID: this.props.groupID,
-      top: this.props.top,
-      left: this.props.left,
       canDrag: false,
     };
   },
@@ -73,10 +72,9 @@ const Idea = React.createClass({
   render: function() {
     const ideaString = this.props.content.toString();
     const connectDragSource = this.props.connectDragSource;
-    const draggableState = this.state.canDrag;
     const classToAdd = classNames('idea', 'workspaceCard',
                                   {deleting: this.state.canDrag});
-    const id = this.state.ideaID;
+    const id = this.props.ideaID;
 
     const color = BoardOptionsStore.getColor(this.props.userId) || '#AAA';
 
@@ -84,7 +82,7 @@ const Idea = React.createClass({
       <div
         id={id}
         className={classToAdd}
-        canDrag={draggableState}
+        canDrag={this.state.canDrag}
         onMouseDown={this._onMouseDown}
         onMouseUp={this._onMouseUp}
         onMouseLeave={this._onMouseLeave}
@@ -95,7 +93,7 @@ const Idea = React.createClass({
       </div>
     );
 
-    if (draggableState) {
+    if (this.state.canDrag) {
       return connectDragSource(self);
     }
     else {

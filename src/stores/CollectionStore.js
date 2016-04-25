@@ -244,7 +244,7 @@ force.on('tick', function() {
 });
 
 AppDispatcher.register(function(action) {
-  switch (action.actionType) {
+  switch (action.type) {
   case StormConstants.ADDED_COLLECTION:
     createCollection(action.index,
                      action.content,

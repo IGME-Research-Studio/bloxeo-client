@@ -349,7 +349,7 @@ socket.on('reconnect', () => {
 
 // Set up action watchers
 AppDispatcher.register((action) => {
-  switch (action.actionType) {
+  switch (action.type) {
   case StormConstants.CREATE_BOARD:
     getOrCreateUser(action.username)
     .then(() => createBoard(action.boardName, action.boardDesc))
@@ -395,8 +395,10 @@ AppDispatcher.register((action) => {
     addIdeaToCollection(action.id, action.idea.content);
     break;
 
-  case StormConstants.COLLECTION_CREATE:
-    addCollection(action.idea.content, action.left, action.top);
+  case StormConstants.CREATE_COLLECTION:
+    addCollection(action.payload.ideaContent,
+                  action.payload.left,
+                  action.payload.top);
     break;
 
   case StormConstants.REMOVE_COLLECTION:

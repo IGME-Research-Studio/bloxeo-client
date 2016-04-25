@@ -2,7 +2,8 @@ import { EventEmitter } from 'events';
 import assign from 'object-assign';
 import { ify as lazy } from 'sloth';
 import materialColors from 'material-color';
-import { map, lensProp, set, pipe } from 'ramda';
+import { map, lensProp, set, pipe, find,
+  propEq, prop, unless, isNil } from 'ramda';
 
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import { WORKSPACE_TAB } from '../constants/NavBarConstants';
@@ -27,6 +28,8 @@ let boardOptions = {
   numResultsReturn: 5,
 };
 
+const getUser = (id) => find(propEq('userId', id))(boardOptions.users);
+
 const self = assign({}, EventEmitter.prototype, {
 
   getBoardOptions: () => boardOptions,
@@ -38,6 +41,10 @@ const self = assign({}, EventEmitter.prototype, {
   getUsers: function() {
     return boardOptions.users;
   },
+
+  getUser: getUser,
+
+  getColor: (userId) => unless(isNil, prop('color'))(getUser(userId)),
 
   getRoomData: function() {
     return {

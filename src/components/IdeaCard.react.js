@@ -25,7 +25,7 @@ const IdeaCard = React.createClass({
 
   render: function() {
     const idea = this.props.idea;
-    const ideaString = idea.toString();
+    const ideaString = idea.content.toString();
     const connectDragSource = this.props.connectDragSource;
     // Apply REACT-DnD to element
     return connectDragSource(

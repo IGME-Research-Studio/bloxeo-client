@@ -13,6 +13,7 @@ const IdeaCollection = React.createClass({
   propTypes: {
     connectDropTarget: PropTypes.func.isRequired,
   },
+
   getInitialState: function() {
     return {
       left: this.props.left,
@@ -22,6 +23,7 @@ const IdeaCollection = React.createClass({
       ideaID: this.props.ideaID,
     };
   },
+
   componentDidMount: function() {
     CollectionStore.addChangeListener(this.ideasChange);
     const width = parseInt(ReactDOM.findDOMNode(this).offsetWidth, 10);
@@ -29,9 +31,11 @@ const IdeaCollection = React.createClass({
     this.setState({height: height});
     CollectionStore.setCollectionSize(this.props.ideaID, width, height);
   },
+
   componentWillUnmount: function() {
     CollectionStore.removeChangeListener(this.ideasChange);
   },
+
   _style: function() {
     const ss = this.squareSize();
     const width = (ss * 160) + 24;
@@ -52,9 +56,11 @@ const IdeaCollection = React.createClass({
     };
     return styles;
   },
+
   squareSize: function() {
     let sizeCount = 1;
     let value = 0;
+
     // TODO remove when empty collections are fixed
     if (this.props.ideas.content.length > 0) {
       this.props.ideas.content.forEach(function(item) {
@@ -66,6 +72,7 @@ const IdeaCollection = React.createClass({
         }
       });
     }
+
     for (let i = Math.ceil(value); i < value * 100; i++) {
       if (Math.sqrt(i) % 1 === 0) {
         sizeCount = Math.sqrt(i);
@@ -93,6 +100,7 @@ const IdeaCollection = React.createClass({
       'drop-zone',
       {collectionShadow: (count > 1)}
     );
+
     // Apply react DnD to element
     if (!this.state.ideas) {
       return connectDragSource(connectDropTarget(
@@ -101,16 +109,18 @@ const IdeaCollection = React.createClass({
         )
       );
     }
+
     return connectDragSource(connectDropTarget(
       <div className={classes} style={this._style()}>
         {this.state.ideas.content.map(function(idea, i) {
           return (
-          <div key={i} className="workspaceCard draggable">
+          <div key={i} className="draggable">
             <Idea
               content={idea.text}
               ideaID={i}
               groupID={groupID}
               collectionCount={count}
+              userId={idea.userId}
             />
           </div>
           );
@@ -119,8 +129,10 @@ const IdeaCollection = React.createClass({
     ));
   },
 });
+
 // REACT-DnD
 const dropTypes = [DnDTypes.CARD, DnDTypes.COLLECTION, DnDTypes.IDEA];
+
 // DropTarget parameters
 const collectionTarget = {
   // Only allow drop from collections with one idea
@@ -142,11 +154,13 @@ const collectionTarget = {
     }
   },
 };
+
 function targetCollect(connect) {
   return {
     connectDropTarget: connect.dropTarget(),
   };
 }
+
 // DragSource parameters
 const collectionSource = {
   beginDrag: function(props) {
@@ -159,6 +173,7 @@ const collectionSource = {
     };
   },
 };
+
 function dragCollect(connect, monitor) {
   return {
     connectDragSource: connect.dragSource(),

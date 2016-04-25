@@ -99,8 +99,8 @@ socket.on(EVENT_API.UPDATED_COLLECTIONS, (data) => {
 socket.on(EVENT_API.UPDATED_IDEAS, (data) => {
   checkSocketStatus(data)
   .then((res) => {
-    const ideas = res.data.map((idea) => idea.content);
-    StormActions.updatedIdeas(ideas);
+    // const ideas = res.data.map((idea) => idea.content);
+    StormActions.updatedIdeas(res.data);
   })
   .catch((res) => {
     console.error(`Error updating ideas: ${res}`);
@@ -111,8 +111,7 @@ socket.on(EVENT_API.JOINED_ROOM, (data) => {
 
   checkSocketStatus(data)
   .then((res) => {
-    const ideas = map((idea) => idea.content, res.data.ideas);
-    StormActions.updatedIdeas(ideas);
+    StormActions.updatedIdeas(res.data.ideas);
     StormActions.receivedCollections(res.data.collections, false);
     StormActions.changeRoomOptions(res.data.room);
 
@@ -140,11 +139,8 @@ socket.on(EVENT_API.RECEIVED_COLLECTIONS, (data) => {
 socket.on(EVENT_API.RECEIVED_IDEAS, (data) => {
   checkSocketStatus(data)
   .then((res) => {
-    const ideas = res.data.map((idea) => {
-      return idea.content;
-    });
 
-    StormActions.updatedIdeas(ideas);
+    StormActions.updatedIdeas(res.data);
   })
   .catch((res) => {
     console.error(`Error receiving ideas: ${res}`);

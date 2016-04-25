@@ -1,6 +1,7 @@
 const React = require('react');
 const PropTypes  = React.PropTypes;
 const StormActions = require('../actions/StormActions');
+const BoardOptionsStore = require('../stores/BoardOptionsStore');
 const dragSource = require('react-dnd').DragSource;
 const DnDTypes   = require('../constants/DragAndDropConstants');
 const classNames = require('classnames');
@@ -22,43 +23,36 @@ const Idea = React.createClass({
     };
   },
 
-  _onMouseDown: () => {
+  _onMouseDown: function() {
     holdTimeout = setTimeout(() => {
-      if (that.props.collectionCount > 1) {
+      if (this.props.collectionCount > 1) {
         this.setCanDrag(true);
       }
-    }, 1500);
+    }, 500);
   },
 
-  _onMouseUp: () => {
+  _onMouseUp: function() {
     clearTimeout(holdTimeout);
     this.setCanDrag(false);
   },
 
-  _onMouseLeave: () => {
+  _onMouseLeave: function() {
     clearTimeout(holdTimeout);
     this.setCanDrag(false);
   },
 
-  _onMouseMove: () => {
+  _onMouseMove: function() {
     clearTimeout(holdTimeout);
   },
 
-  _style: function() {
-    if (this.state.content.length > 15) {
-      return {
-        width: `150px`,
-        height: `125px`,
-        overflow: `ellipsis`,
-      };
-    }
-    else {
-      return {
-        width: `150px`,
-        height: `75px`,
-        overflow: `ellipsis`,
-      };
-    }
+  _style: function(color) {
+    return {
+      width: `150px`,
+      height: `75px`,
+      overflow: `ellipsis`,
+      boxShadow: `0 0 6px -1px rgba(0, 0, 0, 0.35)`,
+      borderBottomColor: color,
+    };
   },
 
   /**
@@ -80,34 +74,32 @@ const Idea = React.createClass({
     const ideaString = this.props.content.toString();
     const connectDragSource = this.props.connectDragSource;
     const draggableState = this.state.canDrag;
-    const classToAdd = classNames('idea', {deleting: this.state.canDrag});
+    const classToAdd = classNames('idea', 'workspaceCard',
+                                  {deleting: this.state.canDrag});
     const id = this.state.ideaID;
 
-    if (draggableState) {
-      return connectDragSource(
-        <div className={classToAdd}
+    const color = BoardOptionsStore.getColor(this.props.userId) || '#AAA';
+
+    const self = (
+      <div
+        id={id}
+        className={classToAdd}
         canDrag={draggableState}
         onMouseDown={this._onMouseDown}
         onMouseUp={this._onMouseUp}
         onMouseLeave={this._onMouseLeave}
         onMouseMove={this._onMouseMove}
-        style={this._style()}>
-          {ideaString}
-        </div>
-      );
+        style={this._style(color)}
+      >
+        {ideaString}
+      </div>
+    );
+
+    if (draggableState) {
+      return connectDragSource(self);
     }
     else {
-      return (
-        <div className={classToAdd}
-        canDrag={draggableState} id={id}
-        onMouseDown={this._onMouseDown}
-        onMouseUp={this._onMouseUp}
-        onMouseLeave={this._onMouseLeave}
-        onMouseMove={this._onMouseMove}
-        style={this._style()}>
-          {ideaString}
-        </div>
-      );
+      return self;
     }
   },
 });

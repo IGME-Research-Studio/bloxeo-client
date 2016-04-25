@@ -2,12 +2,11 @@
  * layout.scss
  *   The sections of a page. Layouts hold modules and position
  *   them on the screen.
-*/
+ */
 
 //import vars and mixins to use
 @import '_vars';
 @import '_mixins';
-/* SIDEBAR */
 
 .sidebar {
   width: 300px;
@@ -39,7 +38,9 @@
   background-color: white;
   text-align: center;
   border-radius: 3px;
-  border-bottom: 5px solid #9acc60;
+  border-bottom-width: 5px;
+  border-bottom-color: #AAAAAA;
+  border-bottom-style: solid;
   margin: 5px;
   display: inline-block;
   vertical-align: top;

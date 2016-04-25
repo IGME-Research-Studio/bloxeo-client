@@ -100,12 +100,13 @@ const Workspace = React.createClass({
             const left = Math.round(group.x) + (that.state.x);
             const top = Math.round(group.y) + (that.state.y);
             return <IdeaCollection
-            key={i}
-            left={left}
-            top={top}
-            ideas={group}
-            owner={this}
-            ideaID={group.key}/>;
+              key={i}
+              left={left}
+              top={top}
+              ideas={group}
+              owner={this}
+              ideaID={group.key}
+            />;
           })}
         </div>
         <TrashCan />
@@ -138,7 +139,7 @@ const workTarget = {
     }
     else {
       StormActions.collectionCreate(
-        idea,
+        idea.content,
         Math.round(pos.x) - (domNode.left) - component.state.x,
         Math.round(pos.y) - (domNode.top) - component.state.y
       );

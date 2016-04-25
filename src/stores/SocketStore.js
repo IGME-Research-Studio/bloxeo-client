@@ -30,21 +30,11 @@ const Routes = _.mapValues(REST_API, (route) => {
 });
 
 let currentBoardId = undefined;
-let errorMsg = undefined;
 
 const ERROR_CHANGE_EVENT = 'JOIN_ERROR';
 const VALIDATE_ERROR = 'VALIDATE_ERROR';
 
 const SocketStore = assign({}, EventEmitter.prototype, {
-  valid: true,
-
-  /**
-   * Get join error message
-   * @return {array}
-   */
-  getErrorMessage: function() {
-    return errorMsg;
-  },
 
   emitChange: function() {
     this.emit(ERROR_CHANGE_EVENT);
@@ -91,7 +81,7 @@ socket.on(EVENT_API.UPDATED_COLLECTIONS, (data) => {
     );
   })
   .catch((res) => {
-    console.error(`Error updating collections: ${res}`);
+    console.error(`${res} Updating the collections.`);
   });
 });
 
@@ -102,7 +92,7 @@ socket.on(EVENT_API.UPDATED_IDEAS, (data) => {
     StormActions.updatedIdeas(res.data);
   })
   .catch((res) => {
-    console.error(`Error updating ideas: ${res}`);
+    console.error(`${res}. Updating the ideas.`);
   });
 });
 
@@ -116,11 +106,6 @@ socket.on(EVENT_API.JOINED_ROOM, (data) => {
 
     browserHistory.push(`/room/${currentBoardId}`);
     StormActions.endLoadAnimation();
-  })
-  .catch((res) => {
-    console.error(`Error joining a room: ${res}`);
-    errorMsg = res.message;
-    SocketStore.emitChange();
   });
 });
 
@@ -250,9 +235,20 @@ function getOrCreateUser(name) {
  * Make post request to server for idea creation
  * @param {string} ideaContent
  */
-function addIdea(content) {
+function createIdea(content) {
   socket.emit(
     EVENT_API.CREATE_IDEA,
+    {
+      boardId: currentBoardId,
+      content: content,
+      userToken: UserStore.getUserToken(),
+    }
+  );
+}
+
+function destroyIdea(content) {
+  socket.emit(
+    EVENT_API.DESTROY_IDEA,
     {
       boardId: currentBoardId,
       content: content,
@@ -387,8 +383,12 @@ AppDispatcher.register((action) => {
     socket.emit(EVENT_API.GET_COLLECTIONS, { boardId: currentBoardId });
     break;
 
-  case StormConstants.IDEA_CREATE:
-    addIdea(action.ideaContent.trim());
+  case StormConstants.CREATE_IDEA:
+    createIdea(action.ideaContent.trim());
+    break;
+
+  case StormConstants.DESTROY_IDEA:
+    destroyIdea(action.payload.ideaContent);
     break;
 
   case StormConstants.GROUP_IDEAS:

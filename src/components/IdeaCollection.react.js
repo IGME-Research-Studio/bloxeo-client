@@ -41,7 +41,7 @@ const IdeaCollection = React.createClass({
     const ss = this.squareSize();
     const width = (ss * 160) + 24;
 
-    const styles = {
+    return {
       WebkitTransform: `translateX(${this.props.left - width / 2}px)
         translateY(${this.props.top - this.state.height / 2}px)`,
       transform: `translateX(${this.props.left - width / 2}px)
@@ -55,25 +55,23 @@ const IdeaCollection = React.createClass({
       ColumnGap: `10px`,
       height: `auto`,
     };
-    return styles;
   },
 
   squareSize: function() {
-    let sizeCount = 1;
     let value = 0;
+    let sizeCount = 1;
 
-    // TODO remove when empty collections are fixed
-    if (this.props.ideas.content.length > 0) {
-      this.props.ideas.content.forEach(function(item) {
-        if (item.text.length > 15) {
-          value += 1;
-        }
-        else {
-          value += 0.5;
-        }
-      });
-    }
-
+    // TODO remove if empty check when empty collections are fixed
+    // if (this.props.ideas.content.length > 0) {
+    this.props.ideas.content.forEach(function(item) {
+      if (item.text.length > 15) {
+        value += 1;
+      }
+      else {
+        value += 0.5;
+      }
+    });
+    // }
     for (let i = Math.ceil(value); i < value * 100; i++) {
       if (Math.sqrt(i) % 1 === 0) {
         sizeCount = Math.sqrt(i);
@@ -145,7 +143,7 @@ const collectionTarget = {
   // Group ideas on drop
   drop: function(props, monitor) {
     const item = monitor.getItem();
-    console.log(item, props.ideaID);
+
     // Do not execute drop on self
     if (props.ideaID === item.id && item.type !== 'IDEA') {
       return;

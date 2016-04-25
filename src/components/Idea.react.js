@@ -17,9 +17,7 @@ const Idea = React.createClass({
   },
 
   getInitialState: function() {
-    return {
-      canDrag: false,
-    };
+    return { canDrag: false };
   },
 
   _onMouseDown: function() {

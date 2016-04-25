@@ -33,6 +33,7 @@ const cardSource = {
     return {
       content: props.idea.content,
       userId: props.idea.userId,
+      type: DnDTypes.CARD,
       ideaCount: 1,
     };
   },

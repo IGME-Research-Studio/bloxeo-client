@@ -93,11 +93,17 @@ const StormActions = {
    * Dispatch idea create event
    * @param {string} ideaContent
    */
-  ideaCreate: function(ideaContent) {
+  createIdea: function(ideaContent) {
     Dispatcher.dispatch({
-      type: ActTypes.IDEA_CREATE,
+      type: ActTypes.CREATE_IDEA,
       ideaContent: ideaContent,
     });
+  },
+
+  destroyIdea: function({ ideaContent }) {
+    Dispatcher.dispatch(
+      createAction(ActTypes.DESTROY_IDEA)({ ideaContent })
+    );
   },
 
   /**

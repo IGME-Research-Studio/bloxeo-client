@@ -64,10 +64,8 @@
   font-size: 15px;
   word-wrap: break-word;
   padding: 15px;
-  &.deleting {
-    background-color: red;
-  }
 }
+
 /* Loading overlay */
 
 .loadingOverlay {
@@ -406,15 +404,6 @@ img {
   text-align: center;
   line-height: 45px;
   color: white;
-}
-
-.idea {
-  font-size: 15px;
-  word-wrap: break-word;
-  padding: 15px;
-  &.deleting {
-    background-color: red;
-  }
 }
 
 .appContainer {

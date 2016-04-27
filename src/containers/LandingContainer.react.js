@@ -3,31 +3,8 @@ import MuiThemeProvider from 'material-ui/lib/MuiThemeProvider';
 import colorTheme from '../colorTheme';
 
 import FeatureButton from '../components/UI/FeatureButton.react';
-import SocketStore from '../stores/SocketStore';
-
-function getStates() {
-  return {
-    joinError: '',//SocketStore.getErrorMessage(),
-  };
-}
 
 const LandingContainer = React.createClass({
-
-  getInitialState: function() {
-    return getStates();
-  },
-
-  componentDidMount: function() {
-    SocketStore.addErrorListener(this._onChange);
-  },
-
-  componentWillUnmount: function() {
-    SocketStore.removeErrorListener(this._onChange);
-  },
-
-  _onChange: function() {
-    this.setState(getStates());
-  },
 
   render: function() {
     return (

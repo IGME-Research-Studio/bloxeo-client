@@ -7,7 +7,7 @@ import SocketStore from '../stores/SocketStore';
 
 function getStates() {
   return {
-    joinError: SocketStore.getErrorMessage(),
+    joinError: '',//SocketStore.getErrorMessage(),
   };
 }
 

@@ -13,15 +13,18 @@ const IdeaCollection = React.createClass({
   propTypes: {
     connectDropTarget: PropTypes.func.isRequired,
   },
+
   getInitialState: function() {
     return {
       left: this.props.left,
       top: this.props.top,
       height: 0,
       ideas: this.props.ideas,
+      // @XXX this is actually the collection id?
       ideaID: this.props.ideaID,
     };
   },
+
   componentDidMount: function() {
     CollectionStore.addChangeListener(this.ideasChange);
     const width = parseInt(ReactDOM.findDOMNode(this).offsetWidth, 10);
@@ -29,14 +32,16 @@ const IdeaCollection = React.createClass({
     this.setState({height: height});
     CollectionStore.setCollectionSize(this.props.ideaID, width, height);
   },
+
   componentWillUnmount: function() {
     CollectionStore.removeChangeListener(this.ideasChange);
   },
+
   _style: function() {
     const ss = this.squareSize();
     const width = (ss * 160) + 24;
 
-    const styles = {
+    return {
       WebkitTransform: `translateX(${this.props.left - width / 2}px)
         translateY(${this.props.top - this.state.height / 2}px)`,
       transform: `translateX(${this.props.left - width / 2}px)
@@ -50,22 +55,23 @@ const IdeaCollection = React.createClass({
       ColumnGap: `10px`,
       height: `auto`,
     };
-    return styles;
   },
+
   squareSize: function() {
-    let sizeCount = 1;
     let value = 0;
-    // TODO remove when empty collections are fixed
-    if (this.props.ideas.content.length > 0) {
-      this.props.ideas.content.forEach(function(item) {
-        if (item.text.length > 15) {
-          value += 1;
-        }
-        else {
-          value += 0.5;
-        }
-      });
-    }
+    let sizeCount = 1;
+
+    // TODO remove if empty check when empty collections are fixed
+    // if (this.props.ideas.content.length > 0) {
+    this.props.ideas.content.forEach(function(item) {
+      if (item.text.length > 15) {
+        value += 1;
+      }
+      else {
+        value += 0.5;
+      }
+    });
+    // }
     for (let i = Math.ceil(value); i < value * 100; i++) {
       if (Math.sqrt(i) % 1 === 0) {
         sizeCount = Math.sqrt(i);
@@ -93,6 +99,7 @@ const IdeaCollection = React.createClass({
       'drop-zone',
       {collectionShadow: (count > 1)}
     );
+
     // Apply react DnD to element
     if (!this.state.ideas) {
       return connectDragSource(connectDropTarget(
@@ -101,16 +108,18 @@ const IdeaCollection = React.createClass({
         )
       );
     }
+
     return connectDragSource(connectDropTarget(
       <div className={classes} style={this._style()}>
         {this.state.ideas.content.map(function(idea, i) {
           return (
-          <div key={i} className="workspaceCard draggable">
+          <div key={i} className="draggable">
             <Idea
               content={idea.text}
               ideaID={i}
               groupID={groupID}
               collectionCount={count}
+              userId={idea.userId}
             />
           </div>
           );
@@ -119,8 +128,10 @@ const IdeaCollection = React.createClass({
     ));
   },
 });
+
 // REACT-DnD
 const dropTypes = [DnDTypes.CARD, DnDTypes.COLLECTION, DnDTypes.IDEA];
+
 // DropTarget parameters
 const collectionTarget = {
   // Only allow drop from collections with one idea
@@ -128,25 +139,30 @@ const collectionTarget = {
     const idea = monitor.getItem();
     return (idea.ideaCount === 1);
   },
+
   // Group ideas on drop
   drop: function(props, monitor) {
-    const idea = monitor.getItem();
+    const item = monitor.getItem();
+
     // Do not execute drop on self
-    if (props.ideaID === idea.id && idea.type !== 'IDEA') {
+    if (props.ideaID === item.id && item.type !== 'IDEA') {
       return;
     }
-    StormActions.groupIdea(props.ideaID, idea);
+
+    StormActions.groupIdea(props.ideaID, item);
     // Remove combined collection
-    if (idea.type === DnDTypes.COLLECTION) {
-      StormActions.removeCollection(idea.id);
+    if (item.type === DnDTypes.COLLECTION) {
+      StormActions.removeCollection(item.id);
     }
   },
 };
+
 function targetCollect(connect) {
   return {
     connectDropTarget: connect.dropTarget(),
   };
 }
+
 // DragSource parameters
 const collectionSource = {
   beginDrag: function(props) {
@@ -159,6 +175,7 @@ const collectionSource = {
     };
   },
 };
+
 function dragCollect(connect, monitor) {
   return {
     connectDragSource: connect.dragSource(),

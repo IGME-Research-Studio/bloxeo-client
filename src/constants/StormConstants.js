@@ -8,10 +8,11 @@ module.exports = {
   TIMER_PAUSE: 'TIMER_PAUSE',
   END_LOAD_ANIMATION: 'END_LOAD_ANIMATION',
   // Idea constants
-  IDEA_CREATE: 'IDEA_CREATE',
+  CREATE_IDEA: 'CREATE_IDEA',
+  DESTROY_IDEA: 'DESTROY_IDEA',
   // Collection Constants
-  COLLECTION_CREATE: 'COLLECTION_CREATE',
   REMOVE_COLLECTION: 'REMOVE_COLLECTION',
+  CREATE_COLLECTION: 'CREATE_COLLECTION',
   SEPARATE_IDEAS: 'SEPARATE_IDEAS',
   GROUP_IDEAS: 'GROUP_IDEAS',
   // Misc Constants
@@ -24,10 +25,9 @@ module.exports = {
   STORE_WORKSPACE: 'STORE_WORKSPACE',
   STORE_MOVED_IDEA: 'STORE_MOVED_IDEA',
   // Server URL constants
-  SERVER_URL: 'http://storm-server-stage.herokuapp.com',
+  SERVER_URL: 'http://bloxeo-api.herokuapp.com',
   // SERVER_URL: 'http://localhost:1337',
   API_VERSION: '/v1',
-  TEST_BOARD: '4yibJDO4l',
   // Server requests
   CREATE_BOARD: 'CREATE_BOARD',
   JOIN_BOARD: 'JOIN_BOARD',

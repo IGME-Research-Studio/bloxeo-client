@@ -6,31 +6,19 @@ const DnDTypes   = require('../constants/DragAndDropConstants');
 const IdeaCard = React.createClass({
   propTypes: {
     connectDragSource: PropTypes.func.isRequired,
-  },
-  getInitialState: function() {
-    return {
-      x: 0,
-      y: 0,
-      idea: this.props.idea,
-    };
-  },
-  /**
-   * @return {object}
-   */
-  _style: function() {
-    return {
-      transform: `translate(${this.state.x}px,${this.state.y}px)`,
-    };
+    idea: PropTypes.shape({
+      content: PropTypes.string,
+      userId: PropTypes.string,
+    }).isRequired,
   },
 
   render: function() {
-    const idea = this.props.idea;
-    const ideaString = idea.toString();
+    const ideaString = this.props.idea.content;
     const connectDragSource = this.props.connectDragSource;
     // Apply REACT-DnD to element
     return connectDragSource(
-      <div className="bankCard ui-widget-content drop-zone ui-state-default"
-        style={this._style()}
+      <div
+        className="bankCard ui-widget-content drop-zone ui-state-default"
       >
         {ideaString}
       </div>
@@ -43,7 +31,9 @@ const IdeaCard = React.createClass({
 const cardSource = {
   beginDrag: function(props) {
     return {
-      content: props.idea,
+      content: props.idea.content,
+      userId: props.idea.userId,
+      type: DnDTypes.CARD,
       ideaCount: 1,
     };
   },

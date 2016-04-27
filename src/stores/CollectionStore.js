@@ -41,6 +41,7 @@ const CollectionStore = assign({}, EventEmitter.prototype, {
   emitChange: function() {
     this.emit(COLLECTION_CHANGE_EVENT);
   },
+
   /**
    * Add a change listener
    * @param {function} callback - event callback function
@@ -48,6 +49,7 @@ const CollectionStore = assign({}, EventEmitter.prototype, {
   addChangeListener: function(callback) {
     this.on(COLLECTION_CHANGE_EVENT, callback);
   },
+
   /**
    * Remove a change listener
    * @param {function} callback - callback to be removed
@@ -55,15 +57,18 @@ const CollectionStore = assign({}, EventEmitter.prototype, {
   removeChangeListener: function(callback) {
     this.removeListener(COLLECTION_CHANGE_EVENT, callback);
   },
+
   setCollectionSize: function(_key, width, height) {
     const d3Index = _.findIndex(layoutObjs, 'key', _key);
     layoutObjs[d3Index].height = height + 15;
     layoutObjs[d3Index].width = width + 15;
   },
 });
+
 function updateForce() {
   force.nodes(layoutObjs).start();
 }
+
 /**
  * Hide collections with the given ids
  * @param {number[]} ids - an array of ids to remove
@@ -73,6 +78,7 @@ function hideCollections(ids) {
     delete _collections[ids[i]];
   }
 }
+
 /**
  * Create new collections for the given results
  * @param {object[]} results - given results
@@ -91,17 +97,17 @@ function returnResults(results) {
     });
   }
 }
+
 /**
 * Mutate content strings to a more usable object
 * @param {Object[]} content - an array of strings
 */
 function objectifyContent(cont) {
-  const content = cont.map(function(i) {
-    const item = {text: i.content, top: 0, left: 0};
-    return item;
+  return cont.map((idea) => {
+    return { userId: idea.userId, text: idea.content, top: 0, left: 0 };
   });
-  return content;
 }
+
 /**
 * Create an idea group when an idea is dragged to the workspace
 */
@@ -109,6 +115,7 @@ function createCollection(_key, cont) {
   const content = objectifyContent(cont);
   _collections[_key] = {content, votes: 0, key: _key};
 }
+
 /**
 * Change the content of collection with given index
 */
@@ -116,6 +123,7 @@ function updateCollection(_key, cont) {
   const content = objectifyContent(cont);
   _collections[_key].content = content;
 }
+
 /**
  * Recieve collections from server
  * @param {object[]} collections - all collections
@@ -236,9 +244,12 @@ force.on('tick', function() {
 });
 
 AppDispatcher.register(function(action) {
-  switch (action.actionType) {
+  switch (action.type) {
   case StormConstants.ADDED_COLLECTION:
-    createCollection(action.index, action.content, action.left, action.top);
+    createCollection(action.index,
+                     action.content,
+                     action.left,
+                     action.top);
     CollectionStore.emitChange();
     updateForce();
     break;

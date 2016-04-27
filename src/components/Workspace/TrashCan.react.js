@@ -12,6 +12,7 @@ const TrashCan = React.createClass({
   propTypes: {
     connectDropTarget: PropTypes.func.isRequired,
   },
+
   /**
    * Render TrashCan component as a DragTarget
    * @return {object}
@@ -44,11 +45,14 @@ const collectionTarget = {
    * @param (object) monitor
    */
   drop: function(props, monitor) {
-    const idea = monitor.getItem();
+    const item = monitor.getItem();
 
     // Remove the dropped collection
-    if (idea.type === DnDTypes.COLLECTION) {
-      StormActions.removeCollection(idea.id);
+    if (item.type === DnDTypes.COLLECTION) {
+      StormActions.removeCollection(item.id);
+    }
+    else if (item.type === DnDTypes.CARD) {
+      StormActions.destroyIdea({ ideaContent: item.content });
     }
   },
 };
@@ -63,7 +67,7 @@ function targetCollect(connect) {
     connectDropTarget: connect.dropTarget(),
   };
 }
-const dropTypes = [DnDTypes.COLLECTION, DnDTypes.IDEA];
+const dropTypes = [DnDTypes.COLLECTION, DnDTypes.IDEA, DnDTypes.CARD];
 
 module.exports = dropTarget(
   dropTypes,

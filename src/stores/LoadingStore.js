@@ -26,7 +26,7 @@ const LoadingStore = assign({}, EventEmitter.prototype, {
 });
 
 AppDispatcher.register(function(action) {
-  switch (action.actionType) {
+  switch (action.type) {
   case StormConstants.END_LOAD_ANIMATION:
     LoadingStore.emitChange();
     break;

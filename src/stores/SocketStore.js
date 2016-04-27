@@ -2,7 +2,7 @@ import 'whatwg-fetch';
 import _ from 'lodash';
 import Promise from 'bluebird';
 import assign from 'object-assign';
-import { equals, either, not, compose, isNil, map } from 'ramda';
+import { equals, or, not, compose, isNil } from 'ramda';
 import { EventEmitter } from 'events';
 import { browserHistory } from 'react-router';
 
@@ -30,21 +30,11 @@ const Routes = _.mapValues(REST_API, (route) => {
 });
 
 let currentBoardId = undefined;
-let errorMsg = undefined;
 
 const ERROR_CHANGE_EVENT = 'JOIN_ERROR';
 const VALIDATE_ERROR = 'VALIDATE_ERROR';
 
 const SocketStore = assign({}, EventEmitter.prototype, {
-  valid: true,
-
-  /**
-   * Get join error message
-   * @return {array}
-   */
-  getErrorMessage: function() {
-    return errorMsg;
-  },
 
   emitChange: function() {
     this.emit(ERROR_CHANGE_EVENT);
@@ -91,7 +81,7 @@ socket.on(EVENT_API.UPDATED_COLLECTIONS, (data) => {
     );
   })
   .catch((res) => {
-    console.error(`Error updating collections: ${res}`);
+    console.error(`${res} Updating the collections.`);
   });
 });
 
@@ -99,11 +89,10 @@ socket.on(EVENT_API.UPDATED_COLLECTIONS, (data) => {
 socket.on(EVENT_API.UPDATED_IDEAS, (data) => {
   checkSocketStatus(data)
   .then((res) => {
-    const ideas = res.data.map((idea) => idea.content);
-    StormActions.updatedIdeas(ideas);
+    StormActions.updatedIdeas(res.data);
   })
   .catch((res) => {
-    console.error(`Error updating ideas: ${res}`);
+    console.error(`${res}. Updating the ideas.`);
   });
 });
 
@@ -111,18 +100,12 @@ socket.on(EVENT_API.JOINED_ROOM, (data) => {
 
   checkSocketStatus(data)
   .then((res) => {
-    const ideas = map((idea) => idea.content, res.data.ideas);
-    StormActions.updatedIdeas(ideas);
+    StormActions.updatedIdeas(res.data.ideas);
     StormActions.receivedCollections(res.data.collections, false);
     StormActions.changeRoomOptions(res.data.room);
 
     browserHistory.push(`/room/${currentBoardId}`);
     StormActions.endLoadAnimation();
-  })
-  .catch((res) => {
-    console.error(`Error joining a room: ${res}`);
-    errorMsg = res.message;
-    SocketStore.emitChange();
   });
 });
 
@@ -140,11 +123,7 @@ socket.on(EVENT_API.RECEIVED_COLLECTIONS, (data) => {
 socket.on(EVENT_API.RECEIVED_IDEAS, (data) => {
   checkSocketStatus(data)
   .then((res) => {
-    const ideas = res.data.map((idea) => {
-      return idea.content;
-    });
-
-    StormActions.updatedIdeas(ideas);
+    StormActions.updatedIdeas(res.data);
   })
   .catch((res) => {
     console.error(`Error receiving ideas: ${res}`);
@@ -209,8 +188,8 @@ function createBoard(boardName, boardDesc) {
 
   return post(Routes.createBoard(),
               { userToken: UserStore.getUserToken(),
-                name: boardName,
-                description: boardDesc,
+                boardName,
+                boardDesc,
               })
   .then(checkHTTPStatus);
 }
@@ -230,7 +209,6 @@ function createUser(name) {
       return res;
     })
     .catch((err) => {
-      console.error(err.stack);
       throw new Error(err);
     });
 }
@@ -245,7 +223,7 @@ function getOrCreateUser(name) {
   const maybeToken = UserStore.getUserToken();
   const maybeName = UserStore.getUserName();
 
-  if (either(isNil(maybeToken), not(equals(maybeName, name)))) {
+  if (or(isNil(maybeToken), not(equals(maybeName, name)))) {
     return createUser(name);
   }
   else {
@@ -257,9 +235,20 @@ function getOrCreateUser(name) {
  * Make post request to server for idea creation
  * @param {string} ideaContent
  */
-function addIdea(content) {
+function createIdea(content) {
   socket.emit(
     EVENT_API.CREATE_IDEA,
+    {
+      boardId: currentBoardId,
+      content: content,
+      userToken: UserStore.getUserToken(),
+    }
+  );
+}
+
+function destroyIdea(content) {
+  socket.emit(
+    EVENT_API.DESTROY_IDEA,
     {
       boardId: currentBoardId,
       content: content,
@@ -339,7 +328,7 @@ socket.on('connect', () => {
 });
 
 socket.on('disconnect', () => {
-  console.info('disconnected');
+  console.info(`Disconnected, was on ${currentBoardId}`);
 
   if (isntNil(currentBoardId)) {
     leaveBoard(currentBoardId);
@@ -347,7 +336,7 @@ socket.on('disconnect', () => {
 });
 
 socket.on('reconnect', () => {
-  console.info(`Reconnection ${socket.id}`);
+  console.info(`Reconnection ${socket.id}, was on ${currentBoardId}`);
 
   if (isntNil(currentBoardId)) {
     joinBoard(currentBoardId);
@@ -356,7 +345,7 @@ socket.on('reconnect', () => {
 
 // Set up action watchers
 AppDispatcher.register((action) => {
-  switch (action.actionType) {
+  switch (action.type) {
   case StormConstants.CREATE_BOARD:
     getOrCreateUser(action.username)
     .then(() => createBoard(action.boardName, action.boardDesc))
@@ -394,16 +383,22 @@ AppDispatcher.register((action) => {
     socket.emit(EVENT_API.GET_COLLECTIONS, { boardId: currentBoardId });
     break;
 
-  case StormConstants.IDEA_CREATE:
-    addIdea(action.ideaContent.trim());
+  case StormConstants.CREATE_IDEA:
+    createIdea(action.ideaContent.trim());
+    break;
+
+  case StormConstants.DESTROY_IDEA:
+    destroyIdea(action.payload.ideaContent);
     break;
 
   case StormConstants.GROUP_IDEAS:
     addIdeaToCollection(action.id, action.idea.content);
     break;
 
-  case StormConstants.COLLECTION_CREATE:
-    addCollection(action.idea.content, action.left, action.top);
+  case StormConstants.CREATE_COLLECTION:
+    addCollection(action.payload.ideaContent,
+                  action.payload.left,
+                  action.payload.top);
     break;
 
   case StormConstants.REMOVE_COLLECTION:

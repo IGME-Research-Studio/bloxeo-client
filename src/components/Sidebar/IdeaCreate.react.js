@@ -32,7 +32,7 @@ const IdeaCreate = React.createClass({
     if (this.state.value === '') {
       return;
     }
-    StormActions.ideaCreate(this.state.value);
+    StormActions.createIdea(this.state.value);
     this.setState({
       value: '',
     });

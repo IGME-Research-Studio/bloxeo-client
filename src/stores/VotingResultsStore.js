@@ -38,7 +38,7 @@ const VotingResultsStore = assign({}, EventEmitter.prototype, {
 });
 
 AppDispatcher.register(function(action) {
-  switch (action.actionType) {
+  switch (action.type) {
   case StormConstants.STORE_RESULTS:
     _results = action.results;
     VotingResultsStore.emitResultsChange();

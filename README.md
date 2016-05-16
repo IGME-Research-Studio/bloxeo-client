@@ -1,52 +1,64 @@
-# StormClient
+![Logo](http://i.imgur.com/rp6p0vD.png)
 
-Client for our [Brainstorm App](http://the-storm.herokuapp.com/)
+A platform for brainstorming, organizing, and refining ideas in a distributed manner.
 
-## Getting started
+## Bloxeo Client
+
+The frontend code for our brainstorming app, [live version available here](http://bloxeo.herokuapp.com/).
+
+### Tech stack
+
+* React view layer
+* Flux for one way data communication
+* HTTP and WebSockets for server communication
+* React-DND for drag and drop support
+* Babel and Browserify for running the latest ES code 
+* Follows Material-UI design spec
+
+### Getting started
 
 Clone or fork the repo.
 
 ```
-    $ git clone git@github.com:IGME-Research-Studio/StormClient.git
-    $ cd StormClient
-    $ npm install
-    $ npm install -g grunt-cli
+$ git clone git@github.com:IGME-Research-Studio/StormClient.git
+$ cd StormClient
+$ npm install
 ```
 
 ### Commands
 ```
-    # Start a dummy express server
-    $ npm start
+# Start an HTTP server, serve the app on port 3000
+$ npm start
 
-    # Run the test suite
-    $ npm test
+# Run the test suite
+$ npm test
 
-    # Recompile the project whenever changes are made to the tests or src files
-    $ npm run watch
+# Recompile the project whenever changes are made to the tests or src files
+$ npm run watch
 
-    # Check the source code for stylistic correctness
-    $ npm run lint
+# Recompile the project sass and watch for changes if you are editing the scss for the project
+$ npm run sass
 
-    # Build the project for development with either:
-    $ npm run build
-    $ npm run build-dev
+# Check the source code for stylistic correctness
+$ npm run lint
 
-    # Build the project for production
-    $ npm run build-prod
+# Build the project for development with either:
+$ npm run build
+$ npm run build-dev
 
-    # Lint, test, and build the project for production (should be run before PRs)
-    $ npm run prod
+# Build the project for production
+$ npm run build-prod
+
+# Lint, test, and build the project for production (should be run before PRs)
+$ npm run prod
 ```
 
-## Contributing guide
+### Contributing guide
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for contributing guidelines.
 
-## Documentation
 
-Github page coming soon.
-
-## License
+### License
 
 Copyright &copy; 2015 MAGIC Spell Studios, all rights reserved.
 

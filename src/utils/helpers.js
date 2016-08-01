@@ -4,12 +4,12 @@ import {
   T, F, not, equals, propEq, complement,
   compose, map, pipe, curry,
   head, flatten, transpose, splitEvery, sortBy,
-  assocPath, toLower } from 'ramda';
+  assocPath, toLower, toUpper } from 'ramda';
 
 const self = {};
 
 self.firstChar = (str) => {
-  return ifElse(is(String), head, always('?'))(str);
+  return ifElse(is(String), compose(toUpper, head), always('?'))(str);
   // return ifElse(compose(not, isEmpty), head, () => def)(str)
 };
 

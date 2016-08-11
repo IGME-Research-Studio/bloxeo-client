@@ -1,7 +1,7 @@
 import React from 'react';
 
-import LandingContainer from './LandingContainer.react';
-import JoinRoomContainer from './JoinRoomContainer.react';
+import LandingContainer from './LandingContainer';
+import JoinRoomContainer from './JoinRoomContainer';
 
 const NotFoundContainer = () => (
   <LandingContainer>

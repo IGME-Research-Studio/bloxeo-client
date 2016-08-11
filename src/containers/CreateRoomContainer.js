@@ -1,7 +1,7 @@
 import React from 'react';
 
-import ModalContainer from './ModalContainer.react';
-import CreateForm from '../components/Modal/CreateForm.react';
+import ModalContainer from './ModalContainer';
+import CreateForm from '../components/Modal/CreateForm';
 
 const CreateRoomContainer = () => (
   <ModalContainer

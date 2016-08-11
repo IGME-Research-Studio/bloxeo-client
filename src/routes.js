@@ -1,11 +1,11 @@
 import React from 'react';
 import { Router, Route } from 'react-router';
 
-import RoomContainer from './containers/RoomContainer.react';
-import LandingContainer from './containers/LandingContainer.react';
-import CreateRoomContainer from './containers/CreateRoomContainer.react';
-import JoinRoomContainer from './containers/JoinRoomContainer.react';
-import NotFoundContainer from './containers/NotFoundContainer.react';
+import RoomContainer from './containers/RoomContainer';
+import LandingContainer from './containers/LandingContainer';
+import CreateRoomContainer from './containers/CreateRoomContainer';
+import JoinRoomContainer from './containers/JoinRoomContainer';
+import NotFoundContainer from './containers/NotFoundContainer';
 
 const renderRoutes = (history) => {
   return (

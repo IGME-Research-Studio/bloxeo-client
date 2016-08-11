@@ -1,11 +1,11 @@
 import React, { PropTypes } from 'react';
 
-import Brand from './Brand.react';
-import RoomInfoBox from './RoomInfoBox.react';
-import MembersList from './MembersList.react';
-import Wordbank from './Wordbank.react';
-import IdeaCreate from './IdeaCreate.react';
-import VotingModal from '../Voting/VotingModal.react';
+import Brand from './Brand';
+import RoomInfoBox from './RoomInfoBox';
+import MembersList from './MembersList';
+import Wordbank from './Wordbank';
+import IdeaCreate from './IdeaCreate';
+import VotingModal from '../Voting/VotingModal';
 
 const propTypes = {
   room: PropTypes.object.isRequired,

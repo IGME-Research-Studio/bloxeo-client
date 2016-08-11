@@ -1,5 +1,5 @@
 import React, { PropTypes }  from 'react';
-import Avatar from '../Avatar.react';
+import Avatar from '../Avatar';
 
 const propTypes = {
   users: PropTypes.array.isRequired,

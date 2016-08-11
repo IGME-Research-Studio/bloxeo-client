@@ -2,7 +2,7 @@ import React from 'react';
 import MuiThemeProvider from 'material-ui/lib/MuiThemeProvider';
 import colorTheme from '../colorTheme';
 
-import FeatureButton from '../components/UI/FeatureButton.react';
+import FeatureButton from '../components/UI/FeatureButton';
 
 const LandingContainer = React.createClass({
 

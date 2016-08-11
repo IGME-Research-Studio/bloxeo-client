@@ -2,8 +2,8 @@ import React from 'react';
 import { TextField } from 'material-ui';
 
 import StormActions from '../../actions/StormActions';
-import ModalFooter from './ModalFooter.react';
-import Avatar from '../Avatar.react';
+import ModalFooter from './ModalFooter';
+import Avatar from '../Avatar';
 import UserStore from '../../stores/UserStore';
 import { isntNilorEmpty, isntEmptyValidator,
   updateValues, updateValuesWithError } from '../../utils/helpers';

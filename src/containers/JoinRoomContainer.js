@@ -1,7 +1,7 @@
 import React from 'react';
 
-import ModalContainer from './ModalContainer.react';
-import JoinForm from '../components/Modal/JoinForm.react';
+import ModalContainer from './ModalContainer';
+import JoinForm from '../components/Modal/JoinForm';
 
 const JoinRoomContainer = ({params: {boardId}}) => (
   <ModalContainer

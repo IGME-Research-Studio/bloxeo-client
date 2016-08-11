@@ -1,6 +1,6 @@
 const React = require('react');
 const Modal = require('react-modal');
-const VotingContent = require('./VotingContent.react');
+const VotingContent = require('./VotingContent');
 const CollectionStore = require('../../stores/CollectionStore');
 const StormConstants = require('../../constants/StormConstants.js');
 

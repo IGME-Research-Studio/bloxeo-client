@@ -3,7 +3,7 @@ import { TextField, Toggle } from 'material-ui';
 import { any, values } from 'ramda';
 
 import StormActions from '../../actions/StormActions';
-import ModalFooter from './ModalFooter.react';
+import ModalFooter from './ModalFooter';
 import { getBoardOptions } from '../../stores/BoardOptionsStore';
 import { isntPosIntValidator, updateValues,
   updateValuesWithError, isNilorEmpty  } from '../../utils/helpers';

@@ -4,7 +4,7 @@ import FontAwesome from 'react-fontawesome';
 
 import StormActions from '../actions/StormActions';
 import NavBarTypes from '../constants/NavBarConstants';
-import RoomOptions from './Modal/RoomOptions.react';
+import RoomOptions from './Modal/RoomOptions';
 
 /**
  * Navigation Bar Component

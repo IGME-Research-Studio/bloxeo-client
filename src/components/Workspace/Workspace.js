@@ -4,8 +4,8 @@ const ReactDOM = require('react-dom');
 const CollectionStore = require('../../stores/CollectionStore');
 const StormActions    = require('../../actions/StormActions');
 
-const IdeaCollection = require('../IdeaCollection.react');
-const TrashCan       = require('./TrashCan.react');
+const IdeaCollection = require('../IdeaCollection');
+const TrashCan       = require('./TrashCan');
 
 const dropTarget   = require('react-dnd').DropTarget;
 const PropTypes    = React.PropTypes;

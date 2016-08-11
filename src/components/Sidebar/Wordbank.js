@@ -1,5 +1,5 @@
 const React = require('react');
-const IdeaCard = require('../IdeaCard.react');
+const IdeaCard = require('../IdeaCard');
 const IdeaStore = require('../../stores/IdeaStore');
 const classNames = require('classnames');
 

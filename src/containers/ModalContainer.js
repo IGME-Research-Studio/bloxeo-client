@@ -2,8 +2,8 @@ import React, { PropTypes }  from 'react';
 import { browserHistory } from 'react-router';
 import { isNil } from 'ramda';
 
-import StatelessModal from '../components/StatelessModal.react';
-import ModalHeader from '../components/Modal/ModalHeader.react';
+import StatelessModal from '../components/StatelessModal';
+import ModalHeader from '../components/Modal/ModalHeader';
 
 const propTypes = {
   children: PropTypes.element.isRequired,

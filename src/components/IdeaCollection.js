@@ -6,7 +6,7 @@ const dropTarget      = require('react-dnd').DropTarget;
 const dragSource      = require('react-dnd').DragSource;
 const PropTypes       = React.PropTypes;
 const DnDTypes        = require('../constants/DragAndDropConstants');
-const Idea            = require('./Idea.react');
+const Idea            = require('./Idea');
 const classNames      = require('classnames');
 
 const IdeaCollection = React.createClass({

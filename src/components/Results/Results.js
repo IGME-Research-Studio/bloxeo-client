@@ -1,7 +1,7 @@
 const React = require('react');
 const Masonry = require('react-masonry-component')(React);
 
-const Result = require('./Result.react');
+const Result = require('./Result');
 
 const BoardOptionsStore = require('../../stores/BoardOptionsStore');
 const VotingResultsStore = require('../../stores/VotingResultsStore');

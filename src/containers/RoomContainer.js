@@ -11,11 +11,11 @@ import IdeaStore from '../stores/IdeaStore';
 import LoadingStore from '../stores/LoadingStore';
 import { getUserId } from '../stores/UserStore';
 
-import LoadingOverlay from '../components/LoadingOverlay.react';
-import NavBar from '../components/NavBar.react';
-import Results from '../components/Results/Results.react';
-import Sidebar from '../components/Sidebar/Sidebar.react';
-import Workspace from '../components/Workspace/Workspace.react';
+import LoadingOverlay from '../components/LoadingOverlay';
+import NavBar from '../components/NavBar';
+import Results from '../components/Results/Results';
+import Sidebar from '../components/Sidebar/Sidebar';
+import Workspace from '../components/Workspace/Workspace';
 
 import { joinBoard, leaveBoard } from '../actions/StormActions';
 

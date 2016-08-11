@@ -1,6 +1,6 @@
 const React = require('react');
-const Timer = require('./Timer.react');
-const TimerCheckBox = require('./TimerCheckBox.react');
+const Timer = require('./Timer');
+const TimerCheckBox = require('./TimerCheckBox');
 
 const TimerBox = React.createClass({
   render: function() {

@@ -2,7 +2,7 @@ import { render } from 'react-dom';
 import { browserHistory } from 'react-router';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
-import renderRoutes from './routes.react';
+import renderRoutes from './routes';
 
 // Needed for onTouchTap
 // Can go away when react 1.0 release

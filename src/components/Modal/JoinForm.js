@@ -3,8 +3,8 @@ import { TextField } from 'material-ui';
 import { ifElse, isEmpty, always, all, values } from 'ramda';
 
 import StormActions from '../../actions/StormActions';
-import ModalFooter from '../Modal/ModalFooter.react';
-import Avatar from '../Avatar.react';
+import ModalFooter from '../Modal/ModalFooter';
+import Avatar from '../Avatar';
 import UserStore from '../../stores/UserStore';
 import { isntNilorEmpty,
   isntEmptyValidator, updateValuesWithError } from '../../utils/helpers';

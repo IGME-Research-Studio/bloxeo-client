@@ -1,4 +1,3 @@
-import 'whatwg-fetch';
 import _ from 'lodash';
 import Promise from 'bluebird';
 import assign from 'object-assign';

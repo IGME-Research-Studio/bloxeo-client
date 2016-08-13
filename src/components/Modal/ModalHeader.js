@@ -1,7 +1,7 @@
 import React, { PropTypes }  from 'react';
 
-import IconButton from 'material-ui/lib/icon-button';
-import NavigationClose from 'material-ui/lib/svg-icons/navigation/close';
+import IconButton from 'material-ui/IconButton';
+import NavigationClose from 'material-ui/svg-icons/navigation/close';
 
 const propTypes = {
   onClose: PropTypes.func.isRequired,

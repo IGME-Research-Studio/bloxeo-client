@@ -1,8 +1,19 @@
 import React from 'react';
-import MuiThemeProvider from 'material-ui/lib/MuiThemeProvider';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import colorTheme from '../colorTheme';
 
 import FeatureButton from '../components/UI/FeatureButton';
+
+import bloxeoImg from '../assets/bloxeo.png';
+import magicImg from '../assets/MAGIC.png';
+import igmImg from '../assets/IGM.png';
+import nmdImg from '../assets/NMD.png';
+import codyImg from '../assets/Cody.png';
+import dougImg from '../assets/Doug.png';
+import shoesImg from '../assets/DougShoes.png';
+import laptopImg from '../assets/Laptop.png';
+import whiteboardImg from '../assets/Whiteboard.png';
+import eggImg from '../assets/Egg.png';
 
 const LandingContainer = React.createClass({
 
@@ -10,7 +21,7 @@ const LandingContainer = React.createClass({
     return (
       <MuiThemeProvider muiTheme={colorTheme}>
 
-      <div classNameName="landingPage">
+      <div className="landingPage">
         <main>
 
           <section id="slide-1" className="homeSlide">
@@ -18,7 +29,7 @@ const LandingContainer = React.createClass({
               <div className="contentContainer hscontainer centered">
                 <div className="content column centered">
                   <div className="header">
-                    <img className="poweredByImg" src="/assets/bloxeo.png" />
+                    <img className="poweredByImg" src={ bloxeoImg } />
                     <h1 className="bloxeoTitle"> bloxeo </h1>
                   </div>
                   <div className="contentRow row">
@@ -47,9 +58,9 @@ const LandingContainer = React.createClass({
                   </div>
                 </div>
                 <div className="images">
-                  <img className="codyImg" src="/assets/Cody.png" />
-                  <img className="dougImg" src="/assets/Doug.png" />
-                  <img className="dougShoesImg" src="/assets/DougShoes.png" />
+                  <img className="codyImg" src={ codyImg } />
+                  <img className="dougImg" src={ dougImg } />
+                  <img className="dougShoesImg" src={ shoesImg } />
                 </div>
                </div>
               <div className="footer">
@@ -62,7 +73,7 @@ const LandingContainer = React.createClass({
             <div className="page page2 bcg">
               <div className="contentContainer hsContainer column centered">
                 <div className="images">
-                  <img className="laptopImg" src="/assets/Laptop.png" />
+                  <img className="laptopImg" src={ laptopImg } />
                 </div>
                 <div className="textContainer">
                   <h1>This is Bloxeo </h1>
@@ -86,7 +97,7 @@ const LandingContainer = React.createClass({
                   </p>
                 </div>
                 <div className="images">
-                  <img className="whiteboardImg" src="/assets/Whiteboard.png" />
+                  <img className="whiteboardImg" src={ whiteboardImg } />
                </div>
               </div>
             </div>
@@ -101,9 +112,9 @@ const LandingContainer = React.createClass({
                   </div>
                 </div>
                 <div className="images">
-                  <img className="poweredByImg" src="/assets/MAGIC.png" />
-                  <img className="poweredByImg" src="/assets/IGM.png" />
-                  <img className="poweredByImg" src="/assets/NMD.png" />
+                  <img className="poweredByImg" src={ magicImg } />
+                  <img className="poweredByImg" src={ igmImg } />
+                  <img className="poweredByImg" src={ nmdImg } />
                 </div>
               </div>
             </div>
@@ -115,7 +126,7 @@ const LandingContainer = React.createClass({
               <div className="contentContainer hsContainer column homeSlide" >
 
                 <div className="images">
-                  <img className="eggImg" src="/assets/Egg.png" />
+                  <img className="eggImg" src={ eggImg } />
                 </div>
 
                 <div className="content">

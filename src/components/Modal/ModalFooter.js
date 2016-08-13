@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { FlatButton } from 'material-ui';
-import { green300, green500 } from 'material-ui/lib/styles/colors';
+import { green300, green500 } from 'material-ui/styles/colors';
 
 const propTypes = {
   onSubmit: PropTypes.func.isRequired,

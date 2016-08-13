@@ -1,7 +1,7 @@
 import React from 'react';
 import { DragDropContext as dragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
-import MuiThemeProvider from 'material-ui/lib/MuiThemeProvider';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import colorTheme from '../colorTheme';
 import { find, propEq, pipe, ifElse, F, isNil } from 'ramda';
 

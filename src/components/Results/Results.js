@@ -1,5 +1,5 @@
 const React = require('react');
-const Masonry = require('react-masonry-component')(React);
+const Masonry = require('react-masonry-component');
 
 const Result = require('./Result');
 

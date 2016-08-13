@@ -2,8 +2,8 @@ import { render } from 'react-dom';
 import { browserHistory } from 'react-router';
 
 import renderRoutes from './routes';
-import io from './io'
-import SocketStore from './stores/SocketStore';
+import './io';
+import './stores/SocketStore';
 import './sass/theme.scss';
 
 window.onload = () => {

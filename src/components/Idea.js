@@ -20,7 +20,8 @@ const Idea = React.createClass({
     return { canDrag: false };
   },
 
-  _onMouseDown: function() {
+  _onMouseDown: function(e) {
+    e.stopPropagation();
     holdTimeout = setTimeout(() => {
       if (this.props.collectionCount > 1) {
         this.setCanDrag(true);

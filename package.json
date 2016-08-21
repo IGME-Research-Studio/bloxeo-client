@@ -5,6 +5,7 @@
   "scripts": {
     "start": "nohup node server.js &",
     "watch": "./node_modules/webpack/bin/webpack.js --content-base build/ --config webpack.config.dev.js --inline --progress --watch",
+    "lint": "./node_modules/eslint/bin/eslint.js -c .eslintrc src/**/*.js",
     "dev": "npm start ; npm run watch",
     "build": "./node_modules/webpack/bin/webpack.js --content-base build/ --config webpack.config.prod.js --inline --progress"
   },

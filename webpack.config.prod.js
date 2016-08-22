@@ -16,12 +16,14 @@ var env = require('./env');
 // single-page apps that may serve index.html for nested URLs like /todos/42.
 // We can't use a relative path in HTML because we don't want to load something
 // like /todos/42/static/js/bundle.7289d.js. We have to know the root.
-var homepagePath = require(paths.appPackageJson).homepage;
-var publicPath = homepagePath ? url.parse(homepagePath).pathname : '/';
-if (!publicPath.endsWith('/')) {
-  // If we don't do this, file assets will get incorrect paths.
-  publicPath += '/';
-}
+// var homepagePath = require(paths.appPackageJson).homepage;
+// var publicPath = homepagePath ? url.parse(homepagePath).pathname : '/';
+// if (!publicPath.endsWith('/')) {
+//   // If we don't do this, file assets will get incorrect paths.
+//   publicPath += '/';
+// }
+
+var publicPath =  '/';
 
 module.exports = {
   bail: true,
@@ -126,18 +128,18 @@ module.exports = {
     new HtmlWebpackPlugin({
       inject: true,
       template: paths.appHtml,
-      minify: {
-        removeComments: true,
-        collapseWhitespace: true,
-        removeRedundantAttributes: true,
-        useShortDoctype: true,
-        removeEmptyAttributes: true,
-        removeStyleLinkTypeAttributes: true,
-        keepClosingSlash: true,
-        minifyJS: true,
-        minifyCSS: true,
-        minifyURLs: true
-      }
+      // minify: {
+      //   removeComments: true,
+      //   collapseWhitespace: true,
+      //   removeRedundantAttributes: true,
+      //   useShortDoctype: true,
+      //   removeEmptyAttributes: true,
+      //   removeStyleLinkTypeAttributes: true,
+      //   keepClosingSlash: true,
+      //   minifyJS: true,
+      //   minifyCSS: true,
+      //   minifyURLs: true
+      // }
     }),
 
     // Makes some environment variables available to the JS code, for example:
@@ -146,25 +148,25 @@ module.exports = {
     new webpack.DefinePlugin(env),
 
     // This helps ensure the builds are consistent if source hasn't changed:
-    new webpack.optimize.OccurrenceOrderPlugin(),
-
-    // Try to dedupe duplicated modules, if any:
-    new webpack.optimize.DedupePlugin(),
-
-    // Minify the code.
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        screw_ie8: true,
-        warnings: false
-      },
-      mangle: {
-        screw_ie8: true
-      },
-      output: {
-        comments: false,
-        screw_ie8: true
-      }
-    }),
+    // new webpack.optimize.OccurrenceOrderPlugin(),
+    //
+    // // Try to dedupe duplicated modules, if any:
+    // new webpack.optimize.DedupePlugin(),
+    //
+    // // Minify the code.
+    // new webpack.optimize.UglifyJsPlugin({
+    //   compress: {
+    //     screw_ie8: true,
+    //     warnings: false
+    //   },
+    //   mangle: {
+    //     screw_ie8: true
+    //   },
+    //   output: {
+    //     comments: false,
+    //     screw_ie8: true
+    //   }
+    // }),
 
     new ExtractTextPlugin('static/css/[name].[contenthash:8].css')
   ]

@@ -25,8 +25,8 @@ module.exports = {
   STORE_WORKSPACE: 'STORE_WORKSPACE',
   STORE_MOVED_IDEA: 'STORE_MOVED_IDEA',
   // Server URL constants
-  // SERVER_URL: 'http://bloxeo-api.herokuapp.com',
-  SERVER_URL: 'http://localhost:1337',
+  SERVER_URL: 'http://bloxeo-api.herokuapp.com',
+  // SERVER_URL: 'http://localhost:1337',
   API_VERSION: '/v1',
   // Server requests
   CREATE_BOARD: 'CREATE_BOARD',

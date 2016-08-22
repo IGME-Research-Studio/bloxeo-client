@@ -12,9 +12,6 @@ var paths = require('./paths');
 var env = require('./env');
 
 module.exports = {
-  color: true,
-  progress: true,
-  inline: true,
   devtool: 'source-map',
   contentBase: 'build',
 

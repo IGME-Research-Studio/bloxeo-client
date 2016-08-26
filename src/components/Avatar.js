@@ -14,12 +14,11 @@ const defaultProps = {
   color: head(gradientToDiscrete(materialColors['300'])),
 };
 
-const Avatar = ({name, color, key}) => (
+const Avatar = ({name, color}) => (
   <MaterialAvatar
     size={30}
     className='modalUserIcon'
     backgroundColor={color}
-    key={key}
     style={{marginLeft: '5px'}}
     title={name}
   >

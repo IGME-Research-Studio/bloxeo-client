@@ -25,7 +25,6 @@ const labelStyle = {
 
 const FeatureButton = ({url, label, primary, secondary, fullWidth}) => (
   <RaisedButton
-    linkButton
     disableTouchRipple
     primary={primary}
     secondary={secondary}

@@ -1,7 +1,45 @@
 import { createAction } from 'redux-actions';
 
 import Dispatcher from '../dispatcher/AppDispatcher';
-import ActTypes from '../constants/StormConstants';
+import actionTypes from '../constants/actionTypes';
+
+export const createUser = createAction(actionTypes.CREATE_USER);
+
+export const createBoard = createAction(actionTypes.CREATE_BOARD);
+export const updateBoard = createAction(actionTypes.UPDATE_BOARD);
+export const joinBoard = createAction(actionTypes.JOIN_BOARD);
+export const validateBoard = createAction(actionTypes.VALIDATE_BOARD);
+export const leaveBoard = createAction(actionTypes.LEAVE_BOARD);
+
+export const endLoadAnimation = createAction(actionTypes.END_LOAD_ANIMATION);
+
+export const changeRoomOptions = createAction(actionTypes.CHANGE_ROOM_OPTS);
+export const changeRoomName = createAction(actionTypes.CHANGE_ROOM_NAME);
+export const changeRoomDescription = createAction(actionTypes.CHANGE_ROOM_DESCRIPTION);
+
+export const groupIdeas = createAction(actionTypes.GROUP_IDEA);
+export const separateIdeas = createAction(actionTypes.SEPARATE_IDEAS);
+export const createIdeas = createAction(actionTypes.CREATE_IDEA);
+export const destroyIdeas = createAction(actionTypes.DESTROY_IDEA);
+export const updatedIdeas = createAction(actionTypes.UPDATED_IDEAS);
+
+export const hideCollections = createAction(actionTypes.HIDE_COLLECTIONS);
+export const moveCollection = createAction(actionTypes.MOVE_COLLECTION);
+export const removeCollection = createAction(actionTypes.REMOVE_COLLECTION);
+export const createCollection = createAction(actionTypes.CREATE_COLLECTION);
+export const addCollection = createAction(actionTypes.ADD_COLLECTION);
+export const addedCollection = createAction(actionTypes.ADDED_COLLECTION);
+export const modifiedCollection = createAction(actionTypes.MODIFIED_COLLECTION);
+export const removedCollection = createAction(actionTypes.REMOVED_COLLECTION);
+export const receivedCollections= createAction(actionTypes.RECEIVED_COLLECTIONS);
+
+export const setLayoutSize = createAction(actionTypes.SET_LAYOUT_SIZE);
+
+export const storeResults = createAction(actionTypes.STORE_RESULTS);
+export const returnResults = createAction(actionTypes.RETURN_RESULTS);
+
+// TODO remove in lieu of routing
+export const toggleWorkspace = createAction(actionTypes.SELECT_TAB);
 
 const StormActions = {
   /**
@@ -9,7 +47,7 @@ const StormActions = {
    */
   createUser: function(username) {
     Dispatcher.dispatch({
-      type: ActTypes.CREATE_USER,
+      type: actionTypes.CREATE_USER,
       username: username,
     });
   },
@@ -20,14 +58,14 @@ const StormActions = {
    */
   createBoard: function(requestData) {
     Dispatcher.dispatch({
-      type: ActTypes.CREATE_BOARD,
+      type: actionTypes.CREATE_BOARD,
       ...requestData,
     });
   },
 
   updateBoard: function(requestData) {
     Dispatcher.dispatch({
-      type: ActTypes.UPDATE_BOARD,
+      type: actionTypes.UPDATE_BOARD,
       updates: requestData,
     });
   },
@@ -38,7 +76,7 @@ const StormActions = {
    */
   joinBoard: function(boardId, userToken) {
     Dispatcher.dispatch({
-      type: ActTypes.JOIN_BOARD,
+      type: actionTypes.JOIN_BOARD,
       boardId: boardId,
       userToken: userToken,
     });
@@ -46,7 +84,7 @@ const StormActions = {
 
   validateBoard: function(boardId, username) {
     Dispatcher.dispatch({
-      type: ActTypes.VALIDATE_BOARD,
+      type: actionTypes.VALIDATE_BOARD,
       boardId: boardId,
       username: username,
     });
@@ -54,7 +92,7 @@ const StormActions = {
 
   leaveBoard: function(boardId) {
     Dispatcher.dispatch({
-      type: ActTypes.LEAVE_BOARD,
+      type: actionTypes.LEAVE_BOARD,
       boardId: boardId,
     });
   },
@@ -64,13 +102,13 @@ const StormActions = {
   */
   endLoadAnimation: function() {
     Dispatcher.dispatch({
-      type: ActTypes.END_LOAD_ANIMATION,
+      type: actionTypes.END_LOAD_ANIMATION,
     });
   },
 
   changeRoomOptions: function(updates) {
     Dispatcher.dispatch({
-      type: ActTypes.CHANGE_ROOM_OPTS,
+      type: actionTypes.CHANGE_ROOM_OPTS,
       updates: updates,
     });
   },
@@ -81,7 +119,7 @@ const StormActions = {
    */
   changeRoomName: function(roomName) {
     Dispatcher.dispatch({
-      type: ActTypes.CHANGE_ROOM_NAME,
+      type: actionTypes.CHANGE_ROOM_NAME,
       roomName: roomName,
     });
   },
@@ -92,7 +130,7 @@ const StormActions = {
    */
   changeRoomDescription: function(roomDesc) {
     Dispatcher.dispatch({
-      type: ActTypes.CHANGE_ROOM_DESCRIPTION,
+      type: actionTypes.CHANGE_ROOM_DESCRIPTION,
       roomDesc: roomDesc,
     });
   },
@@ -103,14 +141,14 @@ const StormActions = {
    */
   createIdea: function(ideaContent) {
     Dispatcher.dispatch({
-      type: ActTypes.CREATE_IDEA,
+      type: actionTypes.CREATE_IDEA,
       ideaContent: ideaContent,
     });
   },
 
   destroyIdea: function({ ideaContent }) {
     Dispatcher.dispatch(
-      createAction(ActTypes.DESTROY_IDEA)({ ideaContent })
+      createAction(actionTypes.DESTROY_IDEA)({ ideaContent })
     );
   },
 
@@ -119,7 +157,7 @@ const StormActions = {
    */
   countdown: function() {
     Dispatcher.dispatch({
-      type: ActTypes.TIMER_COUNTDOWN,
+      type: actionTypes.TIMER_COUNTDOWN,
     });
   },
 
@@ -129,27 +167,27 @@ const StormActions = {
    */
   pauseTimer: function(isPaused) {
     Dispatcher.dispatch({
-      type: ActTypes.TIMER_PAUSE,
+      type: actionTypes.TIMER_PAUSE,
       isPaused: isPaused,
     });
   },
 
   createCollection: function({ideaContent, left, top}) {
     Dispatcher.dispatch(
-      createAction(ActTypes.CREATE_COLLECTION)({ideaContent, left, top})
+      createAction(actionTypes.CREATE_COLLECTION)({ideaContent, left, top})
     );
   },
 
   storeWorkspace: function(workspace) {
     Dispatcher.dispatch({
-      type: ActTypes.STORE_WORKSPACE,
+      type: actionTypes.STORE_WORKSPACE,
       workspace: workspace,
     });
   },
 
   groupIdea: function(id, idea) {
     Dispatcher.dispatch({
-      type: ActTypes.GROUP_IDEAS,
+      type: actionTypes.GROUP_IDEAS,
       idea: idea,
       id: id,
     });
@@ -157,7 +195,7 @@ const StormActions = {
 
   separateIdeas: function(groupID, ideaContent) {
     Dispatcher.dispatch({
-      type: ActTypes.SEPARATE_IDEAS,
+      type: actionTypes.SEPARATE_IDEAS,
       groupID: groupID,
       ideaContent: ideaContent,
     });
@@ -169,7 +207,7 @@ const StormActions = {
    */
   hideCollections: function(ids) {
     Dispatcher.dispatch({
-      type: ActTypes.HIDE_COLLECTIONS,
+      type: actionTypes.HIDE_COLLECTIONS,
       ids: ids,
     });
   },
@@ -180,7 +218,7 @@ const StormActions = {
    */
   storeResults: function(results) {
     Dispatcher.dispatch({
-      type: ActTypes.STORE_RESULTS,
+      type: actionTypes.STORE_RESULTS,
       results: results,
     });
   },
@@ -191,7 +229,7 @@ const StormActions = {
    */
   returnResults: function(results) {
     Dispatcher.dispatch({
-      type: ActTypes.RETURN_RESULTS,
+      type: actionTypes.RETURN_RESULTS,
       results: results,
     });
   },
@@ -201,7 +239,7 @@ const StormActions = {
    */
   toggleWorkspace: function(isOnWorkspace) {
     Dispatcher.dispatch({
-      type: ActTypes.SELECT_TAB,
+      type: actionTypes.SELECT_TAB,
       isOnWorkspace,
     });
   },
@@ -214,7 +252,7 @@ const StormActions = {
    */
   moveCollection: function(id, left, top) {
     Dispatcher.dispatch({
-      type: ActTypes.MOVE_COLLECTION,
+      type: actionTypes.MOVE_COLLECTION,
       id: id,
       left: left,
       top: top,
@@ -227,7 +265,7 @@ const StormActions = {
    */
   removeCollection: function(id) {
     Dispatcher.dispatch({
-      type: ActTypes.REMOVE_COLLECTION,
+      type: actionTypes.REMOVE_COLLECTION,
       id: id,
     });
   },
@@ -238,7 +276,7 @@ const StormActions = {
    */
   addCollections: function(collections) {
     Dispatcher.dispatch({
-      type: ActTypes.ADD_COllECTIONS,
+      type: actionTypes.ADD_COllECTIONS,
       collections: collections,
     });
   },
@@ -249,7 +287,7 @@ const StormActions = {
    */
   setLayoutSize: function(width, height) {
     Dispatcher.dispatch({
-      type: ActTypes.SET_LAYOUT_SIZE,
+      type: actionTypes.SET_LAYOUT_SIZE,
       width: width,
       height: height,
     });
@@ -264,7 +302,7 @@ const StormActions = {
    */
   addedCollection: function(index, content, left, top) {
     Dispatcher.dispatch({
-      type: ActTypes.ADDED_COLLECTION,
+      type: actionTypes.ADDED_COLLECTION,
       index: index,
       content: content,
       top: top,
@@ -279,7 +317,7 @@ const StormActions = {
    */
   modifiedCollection: function(index, content) {
     Dispatcher.dispatch({
-      type: ActTypes.MODIFIED_COLLECTION,
+      type: actionTypes.MODIFIED_COLLECTION,
       index: index,
       content: content,
     });
@@ -291,7 +329,7 @@ const StormActions = {
    */
   removedCollection: function(index) {
     Dispatcher.dispatch({
-      type: ActTypes.REMOVED_COLLECTION,
+      type: actionTypes.REMOVED_COLLECTION,
       index: index,
     });
   },
@@ -302,7 +340,7 @@ const StormActions = {
    */
   receivedCollections: function(collections, reset) {
     Dispatcher.dispatch({
-      type: ActTypes.RECEIVED_COLLECTIONS,
+      type: actionTypes.RECEIVED_COLLECTIONS,
       collections: collections,
       reset: reset,
     });
@@ -315,7 +353,7 @@ const StormActions = {
    */
   updatedIdeas: function(ideas) {
     Dispatcher.dispatch({
-      type: ActTypes.UPDATED_IDEAS,
+      type: actionTypes.UPDATED_IDEAS,
       ideas: ideas,
     });
   },

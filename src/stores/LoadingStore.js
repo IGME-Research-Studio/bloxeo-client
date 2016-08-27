@@ -1,7 +1,8 @@
-const AppDispatcher  = require('../dispatcher/AppDispatcher');
-const StormConstants = require('../constants/StormConstants');
-const EventEmitter   = require('events').EventEmitter;
-const assign         = require('object-assign');
+import { EventEmitter } from 'events';
+import assign from 'object-assign';
+
+import AppDispatcher from '../dispatcher/AppDispatcher';
+import actionTypes from '../constants/actionTypes';
 
 const LOAD_CHANGE_EVENT = 'load';
 const LoadingStore = assign({}, EventEmitter.prototype, {
@@ -27,7 +28,7 @@ const LoadingStore = assign({}, EventEmitter.prototype, {
 
 AppDispatcher.register(function(action) {
   switch (action.type) {
-  case StormConstants.END_LOAD_ANIMATION:
+  case actionTypes.END_LOAD_ANIMATION:
     LoadingStore.emitChange();
     break;
   default:

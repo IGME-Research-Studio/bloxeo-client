@@ -1,7 +1,10 @@
-const AppDispatcher  = require('../dispatcher/AppDispatcher');
-const StormConstants = require('../constants/StormConstants');
-const EventEmitter   = require('events').EventEmitter;
-const assign         = require('object-assign');
+import { EventEmitter } from 'events';
+import assign from 'object-assign';
+
+import AppDispatcher from '../dispatcher/AppDispatcher';
+import actionTypes from '../constants/actionTypes';
+import io from '../io';
+import { checkSocketStatus } from '../utils/checkStatus';
 
 const IDEA_CHANGE_EVENT = 'idea';
 
@@ -45,7 +48,7 @@ function setIdeas(ideas) {
 
 AppDispatcher.register(function(action) {
   switch (action.type) {
-  case StormConstants.UPDATED_IDEAS:
+  case actionTypes.UPDATED_IDEAS:
     setIdeas(action.ideas);
     IdeaStore.emitChange();
     break;

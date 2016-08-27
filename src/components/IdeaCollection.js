@@ -1,13 +1,12 @@
-const React           = require('react');
-const ReactDOM        = require('react-dom');
-const StormActions    = require('../actions/StormActions');
-const CollectionStore = require('../stores/CollectionStore');
-const dropTarget      = require('react-dnd').DropTarget;
-const dragSource      = require('react-dnd').DragSource;
-const PropTypes       = React.PropTypes;
-const DnDTypes        = require('../constants/DragAndDropConstants');
-const Idea            = require('./Idea');
-const classNames      = require('classnames');
+import React, { PropTypes } from 'react';
+import ReactDOM from 'react-dom';
+import classNames from 'classnames';
+import { DropTarget, DragSource } from 'react-dnd';
+
+import StormActions from '../actions/StormActions';
+import CollectionStor from '../stores/CollectionStore';
+import dndTypes from '../constants/dndTypes';
+import Idea from './Idea';
 
 const IdeaCollection = React.createClass({
   propTypes: {
@@ -130,7 +129,7 @@ const IdeaCollection = React.createClass({
 });
 
 // REACT-DnD
-const dropTypes = [DnDTypes.CARD, DnDTypes.COLLECTION, DnDTypes.IDEA];
+const dropTypes = [dndTypes.CARD, dndTypes.COLLECTION, dndTypes.IDEA];
 
 // DropTarget parameters
 const collectionTarget = {
@@ -151,7 +150,7 @@ const collectionTarget = {
 
     StormActions.groupIdea(props.ideaID, item);
     // Remove combined collection
-    if (item.type === DnDTypes.COLLECTION) {
+    if (item.type === dndTypes.COLLECTION) {
       StormActions.removeCollection(item.id);
     }
   },
@@ -169,7 +168,7 @@ const collectionSource = {
     // Return the data describing the dragged item
     return {
       content: props.ideas.content[0].text,
-      type: DnDTypes.COLLECTION,
+      type: dndTypes.COLLECTION,
       id: props.ideaID,
       ideaCount: props.ideas.content.length,
     };
@@ -183,6 +182,6 @@ function dragCollect(connect, monitor) {
   };
 }
 
-module.exports = dragSource(DnDTypes.COLLECTION, collectionSource, dragCollect)(
-  dropTarget(dropTypes, collectionTarget, targetCollect)(IdeaCollection)
+module.exports = DragSource(dndTypes.COLLECTION, collectionSource, dragCollect)(
+  DropTarget(dropTypes, collectionTarget, targetCollect)(IdeaCollection)
 );

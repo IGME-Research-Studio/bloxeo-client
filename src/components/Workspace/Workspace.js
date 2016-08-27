@@ -1,16 +1,15 @@
-const React    = require('react');
-const ReactDOM = require('react-dom');
+import React, { PropTypes } from require('react');
+import ReactDOM from 'react-dom';
+import { DropTarget } from 'react-dnd';
+import _ from 'lodash';
 
-const CollectionStore = require('../../stores/CollectionStore');
-const StormActions    = require('../../actions/StormActions');
+import CollectionStore from '../../stores/CollectionStore';
+import StormActions from '../../actions/StormActions';
 
-const IdeaCollection = require('../IdeaCollection');
-const TrashCan       = require('./TrashCan');
+import IdeaCollection from '../IdeaCollection';
+import TrashCan from './TrashCan';
 
-const dropTarget   = require('react-dnd').DropTarget;
-const PropTypes    = React.PropTypes;
-const DnDTypes     = require('../../constants/DragAndDropConstants');
-const _            = require('lodash');
+import dndTypes from '../../constants/dndTypes';
 
 const Workspace = React.createClass({
 
@@ -116,7 +115,7 @@ const Workspace = React.createClass({
 });
 
 // REACT-DnD parameters
-const dropTypes = [DnDTypes.CARD, DnDTypes.COLLECTION, DnDTypes.IDEA];
+const dropTypes = [dndTypes.CARD, dndTypes.COLLECTION, dndTypes.IDEA];
 
 // Workspace DropTarget options
 const workTarget = {
@@ -130,7 +129,7 @@ const workTarget = {
 
     const domNode = ReactDOM.findDOMNode(component).getBoundingClientRect();
     // If the collection is being moved do not create another
-    if (monitor.getItem().type === DnDTypes.COLLECTION) {
+    if (monitor.getItem().type === dndTypes.COLLECTION) {
       StormActions.moveCollection(
         monitor.getItem().id,
         Math.round(pos.x) - (domNode.left) - component.state.x,
@@ -155,4 +154,4 @@ function collectTarget(connect, monitor) {
   };
 }
 
-module.exports = dropTarget(dropTypes, workTarget, collectTarget)(Workspace);
+module.exports = DropTarget(dropTypes, workTarget, collectTarget)(Workspace);

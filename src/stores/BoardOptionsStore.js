@@ -7,7 +7,7 @@ import { map, lensProp, set, pipe, find,
 
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import { WORKSPACE_TAB } from '../constants/NavBarConstants';
-import StormConstants from '../constants/StormConstants';
+import actionTypes from '../constants/actionTypes';
 import { gradientToDiscrete, moveToHeadByProp } from '../utils/helpers';
 import { getUserId } from '../stores/UserStore';
 
@@ -149,23 +149,23 @@ const self = assign({}, EventEmitter.prototype, {
 
 AppDispatcher.register(function(action) {
   switch (action.type) {
-  case StormConstants.CHANGE_ROOM_OPTS:
+  case actionTypes.CHANGE_ROOM_OPTS:
     boardOptions = self.updateBoardUsers({ ...boardOptions,
                                            ...action.updates });
     self.emitUpdate();
     break;
 
-  case StormConstants.CHANGE_ROOM_NAME:
+  case actionTypes.CHANGE_ROOM_NAME:
     boardOptions.boardName = action.roomName.trim();
     self.emitNameChange();
     break;
 
-  case StormConstants.CHANGE_ROOM_DESCRIPTION:
+  case actionTypes.CHANGE_ROOM_DESCRIPTION:
     boardOptions.boardDesc = action.roomDesc.trim();
     self.emitNameChange();
     break;
 
-  case StormConstants.SELECT_TAB:
+  case actionTypes.SELECT_TAB:
     boardOptions.isOnWorkspace = action.isOnWorkspace;
     self.emitUpdate();
     break;

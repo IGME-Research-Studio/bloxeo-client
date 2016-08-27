@@ -1,7 +1,8 @@
-const AppDispatcher  = require('../dispatcher/AppDispatcher');
-const StormConstants = require('../constants/StormConstants');
-const EventEmitter   = require('events').EventEmitter;
-const assign         = require('object-assign');
+import { EventEmitter } from 'events';
+import assign from 'object-assign';
+
+import AppDispatcher from '../dispatcher/AppDispatcher';
+import actionTypes from '../constants/actionTypes';
 
 const TIME_CHANGE_EVENT = 'time';
 
@@ -96,10 +97,10 @@ function pauseTimer(isPaused) {
 
 AppDispatcher.register(function(action) {
   switch (action.type) {
-  case StormConstants.TIMER_COUNTDOWN:
+  case actionTypes.TIMER_COUNTDOWN:
     countdown();
     break;
-  case StormConstants.TIMER_PAUSE:
+  case actionTypes.TIMER_PAUSE:
     pauseTimer(action.isPaused);
     TimerStore.emitTimeChange();
     break;

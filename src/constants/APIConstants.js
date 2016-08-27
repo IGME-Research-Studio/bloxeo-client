@@ -1,4 +1,4 @@
-import APP_CONSTANTS from './StormConstants';
+import { SERVER_URL } from './appConstants';
 
 export default {
   EVENT_API: {
@@ -63,14 +63,14 @@ export default {
   },
   REST_API: {
     // GET
-    checkBoardExists: (boardId) => `${APP_CONSTANTS.SERVER_URL}/v1/boards/${boardId}`,
+    checkBoardExists: (boardId) => `${SERVER_URL}/v1/boards/${boardId}`,
     // POST
-    createBoard: () => `${APP_CONSTANTS.SERVER_URL}/v1/boards`,
+    createBoard: () => `${SERVER_URL}/v1/boards`,
     // POST
-    deleteBoard: () => `${APP_CONSTANTS.SERVER_URL}/v1/boards`,
+    deleteBoard: () => `${SERVER_URL}/v1/boards`,
     // POST
-    createUser: () => `${APP_CONSTANTS.SERVER_URL}/v1/users`,
+    createUser: () => `${SERVER_URL}/v1/users`,
     // POST
-    validateUser: () => `${APP_CONSTANTS.SERVER_URL}/v1/auth/validate`,
+    validateUser: () => `${SERVER_URL}/v1/auth/validate`,
   },
 };

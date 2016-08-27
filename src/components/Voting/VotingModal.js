@@ -1,8 +1,9 @@
-const React = require('react');
-const Modal = require('react-modal');
-const VotingContent = require('./VotingContent');
-const CollectionStore = require('../../stores/CollectionStore');
-const StormConstants = require('../../constants/StormConstants.js');
+import React from 'react';
+import Modal from 'react-modal';
+
+import VotingContent from './VotingContent';
+import CollectionStore from '../../stores/CollectionStore';
+import { CUSTOM_MODAL_STYLES } from '../../constants/appConstants';
 
 /**
  * Component including a Vote button that opens the Voting modal
@@ -48,7 +49,7 @@ const VotingModal = React.createClass({
         </a>
 
         <Modal isOpen={this.state.showModal}
-          style={StormConstants.CUSTOM_MODAL_STYLES}
+          style={CUSTOM_MODAL_STYLES}
           onClick={this.hideModal}>
           <div className="votingModal">
             <VotingContent hideModal={this.hideModal} />

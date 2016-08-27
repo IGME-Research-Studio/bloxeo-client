@@ -1,10 +1,12 @@
-const React = require('react');
+import React from 'react';
+import classNames from 'classnames';
+import { DragSource } from 'react-dnd';
+
+import StormActions from '../actions/StormActions';
+import BoardOptionsStore from '../stores/BoardOptionsStore';
+import dndTypes from '../constants/dndTypes';
+
 const PropTypes  = React.PropTypes;
-const StormActions = require('../actions/StormActions');
-const BoardOptionsStore = require('../stores/BoardOptionsStore');
-const dragSource = require('react-dnd').DragSource;
-const DnDTypes   = require('../constants/DragAndDropConstants');
-const classNames = require('classnames');
 let holdTimeout = 0;
 
 const Idea = React.createClass({
@@ -107,7 +109,7 @@ const ideaSource = {
   beginDrag: function(props) {
     return {
       content: props.content,
-      type: DnDTypes.IDEA,
+      type: dndTypes.IDEA,
       id: props.ideaID,
       ideaCount: 1,
     };
@@ -131,4 +133,4 @@ function dragCollect(connect, monitor) {
   };
 }
 
-module.exports = dragSource(DnDTypes.IDEA, ideaSource, dragCollect)(Idea);
+module.exports = DragSource(dndTypes.IDEA, ideaSource, dragCollect)(Idea);

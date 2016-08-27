@@ -9,13 +9,10 @@ import io from '../io';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import StormActions from '../actions/StormActions';
 import UserStore from './UserStore';
-import StormConstants from '../constants/StormConstants';
+import actionTypes from '../constants/actionTypes';
 import API from '../constants/APIConstants';
 import { post, checkSocketStatus,
   checkHTTPStatus } from '../utils/checkStatus';
-
-// A socket.io connection singleton
-const socket = io;
 
 const { EVENT_API, REST_API } = API;
 
@@ -62,7 +59,7 @@ const SocketStore = assign({}, EventEmitter.prototype, {
 
 // Socket Handlers
 // Idea was added or removed from collection
-socket.on(EVENT_API.UPDATED_COLLECTIONS, (data) => {
+io.on(EVENT_API.UPDATED_COLLECTIONS, (data) => {
   checkSocketStatus(data)
   .then((res) => {
     StormActions.receivedCollections(
@@ -76,7 +73,7 @@ socket.on(EVENT_API.UPDATED_COLLECTIONS, (data) => {
 });
 
 // Idea was added or removed
-socket.on(EVENT_API.UPDATED_IDEAS, (data) => {
+io.on(EVENT_API.UPDATED_IDEAS, (data) => {
   checkSocketStatus(data)
   .then((res) => {
     StormActions.updatedIdeas(res.data);
@@ -86,7 +83,7 @@ socket.on(EVENT_API.UPDATED_IDEAS, (data) => {
   });
 });
 
-socket.on(EVENT_API.JOINED_ROOM, (data) => {
+io.on(EVENT_API.JOINED_ROOM, (data) => {
 
   checkSocketStatus(data)
   .then((res) => {
@@ -98,7 +95,7 @@ socket.on(EVENT_API.JOINED_ROOM, (data) => {
   });
 });
 
-socket.on(EVENT_API.RECEIVED_COLLECTIONS, (data) => {
+io.on(EVENT_API.RECEIVED_COLLECTIONS, (data) => {
   checkSocketStatus(data)
   .then((res) => {
 
@@ -109,7 +106,7 @@ socket.on(EVENT_API.RECEIVED_COLLECTIONS, (data) => {
   });
 });
 
-socket.on(EVENT_API.RECEIVED_IDEAS, (data) => {
+io.on(EVENT_API.RECEIVED_IDEAS, (data) => {
   checkSocketStatus(data)
   .then((res) => {
     StormActions.updatedIdeas(res.data);
@@ -119,7 +116,7 @@ socket.on(EVENT_API.RECEIVED_IDEAS, (data) => {
   });
 });
 
-socket.on(EVENT_API.UPDATED_BOARD, (data) => {
+io.on(EVENT_API.UPDATED_BOARD, (data) => {
   checkSocketStatus(data)
   .then((res) => {
     StormActions.changeRoomOptions(res.data);
@@ -129,7 +126,7 @@ socket.on(EVENT_API.UPDATED_BOARD, (data) => {
   });
 });
 
-socket.on(EVENT_API.RECEIVED_OPTIONS, (data) => {
+io.on(EVENT_API.RECEIVED_OPTIONS, (data) => {
   checkSocketStatus(data)
   .then((res) => {
     StormActions.changeRoomOptions(res.data);
@@ -147,7 +144,7 @@ function joinBoard(boardId) {
   // @XXX WUT?
   currentBoardId = boardId;
 
-  socket.emit(
+  io.emit(
     EVENT_API.JOIN_ROOM,
     {
       boardId: boardId,
@@ -162,7 +159,7 @@ function joinBoard(boardId) {
 function leaveBoard(boardId) {
   currentBoardId = undefined;
 
-  socket.emit(
+  io.emit(
     EVENT_API.LEAVE_ROOM,
     {
       boardId: boardId,
@@ -222,7 +219,7 @@ function getOrCreateUser(name) {
  * @param {string} ideaContent
  */
 function createIdea(content) {
-  socket.emit(
+  io.emit(
     EVENT_API.CREATE_IDEA,
     {
       boardId: currentBoardId,
@@ -233,7 +230,7 @@ function createIdea(content) {
 }
 
 function destroyIdea(content) {
-  socket.emit(
+  io.emit(
     EVENT_API.DESTROY_IDEA,
     {
       boardId: currentBoardId,
@@ -248,7 +245,7 @@ function destroyIdea(content) {
  * @param {string} collection content from first idea added to collection
  */
 function addCollection(content, left, top) {
-  socket.emit(
+  io.emit(
     EVENT_API.CREATE_COLLECTION,
     {
       boardId: currentBoardId,
@@ -265,7 +262,7 @@ function addCollection(content, left, top) {
  * @param {number} index
  */
 function removeCollection(_key) {
-  socket.emit(
+  io.emit(
     EVENT_API.DESTROY_COLLECTION,
     {
       boardId: currentBoardId,
@@ -281,7 +278,7 @@ function removeCollection(_key) {
  * @param {string} content : idea content
  */
 function addIdeaToCollection(_key, content) {
-  socket.emit(
+  io.emit(
     EVENT_API.ADD_IDEA,
     {
       boardId: currentBoardId,
@@ -298,7 +295,7 @@ function addIdeaToCollection(_key, content) {
  * @param {string} content : idea content
  */
 function removeIdeaFromCollection(_key, content) {
-  socket.emit(
+  io.emit(
     EVENT_API.REMOVE_IDEA,
     {
       boardId: currentBoardId,
@@ -309,22 +306,22 @@ function removeIdeaFromCollection(_key, content) {
   );
 }
 
-socket.on('connect', () => {
-  console.info(`Connection ${socket.id}`);
+io.on('connect', () => {
+  console.info(`Connection ${io.id}`);
 });
 
-socket.on('disconnect', () => {
+io.on('disconnect', () => {
   console.info(`Disconnected, was on ${currentBoardId}`);
 });
 
-socket.on('reconnect', () => {
-  console.info(`Reconnection ${socket.id}, was on ${currentBoardId}`);
+io.on('reconnect', () => {
+  console.info(`Reconnection ${io.id}, was on ${currentBoardId}`);
 });
 
 // Set up action watchers
 AppDispatcher.register((action) => {
   switch (action.type) {
-  case StormConstants.CREATE_BOARD:
+  case actionTypes.CREATE_BOARD:
     getOrCreateUser(action.username)
     .then(({ token }) => createBoard(token, action.boardName, action.boardDesc))
     .then(({ boardId }) => browserHistory.push(`/room/${boardId}`))
@@ -333,7 +330,7 @@ AppDispatcher.register((action) => {
     });
     break;
 
-  case StormConstants.VALIDATE_BOARD:
+  case actionTypes.VALIDATE_BOARD:
     getOrCreateUser(action.username)
     .then(() => checkBoardExists(action.boardId))
     .then(({ exists }) => {
@@ -347,53 +344,53 @@ AppDispatcher.register((action) => {
     });
     break;
 
-  case StormConstants.JOIN_BOARD:
+  case actionTypes.JOIN_BOARD:
     joinBoard(action.boardId, action.userToken);
     break;
 
-  case StormConstants.LEAVE_BOARD:
+  case actionTypes.LEAVE_BOARD:
     leaveBoard(action.boardId);
     break;
 
-  case StormConstants.UPDATE_BOARD:
-    socket.emit(EVENT_API.UPDATE_BOARD, {
+  case actionTypes.UPDATE_BOARD:
+    io.emit(EVENT_API.UPDATE_BOARD, {
       boardId: currentBoardId,
       userToken: UserStore.getUserToken(),
       updates: action.updates,
     });
     break;
 
-  case StormConstants.GET_IDEAS:
-    socket.emit(EVENT_API.GET_IDEAS, { boardId: currentBoardId });
+  case actionTypes.GET_IDEAS:
+    io.emit(EVENT_API.GET_IDEAS, { boardId: currentBoardId });
     break;
 
-  case StormConstants.GET_COLLECTIONS:
-    socket.emit(EVENT_API.GET_COLLECTIONS, { boardId: currentBoardId });
+  case actionTypes.GET_COLLECTIONS:
+    io.emit(EVENT_API.GET_COLLECTIONS, { boardId: currentBoardId });
     break;
 
-  case StormConstants.CREATE_IDEA:
+  case actionTypes.CREATE_IDEA:
     createIdea(action.ideaContent.trim());
     break;
 
-  case StormConstants.DESTROY_IDEA:
+  case actionTypes.DESTROY_IDEA:
     destroyIdea(action.payload.ideaContent);
     break;
 
-  case StormConstants.GROUP_IDEAS:
+  case actionTypes.GROUP_IDEAS:
     addIdeaToCollection(action.id, action.idea.content);
     break;
 
-  case StormConstants.CREATE_COLLECTION:
+  case actionTypes.CREATE_COLLECTION:
     addCollection(action.payload.ideaContent,
                   action.payload.left,
                   action.payload.top);
     break;
 
-  case StormConstants.REMOVE_COLLECTION:
+  case actionTypes.REMOVE_COLLECTION:
     removeCollection(action.id);
     break;
 
-  case StormConstants.SEPARATE_IDEAS:
+  case actionTypes.SEPARATE_IDEAS:
     removeIdeaFromCollection(action.groupID, action.ideaContent);
     break;
 

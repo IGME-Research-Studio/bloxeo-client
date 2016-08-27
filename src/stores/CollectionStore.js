@@ -1,9 +1,10 @@
-const AppDispatcher  = require('../dispatcher/AppDispatcher');
-const StormConstants = require('../constants/StormConstants');
-const EventEmitter   = require('events').EventEmitter;
-const assign         = require('object-assign');
-const d3             = require('d3');
-const _              = require('lodash');
+import { EventEmitter } from 'events';
+import assign from 'object-assign';
+import d3 from 'd3';
+import _ from 'lodash';
+
+import AppDispatcher from '../dispatcher/AppDispatcher';
+import actionTypes from '../constants/actionTypes';
 
 const COLLECTION_CHANGE_EVENT = 'collection';
 
@@ -244,7 +245,7 @@ force.on('tick', function() {
 
 AppDispatcher.register(function(action) {
   switch (action.type) {
-  case StormConstants.ADDED_COLLECTION:
+  case actionTypes.ADDED_COLLECTION:
     createCollection(action.index,
                      action.content,
                      action.left,
@@ -253,33 +254,33 @@ AppDispatcher.register(function(action) {
     updateForce();
     break;
 
-  case StormConstants.MODIFIED_COLLECTION:
+  case actionTypes.MODIFIED_COLLECTION:
     updateCollection(action.index, action.content);
     CollectionStore.emitChange();
     updateForce();
     break;
 
-  case StormConstants.HIDE_COLLECTIONS:
+  case actionTypes.HIDE_COLLECTIONS:
     hideCollections(action.ids);
     CollectionStore.emitChange();
     break;
 
-  case StormConstants.REMOVED_COLLECTION:
+  case actionTypes.REMOVED_COLLECTION:
     removeCollection(action.index);
     CollectionStore.emitChange();
     break;
 
-  case StormConstants.MOVE_COLLECTION:
+  case actionTypes.MOVE_COLLECTION:
     moveCollection(action.id, action.left, action.top);
     CollectionStore.emitChange();
     updateForce();
     break;
 
-  case StormConstants.SET_LAYOUT_SIZE:
+  case actionTypes.SET_LAYOUT_SIZE:
     setLayoutSize(action.width, action.height);
     break;
 
-  case StormConstants.RECEIVED_COLLECTIONS:
+  case actionTypes.RECEIVED_COLLECTIONS:
     receivedAllCollections(action.collections, action.reset);
     CollectionStore.emitChange();
     if (_.keys(_collections).length > 0) {
@@ -287,7 +288,7 @@ AppDispatcher.register(function(action) {
     }
     break;
 
-  case StormConstants.RETURN_RESULTS:
+  case actionTypes.RETURN_RESULTS:
     returnResults(action.results);
     CollectionStore.emitChange();
     break;

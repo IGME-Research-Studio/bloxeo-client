@@ -207,14 +207,13 @@ function createUser(name) {
  * @returns {Promise}
  */
 function getOrCreateUser(name) {
-  const maybeToken = UserStore.getUserToken();
-  const maybeName = UserStore.getUserName();
+  const { maybeToken, maybeName, maybeId } = UserStore.getUserData();
 
   if (or(isNil(maybeToken), not(equals(maybeName, name)))) {
     return createUser(name);
   }
   else {
-    return Promise.resolve(maybeToken);
+    return Promise.resolve({ maybeToken, maybeName, maybeId });
   }
 }
 

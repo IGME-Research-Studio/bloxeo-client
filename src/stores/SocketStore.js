@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import Promise from 'bluebird';
 import assign from 'object-assign';
-import { equals, or, not, compose, isNil } from 'ramda';
+import { equals, or, not, isNil } from 'ramda';
 import { EventEmitter } from 'events';
 import { browserHistory } from 'react-router';
 
@@ -17,16 +17,7 @@ import { post, checkSocketStatus,
 // A socket.io connection singleton
 const socket = io;
 
-const isntNil = compose(not, isNil);
 const { EVENT_API, REST_API } = API;
-
-/**
- * Checks to update the client to the server
- * turn REST_API into route templates
- */
-const Routes = _.mapValues(REST_API, (route) => {
-  return _.template(StormConstants.SERVER_URL + route[1]);
-});
 
 let currentBoardId = undefined;
 
@@ -103,7 +94,6 @@ socket.on(EVENT_API.JOINED_ROOM, (data) => {
     StormActions.receivedCollections(res.data.collections, false);
     StormActions.changeRoomOptions(res.data.room);
 
-    browserHistory.push(`/room/${currentBoardId}`);
     StormActions.endLoadAnimation();
   });
 });
@@ -183,13 +173,14 @@ function leaveBoard(boardId) {
 /**
  * Create new board
  */
-function createBoard(boardName, boardDesc) {
+function createBoard(userToken, boardName, boardDesc) {
 
-  return post(Routes.createBoard(),
-              { userToken: UserStore.getUserToken(),
-                boardName,
-                boardDesc,
-              })
+  return post(REST_API.createBoard(), { userToken, boardName, boardDesc })
+  .then(checkHTTPStatus);
+}
+
+function checkBoardExists(boardId) {
+  return fetch(REST_API.checkBoardExists(boardId))
   .then(checkHTTPStatus);
 }
 
@@ -199,16 +190,13 @@ function createBoard(boardName, boardDesc) {
  */
 function createUser(name) {
 
-  return post(Routes.createUser(), { username: name })
+  return post(REST_API.createUser(), { username: name })
     .then(checkHTTPStatus)
     .then((res) => {
       UserStore.setUserData({token: res.token,
                             userId: res.userId,
                             username: name});
-      return res;
-    })
-    .catch((err) => {
-      throw new Error(err);
+      return Promise.resolve(res);
     });
 }
 
@@ -328,18 +316,10 @@ socket.on('connect', () => {
 
 socket.on('disconnect', () => {
   console.info(`Disconnected, was on ${currentBoardId}`);
-
-  if (isntNil(currentBoardId)) {
-    leaveBoard(currentBoardId);
-  }
 });
 
 socket.on('reconnect', () => {
   console.info(`Reconnection ${socket.id}, was on ${currentBoardId}`);
-
-  if (isntNil(currentBoardId)) {
-    joinBoard(currentBoardId);
-  }
 });
 
 // Set up action watchers
@@ -347,23 +327,33 @@ AppDispatcher.register((action) => {
   switch (action.type) {
   case StormConstants.CREATE_BOARD:
     getOrCreateUser(action.username)
-    .then(() => createBoard(action.boardName, action.boardDesc))
-    .then((res) => joinBoard(res.boardId))
+    .then(({ token }) => createBoard(token, action.boardName, action.boardDesc))
+    .then(({ boardId }) => browserHistory.push(`/room/${boardId}`))
     .catch((e) => {
       console.error(e);
     });
     break;
 
-  case StormConstants.JOIN_BOARD:
+  case StormConstants.VALIDATE_BOARD:
     getOrCreateUser(action.username)
-    .then(() => joinBoard(action.boardId));
+    .then(() => checkBoardExists(action.boardId))
+    .then(({ exists }) => {
+      if (exists) {
+        browserHistory.push(`/room/${action.boardId}`);
+      }
+      else {
+        // TODO: snackbar error or validation error message?
+        console.error(`Room ${action.boardId} does not exist`);
+      }
+    });
+    break;
+
+  case StormConstants.JOIN_BOARD:
+    joinBoard(action.boardId, action.userToken);
     break;
 
   case StormConstants.LEAVE_BOARD:
-    socket.emit(EVENT_API.LEAVE_ROOM, {
-      boardId: action.boardId,
-      userToken: UserStore.getUserToken(),
-    });
+    leaveBoard(action.boardId);
     break;
 
   case StormConstants.UPDATE_BOARD:

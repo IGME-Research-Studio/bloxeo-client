@@ -9,7 +9,7 @@ import BoardOptionsStore from '../stores/BoardOptionsStore';
 import CollectionStore from '../stores/CollectionStore';
 import IdeaStore from '../stores/IdeaStore';
 import LoadingStore from '../stores/LoadingStore';
-import { getUserId } from '../stores/UserStore';
+import UserStore from '../stores/UserStore';
 
 import LoadingOverlay from '../components/LoadingOverlay';
 import NavBar from '../components/NavBar';
@@ -30,6 +30,7 @@ function getRoomState(prevState) {
     groups: CollectionStore.getAllCollections(),
     ideas: IdeaStore.getAllIdeas(),
     room: BoardOptionsStore.getBoardOptions(),
+    user: UserStore.getUserData(),
     onWorkspace: BoardOptionsStore.getIsOnWorkspace(),
   };
 }
@@ -41,7 +42,6 @@ class RoomContainer extends React.Component {
 
     this._onChange = () => this.setState(getRoomState(this.state));
     this._onLoad = () => this.setState({loading: false});
-    this._joinBoard = (boardId) => joinBoard(boardId);
     this._switchTab = (isOnWorkspace) => (
       isOnWorkspace ?
         <Workspace boardId={this.props.params.boardId} /> :
@@ -50,7 +50,7 @@ class RoomContainer extends React.Component {
 
     this._isAdmin = () => (
       pipe(
-        find(propEq('userId', getUserId())),
+        find(propEq('userId', UserStore.getUserId())),
         ifElse(
           isNil, F,
           propEq('isAdmin', true))
@@ -70,6 +70,8 @@ class RoomContainer extends React.Component {
     const ideasElement = document.querySelector('body');
     const hideScroll = 'overflow: hidden';
     ideasElement.setAttribute('style', hideScroll);
+
+    joinBoard(this.props.params.boardId, this.state.user.userToken);
   }
 
   componentWillUnmount() {

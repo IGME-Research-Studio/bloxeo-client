@@ -1,9 +1,12 @@
+import APP_CONSTANTS from './StormConstants';
+
 export default {
   EVENT_API: {
     GET_CONSTANTS: 'GET_CONSTANTS',
     JOIN_ROOM: 'JOIN_ROOM',
     LEAVE_ROOM: 'LEAVE_ROOM',
     UPDATE_BOARD: 'UPDATE_BOARD',
+    VALIDATE_BOARD: 'VALIDATE_BOARD',
     CREATE_IDEA: 'CREATE_IDEA',
     DESTROY_IDEA: 'DESTROY_IDEA',
     GET_IDEAS: 'GET_IDEAS',
@@ -59,33 +62,15 @@ export default {
     RECEIVED_RESULTS: 'RECEIVED_RESULTS',
   },
   REST_API: {
-    getBoards: [
-      'GET',
-      '/v1/boards',
-    ],
-    getBoard: [
-      'GET',
-      '/v1/boards/<%= boardId %>',
-    ],
-    createBoard: [
-      'POST',
-      '/v1/boards',
-    ],
-    updateBoard: [
-      'PATCH',
-      '/v1/boards/<%= boardId %>',
-    ],
-    deleteBoard: [
-      'DELETE',
-      '/v1/boards',
-    ],
-    createUser: [
-      'POST',
-      '/v1/users',
-    ],
-    validateUser: [
-      'POST',
-      '/v1/auth/validate',
-    ],
+    // GET
+    checkBoardExists: (boardId) => `${APP_CONSTANTS.SERVER_URL}/v1/boards/${boardId}`,
+    // POST
+    createBoard: () => `${APP_CONSTANTS.SERVER_URL}/v1/boards`,
+    // POST
+    deleteBoard: () => `${APP_CONSTANTS.SERVER_URL}/v1/boards`,
+    // POST
+    createUser: () => `${APP_CONSTANTS.SERVER_URL}/v1/users`,
+    // POST
+    validateUser: () => `${APP_CONSTANTS.SERVER_URL}/v1/auth/validate`,
   },
 };

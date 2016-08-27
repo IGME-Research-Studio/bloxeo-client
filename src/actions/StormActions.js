@@ -36,9 +36,17 @@ const StormActions = {
    * Dispatch join board event
    * @param {string} id of board to join
    */
-  joinBoard: function(boardId, username) {
+  joinBoard: function(boardId, userToken) {
     Dispatcher.dispatch({
       type: ActTypes.JOIN_BOARD,
+      boardId: boardId,
+      userToken: userToken,
+    });
+  },
+
+  validateBoard: function(boardId, username) {
+    Dispatcher.dispatch({
+      type: ActTypes.VALIDATE_BOARD,
       boardId: boardId,
       username: username,
     });

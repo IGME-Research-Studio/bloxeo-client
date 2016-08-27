@@ -53,7 +53,7 @@ const JoinForm = React.createClass({
    */
   _onSubmit: function() {
     if (all(isntNilorEmpty, values(this.state.values))) {
-      StormActions.joinBoard(this.state.values.boardId,
+      StormActions.validateBoard(this.state.values.boardId,
                              this.state.values.username);
     }
   },

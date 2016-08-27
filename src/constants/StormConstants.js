@@ -1,4 +1,3 @@
-/** Export Storm client constants */
 module.exports = {
   CHANGE_ROOM_NAME: 'CHANGE_ROOM_NAME',
   CHANGE_ROOM_DESCRIPTION: 'CHANGE_ROOM_DESCRIPTION',

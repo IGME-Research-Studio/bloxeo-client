@@ -24,8 +24,7 @@ module.exports = {
   STORE_WORKSPACE: 'STORE_WORKSPACE',
   STORE_MOVED_IDEA: 'STORE_MOVED_IDEA',
   // Server URL constants
-  SERVER_URL: 'http://bloxeo-api.herokuapp.com',
-  // SERVER_URL: 'http://localhost:1337',
+  SERVER_URL: process.env.NODE_ENV === 'development' ? 'http://localhost:1337' : 'http://bloxeo-api.herokuapp.com',
   API_VERSION: '/v1',
   // Server requests
   CREATE_BOARD: 'CREATE_BOARD',
@@ -36,7 +35,7 @@ module.exports = {
   // Socket responses
   UPDATED_IDEAS: 'UPDATED_IDEAS',
   // Collection responses
-  RECIEVED_COLLECTIONS: 'RECIEVED_COLLECTIONS',
+  RECEIVED_COLLECTIONS: 'RECEIVED_COLLECTIONS',
   REMOVED_COLLECTION: 'REMOVED_COLLECTION',
   MODIFIED_COLLECTION: 'MODIFIED_COLLECTION',
   ADDED_COLLECTION: 'ADDED_COLLECTION',

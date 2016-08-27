@@ -137,7 +137,6 @@ function receivedAllCollections(collections, reset) {
   // Clear out old collection data
   _collections = {};
   layoutObjs = [];
-  CollectionStore.emitChange();
   // Create collections from server data
   let i = 0;
   for (const _key in collections) {

@@ -72,7 +72,9 @@ class RoomContainer extends React.Component {
     const hideScroll = 'overflow: hidden';
     ideasElement.setAttribute('style', hideScroll);
 
-    d.dispatch(joinBoard(this.props.params.boardId, this.state.user.userToken));
+    d.dispatch(joinBoard({
+      boardId: this.props.params.boardId,
+      userToken: this.state.user.userToken }));
   }
 
   componentWillUnmount() {
@@ -81,7 +83,7 @@ class RoomContainer extends React.Component {
     IdeaStore.removeChangeListener(this._onChange);
     LoadingStore.removeLoadingListener(this._onLoad);
 
-    d.dispatch(leaveBoard(this.props.params.boardId));
+    d.dispatch(leaveBoard({ boardId: this.props.params.boardId }));
   }
 
   render() {

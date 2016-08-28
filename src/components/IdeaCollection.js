@@ -5,7 +5,7 @@ import { DropTarget, DragSource } from 'react-dnd';
 
 import { groupIdeas, removeCollection } from '../actionCreators';
 import d from '../dispatcher/AppDispatcher';
-import CollectionStor from '../stores/CollectionStore';
+import CollectionStore from '../stores/CollectionStore';
 import dndTypes from '../constants/dndTypes';
 import Idea from './Idea';
 
@@ -149,10 +149,11 @@ const collectionTarget = {
       return;
     }
 
-    d.dispatch(groupIdeas(props.ideaID, item));
+    console.log({ ideaId: props.ideaID, idea: item })
+    d.dispatch(groupIdeas({ ideaId: props.ideaID, idea: item }));
     // Remove combined collection
     if (item.type === dndTypes.COLLECTION) {
-      d.dispatch(removeCollection(item.id));
+      d.dispatch(removeCollection({ collectionId: item.id }));
     }
   },
 };

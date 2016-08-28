@@ -1,7 +1,7 @@
 import { EventEmitter } from 'events';
 import assign from 'object-assign';
 
-import AppDispatcher from '../dispatcher/AppDispatcher';
+import d from '../dispatcher/AppDispatcher';
 import actionTypes from '../constants/actionTypes';
 
 const TIME_CHANGE_EVENT = 'time';
@@ -95,13 +95,13 @@ function pauseTimer(isPaused) {
   }
 }
 
-AppDispatcher.register(function(action) {
-  switch (action.type) {
+d.register(function({ type, payload }) {
+  switch (type) {
   case actionTypes.TIMER_COUNTDOWN:
     countdown();
     break;
   case actionTypes.TIMER_PAUSE:
-    pauseTimer(action.isPaused);
+    pauseTimer(payload.isPaused);
     TimerStore.emitTimeChange();
     break;
   default:

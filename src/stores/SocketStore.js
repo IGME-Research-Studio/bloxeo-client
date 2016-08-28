@@ -8,7 +8,7 @@ import { browserHistory } from 'react-router';
 import io from '../io';
 import { changeRoomOptions, updatedIdeas,
   receivedCollections, endLoadAnimation,  } from '../actionCreators';
-import AppDispatcher, { dispatch } from '../dispatcher/AppDispatcher';
+import d from '../dispatcher/AppDispatcher';
 import UserStore from './UserStore';
 import actionTypes from '../constants/actionTypes';
 import API from '../constants/APIConstants';
@@ -63,9 +63,11 @@ const SocketStore = assign({}, EventEmitter.prototype, {
 io.on(EVENT_API.UPDATED_COLLECTIONS, (data) => {
   checkSocketStatus(data)
   .then((res) => {
-    dispatch(receivedCollections(
-      _.omit(res.data, ['top', 'left', 'key']),
-      false
+    d.dispatch(receivedCollections(
+      {
+        collections: _.omit(res.data, ['top', 'left', 'key']),
+        reset: false,
+      }
     ));
   })
   .catch((res) => {
@@ -77,7 +79,7 @@ io.on(EVENT_API.UPDATED_COLLECTIONS, (data) => {
 io.on(EVENT_API.UPDATED_IDEAS, (data) => {
   checkSocketStatus(data)
   .then((res) => {
-    dispatch(updatedIdeas(res.data));
+    d.dispatch(updatedIdeas({ ideas: res.data }));
   })
   .catch((res) => {
     console.error(`${res}. Updating the ideas.`);
@@ -85,14 +87,17 @@ io.on(EVENT_API.UPDATED_IDEAS, (data) => {
 });
 
 io.on(EVENT_API.JOINED_ROOM, (data) => {
+  console.log(data);
 
   checkSocketStatus(data)
   .then((res) => {
-    dispatch(updatedIdeas(res.data.ideas));
-    dispatch(receivedCollections(res.data.collections, false));
-    dispatch(changeRoomOptions(res.data.room));
 
-    dispatch(endLoadAnimation());
+    d.dispatch(updatedIdeas({ ideas: res.data.ideas }));
+    d.dispatch(receivedCollections({
+      collections: res.data.collections, reset: false }));
+    d.dispatch(changeRoomOptions({ updates: res.data.room }));
+
+    d.dispatch(endLoadAnimation(true));
   });
 });
 
@@ -100,7 +105,9 @@ io.on(EVENT_API.RECEIVED_COLLECTIONS, (data) => {
   checkSocketStatus(data)
   .then((res) => {
 
-    dispatch(receivedCollections(res.data, receivedCollections));
+    d.dispatch(receivedCollections({
+      collections: res.data,
+      reset: false }));
   })
   .catch((res) => {
     console.error(`Error receiving collections: ${res}`);
@@ -110,7 +117,7 @@ io.on(EVENT_API.RECEIVED_COLLECTIONS, (data) => {
 io.on(EVENT_API.RECEIVED_IDEAS, (data) => {
   checkSocketStatus(data)
   .then((res) => {
-    dispatch(updatedIdeas(res.data));
+    d.dispatch(updatedIdeas({ ideas: res.data }));
   })
   .catch((res) => {
     console.error(`Error receiving ideas: ${res}`);
@@ -120,7 +127,7 @@ io.on(EVENT_API.RECEIVED_IDEAS, (data) => {
 io.on(EVENT_API.UPDATED_BOARD, (data) => {
   checkSocketStatus(data)
   .then((res) => {
-    dispatch(changeRoomOptions(res.data));
+    d.dispatch(changeRoomOptions({ updates: res.data }));
   })
   .catch((res) => {
     console.error(`Error receiving update: ${res}`);
@@ -130,7 +137,7 @@ io.on(EVENT_API.UPDATED_BOARD, (data) => {
 io.on(EVENT_API.RECEIVED_OPTIONS, (data) => {
   checkSocketStatus(data)
   .then((res) => {
-    dispatch(changeRoomOptions(res.data));
+    d.dispatch(changeRoomOptions({ updates: res.data }));
   })
   .catch((res) => {
     console.error(`Error receiving options: ${res}`);
@@ -320,79 +327,68 @@ io.on('reconnect', () => {
 });
 
 // Set up action watchers
-AppDispatcher.register((action) => {
-  switch (action.type) {
+d.register(({ type, payload }) => {
+  switch (type) {
   case actionTypes.CREATE_BOARD:
-    getOrCreateUser(action.username)
-    .then(({ token }) => createBoard(token, action.boardName, action.boardDesc))
+    getOrCreateUser(payload.username)
+    .then(({ token }) => createBoard(token, payload.boardName, payload.boardDesc))
     .then(({ boardId }) => browserHistory.push(`/room/${boardId}`))
-    .catch((e) => {
-      console.error(e);
-    });
     break;
 
   case actionTypes.VALIDATE_BOARD:
-    getOrCreateUser(action.username)
-    .then(() => checkBoardExists(action.boardId))
+    getOrCreateUser(payload.username)
+    .then(() => checkBoardExists(payload.boardId))
     .then(({ exists }) => {
       if (exists) {
-        browserHistory.push(`/room/${action.boardId}`);
+        browserHistory.push(`/room/${payload.boardId}`);
       }
       else {
         // TODO: snackbar error or validation error message?
-        console.error(`Room ${action.boardId} does not exist`);
+        console.error(`Room ${payload.boardId} does not exist`);
       }
     });
     break;
 
   case actionTypes.JOIN_BOARD:
-    joinBoard(action.boardId, action.userToken);
+    joinBoard(payload.boardId, payload.userToken);
     break;
 
   case actionTypes.LEAVE_BOARD:
-    leaveBoard(action.boardId);
+    leaveBoard(payload.boardId);
     break;
 
   case actionTypes.UPDATE_BOARD:
     io.emit(EVENT_API.UPDATE_BOARD, {
       boardId: currentBoardId,
       userToken: UserStore.getUserToken(),
-      updates: action.updates,
+      updates: payload,
     });
     break;
 
-  case actionTypes.GET_IDEAS:
-    io.emit(EVENT_API.GET_IDEAS, { boardId: currentBoardId });
-    break;
-
-  case actionTypes.GET_COLLECTIONS:
-    io.emit(EVENT_API.GET_COLLECTIONS, { boardId: currentBoardId });
-    break;
-
   case actionTypes.CREATE_IDEA:
-    createIdea(action.ideaContent.trim());
+    createIdea(payload.content.trim());
     break;
 
   case actionTypes.DESTROY_IDEA:
-    destroyIdea(action.payload.ideaContent);
+    destroyIdea(payload.content);
     break;
 
   case actionTypes.GROUP_IDEAS:
-    addIdeaToCollection(action.id, action.idea.content);
+    addIdeaToCollection(payload.ideaId, payload.idea.content);
     break;
 
   case actionTypes.CREATE_COLLECTION:
-    addCollection(action.payload.ideaContent,
-                  action.payload.left,
-                  action.payload.top);
+    addCollection(payload.ideaContent,
+                  payload.left,
+                  payload.top);
     break;
 
   case actionTypes.REMOVE_COLLECTION:
-    removeCollection(action.id);
+    removeCollection(payload.collectionId);
     break;
 
   case actionTypes.SEPARATE_IDEAS:
-    removeIdeaFromCollection(action.groupID, action.ideaContent);
+    removeIdeaFromCollection(payload.groupId, payload.content);
     break;
 
   default:

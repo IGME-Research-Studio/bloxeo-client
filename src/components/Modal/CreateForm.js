@@ -24,83 +24,83 @@ const CreateForm = React.createClass({
     };
   },
 
-  /**
-   * @param {object} event
-   */
-  _updateName: function({target: { value }}) {
-    const errMsg = isntEmptyValidator('Username is required', value);
+    /**
+     * @param {object} event
+     */
+    _updateName: function({target: { value }}) {
+      const errMsg = isntEmptyValidator('Username is required', value);
 
-    this.setState(
-      updateValuesWithError('username', value, errMsg, this.state)
-    );
-  },
-  _updateBoardName: function({target: { value }}) {
-    this.setState(updateValues('boardName', value, this.state));
-  },
-  _updateBoardDesc: function({target: { value }}) {
-    this.setState(updateValues('boardDesc', value, this.state));
-  },
+      this.setState(
+        updateValuesWithError('username', value, errMsg, this.state)
+      );
+    },
+    _updateBoardName: function({target: { value }}) {
+      this.setState(updateValues('boardName', value, this.state));
+    },
+    _updateBoardDesc: function({target: { value }}) {
+      this.setState(updateValues('boardDesc', value, this.state));
+    },
 
-  /**
-   * Handle submit
-   */
-  _onSubmit: function() {
-    if (isntNilorEmpty(this.state.values.username)) {
-      const { username, boardName, boardDesc } = this.state.values;
-      d.dispatch(createBoard({ username, boardName, boardDesc }));
-    }
-  },
+    /**
+     * Handle submit
+     */
+    _onSubmit: function() {
+      if (isntNilorEmpty(this.state.values.username)) {
+        const { username, boardName, boardDesc } = this.state.values;
+        d.dispatch(createBoard({ username, boardName, boardDesc }));
+      }
+    },
 
-  /**
-   * @return {object}
-   */
-  render: function() {
+    /**
+     * @return {object}
+     */
+    render: function() {
 
-    return (
-      <div className="joinModal">
-        <div className="modalContent">
-          <TextField
-            fullWidth
-            hintText='Your username'
-            value={this.state.values.username}
-            errorText={this.state.errors.username}
-            onChange={this._updateName}
+      return (
+        <div className="joinModal">
+          <div className="modalContent">
+            <TextField
+              fullWidth
+              hintText='Your username'
+              value={this.state.values.username}
+        errorText={this.state.errors.username}
+        onChange={this._updateName}
           />
 
-          <TextField
-            fullWidth
-            hintText='Project name (optional)'
-            value={this.state.values.boardName}
-            onChange={this._updateBoardName}
+        <TextField
+          fullWidth
+          hintText='Project name (optional)'
+          value={this.state.values.boardName}
+        onChange={this._updateBoardName}
           />
 
-          <TextField
-            fullWidth
-            multiLine
-            rows={2}
-            hintText={"Project description (optional)"}
-            value={this.state.values.boardDesc}
-            onChange={this._updateBoardDesc}
+        <TextField
+          fullWidth
+          multiLine
+          rows={2}
+        hintText={"Project description (optional)"}
+        value={this.state.values.boardDesc}
+        onChange={this._updateBoardDesc}
           />
 
-          <div className="modalSection">
-            <div className="modalUserText">Your user icon</div>
+        <div className="modalSection">
+          <div className="modalUserText">Your user icon</div>
 
-            <Avatar name={this.state.values.username}/>
-          </div>
-
-          <p className="modalTerms">
-            Logging in confirms your agreement to <a href="#">our EULA</a>.
-          </p>
+          <Avatar name={this.state.values.username}/>
         </div>
 
-        <ModalFooter
-          onSubmit={this._onSubmit}
-          buttonText='Create room'
-        />
+        <p className="modalTerms">
+          Logging in confirms your agreement to <a href="#">our EULA</a>.
+        </p>
       </div>
+
+      <ModalFooter
+        onSubmit={this._onSubmit}
+        buttonText='Create room'
+      />
+    </div>
     );
-  },
+    },
 });
 
 module.exports = CreateForm;

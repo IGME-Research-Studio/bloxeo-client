@@ -13,12 +13,10 @@ export const leaveBoard = createAction(actionTypes.LEAVE_BOARD);
 export const endLoadAnimation = createAction(actionTypes.END_LOAD_ANIMATION);
 
 export const changeRoomOptions = createAction(actionTypes.CHANGE_ROOM_OPTS);
-export const changeRoomName = createAction(actionTypes.CHANGE_ROOM_NAME);
-export const changeRoomDescription = createAction(actionTypes.CHANGE_ROOM_DESCRIPTION);
 
-export const groupIdeas = createAction(actionTypes.GROUP_IDEA);
+export const groupIdeas = createAction(actionTypes.GROUP_IDEAS);
 export const separateIdeas = createAction(actionTypes.SEPARATE_IDEAS);
-export const createIdeas = createAction(actionTypes.CREATE_IDEA);
+export const createIdea = createAction(actionTypes.CREATE_IDEA);
 export const destroyIdeas = createAction(actionTypes.DESTROY_IDEA);
 export const updatedIdeas = createAction(actionTypes.UPDATED_IDEAS);
 

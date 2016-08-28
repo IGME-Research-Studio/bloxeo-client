@@ -34,7 +34,7 @@ const IdeaCreate = React.createClass({
     if (this.state.value === '') {
       return;
     }
-    d.dispatch(createIdea(this.state.value));
+    d.dispatch(createIdea({ content: this.state.value }));
     this.setState({ value: '' });
   },
   /**

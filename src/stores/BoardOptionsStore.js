@@ -5,7 +5,7 @@ import materialColors from 'material-color';
 import { map, lensProp, set, pipe, find,
   propEq, prop, unless, isNil } from 'ramda';
 
-import AppDispatcher from '../dispatcher/AppDispatcher';
+import d from '../dispatcher/AppDispatcher';
 import { WORKSPACE_TAB } from '../constants/NavBarConstants';
 import actionTypes from '../constants/actionTypes';
 import { gradientToDiscrete, moveToHeadByProp } from '../utils/helpers';
@@ -147,26 +147,16 @@ const self = assign({}, EventEmitter.prototype, {
   },
 });
 
-AppDispatcher.register(function(action) {
-  switch (action.type) {
+d.register(function({ type, payload }) {
+  switch (type) {
   case actionTypes.CHANGE_ROOM_OPTS:
     boardOptions = self.updateBoardUsers({ ...boardOptions,
-                                           ...action.updates });
+                                           ...payload.updates });
     self.emitUpdate();
     break;
 
-  case actionTypes.CHANGE_ROOM_NAME:
-    boardOptions.boardName = action.roomName.trim();
-    self.emitNameChange();
-    break;
-
-  case actionTypes.CHANGE_ROOM_DESCRIPTION:
-    boardOptions.boardDesc = action.roomDesc.trim();
-    self.emitNameChange();
-    break;
-
   case actionTypes.SELECT_TAB:
-    boardOptions.isOnWorkspace = action.isOnWorkspace;
+    boardOptions.isOnWorkspace = payload;
     self.emitUpdate();
     break;
 

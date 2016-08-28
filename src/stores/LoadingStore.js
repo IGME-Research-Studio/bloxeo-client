@@ -1,7 +1,7 @@
 import { EventEmitter } from 'events';
 import assign from 'object-assign';
 
-import AppDispatcher from '../dispatcher/AppDispatcher';
+import d from '../dispatcher/AppDispatcher';
 import actionTypes from '../constants/actionTypes';
 
 const LOAD_CHANGE_EVENT = 'load';
@@ -26,8 +26,8 @@ const LoadingStore = assign({}, EventEmitter.prototype, {
   },
 });
 
-AppDispatcher.register(function(action) {
-  switch (action.type) {
+d.register(function({ type }) {
+  switch (type) {
   case actionTypes.END_LOAD_ANIMATION:
     LoadingStore.emitChange();
     break;

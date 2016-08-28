@@ -3,7 +3,7 @@ import assign from 'object-assign';
 import d3 from 'd3';
 import _ from 'lodash';
 
-import AppDispatcher, { dispatch } from '../dispatcher/AppDispatcher';
+import d from '../dispatcher/AppDispatcher';
 import actionTypes from '../constants/actionTypes';
 
 const COLLECTION_CHANGE_EVENT = 'collection';
@@ -138,6 +138,7 @@ function receivedAllCollections(collections, reset) {
   // Clear out old collection data
   _collections = {};
   layoutObjs = [];
+  CollectionStore.emitChange();
   // Create collections from server data
   let i = 0;
   for (const _key in collections) {
@@ -243,45 +244,45 @@ force.on('tick', function() {
   CollectionStore.emitChange();
 });
 
-AppDispatcher.register(function(action) {
-  switch (action.type) {
+d.register(function({ type, payload }) {
+  switch (type) {
+  // TODO: Never called
   case actionTypes.ADDED_COLLECTION:
-    createCollection(action.index,
-                     action.content,
-                     action.left,
-                     action.top);
+    createCollection(payload.index, payload.content);
     CollectionStore.emitChange();
     updateForce();
     break;
 
+  // TODO: Never called
   case actionTypes.MODIFIED_COLLECTION:
-    updateCollection(action.index, action.content);
+    updateCollection(payload.index, payload.content);
     CollectionStore.emitChange();
     updateForce();
     break;
 
   case actionTypes.HIDE_COLLECTIONS:
-    hideCollections(action.ids);
+    hideCollections(payload);
     CollectionStore.emitChange();
     break;
 
+  // TODO: Never called
   case actionTypes.REMOVED_COLLECTION:
-    removeCollection(action.index);
+    removeCollection(payload.index);
     CollectionStore.emitChange();
     break;
 
   case actionTypes.MOVE_COLLECTION:
-    moveCollection(action.id, action.left, action.top);
+    moveCollection(payload.collectionId, payload.left, payload.top);
     CollectionStore.emitChange();
     updateForce();
     break;
 
   case actionTypes.SET_LAYOUT_SIZE:
-    setLayoutSize(action.width, action.height);
+    setLayoutSize(payload.width, payload.height);
     break;
 
   case actionTypes.RECEIVED_COLLECTIONS:
-    receivedAllCollections(action.collections, action.reset);
+    receivedAllCollections(payload.collections, payload.reset);
     CollectionStore.emitChange();
     if (_.keys(_collections).length > 0) {
       updateForce();
@@ -289,7 +290,7 @@ AppDispatcher.register(function(action) {
     break;
 
   case actionTypes.RETURN_RESULTS:
-    returnResults(action.results);
+    returnResults(payload);
     CollectionStore.emitChange();
     break;
 

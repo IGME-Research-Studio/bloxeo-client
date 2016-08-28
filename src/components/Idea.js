@@ -119,7 +119,10 @@ const ideaSource = {
     const dropped = monitor.didDrop();
     if (dropped) {
       d.dispatch(
-        separateIdeas(component.props.groupID, component.props.content)
+        separateIdeas({
+          groupId: component.props.groupID,
+          content: component.props.content
+        })
       );
     }
   },

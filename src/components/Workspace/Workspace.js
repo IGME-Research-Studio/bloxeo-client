@@ -36,7 +36,9 @@ const Workspace = React.createClass({
   componentDidMount: function() {
     CollectionStore.addChangeListener(this.collectionChange);
     const domNode = ReactDOM.findDOMNode(this);
-    d.dispatch(setLayoutSize(domNode.offsetWidth, domNode.offsetHeight));
+    d.dispatch(setLayoutSize({
+      width: domNode.offsetWidth,
+      height: domNode.offsetHeight }));
   },
 
   componentWillUnmount: function() {
@@ -133,17 +135,21 @@ const workTarget = {
     // If the collection is being moved do not create another
     if (monitor.getItem().type === dndTypes.COLLECTION) {
       d.dispatch(moveCollection(
-        monitor.getItem().id,
-        Math.round(pos.x) - (domNode.left) - component.state.x,
-        Math.round(pos.y) - (domNode.top) - component.state.y
+        {
+          collectionId: monitor.getItem().id,
+          left: Math.round(pos.x) - (domNode.left) - component.state.x,
+          top: Math.round(pos.y) - (domNode.top) - component.state.y
+        }
       ));
     }
     else {
-      d.dispatch(createCollection({
-        ideaContent: idea.content,
-        left: Math.round(pos.x) - (domNode.left) - component.state.x,
-        top: Math.round(pos.y) - (domNode.top) - component.state.y,
-      }));
+      d.dispatch(createCollection(
+        {
+          ideaContent: idea.content,
+          left: Math.round(pos.x) - (domNode.left) - component.state.x,
+          top: Math.round(pos.y) - (domNode.top) - component.state.y,
+        }
+      ));
     }
   },
 };

@@ -1,7 +1,7 @@
 import { EventEmitter } from 'events';
 import assign from 'object-assign';
 
-import AppDispatcher from '../dispatcher/AppDispatcher';
+import d from '../dispatcher/AppDispatcher';
 import actionTypes from '../constants/actionTypes';
 import io from '../io';
 import { checkSocketStatus } from '../utils/checkStatus';
@@ -46,10 +46,10 @@ function setIdeas(ideas) {
   _ideas = ideas;
 }
 
-AppDispatcher.register(function(action) {
-  switch (action.type) {
+d.register(function({ type, payload }) {
+  switch (type) {
   case actionTypes.UPDATED_IDEAS:
-    setIdeas(action.ideas);
+    setIdeas(payload.ideas);
     IdeaStore.emitChange();
     break;
   default:

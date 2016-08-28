@@ -1,7 +1,7 @@
 import { EventEmitter } from 'events';
 import assign from 'object-assign';
 
-import AppDispatcher from '../dispatcher/AppDispatcher';
+import d from '../dispatcher/AppDispatcher';
 import actionTypes from '../constants/actionTypes';
 
 const RESULTS_CHANGE_EVENT = 'RESULTS_CHANGE_EVENT';
@@ -38,10 +38,10 @@ const VotingResultsStore = assign({}, EventEmitter.prototype, {
   },
 });
 
-AppDispatcher.register(function(action) {
-  switch (action.type) {
+d.register(function({ type, payload }) {
+  switch (type) {
   case actionTypes.STORE_RESULTS:
-    _results = action.results;
+    _results = payload;
     VotingResultsStore.emitResultsChange();
     break;
   default:

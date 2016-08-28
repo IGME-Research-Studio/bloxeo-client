@@ -54,9 +54,8 @@ const JoinForm = React.createClass({
    */
   _onSubmit: function() {
     if (all(isntNilorEmpty, values(this.state.values))) {
-     d.dispatch(
-        validateBoard(this.state.values.boardId, this.state.values.username)
-      );
+      const { boardId, username } = this.state.values;
+      d.dispatch(validateBoard({ boardId, username }));
     }
   },
 

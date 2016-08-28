@@ -50,10 +50,10 @@ const collectionTarget = {
 
     // Remove the dropped collection
     if (item.type === dndTypes.COLLECTION) {
-      d.dispatch(removeCollection(item.id));
+      d.dispatch(removeCollection({ collectionId: item.id }));
     }
     else if (item.type === dndTypes.CARD) {
-      d.dispatch(destroyIdea({ ideaContent: item.content }));
+      d.dispatch(destroyIdea({ content: item.content }));
     }
   },
 };

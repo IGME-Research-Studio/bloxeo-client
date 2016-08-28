@@ -1,9 +1,12 @@
-const React = require('react');
-const StormActions = require('../../actions/StormActions');
-const BoardOptionsStore = require('../../stores/BoardOptionsStore');
-const CollectionStore = require('../../stores/CollectionStore');
-const VoteButton = require('./VoteButton');
-const VoteCollection = require('./VoteCollection');
+import React from 'react';
+
+import { hideCollections, toggleWorkspace,
+  storeResults } from '../../actionCreators';
+import d from '../../dispatcher/AppDispatcher';
+import BoardOptionsStore from '../../stores/BoardOptionsStore';
+import CollectionStore from '../../stores/CollectionStore';
+import VoteButton from './VoteButton';
+import VoteCollection from './VoteCollection';
 
 /**
  * Component for voting 'Yes' or 'No' and displaying results
@@ -107,14 +110,14 @@ const VotingContent = React.createClass({
     if (this.state.voteIndex === collectionSize - 1) {
       // store voting results
       const sortedCollections = this._getSortedCollections();
-      StormActions.storeResults(sortedCollections);
+      d.dispatch(storeResults(sortedCollections));
 
       // remove non-top voted ideaCollections from the Workspace
       const hideIds = this._getHideIds(sortedCollections);
-      StormActions.hideCollections(hideIds);
+      d.dispatch(hideCollections(hideIds));
 
       // show results tab
-      StormActions.toggleWorkspace(false);
+      d.dispatch(toggleWorkspace(false));
 
       this.props.hideModal();
     }

@@ -2,7 +2,8 @@ import React from 'react';
 import Modal from 'react-modal';
 import FontAwesome from 'react-fontawesome';
 
-import StormActions from '../actions/StormActions';
+import { toggleWorkspace } from '../actionCreators';
+import d from '../dispatcher/AppDispatcher';
 import NavBarTypes from '../constants/NavBarConstants';
 import RoomOptions from './Modal/RoomOptions';
 
@@ -25,8 +26,8 @@ const NavBar = React.createClass({
     isAdmin: React.PropTypes.bool.isRequired,
   },
 
-  goToWorkspace: () => StormActions.toggleWorkspace(true),
-  goToResults: () => StormActions.toggleWorkspace(false),
+  goToWorkspace: () => d.dispatch(toggleWorkspace(true)),
+  goToResults: () => d.dispatch(toggleWorkspace(false)),
 
   toggleRoomOptions: function() {
     if (this.state.isOpen) {

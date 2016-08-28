@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import classNames from 'classnames';
 import { DragSource } from 'react-dnd';
 
-import StormActions from '../actions/StormActions';
-import BoardOptionsStore from '../stores/BoardOptionsStore';
+import { separateIdeas } from '../actionCreators';
 import dndTypes from '../constants/dndTypes';
+import d from '../dispatcher/AppDispatcher';
+import BoardOptionsStore from '../stores/BoardOptionsStore';
 
-const PropTypes  = React.PropTypes;
 let holdTimeout = 0;
 
 const Idea = React.createClass({
@@ -118,9 +118,8 @@ const ideaSource = {
   endDrag: function(props, monitor, component) {
     const dropped = monitor.didDrop();
     if (dropped) {
-      StormActions.separateIdeas(
-        component.props.groupID,
-        component.props.content
+      d.dispatch(
+        separateIdeas(component.props.groupID, component.props.content)
       );
     }
   },

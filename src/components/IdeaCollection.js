@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 import { DropTarget, DragSource } from 'react-dnd';
 
-import StormActions from '../actions/StormActions';
+import { groupIdeas, removeCollection } from '../actionCreators';
+import d from '../dispatcher/AppDispatcher';
 import CollectionStor from '../stores/CollectionStore';
 import dndTypes from '../constants/dndTypes';
 import Idea from './Idea';
@@ -148,10 +149,10 @@ const collectionTarget = {
       return;
     }
 
-    StormActions.groupIdea(props.ideaID, item);
+    d.dispatch(groupIdeas(props.ideaID, item));
     // Remove combined collection
     if (item.type === dndTypes.COLLECTION) {
-      StormActions.removeCollection(item.id);
+      d.dispatch(removeCollection(item.id));
     }
   },
 };

@@ -6,8 +6,9 @@ import { EventEmitter } from 'events';
 import { browserHistory } from 'react-router';
 
 import io from '../io';
-import AppDispatcher from '../dispatcher/AppDispatcher';
-import StormActions from '../actions/StormActions';
+import { changeRoomOptions, updatedIdeas,
+  receivedCollections, endLoadAnimation,  } from '../actionCreators';
+import AppDispatcher, { dispatch } from '../dispatcher/AppDispatcher';
 import UserStore from './UserStore';
 import actionTypes from '../constants/actionTypes';
 import API from '../constants/APIConstants';
@@ -62,10 +63,10 @@ const SocketStore = assign({}, EventEmitter.prototype, {
 io.on(EVENT_API.UPDATED_COLLECTIONS, (data) => {
   checkSocketStatus(data)
   .then((res) => {
-    StormActions.receivedCollections(
+    dispatch(receivedCollections(
       _.omit(res.data, ['top', 'left', 'key']),
       false
-    );
+    ));
   })
   .catch((res) => {
     console.error(`${res} Updating the collections.`);
@@ -76,7 +77,7 @@ io.on(EVENT_API.UPDATED_COLLECTIONS, (data) => {
 io.on(EVENT_API.UPDATED_IDEAS, (data) => {
   checkSocketStatus(data)
   .then((res) => {
-    StormActions.updatedIdeas(res.data);
+    dispatch(updatedIdeas(res.data));
   })
   .catch((res) => {
     console.error(`${res}. Updating the ideas.`);
@@ -87,11 +88,11 @@ io.on(EVENT_API.JOINED_ROOM, (data) => {
 
   checkSocketStatus(data)
   .then((res) => {
-    StormActions.updatedIdeas(res.data.ideas);
-    StormActions.receivedCollections(res.data.collections, false);
-    StormActions.changeRoomOptions(res.data.room);
+    dispatch(updatedIdeas(res.data.ideas));
+    dispatch(receivedCollections(res.data.collections, false));
+    dispatch(changeRoomOptions(res.data.room));
 
-    StormActions.endLoadAnimation();
+    dispatch(endLoadAnimation());
   });
 });
 
@@ -99,7 +100,7 @@ io.on(EVENT_API.RECEIVED_COLLECTIONS, (data) => {
   checkSocketStatus(data)
   .then((res) => {
 
-    StormActions.receivedCollections(res.data, receivedCollections);
+    dispatch(receivedCollections(res.data, receivedCollections));
   })
   .catch((res) => {
     console.error(`Error receiving collections: ${res}`);
@@ -109,7 +110,7 @@ io.on(EVENT_API.RECEIVED_COLLECTIONS, (data) => {
 io.on(EVENT_API.RECEIVED_IDEAS, (data) => {
   checkSocketStatus(data)
   .then((res) => {
-    StormActions.updatedIdeas(res.data);
+    dispatch(updatedIdeas(res.data));
   })
   .catch((res) => {
     console.error(`Error receiving ideas: ${res}`);
@@ -119,7 +120,7 @@ io.on(EVENT_API.RECEIVED_IDEAS, (data) => {
 io.on(EVENT_API.UPDATED_BOARD, (data) => {
   checkSocketStatus(data)
   .then((res) => {
-    StormActions.changeRoomOptions(res.data);
+    dispatch(changeRoomOptions(res.data));
   })
   .catch((res) => {
     console.error(`Error receiving update: ${res}`);
@@ -129,7 +130,7 @@ io.on(EVENT_API.UPDATED_BOARD, (data) => {
 io.on(EVENT_API.RECEIVED_OPTIONS, (data) => {
   checkSocketStatus(data)
   .then((res) => {
-    StormActions.changeRoomOptions(res.data);
+    dispatch(changeRoomOptions(res.data));
   })
   .catch((res) => {
     console.error(`Error receiving options: ${res}`);

@@ -1,5 +1,8 @@
-const React = require('react');
-const StormActions = require('../../actions/StormActions');
+// TODO: deprecated?
+import React from 'react';
+
+import { changeRoomName } from '../../actionCreators';
+import d from '../../dispatcher/AppDispatcher';
 
 const ENTER_KEY_CODE = 13;
 
@@ -59,7 +62,7 @@ const RoomName = React.createClass({
     }
     else {
       // save room name to StormStore
-      StormActions.changeRoomName(this.state.value);
+      d.dispatch(changeRoomName(this.state.value));
       // update room name view
       this.setState({
         name: this.state.value,

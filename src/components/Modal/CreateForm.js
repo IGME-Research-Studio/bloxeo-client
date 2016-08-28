@@ -1,7 +1,8 @@
 import React from 'react';
 import { TextField } from 'material-ui';
 
-import StormActions from '../../actions/StormActions';
+import { createBoard } from '../../actionCreators';
+import d from '../../dispatcher/AppDispatcher';
 import ModalFooter from './ModalFooter';
 import Avatar from '../Avatar';
 import UserStore from '../../stores/UserStore';
@@ -46,7 +47,7 @@ const CreateForm = React.createClass({
   _onSubmit: function() {
     if (isntNilorEmpty(this.state.values.username)) {
       const { username, boardName, boardDesc } = this.state.values;
-      StormActions.createBoard({ username, boardName, boardDesc });
+      d.dispatch(createBoard({ username, boardName, boardDesc }));
     }
   },
 

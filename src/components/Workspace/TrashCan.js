@@ -1,8 +1,9 @@
-import React, { PropTypes } from require('react');
+import React, { PropTypes } from 'react';
 import { DropTarget } from 'react-dnd';
 import classNames from 'classnames';
 
-import StormActions from '../../actions/StormActions';
+import { removeCollection, destroyIdea } from '../../actionCreators';
+import d from '../../dispatcher/AppDispatcher';
 import dndTypes from '../../constants/dndTypes';
 
 /**
@@ -49,10 +50,10 @@ const collectionTarget = {
 
     // Remove the dropped collection
     if (item.type === dndTypes.COLLECTION) {
-      StormActions.removeCollection(item.id);
+      d.dispatch(removeCollection(item.id));
     }
     else if (item.type === dndTypes.CARD) {
-      StormActions.destroyIdea({ ideaContent: item.content });
+      d.dispatch(destroyIdea({ ideaContent: item.content }));
     }
   },
 };

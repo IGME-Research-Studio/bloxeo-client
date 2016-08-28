@@ -1,5 +1,8 @@
-const React = require('react');
-const StormActions = require('../../actions/StormActions');
+// TODO: deprecated?
+import React from 'react';
+
+import { changeRoomDescription } from '../../actions/actionCreators';
+import d from '../../dispatcher/AppDispatcher';
 
 const ENTER_KEY_CODE = 13;
 
@@ -53,7 +56,7 @@ const RoomDesciption = React.createClass({
     }
     else {
       // save room description to StormStore
-      StormActions.changeRoomDescription(this.state.value);
+      d.dispatch(changeRoomDescription(this.state.value));
       // update room description view
       this.setState({
         description: this.state.value,

@@ -3,7 +3,7 @@ import assign from 'object-assign';
 import d3 from 'd3';
 import _ from 'lodash';
 
-import AppDispatcher from '../dispatcher/AppDispatcher';
+import AppDispatcher, { dispatch } from '../dispatcher/AppDispatcher';
 import actionTypes from '../constants/actionTypes';
 
 const COLLECTION_CHANGE_EVENT = 'collection';

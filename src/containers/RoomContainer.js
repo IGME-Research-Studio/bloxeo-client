@@ -17,7 +17,8 @@ import Results from '../components/Results/Results';
 import Sidebar from '../components/Sidebar/Sidebar';
 import Workspace from '../components/Workspace/Workspace';
 
-import { joinBoard, leaveBoard } from '../actions/StormActions';
+import { joinBoard, leaveBoard } from '../actionCreators';
+import d from '../dispatcher/AppDispatcher';
 
 /**
  * Retrieve the current data from the StormStore
@@ -71,7 +72,7 @@ class RoomContainer extends React.Component {
     const hideScroll = 'overflow: hidden';
     ideasElement.setAttribute('style', hideScroll);
 
-    joinBoard(this.props.params.boardId, this.state.user.userToken);
+    d.dispatch(joinBoard(this.props.params.boardId, this.state.user.userToken));
   }
 
   componentWillUnmount() {
@@ -80,7 +81,7 @@ class RoomContainer extends React.Component {
     IdeaStore.removeChangeListener(this._onChange);
     LoadingStore.removeLoadingListener(this._onLoad);
 
-    leaveBoard(this.props.params.boardId);
+    d.dispatch(leaveBoard(this.props.params.boardId));
   }
 
   render() {

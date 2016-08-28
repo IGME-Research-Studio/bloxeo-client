@@ -1,5 +1,7 @@
-const React = require('react');
-const StormActions = require('../../actions/StormActions');
+import React from 'react';
+
+import { createIdea } from '../../actionCreators';
+import d from '../../dispatcher/AppDispatcher';
 
 const ENTER_KEY_CODE = 13;
 
@@ -32,10 +34,8 @@ const IdeaCreate = React.createClass({
     if (this.state.value === '') {
       return;
     }
-    StormActions.createIdea(this.state.value);
-    this.setState({
-      value: '',
-    });
+    d.dispatch(createIdea(this.state.value));
+    this.setState({ value: '' });
   },
   /**
    * @return {object}

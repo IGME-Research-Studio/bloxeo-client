@@ -2,7 +2,8 @@ import React from 'react';
 import { TextField, Toggle } from 'material-ui';
 import { any, values } from 'ramda';
 
-import StormActions from '../../actions/StormActions';
+import { updateBoard } from '../../actionCreators';
+import d from '../../dispatcher/AppDispatcher';
 import ModalFooter from './ModalFooter';
 import { getBoardOptions } from '../../stores/BoardOptionsStore';
 import { isntPosIntValidator, updateValues,
@@ -57,7 +58,7 @@ const RoomOptions = React.createClass({
 
   _onSubmit: function() {
     if (any(isNilorEmpty, values(this.state.errors))) {
-      StormActions.updateBoard(this.state.values);
+      d.dispatch(updateBoard(this.state.values));
     }
     this.props.onSubmit();
   },

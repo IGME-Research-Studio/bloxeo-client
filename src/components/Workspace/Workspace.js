@@ -1,10 +1,12 @@
-import React, { PropTypes } from require('react');
+import React, { PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import { DropTarget } from 'react-dnd';
 import _ from 'lodash';
 
 import CollectionStore from '../../stores/CollectionStore';
-import StormActions from '../../actions/StormActions';
+import { createCollection, moveCollection,
+  setLayoutSize } from '../../actionCreators';
+import d from '../../dispatcher/AppDispatcher';
 
 import IdeaCollection from '../IdeaCollection';
 import TrashCan from './TrashCan';
@@ -34,7 +36,7 @@ const Workspace = React.createClass({
   componentDidMount: function() {
     CollectionStore.addChangeListener(this.collectionChange);
     const domNode = ReactDOM.findDOMNode(this);
-    StormActions.setLayoutSize(domNode.offsetWidth, domNode.offsetHeight);
+    d.dispatch(setLayoutSize(domNode.offsetWidth, domNode.offsetHeight));
   },
 
   componentWillUnmount: function() {
@@ -130,18 +132,18 @@ const workTarget = {
     const domNode = ReactDOM.findDOMNode(component).getBoundingClientRect();
     // If the collection is being moved do not create another
     if (monitor.getItem().type === dndTypes.COLLECTION) {
-      StormActions.moveCollection(
+      d.dispatch(moveCollection(
         monitor.getItem().id,
         Math.round(pos.x) - (domNode.left) - component.state.x,
         Math.round(pos.y) - (domNode.top) - component.state.y
-      );
+      ));
     }
     else {
-      StormActions.createCollection({
+      d.dispatch(createCollection({
         ideaContent: idea.content,
         left: Math.round(pos.x) - (domNode.left) - component.state.x,
         top: Math.round(pos.y) - (domNode.top) - component.state.y,
-      });
+      }));
     }
   },
 };

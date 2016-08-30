@@ -5,7 +5,7 @@ import Result from './Result';
 
 import BoardOptionsStore from '../../stores/BoardOptionsStore';
 import VotingResultsStore from '../../stores/VotingResultsStore';
-import { returnResults, toggleWorkspace } from '../../actionCreators';
+import { returnResults } from '../../actionCreators';
 import d from '../../dispatcher/AppDispatcher';
 
 /**
@@ -75,7 +75,8 @@ const Results = React.createClass({
     const results = this._getSelectedResults();
     if (results.length > 0) {
       d.dispatch(returnResults(results));
-      d.dispatch(toggleWorkspace(true));
+
+      // TODO: use browserHistory to push to results route
 
       for (let i = 0; i < results.length; i++) {
         results[i].selected = false;

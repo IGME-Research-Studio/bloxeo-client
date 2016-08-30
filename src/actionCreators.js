@@ -34,6 +34,3 @@ export const setLayoutSize = createAction(actionTypes.SET_LAYOUT_SIZE);
 
 export const storeResults = createAction(actionTypes.STORE_RESULTS);
 export const returnResults = createAction(actionTypes.RETURN_RESULTS);
-
-// TODO remove in lieu of routing
-export const toggleWorkspace = createAction(actionTypes.SELECT_TAB);

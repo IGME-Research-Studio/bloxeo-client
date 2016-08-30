@@ -20,7 +20,6 @@ const Workspace = React.createClass({
     connectDropTarget: PropTypes.func.isRequired,
     isOver: PropTypes.bool.isRequired,
     isOverCurrent: PropTypes.bool.isRequired,
-    boardId: PropTypes.string.isRequired,
   },
 
   // set state to the first element of the array

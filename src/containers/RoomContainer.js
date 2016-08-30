@@ -43,11 +43,6 @@ class RoomContainer extends React.Component {
 
     this._onChange = () => this.setState(getRoomState(this.state));
     this._onLoad = () => this.setState({loading: false});
-    this._switchTab = (isOnWorkspace) => (
-      isOnWorkspace ?
-        <Workspace boardId={this.props.params.boardId} /> :
-        <Results />
-    );
 
     this._isAdmin = () => (
       pipe(
@@ -65,8 +60,6 @@ class RoomContainer extends React.Component {
     IdeaStore.addChangeListener(this._onChange);
 
     LoadingStore.addLoadingListener(this._onLoad);
-    // start timer countdown
-    // countdown();
 
     const ideasElement = document.querySelector('body');
     const hideScroll = 'overflow: hidden';
@@ -105,8 +98,9 @@ class RoomContainer extends React.Component {
             <NavBar
               isOnWorkspace={this.state.onWorkspace}
               isAdmin={this._isAdmin()}
+              boardId={this.props.params.boardId}
             />
-            {( this._switchTab(this.state.onWorkspace) )}
+            {this.props.children}
           </div>
         </div>
       </MuiThemeProvider>

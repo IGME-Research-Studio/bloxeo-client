@@ -332,7 +332,7 @@ d.register(({ type, payload }) => {
   case actionTypes.CREATE_BOARD:
     getOrCreateUser(payload.username)
     .then(({ token }) => createBoard(token, payload.boardName, payload.boardDesc))
-    .then(({ boardId }) => browserHistory.push(`/room/${boardId}`))
+      .then(({ boardId }) => browserHistory.push(`/room/${boardId}/workspace`))
     break;
 
   case actionTypes.VALIDATE_BOARD:
@@ -340,7 +340,7 @@ d.register(({ type, payload }) => {
     .then(() => checkBoardExists(payload.boardId))
     .then(({ exists }) => {
       if (exists) {
-        browserHistory.push(`/room/${payload.boardId}`);
+        browserHistory.push(`/room/${payload.boardId}/workspace`);
       }
       else {
         // TODO: snackbar error or validation error message?

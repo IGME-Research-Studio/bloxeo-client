@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { hideCollections, toggleWorkspace,
-  storeResults } from '../../actionCreators';
+import { hideCollections, storeResults } from '../../actionCreators';
 import d from '../../dispatcher/AppDispatcher';
 import BoardOptionsStore from '../../stores/BoardOptionsStore';
 import CollectionStore from '../../stores/CollectionStore';
@@ -116,8 +115,7 @@ const VotingContent = React.createClass({
       const hideIds = this._getHideIds(sortedCollections);
       d.dispatch(hideCollections(hideIds));
 
-      // show results tab
-      d.dispatch(toggleWorkspace(false));
+      // TODO: show results tab via browserHistory
 
       this.props.hideModal();
     }

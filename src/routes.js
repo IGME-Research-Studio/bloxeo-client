@@ -7,6 +7,9 @@ import CreateRoomContainer from './containers/CreateRoomContainer';
 import JoinRoomContainer from './containers/JoinRoomContainer';
 import NotFoundContainer from './containers/NotFoundContainer';
 
+import Workspace from './components/Workspace/Workspace';
+import Results from './components/Results/Results';
+
 const renderRoutes = (history) => {
   return (
     <Router history={history}>
@@ -27,7 +30,18 @@ const renderRoutes = (history) => {
 
       <Route
         path="/room/:boardId"
-        component={RoomContainer} />
+        component={RoomContainer}>
+
+        <Route
+          path="workspace"
+          component={Workspace} />
+        <Route
+          path="results"
+          component={Results} />
+        <Route
+          path="*"
+          component={Workspace} />
+      </Route>
 
       <Route
         path="*"

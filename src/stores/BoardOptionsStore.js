@@ -20,7 +20,6 @@ const COLORS = gradientToDiscrete(materialColors['300']);
 let boardOptions = {
   boardName: '',
   boardDesc: '',
-  selectedTab: WORKSPACE_TAB,
   isOnWorkspace: true,
   users: [],
   userColorsEnabled: true,
@@ -108,9 +107,6 @@ const self = assign({}, EventEmitter.prototype, {
   emitMemberChange: function() {
     this.emit(MEMBER_CHANGE_EVENT);
   },
-  emitTabChange: function() {
-    this.emit(TAB_CHANGE_EVENT);
-  },
 
   /**
    * Add a change listener
@@ -124,9 +120,6 @@ const self = assign({}, EventEmitter.prototype, {
   },
   addMemberListener: function(callback) {
     this.on(MEMBER_CHANGE_EVENT, callback);
-  },
-  addTabChangeListener: function(callback) {
-    this.on(TAB_CHANGE_EVENT, callback);
   },
 
   /**
@@ -142,9 +135,6 @@ const self = assign({}, EventEmitter.prototype, {
   removeMemberListener: function(callback) {
     this.removeListener(MEMBER_CHANGE_EVENT, callback);
   },
-  removeTabChangeListener: function(callback) {
-    this.removeListener(TAB_CHANGE_EVENT, callback);
-  },
 });
 
 d.register(function({ type, payload }) {
@@ -152,11 +142,6 @@ d.register(function({ type, payload }) {
   case actionTypes.CHANGE_ROOM_OPTS:
     boardOptions = self.updateBoardUsers({ ...boardOptions,
                                            ...payload.updates });
-    self.emitUpdate();
-    break;
-
-  case actionTypes.SELECT_TAB:
-    boardOptions.isOnWorkspace = payload;
     self.emitUpdate();
     break;
 

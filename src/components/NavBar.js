@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import Modal from 'react-modal';
 import FontAwesome from 'react-fontawesome';
+import { browserHistory } from 'react-router';
+  import { Link } from 'react-router';
 
-import { toggleWorkspace } from '../actionCreators';
 import d from '../dispatcher/AppDispatcher';
 import NavBarTypes from '../constants/NavBarConstants';
 import RoomOptions from './Modal/RoomOptions';
@@ -25,9 +26,6 @@ const NavBar = React.createClass({
     isOnWorkspace: React.PropTypes.bool.isRequired,
     isAdmin: React.PropTypes.bool.isRequired,
   },
-
-  goToWorkspace: () => d.dispatch(toggleWorkspace(true)),
-  goToResults: () => d.dispatch(toggleWorkspace(false)),
 
   toggleRoomOptions: function() {
     if (this.state.isOpen) {
@@ -52,7 +50,7 @@ const NavBar = React.createClass({
    */
   render: function() {
     const tabClass = 'navBarTab';
-    const selectedTabClass = tabClass + ' is-selected';
+    const selectedClass = 'is-selected';
     const customStyles = {
       overlay: {
         backgroundColor: 'rgba(255, 255, 255 0)',
@@ -93,21 +91,21 @@ const NavBar = React.createClass({
 
     return (
       <div className="navBar">
-        <a name={NavBarTypes.WORKSPACE_TAB}
-            className={
-              this.props.isOnWorkspace === true ? selectedTabClass : tabClass
-            }
-            onClick={this.goToWorkspace}>
-          Workspace
-        </a>
+        <Link
+          to={`/room/${this.props.boardId}/workspace`}
+          className={tabClass}
+          activeClassName={selectedClass}>
 
-        <a name={NavBarTypes.RESULTS_TAB}
-            className={
-              this.props.isOnWorkspace === false ? selectedTabClass : tabClass
-            }
-            onClick={this.goToResults}>
+          Workspace
+        </Link>
+
+        <Link
+          to={`/room/${this.props.boardId}/results`}
+          className={tabClass}
+          activeClassName={selectedClass}>
+
           Results
-        </a>
+        </Link>
 
         {this.props.isAdmin ?
           <span>
@@ -136,5 +134,9 @@ const NavBar = React.createClass({
     );
   },
 });
+
+NavBar.contextTypes = {
+  router: PropTypes.object.isRequired,
+}
 
 module.exports = NavBar;

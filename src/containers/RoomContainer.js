@@ -32,7 +32,6 @@ function getRoomState(prevState) {
     ideas: IdeaStore.getAllIdeas(),
     room: BoardOptionsStore.getBoardOptions(),
     user: UserStore.getUserData(),
-    onWorkspace: BoardOptionsStore.getIsOnWorkspace(),
   };
 }
 
@@ -89,14 +88,11 @@ class RoomContainer extends React.Component {
           <Sidebar
             room={this.state.room}
             ideas={this.state.ideas}
-            time={this.state.time}
-            timerStatus={this.state.timerStatus}
-            timerWidth={this.state.timerWidth}
+            boardId={this.props.params.boardId}
           />
 
           <div className="dragContainer">
             <NavBar
-              isOnWorkspace={this.state.onWorkspace}
               isAdmin={this._isAdmin()}
               boardId={this.props.params.boardId}
             />

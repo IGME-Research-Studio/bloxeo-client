@@ -21,24 +21,28 @@ const VotingContent = React.createClass({
       voteIndex: 0,
     });
   },
+
   /**
    * Invoked before initial render occurs
    */
   componentDidMount: function() {
     CollectionStore.addChangeListener(this._onChange);
   },
+
   /**
    * Invoked before component is unmounted from DOM
    */
   componentWillUnmount: function() {
     CollectionStore.removeChangeListener(this._onChange);
   },
+
   /**
    * Event handler for change events from StormStore
    */
   _onChange: function() {
     this.setState({collections: CollectionStore.getAllCollections()});
   },
+
   /**
    * @return {object} - the current collection to display
    */
@@ -49,6 +53,7 @@ const VotingContent = React.createClass({
     const currId = Object.keys(this.state.collections)[this.state.voteIndex];
     return this.state.collections[currId];
   },
+
   /**
    * Sort collections by number of votes
    */
@@ -114,8 +119,6 @@ const VotingContent = React.createClass({
       // remove non-top voted ideaCollections from the Workspace
       const hideIds = this._getHideIds(sortedCollections);
       d.dispatch(hideCollections(hideIds));
-
-      // TODO: show results tab via browserHistory
 
       this.props.hideModal();
     }

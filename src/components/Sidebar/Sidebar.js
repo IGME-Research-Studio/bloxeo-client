@@ -10,22 +10,22 @@ import VotingModal from '../Voting/VotingModal';
 const propTypes = {
   room: PropTypes.object.isRequired,
   ideas: PropTypes.array.isRequired,
-  timerStatus: PropTypes.object,
+  boardId: PropTypes.string.isRequired,
 };
 
-const Sidebar = ({room, ideas, timerStatus}) => (
+const Sidebar = ({room, ideas, boardId}) => (
   <div className="sidebar">
     <div className="sidebar-info">
       <Brand />
       <RoomInfoBox room={room} />
       <MembersList users={room.users}/>
-      <VotingModal />
+      <VotingModal boardId={boardId}/>
     </div>
 
     <Wordbank data={ideas} />
 
     <div>
-      <IdeaCreate timerStatus={timerStatus} />
+      <IdeaCreate />
     </div>
   </div>
 );

@@ -28,16 +28,7 @@ const NavBar = React.createClass({
   },
 
   toggleRoomOptions: function() {
-    if (this.state.isOpen) {
-      this.setState({
-        isOpen: false,
-      });
-    }
-    else {
-      this.setState({
-        isOpen: true,
-      });
-    }
+    this.setState({ isOpen: !this.state.isOpen, });
   },
 
   closeRoomOptions: function() {

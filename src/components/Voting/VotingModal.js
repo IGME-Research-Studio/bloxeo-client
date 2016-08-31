@@ -1,5 +1,6 @@
 import React from 'react';
 import Modal from 'react-modal';
+import { browserHistory } from 'react-router';
 
 import VotingContent from './VotingContent';
 import CollectionStore from '../../stores/CollectionStore';
@@ -28,6 +29,8 @@ const VotingModal = React.createClass({
    * Hide voting modal
    */
   hideModal: function() {
+    // TODO: show results tab via browserHistory
+    browserHistory.push(`/room/${this.props.boardId}/results`)
     this.setState({showModal: false});
   },
 

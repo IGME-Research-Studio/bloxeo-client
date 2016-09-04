@@ -13,9 +13,7 @@ import UserStore from '../stores/UserStore';
 
 import LoadingOverlay from '../components/LoadingOverlay';
 import NavBar from '../components/NavBar';
-import Results from '../components/Results/Results';
 import Sidebar from '../components/Sidebar/Sidebar';
-import Workspace from '../components/Workspace/Workspace';
 
 import { joinBoard, leaveBoard } from '../actionCreators';
 import d from '../dispatcher/AppDispatcher';

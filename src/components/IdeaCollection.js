@@ -149,7 +149,6 @@ const collectionTarget = {
       return;
     }
 
-    console.log({ ideaId: props.ideaID, idea: item })
     d.dispatch(groupIdeas({ ideaId: props.ideaID, idea: item }));
     // Remove combined collection
     if (item.type === dndTypes.COLLECTION) {

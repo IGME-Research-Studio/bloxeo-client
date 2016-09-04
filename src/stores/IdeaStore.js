@@ -3,8 +3,6 @@ import assign from 'object-assign';
 
 import d from '../dispatcher/AppDispatcher';
 import actionTypes from '../constants/actionTypes';
-import io from '../io';
-import { checkSocketStatus } from '../utils/checkStatus';
 
 const IDEA_CHANGE_EVENT = 'idea';
 

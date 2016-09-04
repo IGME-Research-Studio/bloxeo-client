@@ -121,7 +121,7 @@ const ideaSource = {
       d.dispatch(
         separateIdeas({
           groupId: component.props.groupID,
-          content: component.props.content
+          content: component.props.content,
         })
       );
     }

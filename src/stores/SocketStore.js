@@ -1,157 +1,22 @@
-import _ from 'lodash';
 import Promise from 'bluebird';
-import assign from 'object-assign';
 import { equals, or, not, isNil } from 'ramda';
-import { EventEmitter } from 'events';
 import { browserHistory } from 'react-router';
 
 import io from '../io';
-import { changeRoomOptions, updatedIdeas,
-  receivedCollections, endLoadAnimation,  } from '../actionCreators';
 import d from '../dispatcher/AppDispatcher';
-import UserStore from './UserStore';
-import actionTypes from '../constants/actionTypes';
 import API from '../constants/APIConstants';
-import { post, checkSocketStatus,
-  checkHTTPStatus } from '../utils/checkStatus';
+import UserStore from './UserStore';
+import BoardOptionsStore from './UserStore';
+import actionTypes from '../constants/actionTypes';
+import { post, checkHTTPStatus } from '../utils/checkStatus';
 
-const { EVENT_API, REST_API } = API;
-
-let currentBoardId = undefined;
-
-const ERROR_CHANGE_EVENT = 'JOIN_ERROR';
-const VALIDATE_ERROR = 'VALIDATE_ERROR';
-
-const SocketStore = assign({}, EventEmitter.prototype, {
-
-  emitChange: function() {
-    this.emit(ERROR_CHANGE_EVENT);
-  },
-
-  emitValidError: function() {
-    this.emit(VALIDATE_ERROR);
-  },
-
-  /**
-   * Add a change listener
-   * @param {function} callback - event callback function
-   */
-  addErrorListener: function(callback) {
-    this.on(ERROR_CHANGE_EVENT, callback);
-  },
-
-  /**
-   * Remove a change listener
-   * @param {function} callback - callback to be removed
-   */
-  removeErrorListener: function(callback) {
-    this.removeListener(ERROR_CHANGE_EVENT, callback);
-  },
-
-  addValidateListener: function(callback) {
-    this.on(VALIDATE_ERROR, callback);
-    if (!this.valid) this.emit(VALIDATE_ERROR);
-  },
-
-  removeValidateListener: function(callback) {
-    this.removeListener(VALIDATE_ERROR, callback);
-  },
-});
-
-// Socket Handlers
-// Idea was added or removed from collection
-io.on(EVENT_API.UPDATED_COLLECTIONS, (data) => {
-  checkSocketStatus(data)
-  .then((res) => {
-    d.dispatch(receivedCollections(
-      {
-        collections: _.omit(res.data, ['top', 'left', 'key']),
-        reset: false,
-      }
-    ));
-  })
-  .catch((res) => {
-    console.error(`${res} Updating the collections.`);
-  });
-});
-
-// Idea was added or removed
-io.on(EVENT_API.UPDATED_IDEAS, (data) => {
-  checkSocketStatus(data)
-  .then((res) => {
-    d.dispatch(updatedIdeas({ ideas: res.data }));
-  })
-  .catch((res) => {
-    console.error(`${res}. Updating the ideas.`);
-  });
-});
-
-io.on(EVENT_API.JOINED_ROOM, (data) => {
-  console.log(data);
-
-  checkSocketStatus(data)
-  .then((res) => {
-
-    d.dispatch(updatedIdeas({ ideas: res.data.ideas }));
-    d.dispatch(receivedCollections({
-      collections: res.data.collections, reset: false }));
-    d.dispatch(changeRoomOptions({ updates: res.data.room }));
-
-    d.dispatch(endLoadAnimation(true));
-  });
-});
-
-io.on(EVENT_API.RECEIVED_COLLECTIONS, (data) => {
-  checkSocketStatus(data)
-  .then((res) => {
-
-    d.dispatch(receivedCollections({
-      collections: res.data,
-      reset: false }));
-  })
-  .catch((res) => {
-    console.error(`Error receiving collections: ${res}`);
-  });
-});
-
-io.on(EVENT_API.RECEIVED_IDEAS, (data) => {
-  checkSocketStatus(data)
-  .then((res) => {
-    d.dispatch(updatedIdeas({ ideas: res.data }));
-  })
-  .catch((res) => {
-    console.error(`Error receiving ideas: ${res}`);
-  });
-});
-
-io.on(EVENT_API.UPDATED_BOARD, (data) => {
-  checkSocketStatus(data)
-  .then((res) => {
-    d.dispatch(changeRoomOptions({ updates: res.data }));
-  })
-  .catch((res) => {
-    console.error(`Error receiving update: ${res}`);
-  });
-});
-
-io.on(EVENT_API.RECEIVED_OPTIONS, (data) => {
-  checkSocketStatus(data)
-  .then((res) => {
-    d.dispatch(changeRoomOptions({ updates: res.data }));
-  })
-  .catch((res) => {
-    console.error(`Error receiving options: ${res}`);
-  });
-});
+const { REST_API, EVENT_API } = API;
 
 /**
  * Joins board of given id
  * @param {string} boardId
  */
 function joinBoard(boardId) {
-  // @XXX WUT?
-  currentBoardId = boardId;
-
   io.emit(
     EVENT_API.JOIN_ROOM,
     {
@@ -165,8 +30,6 @@ function joinBoard(boardId) {
  * @param {string} boardId
  */
 function leaveBoard(boardId) {
-  currentBoardId = undefined;
-
   io.emit(
     EVENT_API.LEAVE_ROOM,
     {
@@ -230,7 +93,7 @@ function createIdea(content) {
   io.emit(
     EVENT_API.CREATE_IDEA,
     {
-      boardId: currentBoardId,
+      boardId: BoardOptionsStore.getBoardId(),
       content: content,
       userToken: UserStore.getUserToken(),
     }
@@ -241,7 +104,7 @@ function destroyIdea(content) {
   io.emit(
     EVENT_API.DESTROY_IDEA,
     {
-      boardId: currentBoardId,
+      boardId: BoardOptionsStore.getBoardId(),
       content: content,
       userToken: UserStore.getUserToken(),
     }
@@ -256,7 +119,7 @@ function addCollection(content, left, top) {
   io.emit(
     EVENT_API.CREATE_COLLECTION,
     {
-      boardId: currentBoardId,
+      boardId: BoardOptionsStore.getBoardId(),
       content: content,
       userToken: UserStore.getUserToken(),
       top: top,
@@ -273,7 +136,7 @@ function removeCollection(_key) {
   io.emit(
     EVENT_API.DESTROY_COLLECTION,
     {
-      boardId: currentBoardId,
+      boardId: BoardOptionsStore.getBoardId(),
       userToken: UserStore.getUserToken(),
       key: _key,
     }
@@ -289,7 +152,7 @@ function addIdeaToCollection(_key, content) {
   io.emit(
     EVENT_API.ADD_IDEA,
     {
-      boardId: currentBoardId,
+      boardId: BoardOptionsStore.getBoardId(),
       key: _key,
       content: content,
       userToken: UserStore.getUserToken(),
@@ -306,7 +169,7 @@ function removeIdeaFromCollection(_key, content) {
   io.emit(
     EVENT_API.REMOVE_IDEA,
     {
-      boardId: currentBoardId,
+      boardId: BoardOptionsStore.getBoardId(),
       content: content,
       userToken: UserStore.getUserToken(),
       key: _key,
@@ -314,25 +177,15 @@ function removeIdeaFromCollection(_key, content) {
   );
 }
 
-io.on('connect', () => {
-  console.info(`Connection ${io.id}`);
-});
-
-io.on('disconnect', () => {
-  console.info(`Disconnected, was on ${currentBoardId}`);
-});
-
-io.on('reconnect', () => {
-  console.info(`Reconnection ${io.id}, was on ${currentBoardId}`);
-});
-
 // Set up action watchers
 d.register(({ type, payload }) => {
   switch (type) {
   case actionTypes.CREATE_BOARD:
     getOrCreateUser(payload.username)
-    .then(({ token }) => createBoard(token, payload.boardName, payload.boardDesc))
-      .then(({ boardId }) => browserHistory.push(`/room/${boardId}/workspace`))
+    .then(({ token }) =>
+        createBoard(token, payload.boardName, payload.boardDesc))
+    .then(({ boardId }) =>
+        browserHistory.push(`/room/${boardId}/workspace`));
     break;
 
   case actionTypes.VALIDATE_BOARD:
@@ -359,7 +212,7 @@ d.register(({ type, payload }) => {
 
   case actionTypes.UPDATE_BOARD:
     io.emit(EVENT_API.UPDATE_BOARD, {
-      boardId: currentBoardId,
+      boardId: BoardOptionsStore.getBoardId(),
       userToken: UserStore.getUserToken(),
       updates: payload,
     });
@@ -395,4 +248,4 @@ d.register(({ type, payload }) => {
   }
 });
 
-module.exports = SocketStore;
+module.exports = {};

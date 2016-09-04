@@ -1,11 +1,8 @@
 import React, { PropTypes } from 'react';
 import Modal from 'react-modal';
 import FontAwesome from 'react-fontawesome';
-import { browserHistory } from 'react-router';
-  import { Link } from 'react-router';
+import { Link } from 'react-router';
 
-import d from '../dispatcher/AppDispatcher';
-import NavBarTypes from '../constants/NavBarConstants';
 import RoomOptions from './Modal/RoomOptions';
 
 /**
@@ -23,12 +20,11 @@ const NavBar = React.createClass({
   },
 
   propTypes: {
-    isOnWorkspace: React.PropTypes.bool.isRequired,
     isAdmin: React.PropTypes.bool.isRequired,
   },
 
   toggleRoomOptions: function() {
-    this.setState({ isOpen: !this.state.isOpen, });
+    this.setState({ isOpen: !this.state.isOpen });
   },
 
   closeRoomOptions: function() {
@@ -128,6 +124,6 @@ const NavBar = React.createClass({
 
 NavBar.contextTypes = {
   router: PropTypes.object.isRequired,
-}
+};
 
 module.exports = NavBar;

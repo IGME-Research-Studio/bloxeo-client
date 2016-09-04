@@ -6,20 +6,19 @@ import { map, lensProp, set, pipe, find,
   propEq, prop, unless, isNil } from 'ramda';
 
 import d from '../dispatcher/AppDispatcher';
-import { WORKSPACE_TAB } from '../constants/NavBarConstants';
 import actionTypes from '../constants/actionTypes';
 import { gradientToDiscrete, moveToHeadByProp } from '../utils/helpers';
 import { getUserId } from '../stores/UserStore';
 
 const MEMBER_CHANGE_EVENT = 'MEMBER_CHANGE_EVENT';
 const NAME_CHANGE_EVENT = 'NAME_CHANGE_EVENT';
-const TAB_CHANGE_EVENT = 'TAB_CHANGE_EVENT';
 const UPDATE_EVENT = 'UPDATE_EVENT';
 const COLORS = gradientToDiscrete(materialColors['300']);
 
 let boardOptions = {
   boardName: '',
   boardDesc: '',
+  boardId: null,
   isOnWorkspace: true,
   users: [],
   userColorsEnabled: true,
@@ -37,11 +36,15 @@ const self = assign({}, EventEmitter.prototype, {
    * Get the entire collection of room members
    * @return {array}
    */
-  getUsers: function() {
-    return boardOptions.users;
-  },
+  getUsers: () =>  boardOptions.users,
 
   getUser: getUser,
+
+  getBoardId: () => boardOptions.boardId,
+
+  getRoomName: () => boardOptions.boardName,
+
+  getRoomDescription: () => boardOptions.boardDesc,
 
   getColor: (userId) => unless(isNil, prop('color'))(getUser(userId)),
 
@@ -72,30 +75,12 @@ const self = assign({}, EventEmitter.prototype, {
   },
 
   /**
-   * @return {string}
-   */
-  getRoomName: function() {
-    return boardOptions.boardName;
-  },
-
-  /**
-   * @return {string}
-   */
-  getRoomDescription: function() {
-    return boardOptions.boardDesc;
-  },
-
-  /**
    * Returns the top number of voted ideaCollections that should be
    * automatically returned to the workspace.
    * @return {number}
    */
   getNumReturnToWorkspace: function() {
     return boardOptions.numResultsReturn;
-  },
-
-  getIsOnWorkspace: function() {
-    return boardOptions.isOnWorkspace;
   },
 
   emitUpdate: function() {

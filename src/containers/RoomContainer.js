@@ -13,11 +13,10 @@ import UserStore from '../stores/UserStore';
 
 import LoadingOverlay from '../components/LoadingOverlay';
 import NavBar from '../components/NavBar';
-import Results from '../components/Results/Results';
 import Sidebar from '../components/Sidebar/Sidebar';
-import Workspace from '../components/Workspace/Workspace';
 
-import { joinBoard, leaveBoard } from '../actions/StormActions';
+import { joinBoard, leaveBoard } from '../actionCreators';
+import d from '../dispatcher/AppDispatcher';
 
 /**
  * Retrieve the current data from the StormStore
@@ -31,7 +30,6 @@ function getRoomState(prevState) {
     ideas: IdeaStore.getAllIdeas(),
     room: BoardOptionsStore.getBoardOptions(),
     user: UserStore.getUserData(),
-    onWorkspace: BoardOptionsStore.getIsOnWorkspace(),
   };
 }
 
@@ -42,11 +40,6 @@ class RoomContainer extends React.Component {
 
     this._onChange = () => this.setState(getRoomState(this.state));
     this._onLoad = () => this.setState({loading: false});
-    this._switchTab = (isOnWorkspace) => (
-      isOnWorkspace ?
-        <Workspace boardId={this.props.params.boardId} /> :
-        <Results />
-    );
 
     this._isAdmin = () => (
       pipe(
@@ -64,14 +57,14 @@ class RoomContainer extends React.Component {
     IdeaStore.addChangeListener(this._onChange);
 
     LoadingStore.addLoadingListener(this._onLoad);
-    // start timer countdown
-    // countdown();
 
     const ideasElement = document.querySelector('body');
     const hideScroll = 'overflow: hidden';
     ideasElement.setAttribute('style', hideScroll);
 
-    joinBoard(this.props.params.boardId, this.state.user.userToken);
+    d.dispatch(joinBoard({
+      boardId: this.props.params.boardId,
+      userToken: this.state.user.userToken }));
   }
 
   componentWillUnmount() {
@@ -80,7 +73,7 @@ class RoomContainer extends React.Component {
     IdeaStore.removeChangeListener(this._onChange);
     LoadingStore.removeLoadingListener(this._onLoad);
 
-    leaveBoard(this.props.params.boardId);
+    d.dispatch(leaveBoard({ boardId: this.props.params.boardId }));
   }
 
   render() {
@@ -93,17 +86,15 @@ class RoomContainer extends React.Component {
           <Sidebar
             room={this.state.room}
             ideas={this.state.ideas}
-            time={this.state.time}
-            timerStatus={this.state.timerStatus}
-            timerWidth={this.state.timerWidth}
+            boardId={this.props.params.boardId}
           />
 
           <div className="dragContainer">
             <NavBar
-              isOnWorkspace={this.state.onWorkspace}
               isAdmin={this._isAdmin()}
+              boardId={this.props.params.boardId}
             />
-            {( this._switchTab(this.state.onWorkspace) )}
+            {this.props.children}
           </div>
         </div>
       </MuiThemeProvider>

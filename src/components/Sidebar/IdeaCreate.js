@@ -1,5 +1,7 @@
-const React = require('react');
-const StormActions = require('../../actions/StormActions');
+import React from 'react';
+
+import { createIdea } from '../../actionCreators';
+import d from '../../dispatcher/AppDispatcher';
 
 const ENTER_KEY_CODE = 13;
 
@@ -32,32 +34,26 @@ const IdeaCreate = React.createClass({
     if (this.state.value === '') {
       return;
     }
-    StormActions.createIdea(this.state.value);
-    this.setState({
-      value: '',
-    });
+    d.dispatch(createIdea({ content: this.state.value }));
+    this.setState({ value: '' });
   },
   /**
    * @return {object}
    */
   render: function() {
-    const isTimerDisabled = this.props.timerStatus;
     return (
       <div className="sidebar-create">
         <input
           type="text"
           maxLength="30"
-          className={isTimerDisabled ?
-            'idea-create is-disabled' : 'idea-create'}
+          className={'idea-create'}
           placeholder='Enter your ideas here'
           value={this.state.value}
           onChange={this._onChange}
           onKeyDown={this._onKeyDown}
-          disabled={isTimerDisabled}
-          autoFocus={!isTimerDisabled}
+          autoFocus
         />
-        <a className={isTimerDisabled ?
-          'enterButton is-disabled' : 'enterButton'}
+        <a className={'enterButton'}
           onClick={this._onSave}>
           <i className="fa fa-arrow-up"></i>
         </a>

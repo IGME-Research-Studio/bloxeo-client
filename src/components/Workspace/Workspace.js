@@ -1,16 +1,17 @@
-const React    = require('react');
-const ReactDOM = require('react-dom');
+import React, { PropTypes } from 'react';
+import ReactDOM from 'react-dom';
+import { DropTarget } from 'react-dnd';
+import _ from 'lodash';
 
-const CollectionStore = require('../../stores/CollectionStore');
-const StormActions    = require('../../actions/StormActions');
+import CollectionStore from '../../stores/CollectionStore';
+import { createCollection, moveCollection,
+  setLayoutSize } from '../../actionCreators';
+import d from '../../dispatcher/AppDispatcher';
 
-const IdeaCollection = require('../IdeaCollection');
-const TrashCan       = require('./TrashCan');
+import IdeaCollection from '../IdeaCollection';
+import TrashCan from './TrashCan';
 
-const dropTarget   = require('react-dnd').DropTarget;
-const PropTypes    = React.PropTypes;
-const DnDTypes     = require('../../constants/DragAndDropConstants');
-const _            = require('lodash');
+import dndTypes from '../../constants/dndTypes';
 
 const Workspace = React.createClass({
 
@@ -19,7 +20,6 @@ const Workspace = React.createClass({
     connectDropTarget: PropTypes.func.isRequired,
     isOver: PropTypes.bool.isRequired,
     isOverCurrent: PropTypes.bool.isRequired,
-    boardId: PropTypes.string.isRequired,
   },
 
   // set state to the first element of the array
@@ -35,7 +35,9 @@ const Workspace = React.createClass({
   componentDidMount: function() {
     CollectionStore.addChangeListener(this.collectionChange);
     const domNode = ReactDOM.findDOMNode(this);
-    StormActions.setLayoutSize(domNode.offsetWidth, domNode.offsetHeight);
+    d.dispatch(setLayoutSize({
+      width: domNode.offsetWidth,
+      height: domNode.offsetHeight }));
   },
 
   componentWillUnmount: function() {
@@ -116,7 +118,7 @@ const Workspace = React.createClass({
 });
 
 // REACT-DnD parameters
-const dropTypes = [DnDTypes.CARD, DnDTypes.COLLECTION, DnDTypes.IDEA];
+const dropTypes = [dndTypes.CARD, dndTypes.COLLECTION, dndTypes.IDEA];
 
 // Workspace DropTarget options
 const workTarget = {
@@ -130,19 +132,23 @@ const workTarget = {
 
     const domNode = ReactDOM.findDOMNode(component).getBoundingClientRect();
     // If the collection is being moved do not create another
-    if (monitor.getItem().type === DnDTypes.COLLECTION) {
-      StormActions.moveCollection(
-        monitor.getItem().id,
-        Math.round(pos.x) - (domNode.left) - component.state.x,
-        Math.round(pos.y) - (domNode.top) - component.state.y
-      );
+    if (monitor.getItem().type === dndTypes.COLLECTION) {
+      d.dispatch(moveCollection(
+        {
+          collectionId: monitor.getItem().id,
+          left: Math.round(pos.x) - (domNode.left) - component.state.x,
+          top: Math.round(pos.y) - (domNode.top) - component.state.y
+        }
+      ));
     }
     else {
-      StormActions.createCollection({
-        ideaContent: idea.content,
-        left: Math.round(pos.x) - (domNode.left) - component.state.x,
-        top: Math.round(pos.y) - (domNode.top) - component.state.y,
-      });
+      d.dispatch(createCollection(
+        {
+          ideaContent: idea.content,
+          left: Math.round(pos.x) - (domNode.left) - component.state.x,
+          top: Math.round(pos.y) - (domNode.top) - component.state.y,
+        }
+      ));
     }
   },
 };
@@ -155,4 +161,4 @@ function collectTarget(connect, monitor) {
   };
 }
 
-module.exports = dropTarget(dropTypes, workTarget, collectTarget)(Workspace);
+module.exports = DropTarget(dropTypes, workTarget, collectTarget)(Workspace);

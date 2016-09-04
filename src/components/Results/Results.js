@@ -1,11 +1,12 @@
-const React = require('react');
-const Masonry = require('react-masonry-component');
+import React from 'react';
+import Masonry from 'react-masonry-component';
 
-const Result = require('./Result');
+import Result from './Result';
 
-const BoardOptionsStore = require('../../stores/BoardOptionsStore');
-const VotingResultsStore = require('../../stores/VotingResultsStore');
-const StormActions = require('../../actions/StormActions');
+import BoardOptionsStore from '../../stores/BoardOptionsStore';
+import VotingResultsStore from '../../stores/VotingResultsStore';
+import { returnResults } from '../../actionCreators';
+import d from '../../dispatcher/AppDispatcher';
 
 /**
  * Retrieve the current data from the VotingResultsStore
@@ -73,8 +74,9 @@ const Results = React.createClass({
   returnToWorkspace: function() {
     const results = this._getSelectedResults();
     if (results.length > 0) {
-      StormActions.returnResults(results);
-      StormActions.toggleWorkspace(true);
+      d.dispatch(returnResults(results));
+
+      // TODO: use browserHistory to push to results route
 
       for (let i = 0; i < results.length; i++) {
         results[i].selected = false;

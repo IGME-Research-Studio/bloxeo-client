@@ -1,7 +1,6 @@
-const React      = require('react');
-const PropTypes  = React.PropTypes;
-const dragSource = require('react-dnd').DragSource;
-const DnDTypes   = require('../constants/DragAndDropConstants');
+import React, { PropTypes } from 'react';
+import { DragSource } from 'react-dnd';
+import dndTypes from '../constants/dndTypes';
 
 const IdeaCard = React.createClass({
   propTypes: {
@@ -33,7 +32,7 @@ const cardSource = {
     return {
       content: props.idea.content,
       userId: props.idea.userId,
-      type: DnDTypes.CARD,
+      type: dndTypes.CARD,
       ideaCount: 1,
     };
   },
@@ -46,4 +45,4 @@ function dragCollect(connect, monitor) {
   };
 }
 
-module.exports = dragSource(DnDTypes.CARD, cardSource, dragCollect)(IdeaCard);
+module.exports = DragSource(dndTypes.CARD, cardSource, dragCollect)(IdeaCard);

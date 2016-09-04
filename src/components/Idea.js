@@ -1,10 +1,12 @@
-const React = require('react');
-const PropTypes  = React.PropTypes;
-const StormActions = require('../actions/StormActions');
-const BoardOptionsStore = require('../stores/BoardOptionsStore');
-const dragSource = require('react-dnd').DragSource;
-const DnDTypes   = require('../constants/DragAndDropConstants');
-const classNames = require('classnames');
+import React, { PropTypes } from 'react';
+import classNames from 'classnames';
+import { DragSource } from 'react-dnd';
+
+import { separateIdeas } from '../actionCreators';
+import dndTypes from '../constants/dndTypes';
+import d from '../dispatcher/AppDispatcher';
+import BoardOptionsStore from '../stores/BoardOptionsStore';
+
 let holdTimeout = 0;
 
 const Idea = React.createClass({
@@ -46,7 +48,7 @@ const Idea = React.createClass({
   _style: function(color) {
     return {
       width: `150px`,
-      height: `75px`,
+      height: `55px`,
       overflow: `ellipsis`,
       boxShadow: `0 0 6px -1px rgba(0, 0, 0, 0.35)`,
       borderBottomColor: color,
@@ -107,7 +109,7 @@ const ideaSource = {
   beginDrag: function(props) {
     return {
       content: props.content,
-      type: DnDTypes.IDEA,
+      type: dndTypes.IDEA,
       id: props.ideaID,
       ideaCount: 1,
     };
@@ -116,9 +118,11 @@ const ideaSource = {
   endDrag: function(props, monitor, component) {
     const dropped = monitor.didDrop();
     if (dropped) {
-      StormActions.separateIdeas(
-        component.props.groupID,
-        component.props.content
+      d.dispatch(
+        separateIdeas({
+          groupId: component.props.groupID,
+          content: component.props.content,
+        })
       );
     }
   },
@@ -131,4 +135,4 @@ function dragCollect(connect, monitor) {
   };
 }
 
-module.exports = dragSource(DnDTypes.IDEA, ideaSource, dragCollect)(Idea);
+module.exports = DragSource(dndTypes.IDEA, ideaSource, dragCollect)(Idea);

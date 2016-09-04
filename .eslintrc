@@ -12,6 +12,7 @@
     "no-else-return": 0,
     "padded-blocks": 0,
     "max-len": [1, 80, 2],
+    "new-cap": 0,
     "react/jsx-uses-vars": 1,
     "react/jsx-uses-react": 1,
     "react/react-in-jsx-scope": 1

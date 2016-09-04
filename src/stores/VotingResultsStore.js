@@ -1,7 +1,8 @@
-const AppDispatcher  = require('../dispatcher/AppDispatcher');
-const EventEmitter   = require('events').EventEmitter;
-const assign         = require('object-assign');
-const StormConstants = require('../constants/StormConstants');
+import { EventEmitter } from 'events';
+import assign from 'object-assign';
+
+import d from '../dispatcher/AppDispatcher';
+import actionTypes from '../constants/actionTypes';
 
 const RESULTS_CHANGE_EVENT = 'RESULTS_CHANGE_EVENT';
 
@@ -37,10 +38,10 @@ const VotingResultsStore = assign({}, EventEmitter.prototype, {
   },
 });
 
-AppDispatcher.register(function(action) {
-  switch (action.type) {
-  case StormConstants.STORE_RESULTS:
-    _results = action.results;
+d.register(function({ type, payload }) {
+  switch (type) {
+  case actionTypes.STORE_RESULTS:
+    _results = payload;
     VotingResultsStore.emitResultsChange();
     break;
   default:

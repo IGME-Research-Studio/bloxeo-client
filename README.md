@@ -49,6 +49,15 @@ $ npm run lint
 $ npm run build
 ```
 
+### Development
+
+Lint before you commit by adding `pre-commit.sh` as a git hook:
+
+```
+ln -s ../../pre-commit.sh .git/hooks/pre-commit
+```
+
+
 ### Contributing guide
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for contributing guidelines.

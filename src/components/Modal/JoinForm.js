@@ -2,7 +2,8 @@ import React, { PropTypes }  from 'react';
 import { TextField } from 'material-ui';
 import { ifElse, isEmpty, always, all, values } from 'ramda';
 
-import StormActions from '../../actions/StormActions';
+import { validateBoard } from '../../actionCreators';
+import d from '../../dispatcher/AppDispatcher';
 import ModalFooter from '../Modal/ModalFooter';
 import Avatar from '../Avatar';
 import UserStore from '../../stores/UserStore';
@@ -53,8 +54,8 @@ const JoinForm = React.createClass({
    */
   _onSubmit: function() {
     if (all(isntNilorEmpty, values(this.state.values))) {
-      StormActions.validateBoard(this.state.values.boardId,
-                             this.state.values.username);
+      const { boardId, username } = this.state.values;
+      d.dispatch(validateBoard({ boardId, username }));
     }
   },
 

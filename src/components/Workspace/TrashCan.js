@@ -1,9 +1,10 @@
-const React           = require('react');
-const StormActions    = require('../../actions/StormActions');
-const dropTarget      = require('react-dnd').DropTarget;
-const PropTypes       = React.PropTypes;
-const DnDTypes        = require('../../constants/DragAndDropConstants');
-const classNames      = require('classnames');
+import React, { PropTypes } from 'react';
+import { DropTarget } from 'react-dnd';
+import classNames from 'classnames';
+
+import { removeCollection, destroyIdea } from '../../actionCreators';
+import d from '../../dispatcher/AppDispatcher';
+import dndTypes from '../../constants/dndTypes';
 
 /**
  * TrashCan component which is a dragTarget for IdeaCollections
@@ -48,11 +49,11 @@ const collectionTarget = {
     const item = monitor.getItem();
 
     // Remove the dropped collection
-    if (item.type === DnDTypes.COLLECTION) {
-      StormActions.removeCollection(item.id);
+    if (item.type === dndTypes.COLLECTION) {
+      d.dispatch(removeCollection({ collectionId: item.id }));
     }
-    else if (item.type === DnDTypes.CARD) {
-      StormActions.destroyIdea({ ideaContent: item.content });
+    else if (item.type === dndTypes.CARD) {
+      d.dispatch(destroyIdea({ content: item.content }));
     }
   },
 };
@@ -67,9 +68,9 @@ function targetCollect(connect) {
     connectDropTarget: connect.dropTarget(),
   };
 }
-const dropTypes = [DnDTypes.COLLECTION, DnDTypes.IDEA, DnDTypes.CARD];
+const dropTypes = [dndTypes.COLLECTION, dndTypes.IDEA, dndTypes.CARD];
 
-module.exports = dropTarget(
+module.exports = DropTarget(
   dropTypes,
   collectionTarget,
   targetCollect

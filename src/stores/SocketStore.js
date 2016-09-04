@@ -1,164 +1,23 @@
-import 'whatwg-fetch';
-import _ from 'lodash';
 import Promise from 'bluebird';
-import assign from 'object-assign';
-import { equals, or, not, compose, isNil } from 'ramda';
-import { EventEmitter } from 'events';
+import { equals, or, not, isNil } from 'ramda';
 import { browserHistory } from 'react-router';
 
 import io from '../io';
-import AppDispatcher from '../dispatcher/AppDispatcher';
-import StormActions from '../actions/StormActions';
-import UserStore from './UserStore';
-import StormConstants from '../constants/StormConstants';
+import d from '../dispatcher/AppDispatcher';
 import API from '../constants/APIConstants';
-import { post, checkSocketStatus,
-  checkHTTPStatus } from '../utils/checkStatus';
+import UserStore from './UserStore';
+import BoardOptionsStore from './UserStore';
+import actionTypes from '../constants/actionTypes';
+import { post, checkHTTPStatus } from '../utils/checkStatus';
 
-// A socket.io connection singleton
-const socket = io;
-
-const isntNil = compose(not, isNil);
-const { EVENT_API, REST_API } = API;
-
-/**
- * Checks to update the client to the server
- * turn REST_API into route templates
- */
-const Routes = _.mapValues(REST_API, (route) => {
-  return _.template(StormConstants.SERVER_URL + route[1]);
-});
-
-let currentBoardId = undefined;
-
-const ERROR_CHANGE_EVENT = 'JOIN_ERROR';
-const VALIDATE_ERROR = 'VALIDATE_ERROR';
-
-const SocketStore = assign({}, EventEmitter.prototype, {
-
-  emitChange: function() {
-    this.emit(ERROR_CHANGE_EVENT);
-  },
-
-  emitValidError: function() {
-    this.emit(VALIDATE_ERROR);
-  },
-
-  /**
-   * Add a change listener
-   * @param {function} callback - event callback function
-   */
-  addErrorListener: function(callback) {
-    this.on(ERROR_CHANGE_EVENT, callback);
-  },
-
-  /**
-   * Remove a change listener
-   * @param {function} callback - callback to be removed
-   */
-  removeErrorListener: function(callback) {
-    this.removeListener(ERROR_CHANGE_EVENT, callback);
-  },
-
-  addValidateListener: function(callback) {
-    this.on(VALIDATE_ERROR, callback);
-    if (!this.valid) this.emit(VALIDATE_ERROR);
-  },
-
-  removeValidateListener: function(callback) {
-    this.removeListener(VALIDATE_ERROR, callback);
-  },
-});
-
-// Socket Handlers
-// Idea was added or removed from collection
-socket.on(EVENT_API.UPDATED_COLLECTIONS, (data) => {
-  checkSocketStatus(data)
-  .then((res) => {
-    StormActions.receivedCollections(
-      _.omit(res.data, ['top', 'left', 'key']),
-      false
-    );
-  })
-  .catch((res) => {
-    console.error(`${res} Updating the collections.`);
-  });
-});
-
-// Idea was added or removed
-socket.on(EVENT_API.UPDATED_IDEAS, (data) => {
-  checkSocketStatus(data)
-  .then((res) => {
-    StormActions.updatedIdeas(res.data);
-  })
-  .catch((res) => {
-    console.error(`${res}. Updating the ideas.`);
-  });
-});
-
-socket.on(EVENT_API.JOINED_ROOM, (data) => {
-
-  checkSocketStatus(data)
-  .then((res) => {
-    StormActions.updatedIdeas(res.data.ideas);
-    StormActions.receivedCollections(res.data.collections, false);
-    StormActions.changeRoomOptions(res.data.room);
-
-    browserHistory.push(`/room/${currentBoardId}`);
-    StormActions.endLoadAnimation();
-  });
-});
-
-socket.on(EVENT_API.RECEIVED_COLLECTIONS, (data) => {
-  checkSocketStatus(data)
-  .then((res) => {
-
-    StormActions.receivedCollections(res.data, receivedCollections);
-  })
-  .catch((res) => {
-    console.error(`Error receiving collections: ${res}`);
-  });
-});
-
-socket.on(EVENT_API.RECEIVED_IDEAS, (data) => {
-  checkSocketStatus(data)
-  .then((res) => {
-    StormActions.updatedIdeas(res.data);
-  })
-  .catch((res) => {
-    console.error(`Error receiving ideas: ${res}`);
-  });
-});
-
-socket.on(EVENT_API.UPDATED_BOARD, (data) => {
-  checkSocketStatus(data)
-  .then((res) => {
-    StormActions.changeRoomOptions(res.data);
-  })
-  .catch((res) => {
-    console.error(`Error receiving update: ${res}`);
-  });
-});
-
-socket.on(EVENT_API.RECEIVED_OPTIONS, (data) => {
-  checkSocketStatus(data)
-  .then((res) => {
-    StormActions.changeRoomOptions(res.data);
-  })
-  .catch((res) => {
-    console.error(`Error receiving options: ${res}`);
-  });
-});
+const { REST_API, EVENT_API } = API;
 
 /**
  * Joins board of given id
  * @param {string} boardId
  */
 function joinBoard(boardId) {
-  // @XXX WUT?
-  currentBoardId = boardId;
-
-  socket.emit(
+  io.emit(
     EVENT_API.JOIN_ROOM,
     {
       boardId: boardId,
@@ -171,9 +30,7 @@ function joinBoard(boardId) {
  * @param {string} boardId
  */
 function leaveBoard(boardId) {
-  currentBoardId = undefined;
-
-  socket.emit(
+  io.emit(
     EVENT_API.LEAVE_ROOM,
     {
       boardId: boardId,
@@ -184,13 +41,14 @@ function leaveBoard(boardId) {
 /**
  * Create new board
  */
-function createBoard(boardName, boardDesc) {
+function createBoard(userToken, boardName, boardDesc) {
 
-  return post(Routes.createBoard(),
-              { userToken: UserStore.getUserToken(),
-                boardName,
-                boardDesc,
-              })
+  return post(REST_API.createBoard(), { userToken, boardName, boardDesc })
+  .then(checkHTTPStatus);
+}
+
+function checkBoardExists(boardId) {
+  return fetch(REST_API.checkBoardExists(boardId))
   .then(checkHTTPStatus);
 }
 
@@ -200,16 +58,13 @@ function createBoard(boardName, boardDesc) {
  */
 function createUser(name) {
 
-  return post(Routes.createUser(), { username: name })
+  return post(REST_API.createUser(), { username: name })
     .then(checkHTTPStatus)
     .then((res) => {
       UserStore.setUserData({token: res.token,
                             userId: res.userId,
                             username: name});
-      return res;
-    })
-    .catch((err) => {
-      throw new Error(err);
+      return Promise.resolve(res);
     });
 }
 
@@ -220,14 +75,13 @@ function createUser(name) {
  * @returns {Promise}
  */
 function getOrCreateUser(name) {
-  const maybeToken = UserStore.getUserToken();
-  const maybeName = UserStore.getUserName();
+  const { maybeToken, maybeName, maybeId } = UserStore.getUserData();
 
   if (or(isNil(maybeToken), not(equals(maybeName, name)))) {
     return createUser(name);
   }
   else {
-    return Promise.resolve(maybeToken);
+    return Promise.resolve({ maybeToken, maybeName, maybeId });
   }
 }
 
@@ -236,10 +90,10 @@ function getOrCreateUser(name) {
  * @param {string} ideaContent
  */
 function createIdea(content) {
-  socket.emit(
+  io.emit(
     EVENT_API.CREATE_IDEA,
     {
-      boardId: currentBoardId,
+      boardId: BoardOptionsStore.getBoardId(),
       content: content,
       userToken: UserStore.getUserToken(),
     }
@@ -247,10 +101,10 @@ function createIdea(content) {
 }
 
 function destroyIdea(content) {
-  socket.emit(
+  io.emit(
     EVENT_API.DESTROY_IDEA,
     {
-      boardId: currentBoardId,
+      boardId: BoardOptionsStore.getBoardId(),
       content: content,
       userToken: UserStore.getUserToken(),
     }
@@ -262,10 +116,10 @@ function destroyIdea(content) {
  * @param {string} collection content from first idea added to collection
  */
 function addCollection(content, left, top) {
-  socket.emit(
+  io.emit(
     EVENT_API.CREATE_COLLECTION,
     {
-      boardId: currentBoardId,
+      boardId: BoardOptionsStore.getBoardId(),
       content: content,
       userToken: UserStore.getUserToken(),
       top: top,
@@ -279,10 +133,10 @@ function addCollection(content, left, top) {
  * @param {number} index
  */
 function removeCollection(_key) {
-  socket.emit(
+  io.emit(
     EVENT_API.DESTROY_COLLECTION,
     {
-      boardId: currentBoardId,
+      boardId: BoardOptionsStore.getBoardId(),
       userToken: UserStore.getUserToken(),
       key: _key,
     }
@@ -295,10 +149,10 @@ function removeCollection(_key) {
  * @param {string} content : idea content
  */
 function addIdeaToCollection(_key, content) {
-  socket.emit(
+  io.emit(
     EVENT_API.ADD_IDEA,
     {
-      boardId: currentBoardId,
+      boardId: BoardOptionsStore.getBoardId(),
       key: _key,
       content: content,
       userToken: UserStore.getUserToken(),
@@ -312,10 +166,10 @@ function addIdeaToCollection(_key, content) {
  * @param {string} content : idea content
  */
 function removeIdeaFromCollection(_key, content) {
-  socket.emit(
+  io.emit(
     EVENT_API.REMOVE_IDEA,
     {
-      boardId: currentBoardId,
+      boardId: BoardOptionsStore.getBoardId(),
       content: content,
       userToken: UserStore.getUserToken(),
       key: _key,
@@ -323,94 +177,75 @@ function removeIdeaFromCollection(_key, content) {
   );
 }
 
-socket.on('connect', () => {
-  console.info(`Connection ${socket.id}`);
-});
-
-socket.on('disconnect', () => {
-  console.info(`Disconnected, was on ${currentBoardId}`);
-
-  if (isntNil(currentBoardId)) {
-    leaveBoard(currentBoardId);
-  }
-});
-
-socket.on('reconnect', () => {
-  console.info(`Reconnection ${socket.id}, was on ${currentBoardId}`);
-
-  if (isntNil(currentBoardId)) {
-    joinBoard(currentBoardId);
-  }
-});
-
 // Set up action watchers
-AppDispatcher.register((action) => {
-  switch (action.type) {
-  case StormConstants.CREATE_BOARD:
-    getOrCreateUser(action.username)
-    .then(() => createBoard(action.boardName, action.boardDesc))
-    .then((res) => joinBoard(res.boardId))
-    .catch((e) => {
-      console.error(e);
+d.register(({ type, payload }) => {
+  switch (type) {
+  case actionTypes.CREATE_BOARD:
+    getOrCreateUser(payload.username)
+    .then(({ token }) =>
+        createBoard(token, payload.boardName, payload.boardDesc))
+    .then(({ boardId }) =>
+        browserHistory.push(`/room/${boardId}/workspace`));
+    break;
+
+  case actionTypes.VALIDATE_BOARD:
+    getOrCreateUser(payload.username)
+    .then(() => checkBoardExists(payload.boardId))
+    .then(({ exists }) => {
+      if (exists) {
+        browserHistory.push(`/room/${payload.boardId}/workspace`);
+      }
+      else {
+        // TODO: snackbar error or validation error message?
+        console.error(`Room ${payload.boardId} does not exist`);
+      }
     });
     break;
 
-  case StormConstants.JOIN_BOARD:
-    getOrCreateUser(action.username)
-    .then(() => joinBoard(action.boardId));
+  case actionTypes.JOIN_BOARD:
+    joinBoard(payload.boardId, payload.userToken);
     break;
 
-  case StormConstants.LEAVE_BOARD:
-    socket.emit(EVENT_API.LEAVE_ROOM, {
-      boardId: action.boardId,
+  case actionTypes.LEAVE_BOARD:
+    leaveBoard(payload.boardId);
+    break;
+
+  case actionTypes.UPDATE_BOARD:
+    io.emit(EVENT_API.UPDATE_BOARD, {
+      boardId: BoardOptionsStore.getBoardId(),
       userToken: UserStore.getUserToken(),
+      updates: payload,
     });
     break;
 
-  case StormConstants.UPDATE_BOARD:
-    socket.emit(EVENT_API.UPDATE_BOARD, {
-      boardId: currentBoardId,
-      userToken: UserStore.getUserToken(),
-      updates: action.updates,
-    });
+  case actionTypes.CREATE_IDEA:
+    createIdea(payload.content.trim());
     break;
 
-  case StormConstants.GET_IDEAS:
-    socket.emit(EVENT_API.GET_IDEAS, { boardId: currentBoardId });
+  case actionTypes.DESTROY_IDEA:
+    destroyIdea(payload.content);
     break;
 
-  case StormConstants.GET_COLLECTIONS:
-    socket.emit(EVENT_API.GET_COLLECTIONS, { boardId: currentBoardId });
+  case actionTypes.GROUP_IDEAS:
+    addIdeaToCollection(payload.ideaId, payload.idea.content);
     break;
 
-  case StormConstants.CREATE_IDEA:
-    createIdea(action.ideaContent.trim());
+  case actionTypes.CREATE_COLLECTION:
+    addCollection(payload.ideaContent,
+                  payload.left,
+                  payload.top);
     break;
 
-  case StormConstants.DESTROY_IDEA:
-    destroyIdea(action.payload.ideaContent);
+  case actionTypes.REMOVE_COLLECTION:
+    removeCollection(payload.collectionId);
     break;
 
-  case StormConstants.GROUP_IDEAS:
-    addIdeaToCollection(action.id, action.idea.content);
-    break;
-
-  case StormConstants.CREATE_COLLECTION:
-    addCollection(action.payload.ideaContent,
-                  action.payload.left,
-                  action.payload.top);
-    break;
-
-  case StormConstants.REMOVE_COLLECTION:
-    removeCollection(action.id);
-    break;
-
-  case StormConstants.SEPARATE_IDEAS:
-    removeIdeaFromCollection(action.groupID, action.ideaContent);
+  case actionTypes.SEPARATE_IDEAS:
+    removeIdeaFromCollection(payload.groupId, payload.content);
     break;
 
   default:
   }
 });
 
-module.exports = SocketStore;
+module.exports = {};

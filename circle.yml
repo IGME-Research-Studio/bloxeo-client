@@ -1,6 +1,6 @@
-## Dependencies
-
-## Database setup
+machine:
+  node:
+    version: 6
 
 ## Test commands
 test:

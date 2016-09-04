@@ -1,9 +1,10 @@
-const AppDispatcher  = require('../dispatcher/AppDispatcher');
-const StormConstants = require('../constants/StormConstants');
-const EventEmitter   = require('events').EventEmitter;
-const assign         = require('object-assign');
-const d3             = require('d3');
-const _              = require('lodash');
+import { EventEmitter } from 'events';
+import assign from 'object-assign';
+import d3 from 'd3';
+import _ from 'lodash';
+
+import d from '../dispatcher/AppDispatcher';
+import actionTypes from '../constants/actionTypes';
 
 const COLLECTION_CHANGE_EVENT = 'collection';
 
@@ -17,7 +18,7 @@ const layoutSize = {
 // D3 force layout stuff
 const force = d3.layout.force()
   .nodes(layoutObjs)
-  .charge(function(d, i) { return i ? -30 : -2000; })
+  .charge((data, i) => i ? -30 : -2000)
   .gravity(0.05)
   .friction(0.01);
 
@@ -32,10 +33,6 @@ const CollectionStore = assign({}, EventEmitter.prototype, {
 
   getD3Data: function() {
     return layoutObjs;
-  },
-
-  updateCollection: function(id) {
-    return _collections[id];
   },
 
   emitChange: function() {
@@ -117,14 +114,6 @@ function createCollection(_key, cont) {
 }
 
 /**
-* Change the content of collection with given index
-*/
-function updateCollection(_key, cont) {
-  const content = objectifyContent(cont);
-  _collections[_key].content = content;
-}
-
-/**
  * Recieve collections from server
  * @param {object[]} collections - all collections
  * @param {bool} reset - should old collection postion data be retained
@@ -154,14 +143,6 @@ function receivedAllCollections(collections, reset) {
       layoutObjs.push({key: _key, fixed: col.fixed, x: col.x, y: col.y});
     }
   }
-}
-
-/**
- * Remove idea collection at specified key
- */
-function removeCollection(_key) {
-  _collections = _omit(_collections, _key);
-  updateForce();
 }
 
 /**
@@ -243,53 +224,33 @@ force.on('tick', function() {
   CollectionStore.emitChange();
 });
 
-AppDispatcher.register(function(action) {
-  switch (action.type) {
-  case StormConstants.ADDED_COLLECTION:
-    createCollection(action.index,
-                     action.content,
-                     action.left,
-                     action.top);
+d.register(function({ type, payload }) {
+  switch (type) {
+  case actionTypes.HIDE_COLLECTIONS:
+    hideCollections(payload);
+    CollectionStore.emitChange();
+    break;
+
+  case actionTypes.MOVE_COLLECTION:
+    moveCollection(payload.collectionId, payload.left, payload.top);
     CollectionStore.emitChange();
     updateForce();
     break;
 
-  case StormConstants.MODIFIED_COLLECTION:
-    updateCollection(action.index, action.content);
-    CollectionStore.emitChange();
-    updateForce();
+  case actionTypes.SET_LAYOUT_SIZE:
+    setLayoutSize(payload.width, payload.height);
     break;
 
-  case StormConstants.HIDE_COLLECTIONS:
-    hideCollections(action.ids);
-    CollectionStore.emitChange();
-    break;
-
-  case StormConstants.REMOVED_COLLECTION:
-    removeCollection(action.index);
-    CollectionStore.emitChange();
-    break;
-
-  case StormConstants.MOVE_COLLECTION:
-    moveCollection(action.id, action.left, action.top);
-    CollectionStore.emitChange();
-    updateForce();
-    break;
-
-  case StormConstants.SET_LAYOUT_SIZE:
-    setLayoutSize(action.width, action.height);
-    break;
-
-  case StormConstants.RECEIVED_COLLECTIONS:
-    receivedAllCollections(action.collections, action.reset);
+  case actionTypes.RECEIVED_COLLECTIONS:
+    receivedAllCollections(payload.collections, payload.reset);
     CollectionStore.emitChange();
     if (_.keys(_collections).length > 0) {
       updateForce();
     }
     break;
 
-  case StormConstants.RETURN_RESULTS:
-    returnResults(action.results);
+  case actionTypes.RETURN_RESULTS:
+    returnResults(payload);
     CollectionStore.emitChange();
     break;
 

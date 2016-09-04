@@ -1,5 +1,6 @@
-const assign         = require('object-assign');
-const EventEmitter   = require('events').EventEmitter;
+import { map, fromPairs } from 'ramda';
+import assign from 'object-assign';
+import { EventEmitter } from 'events';
 
 const UserStore = assign({}, EventEmitter.prototype, {
 
@@ -39,6 +40,12 @@ const UserStore = assign({}, EventEmitter.prototype, {
     localStorage.setItem('UserToken', token);
     localStorage.setItem('UserName', username);
     localStorage.setItem('UserId', userId);
+  },
+
+  getUserData: function() {
+    return fromPairs(
+      map((k) => [k, localStorage.getItem(k)],
+      ['UserToken', 'UserName', 'UserId']));
   },
 
   emitChange: function() {

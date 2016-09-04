@@ -5,22 +5,20 @@ import materialColors from 'material-color';
 import { map, lensProp, set, pipe, find,
   propEq, prop, unless, isNil } from 'ramda';
 
-import AppDispatcher from '../dispatcher/AppDispatcher';
-import { WORKSPACE_TAB } from '../constants/NavBarConstants';
-import StormConstants from '../constants/StormConstants';
+import d from '../dispatcher/AppDispatcher';
+import actionTypes from '../constants/actionTypes';
 import { gradientToDiscrete, moveToHeadByProp } from '../utils/helpers';
 import { getUserId } from '../stores/UserStore';
 
 const MEMBER_CHANGE_EVENT = 'MEMBER_CHANGE_EVENT';
 const NAME_CHANGE_EVENT = 'NAME_CHANGE_EVENT';
-const TAB_CHANGE_EVENT = 'TAB_CHANGE_EVENT';
 const UPDATE_EVENT = 'UPDATE_EVENT';
 const COLORS = gradientToDiscrete(materialColors['300']);
 
 let boardOptions = {
   boardName: '',
   boardDesc: '',
-  selectedTab: WORKSPACE_TAB,
+  boardId: null,
   isOnWorkspace: true,
   users: [],
   userColorsEnabled: true,
@@ -38,11 +36,15 @@ const self = assign({}, EventEmitter.prototype, {
    * Get the entire collection of room members
    * @return {array}
    */
-  getUsers: function() {
-    return boardOptions.users;
-  },
+  getUsers: () =>  boardOptions.users,
 
   getUser: getUser,
+
+  getBoardId: () => boardOptions.boardId,
+
+  getRoomName: () => boardOptions.boardName,
+
+  getRoomDescription: () => boardOptions.boardDesc,
 
   getColor: (userId) => unless(isNil, prop('color'))(getUser(userId)),
 
@@ -73,30 +75,12 @@ const self = assign({}, EventEmitter.prototype, {
   },
 
   /**
-   * @return {string}
-   */
-  getRoomName: function() {
-    return boardOptions.boardName;
-  },
-
-  /**
-   * @return {string}
-   */
-  getRoomDescription: function() {
-    return boardOptions.boardDesc;
-  },
-
-  /**
    * Returns the top number of voted ideaCollections that should be
    * automatically returned to the workspace.
    * @return {number}
    */
   getNumReturnToWorkspace: function() {
     return boardOptions.numResultsReturn;
-  },
-
-  getIsOnWorkspace: function() {
-    return boardOptions.isOnWorkspace;
   },
 
   emitUpdate: function() {
@@ -107,9 +91,6 @@ const self = assign({}, EventEmitter.prototype, {
   },
   emitMemberChange: function() {
     this.emit(MEMBER_CHANGE_EVENT);
-  },
-  emitTabChange: function() {
-    this.emit(TAB_CHANGE_EVENT);
   },
 
   /**
@@ -125,9 +106,6 @@ const self = assign({}, EventEmitter.prototype, {
   addMemberListener: function(callback) {
     this.on(MEMBER_CHANGE_EVENT, callback);
   },
-  addTabChangeListener: function(callback) {
-    this.on(TAB_CHANGE_EVENT, callback);
-  },
 
   /**
    * Remove a change listener
@@ -142,31 +120,13 @@ const self = assign({}, EventEmitter.prototype, {
   removeMemberListener: function(callback) {
     this.removeListener(MEMBER_CHANGE_EVENT, callback);
   },
-  removeTabChangeListener: function(callback) {
-    this.removeListener(TAB_CHANGE_EVENT, callback);
-  },
 });
 
-AppDispatcher.register(function(action) {
-  switch (action.type) {
-  case StormConstants.CHANGE_ROOM_OPTS:
+d.register(function({ type, payload }) {
+  switch (type) {
+  case actionTypes.CHANGE_ROOM_OPTS:
     boardOptions = self.updateBoardUsers({ ...boardOptions,
-                                           ...action.updates });
-    self.emitUpdate();
-    break;
-
-  case StormConstants.CHANGE_ROOM_NAME:
-    boardOptions.boardName = action.roomName.trim();
-    self.emitNameChange();
-    break;
-
-  case StormConstants.CHANGE_ROOM_DESCRIPTION:
-    boardOptions.boardDesc = action.roomDesc.trim();
-    self.emitNameChange();
-    break;
-
-  case StormConstants.SELECT_TAB:
-    boardOptions.isOnWorkspace = action.isOnWorkspace;
+                                           ...payload.updates });
     self.emitUpdate();
     break;
 

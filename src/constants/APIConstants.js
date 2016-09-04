@@ -1,19 +1,16 @@
+import { SERVER_URL } from './appConstants';
+
 export default {
   EVENT_API: {
-    GET_CONSTANTS: 'GET_CONSTANTS',
     JOIN_ROOM: 'JOIN_ROOM',
     LEAVE_ROOM: 'LEAVE_ROOM',
     UPDATE_BOARD: 'UPDATE_BOARD',
     CREATE_IDEA: 'CREATE_IDEA',
     DESTROY_IDEA: 'DESTROY_IDEA',
-    GET_IDEAS: 'GET_IDEAS',
     CREATE_COLLECTION: 'CREATE_COLLECTION',
     DESTROY_COLLECTION: 'DESTROY_COLLECTION',
     ADD_IDEA: 'ADD_IDEA',
     REMOVE_IDEA: 'REMOVE_IDEA',
-    GET_COLLECTIONS: 'GET_COLLECTIONS',
-    START_TIMER: 'START_TIMER',
-    DISABLE_TIMER: 'DISABLE_TIMER',
     ENABLE_IDEAS: 'ENABLE_IDEAS',
     DISABLE_IDEAS: 'DISABLE_IDEAS',
     FORCE_VOTE: 'FORCE_VOTE',
@@ -29,9 +26,6 @@ export default {
     JOINED_ROOM: 'JOINED_ROOM',
     LEFT_ROOM: 'LEFT_ROOM',
     UPDATED_BOARD: 'UPDATED_BOARD',
-    STARTED_TIMER: 'STARTED_TIMER',
-    DISABLED_TIMER: 'DISABLED_TIMER',
-    TIMER_EXPIRED: 'TIMER_EXPIRED',
     GET_TIME: 'GET_TIME',
     RECEIVED_TIME: 'RECEIVED_TIME',
     ENABLED_IDEAS: 'ENABLED_IDEAS',
@@ -59,33 +53,15 @@ export default {
     RECEIVED_RESULTS: 'RECEIVED_RESULTS',
   },
   REST_API: {
-    getBoards: [
-      'GET',
-      '/v1/boards',
-    ],
-    getBoard: [
-      'GET',
-      '/v1/boards/<%= boardId %>',
-    ],
-    createBoard: [
-      'POST',
-      '/v1/boards',
-    ],
-    updateBoard: [
-      'PATCH',
-      '/v1/boards/<%= boardId %>',
-    ],
-    deleteBoard: [
-      'DELETE',
-      '/v1/boards',
-    ],
-    createUser: [
-      'POST',
-      '/v1/users',
-    ],
-    validateUser: [
-      'POST',
-      '/v1/auth/validate',
-    ],
+    // GET
+    checkBoardExists: (boardId) => `${SERVER_URL}/v1/boards/${boardId}`,
+    // POST
+    createBoard: () => `${SERVER_URL}/v1/boards`,
+    // POST
+    deleteBoard: () => `${SERVER_URL}/v1/boards`,
+    // POST
+    createUser: () => `${SERVER_URL}/v1/users`,
+    // POST
+    validateUser: () => `${SERVER_URL}/v1/auth/validate`,
   },
 };

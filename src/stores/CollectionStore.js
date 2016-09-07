@@ -60,6 +60,8 @@ const CollectionStore = assign({}, EventEmitter.prototype, {
     layoutObjs[d3Index].height = height + 15;
     layoutObjs[d3Index].width = width + 15;
   },
+
+  updateCollection: (id) => _collections[id],
 });
 
 function updateForce() {

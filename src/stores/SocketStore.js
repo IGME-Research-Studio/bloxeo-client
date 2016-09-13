@@ -6,7 +6,7 @@ import io from '../io';
 import d from '../dispatcher/AppDispatcher';
 import API from '../constants/APIConstants';
 import UserStore from './UserStore';
-import BoardOptionsStore from './UserStore';
+import BoardOptionsStore from './BoardOptionsStore';
 import actionTypes from '../constants/actionTypes';
 import { post, checkHTTPStatus } from '../utils/checkStatus';
 

@@ -51,7 +51,14 @@ const IdeaCollection = React.createClass({
       'collectionShadow',
     );
 
-    // Apply react DnD to element
+    if (!this.state.ideas) {
+      return connectDragSource(connectDropTarget(
+        <div className={classes}>
+        </div>
+        )
+      );
+    }
+
     return connectDragSource(connectDropTarget(
       <div className={classes}>
         {this.state.ideas.content.map((idea, i) => (

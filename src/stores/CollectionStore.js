@@ -144,7 +144,6 @@ function moveCollection(_key, left, top) {
   layoutObjs[d3Index].py = top;
   layoutObjs[d3Index].fixed = true;
   _collections[_key].fixed = true;
-  updateForce();
 }
 
 function setLayoutSize(width) {
@@ -161,7 +160,6 @@ d.register(function({ type, payload }) {
   case actionTypes.MOVE_COLLECTION:
     moveCollection(payload.collectionId, payload.left, payload.top);
     CollectionStore.emitChange();
-    updateForce();
     break;
 
   case actionTypes.SET_LAYOUT_SIZE:
@@ -171,9 +169,6 @@ d.register(function({ type, payload }) {
   case actionTypes.RECEIVED_COLLECTIONS:
     receivedAllCollections(payload.collections, payload.reset);
     CollectionStore.emitChange();
-    if (_.keys(_collections).length > 0) {
-      updateForce();
-    }
     break;
 
   case actionTypes.RETURN_RESULTS:

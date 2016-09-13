@@ -44,12 +44,13 @@ html {
 }
 
 ::-webkit-scrollbar-thumb {
+  z-index: 1000;
   border-radius: 10px;
-  background-color: rgba(215, 215, 215, .3);
+  background-color: rgba(115, 115, 115, 0.5);
   background-clip: padding-box;
   border: 8px solid rgba(0, 0, 0, 0);
   &:hover {
-    background-color: rgba(215, 215, 215, .7);    
+    background-color: rgba(115, 115, 115, 1);    
     border: 7px solid rgba(0, 0, 0, 0);
   }
 }

@@ -98,18 +98,14 @@ const Workspace = React.createClass({
         onMouseLeave={this._onMouseLeave}
       >
         <div>
-          {_.values(this.state.ideaCollections).map(function(group, i) {
-            const left = Math.round(group.x) + (that.state.x);
-            const top = Math.round(group.y) + (that.state.y);
-            return <IdeaCollection
+          {_.values(this.state.ideaCollections).map((group, i) => (
+            <IdeaCollection
               key={i}
-              left={left}
-              top={top}
               ideas={group}
               owner={this}
               ideaID={group.key}
-            />;
-          })}
+            />
+          ))}
         </div>
         <TrashCan />
       </div>

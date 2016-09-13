@@ -47,8 +47,6 @@ const Idea = React.createClass({
 
   _style: function(color) {
     return {
-      width: `150px`,
-      height: `55px`,
       overflow: `ellipsis`,
       boxShadow: `0 0 6px -1px rgba(0, 0, 0, 0.35)`,
       borderBottomColor: color,

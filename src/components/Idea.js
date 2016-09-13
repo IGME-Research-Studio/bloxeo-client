@@ -9,6 +9,8 @@ import BoardOptionsStore from '../stores/BoardOptionsStore';
 
 let holdTimeout = 0;
 
+const getColor = (userId) => BoardOptionsStore.getColor(userId) || '#AAA';
+
 const Idea = React.createClass({
   propTypes: {
     connectDragSource: PropTypes.func.isRequired,
@@ -19,15 +21,21 @@ const Idea = React.createClass({
   },
 
   getInitialState: function() {
-    return { canDrag: false };
+    return {
+      canDrag: false,
+      color: getColor(this.props.userId),
+    };
+  },
+
+  componentDidMount: function() {
+    BoardOptionsStore.addUpdateListener(() =>
+      this.setState({ color: getColor(this.props.userId) }));
   },
 
   _onMouseDown: function(e) {
     e.stopPropagation();
     holdTimeout = setTimeout(() => {
-      if (this.props.collectionCount > 1) {
-        this.setCanDrag(true);
-      }
+      this.setCanDrag(true);
     }, 500);
   },
 
@@ -75,18 +83,15 @@ const Idea = React.createClass({
                                   {deleting: this.state.canDrag});
     const id = this.props.ideaID;
 
-    const color = BoardOptionsStore.getColor(this.props.userId) || '#AAA';
-
     const self = (
       <div
         id={id}
         className={classToAdd}
-        canDrag={this.state.canDrag}
         onMouseDown={this._onMouseDown}
         onMouseUp={this._onMouseUp}
         onMouseLeave={this._onMouseLeave}
         onMouseMove={this._onMouseMove}
-        style={this._style(color)}
+        style={this._style(this.state.color)}
       >
         {ideaString}
       </div>

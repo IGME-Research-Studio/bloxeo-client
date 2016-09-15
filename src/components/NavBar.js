@@ -41,7 +41,7 @@ class NavBar extends React.Component {
         backgroundColor: 'rgba(255, 255, 255 0)',
       },
       content: {
-        top: '44px',
+        top: '55px',
         left: 'auto',
         right: '0',
         bottom: 'auto',

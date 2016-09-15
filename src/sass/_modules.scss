@@ -383,7 +383,7 @@ $modal-header-height: 48px;
 .roomOptions {
   width: 250px;
   .optionContent {
-    padding: 20px;
+    padding: 0 20px 20px 20px;
     .optionTitle {
       margin-bottom: 20px;
     }
@@ -543,6 +543,7 @@ $modal-header-height: 48px;
   background-color: $storm-darkGray;
   .navBarTab {
     text-align: center;
+    text-decoration: none;
     margin: 20px 0 0 14px;
     border-radius: 3px 3px 0 0;
     display: inline-block;
@@ -563,7 +564,7 @@ $modal-header-height: 48px;
     background: transparent;
     float: right;
     padding: 17px 17px;
-    span[name="cog"] {
+    span {
       color: $storm-workspace-bgColor;
     }
     &:focus {

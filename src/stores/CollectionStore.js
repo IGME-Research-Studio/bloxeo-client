@@ -46,11 +46,6 @@ const CollectionStore = assign({}, EventEmitter.prototype, {
     this.removeListener(COLLECTION_CHANGE_EVENT, callback);
   },
 
-  setCollectionSize: function(_key, width) {
-    const d3Index = _.findIndex(layoutObjs, 'key', _key);
-    layoutObjs[d3Index].width = width + 15;
-  },
-
   updateCollection: (id) => _collections[id],
 });
 

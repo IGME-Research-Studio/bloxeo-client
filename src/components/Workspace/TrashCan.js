@@ -9,23 +9,23 @@ import dndTypes from '../../constants/dndTypes';
 /**
  * TrashCan component which is a dragTarget for IdeaCollections
  */
-const TrashCan = React.createClass({
-  propTypes: {
+class TrashCan extends React.Component {
+  static propTypes = {
     connectDropTarget: PropTypes.func.isRequired,
-  },
+  };
 
   /**
    * Render TrashCan component as a DragTarget
    * @return {object}
    */
-  render: function() {
+  render() {
     const trashIcon = classNames('fa fa-trash-o trashCan');
     const connectDropTarget = this.props.connectDropTarget;
     return connectDropTarget(
       <i className={trashIcon}></i>
     );
-  },
-});
+  }
+}
 
 /**
  * DrogTarget Parameters

@@ -15,9 +15,8 @@ import laptopImg from '../assets/Laptop.png';
 import whiteboardImg from '../assets/Whiteboard.png';
 import eggImg from '../assets/Egg.png';
 
-const LandingContainer = React.createClass({
-
-  render: function() {
+class LandingContainer extends React.Component {
+  render() {
     return (
       <MuiThemeProvider muiTheme={colorTheme}>
 
@@ -158,7 +157,7 @@ const LandingContainer = React.createClass({
 
     </MuiThemeProvider>
     );
-  },
-});
+  }
+}
 
 module.exports = LandingContainer;

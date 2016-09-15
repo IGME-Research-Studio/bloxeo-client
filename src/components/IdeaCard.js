@@ -2,16 +2,16 @@ import React, { PropTypes } from 'react';
 import { DragSource } from 'react-dnd';
 import dndTypes from '../constants/dndTypes';
 
-const IdeaCard = React.createClass({
-  propTypes: {
+class IdeaCard extends React.Component {
+  static propTypes = {
     connectDragSource: PropTypes.func.isRequired,
     idea: PropTypes.shape({
       content: PropTypes.string,
       userId: PropTypes.string,
     }).isRequired,
-  },
+  };
 
-  render: function() {
+  render() {
     const ideaString = this.props.idea.content;
     const connectDragSource = this.props.connectDragSource;
     // Apply REACT-DnD to element
@@ -22,8 +22,8 @@ const IdeaCard = React.createClass({
         {ideaString}
       </div>
     );
-  },
-});
+  }
+}
 
 // REACT-DnD
 // DragSource parameters

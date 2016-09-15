@@ -3,49 +3,53 @@ const IdeaCard = require('../IdeaCard');
 const IdeaStore = require('../../stores/IdeaStore');
 const classNames = require('classnames');
 
-const Wordbank = React.createClass({
-  calcHeight: function() {
+class Wordbank extends React.Component {
+  // set state to the first element of the array
+  state = {
+    ideaArray: this.props.data,
+    expanded: false,
+    update: false,
+  };
+
+  calcHeight = () => {
     const bankElement = document.querySelector('.wordbank');
     const ideasElement = document.querySelector('.wordbankIdeas');
     const bankHeight = bankElement.offsetHeight;
     const ideasHeight = 'height:' + bankHeight + 'px;';
     ideasElement.setAttribute('style', ideasHeight);
-  },
-  // set state to the first element of the array
-  getInitialState: function() {
-    return {
-      ideaArray: this.props.data,
-      expanded: false,
-      update: false,
-    };
-  },
-  componentDidMount: function() {
+  };
+
+  componentDidMount() {
     IdeaStore.addChangeListener(this.ideaAdd);
     window.addEventListener('resize', this.calcHeight);
     this.calcHeight();
-  },
-  componentWillUnmount: function() {
+  }
+
+  componentWillUnmount() {
     IdeaStore.removeChangeListener(this.ideaAdd);
     window.removeEventListener('resize', this.calcHeight);
-  },
-  ideaAdd: function() {
+  }
+
+  ideaAdd = () => {
     this.setState({
       ideaArray: IdeaStore.getAllIdeas(),
       update: !this.state.update,
     });
-  },
+  };
+
   /**
   * Toggle wordbank expanded on expand arrow click
   */
-  _onClick: function() {
+  _onClick = () => {
     this.setState({
       expanded: !this.state.expanded,
     });
-  },
+  };
+
   /**
    * @return {object}
    */
-  render: function() {
+  render() {
 
     const classToAdd = classNames('wordbank', {expanded: this.state.expanded});
     const arrowDirection = classNames(
@@ -72,7 +76,7 @@ const Wordbank = React.createClass({
         </div>
       </div>
     );
-  },
-});
+  }
+}
 
 module.exports = Wordbank;

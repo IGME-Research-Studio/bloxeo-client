@@ -4,29 +4,29 @@ const classNames = require('classnames');
 /**
  * Result Component
  */
-const Result = React.createClass({
+class Result extends React.Component {
   /**
    * Get initial state of results component
    * @return {object}
    */
-  getInitialState: function() {
-    return {
-      selected: false,
-    };
-  },
+  state = {
+    selected: false,
+  };
+
   /**
    * Toggle selected state of result
    */
-  toggleSelected: function() {
+  toggleSelected = () => {
     const newSelectedState = !this.state.selected;
     this.setState({selected: newSelectedState});
     this.props.handleSelect(this.props.ideaCollection, newSelectedState);
-  },
+  };
+
   /**
    * Render Results Component
    * @return {object}
    */
-  render: function() {
+  render() {
     const containerClass = classNames({
       'resultContainer': true,
       'selectable': this.props.selectable,
@@ -68,7 +68,7 @@ const Result = React.createClass({
         })}
       </div>
     );
-  },
-});
+  }
+}
 
 module.exports = Result;

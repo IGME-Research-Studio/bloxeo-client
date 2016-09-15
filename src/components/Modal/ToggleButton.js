@@ -1,17 +1,15 @@
 const React = require('react');
 const classNames = require('classnames');
 
-const ToggleButton = React.createClass({
-  getInitialState: function() {
-    return { disable: true };
-  },
+class ToggleButton extends React.Component {
+  state = { disable: true };
 
-  _onClick: function() {
+  _onClick = () => {
     this.setState({ disable: !this.state.disable });
     this.props.onToggle(this.state.disable);
-  },
+  };
 
-  render: function() {
+  render() {
     const toggleRadio = classNames('toggleRadio', {
       'toggleRadio enable': !this.state.disable,
       'toggleRadio disable': this.state.disable,
@@ -27,7 +25,7 @@ const ToggleButton = React.createClass({
         <div ref="toggleSlider" className={toggleSlider}></div>
       </div>
     );
-  },
-});
+  }
+}
 
 module.exports = ToggleButton;

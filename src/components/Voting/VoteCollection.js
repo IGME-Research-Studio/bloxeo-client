@@ -1,7 +1,7 @@
 const React = require('react');
 
-const VoteCollection = React.createClass({
-  render: function() {
+class VoteCollection extends React.Component {
+  render() {
     return (
       <div className="voteCollection">
         {this.props.collection.content.map(function(idea, i) {
@@ -13,7 +13,7 @@ const VoteCollection = React.createClass({
         })}
       </div>
     );
-  },
-});
+  }
+}
 
 module.exports = VoteCollection;

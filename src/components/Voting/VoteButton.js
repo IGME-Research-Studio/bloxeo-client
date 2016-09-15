@@ -1,11 +1,12 @@
 const React = require('react');
 
-const VoteButton = React.createClass({
-  handleClick: function(e) {
+class VoteButton extends React.Component {
+  handleClick = (e) => {
     e.preventDefault();
     this.props.changeState(this.props.data === 'true');
-  },
-  render: function() {
+  };
+
+  render() {
     if (this.props.data === 'true') {
       return (
         <a className="yesButton" onClick={this.handleClick}>
@@ -18,7 +19,7 @@ const VoteButton = React.createClass({
         <i className="fa fa-times"></i>
       </a>
     );
-  },
-});
+  }
+}
 
 module.exports = VoteButton;

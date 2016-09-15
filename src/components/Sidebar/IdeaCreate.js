@@ -5,42 +5,44 @@ import d from '../../dispatcher/AppDispatcher';
 
 const ENTER_KEY_CODE = 13;
 
-const IdeaCreate = React.createClass({
-  getInitialState: function() {
-    return {
-      value: '',
-    };
-  },
+class IdeaCreate extends React.Component {
+  state = {
+    value: '',
+  };
+
   /**
    * @param {object} event
    */
-  _onChange: function(event) {
+  _onChange = (event) => {
     this.setState({
       value: event.target.value,
     });
-  },
+  };
+
   /**
    * @param {object} event
    */
-  _onKeyDown: function(event) {
+  _onKeyDown = (event) => {
     if (event.keyCode === ENTER_KEY_CODE) {
       this._onSave();
     }
-  },
+  };
+
   /**
    * Handle submit and clear input box
    */
-  _onSave: function() {
+  _onSave = () => {
     if (this.state.value === '') {
       return;
     }
     d.dispatch(createIdea({ content: this.state.value }));
     this.setState({ value: '' });
-  },
+  };
+
   /**
    * @return {object}
    */
-  render: function() {
+  render() {
     return (
       <div className="sidebar-create">
         <input
@@ -60,7 +62,7 @@ const IdeaCreate = React.createClass({
       </div>
     );
 
-  },
-});
+  }
+}
 
 module.exports = IdeaCreate;

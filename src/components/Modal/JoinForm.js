@@ -19,50 +19,48 @@ const ifEmptyDefault = (maybe, def) => (
   ifElse(isEmpty, always(def), always(maybe))(maybe)
 );
 
-const JoinForm = React.createClass({
-  getInitialState: function() {
-    return {
-      values: {
-        username: UserStore.getUserName(),
-        boardId: '',
-      },
-      errors: {
-        username: '',
-        boardId: '',
-      },
-    };
-  },
+class JoinForm extends React.Component {
+  state = {
+    values: {
+      username: UserStore.getUserName(),
+      boardId: '',
+    },
+    errors: {
+      username: '',
+      boardId: '',
+    },
+  };
 
-  _updateName: function({target: { value }}) {
+  _updateName = ({target: { value }}) => {
     const errMsg = isntEmptyValidator('Username is required', value);
 
     this.setState(
       updateValuesWithError('username', value, errMsg, this.state)
     );
-  },
+  };
 
-  _updateCode: function({target: { value }}) {
+  _updateCode = ({target: { value }}) => {
     const errMsg = isntEmptyValidator('Room code is required', value);
 
     this.setState(
       updateValuesWithError('boardId', value, errMsg, this.state)
     );
-  },
+  };
 
   /**
    * Handle submit
    */
-  _onSubmit: function() {
+  _onSubmit = () => {
     if (all(isntNilorEmpty, values(this.state.values))) {
       const { boardId, username } = this.state.values;
       d.dispatch(validateBoard({ boardId, username }));
     }
-  },
+  };
 
   /**
    * @return {object}
    */
-  render: function() {
+  render() {
     const { boardId } = this.props;
 
     return (
@@ -103,8 +101,8 @@ const JoinForm = React.createClass({
         />
       </div>
     );
-  },
-});
+  }
+}
 
 JoinForm.propTypes = propTypes;
 module.exports = JoinForm;

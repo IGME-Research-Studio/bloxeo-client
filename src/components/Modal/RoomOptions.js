@@ -9,13 +9,13 @@ import { getBoardOptions } from '../../stores/BoardOptionsStore';
 import { isntPosIntValidator, updateValues,
   updateValuesWithError, isNilorEmpty  } from '../../utils/helpers';
 
-const RoomOptions = React.createClass({
-
-  getInitialState: function() {
+class RoomOptions extends React.Component {
+  constructor(props) {
+    super(props);
     const { boardName, boardDesc, userColorsEnabled,
       numResultsShown, numResultsReturn } = getBoardOptions();
 
-    return {
+    this.state = {
       values: {
         boardName, boardDesc,
         userColorsEnabled, numResultsShown, numResultsReturn,
@@ -25,45 +25,46 @@ const RoomOptions = React.createClass({
         numResultsShown: '', numResultsReturn: '',
       },
     };
-  },
+  }
 
-  _updateBoardName: function({target: { value } }) {
+  _updateBoardName = ({target: { value } }) => {
     this.setState(updateValues('boardName', value, this.state));
-  },
+  };
 
-  _updateBoardDesc: function({target: { value } }) {
+  _updateBoardDesc = ({target: { value } }) => {
     this.setState(updateValues('boardDesc', value, this.state));
-  },
+  };
 
-  _updateNumResultsShown: function({target: { value } }) {
+  _updateNumResultsShown = ({target: { value } }) => {
     const errMsg = isntPosIntValidator(
       'Number of results requires positive integers', value);
     this.setState(
       updateValuesWithError('numResultsShown', value, errMsg, this.state)
     );
-  },
+  };
 
-  _updateNumResultsReturn: function({target: { value } }) {
+  _updateNumResultsReturn = ({target: { value } }) => {
     const errMsg = isntPosIntValidator(
       'Number of results returned requires positive integers', value);
     this.setState(
       updateValuesWithError('numResultsReturn', value, errMsg, this.state)
     );
 
-  },
-  _updateUserColorsEnabled: function({target: { checked }}) {
+  };
+
+  _updateUserColorsEnabled = ({target: { checked }}) => {
     this.setState(updateValues('userColorsEnabled',
                                checked, this.state));
-  },
+  };
 
-  _onSubmit: function() {
+  _onSubmit = () => {
     if (any(isNilorEmpty, values(this.state.errors))) {
       d.dispatch(updateBoard(this.state.values));
     }
     this.props.onSubmit();
-  },
+  };
 
-  render: function() {
+  render() {
     return (
       <div className="roomOptions">
         <div className="optionContent">
@@ -126,7 +127,7 @@ const RoomOptions = React.createClass({
         />
       </div>
     );
-  },
-});
+  }
+}
 
 module.exports = RoomOptions;

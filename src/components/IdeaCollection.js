@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react';
-import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 import { DropTarget, DragSource } from 'react-dnd';
 
@@ -9,38 +8,32 @@ import CollectionStore from '../stores/CollectionStore';
 import dndTypes from '../constants/dndTypes';
 import Idea from './Idea';
 
-const IdeaCollection = React.createClass({
-  propTypes: {
+class IdeaCollection extends React.Component {
+  static propTypes = {
     connectDropTarget: PropTypes.func.isRequired,
-  },
+  };
 
-  getInitialState: function() {
-    return {
-      ideas: this.props.ideas,
-      // @XXX this is actually the collection id?
-      ideaID: this.props.ideaID,
-    };
-  },
+  state = {
+    ideas: this.props.ideas,
+    // @XXX this is actually the collection id?
+    ideaID: this.props.ideaID,
+  };
 
-  componentDidMount: function() {
+  componentDidMount() {
     CollectionStore.addChangeListener(this.ideasChange);
-    const width = parseInt(ReactDOM.findDOMNode(this).offsetWidth, 10);
-    CollectionStore.setCollectionSize(this.props.ideaID, width);
-  },
+  }
 
-  componentWillUnmount: function() {
+  componentWillUnmount() {
     CollectionStore.removeChangeListener(this.ideasChange);
-  },
+  }
 
-  ideasChange: function() {
-    if (this.isMounted()) {
-      this.setState({
-        ideas: CollectionStore.updateCollection(this.props.ideaID),
-      });
-    }
-  },
+  ideasChange = () => {
+    this.setState({
+      ideas: CollectionStore.updateCollection(this.props.ideaID),
+    });
+  };
 
-  render: function() {
+  render() {
     const connectDropTarget = this.props.connectDropTarget;
     const connectDragSource = this.props.connectDragSource;
     const groupID = this.state.ideaID;
@@ -51,7 +44,14 @@ const IdeaCollection = React.createClass({
       'collectionShadow',
     );
 
-    // Apply react DnD to element
+    if (!this.state.ideas) {
+      return connectDragSource(connectDropTarget(
+        <div className={classes}>
+        </div>
+        )
+      );
+    }
+
     return connectDragSource(connectDropTarget(
       <div className={classes}>
         {this.state.ideas.content.map((idea, i) => (
@@ -67,8 +67,8 @@ const IdeaCollection = React.createClass({
         }
       </div>
     ));
-  },
-});
+  }
+}
 
 // REACT-DnD
 const dropTypes = [dndTypes.CARD, dndTypes.COLLECTION, dndTypes.IDEA];

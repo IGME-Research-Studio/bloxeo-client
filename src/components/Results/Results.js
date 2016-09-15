@@ -21,31 +21,33 @@ function getStoreState() {
 /**
  * Results Component
  */
-const Results = React.createClass({
+class Results extends React.Component {
   /**
    * Get initial state of results component
    * @return {object}
    */
-  getInitialState: function() {
-    return getStoreState();
-  },
-  componentDidMount: function() {
+  state = getStoreState();
+
+  componentDidMount() {
     VotingResultsStore.addResultsChangeListener(this._onChange);
-  },
-  componentWillUnmount: function() {
+  }
+
+  componentWillUnmount() {
     VotingResultsStore.removeResultsChangeListener(this._onChange);
-  },
+  }
+
   /**
    * Event handler for 'change' events coming from the VotingResultsStore
    */
-  _onChange: function() {
+  _onChange = () => {
     this.setState(getStoreState());
-  },
+  };
+
   /**
    * Get the selected results
    * @return {object[]} - an array of selected results
    */
-  _getSelectedResults: function() {
+  _getSelectedResults = () => {
     const returnCollections = this.state.results.filter(function(result) {
       if (result.selected) {
         return true;
@@ -54,24 +56,26 @@ const Results = React.createClass({
     });
 
     return returnCollections;
-  },
+  };
+
   /**
    * Called from Result child components when user selects or
    * deselects a result
    * @param {object} result - the result
    * @param {boolean} selected - set selected to true or false
    */
-  handleSelect: function(result, selected) {
+  handleSelect = (result, selected) => {
     result.selected = selected;
     const selectedResults = this._getSelectedResults();
     this.setState({
       showReturnToWorkspace: selectedResults.length > 0 ? true : false,
     });
-  },
+  };
+
   /**
    * Return selected results to workspace
    */
-  returnToWorkspace: function() {
+  returnToWorkspace = () => {
     const results = this._getSelectedResults();
     if (results.length > 0) {
       d.dispatch(returnResults(results));
@@ -82,12 +86,13 @@ const Results = React.createClass({
         results[i].selected = false;
       }
     }
-  },
+  };
+
   /**
    * Render Results Component
    * @return {object}
    */
-  render: function() {
+  render() {
     const that = this;
     const numReturn = BoardOptionsStore.getNumReturnToWorkspace();
     const results = this.state.results;
@@ -129,7 +134,7 @@ const Results = React.createClass({
         </div>
       </div>
     );
-  },
-});
+  }
+}
 
 module.exports = Results;

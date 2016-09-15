@@ -13,77 +13,74 @@ import TrashCan from './TrashCan';
 
 import dndTypes from '../../constants/dndTypes';
 
-const Workspace = React.createClass({
-
+class Workspace extends React.Component {
   // Required property types
-  propTypes: {
+  static propTypes = {
     connectDropTarget: PropTypes.func.isRequired,
     isOver: PropTypes.bool.isRequired,
     isOverCurrent: PropTypes.bool.isRequired,
-  },
+  };
 
   // set state to the first element of the array
-  getInitialState: function() {
-    return ({
-      ideaCollections: CollectionStore.getAllCollections(),
-      x: 0,
-      y: 0,
-      panning: false,
-    });
-  },
+  state = {
+    ideaCollections: CollectionStore.getAllCollections(),
+    x: 0,
+    y: 0,
+    panning: false,
+  };
 
-  componentDidMount: function() {
+  componentDidMount() {
     CollectionStore.addChangeListener(this.collectionChange);
     const domNode = ReactDOM.findDOMNode(this);
     d.dispatch(setLayoutSize({
       width: domNode.offsetWidth,
       height: domNode.offsetHeight }));
-  },
+  }
 
-  componentWillUnmount: function() {
+  componentWillUnmount() {
     CollectionStore.removeChangeListener(this.collectionChange);
-  },
+  }
 
-  _onDrag: function(e) {
+  _onDrag = (e) => {
     if (this.state.panning === true) {
       this.setState({
         x: this.state.x + e.nativeEvent.movementX,
         y: this.state.y + e.nativeEvent.movementY,
       });
     }
-  },
+  };
 
-  _onMouseUp: function() {
+  _onMouseUp = () => {
     this.setState({
       panning: false,
     });
-  },
+  };
 
-  _onMouseDown: function(e) {
+  _onMouseDown = (e) => {
     if (e.nativeEvent.target.className.indexOf('workspace') > -1) {
       this.setState({
         panning: true,
       });
     }
-  },
+  };
 
-  _onMouseLeave: function() {
+  _onMouseLeave = () => {
     this.setState({
       panning: false,
     });
-  },
+  };
 
   /** Reset state to align with StormStore */
-  collectionChange: function() {
+  collectionChange = () => {
     this.setState({
       ideaCollections: CollectionStore.getAllCollections(),
     });
-  },
+  };
 
   /**
    * @return {object}
    */
-  render: function() {
+  render() {
 
     // Grab connectDropTarget function to wrap element with
     const connectDropTarget = this.props.connectDropTarget;
@@ -110,8 +107,8 @@ const Workspace = React.createClass({
         <TrashCan />
       </div>
     );
-  },
-});
+  }
+}
 
 // REACT-DnD parameters
 const dropTypes = [dndTypes.CARD, dndTypes.COLLECTION, dndTypes.IDEA];

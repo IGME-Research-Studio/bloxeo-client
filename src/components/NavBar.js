@@ -8,34 +8,32 @@ import RoomOptions from './Modal/RoomOptions';
 /**
  * Navigation Bar Component
  */
-const NavBar = React.createClass({
+class NavBar extends React.Component {
+  static propTypes = {
+    isAdmin: React.PropTypes.bool.isRequired,
+  };
+
   /**
    * Set state to the first element of the array
    * @return {object} - initial state object
    */
-  getInitialState: function() {
-    return {
-      isOpen: false,
-    };
-  },
+  state = {
+    isOpen: false,
+  };
 
-  propTypes: {
-    isAdmin: React.PropTypes.bool.isRequired,
-  },
-
-  toggleRoomOptions: function() {
+  toggleRoomOptions = () => {
     this.setState({ isOpen: !this.state.isOpen });
-  },
+  };
 
-  closeRoomOptions: function() {
+  closeRoomOptions = () => {
     this.setState({ isOpen: false });
-  },
+  };
 
   /**
    * Render NavBar component
    * @return {object}
    */
-  render: function() {
+  render() {
     const tabClass = 'navBarTab';
     const selectedClass = 'is-selected';
     const customStyles = {
@@ -43,7 +41,7 @@ const NavBar = React.createClass({
         backgroundColor: 'rgba(255, 255, 255 0)',
       },
       content: {
-        top: '44px',
+        top: '55px',
         left: 'auto',
         right: '0',
         bottom: 'auto',
@@ -119,8 +117,8 @@ const NavBar = React.createClass({
         }
       </div>
     );
-  },
-});
+  }
+}
 
 NavBar.contextTypes = {
   router: PropTypes.object.isRequired,

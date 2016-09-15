@@ -9,84 +9,85 @@ import BoardOptionsStore from '../stores/BoardOptionsStore';
 
 let holdTimeout = 0;
 
-const Idea = React.createClass({
-  propTypes: {
+const getColor = (userId) => BoardOptionsStore.getColor(userId) || '#AAA';
+
+class Idea extends React.Component {
+  static propTypes = {
     connectDragSource: PropTypes.func.isRequired,
     content: PropTypes.string.isRequired,
     // @XXX actually the index?
     ideaID: PropTypes.number.isRequired,
     groupID: PropTypes.string.isRequired,
-  },
+  };
 
-  getInitialState: function() {
-    return { canDrag: false };
-  },
+  state = {
+    canDrag: false,
+    color: getColor(this.props.userId),
+  };
 
-  _onMouseDown: function(e) {
+  componentDidMount() {
+    BoardOptionsStore.addUpdateListener(() =>
+      this.setState({ color: getColor(this.props.userId) }));
+  }
+
+  _onMouseDown = (e) => {
     e.stopPropagation();
     holdTimeout = setTimeout(() => {
-      if (this.props.collectionCount > 1) {
-        this.setCanDrag(true);
-      }
+      this.setCanDrag(true);
     }, 500);
-  },
+  };
 
-  _onMouseUp: function() {
+  _onMouseUp = () => {
     clearTimeout(holdTimeout);
     this.setCanDrag(false);
-  },
+  };
 
-  _onMouseLeave: function() {
+  _onMouseLeave = () => {
     clearTimeout(holdTimeout);
     this.setCanDrag(false);
-  },
+  };
 
-  _onMouseMove: function() {
+  _onMouseMove = () => {
     clearTimeout(holdTimeout);
-  },
+  };
 
-  _style: function(color) {
+  _style = (color) => {
     return {
       overflow: `ellipsis`,
       boxShadow: `0 0 6px -1px rgba(0, 0, 0, 0.35)`,
       borderBottomColor: color,
     };
-  },
+  };
 
   /**
    * Set draggable
    * @param <Boolean> draggable
    */
-  setCanDrag: function(draggable) {
-    if (this.isMounted()) {
-      this.setState({
-        canDrag: draggable,
-      });
-    }
-  },
+  setCanDrag = (draggable) => {
+    this.setState({
+      canDrag: draggable,
+    });
+  };
 
   /**
    * @return {object}
    */
-  render: function() {
+  render() {
     const ideaString = this.props.content.toString();
     const connectDragSource = this.props.connectDragSource;
     const classToAdd = classNames('idea', 'workspaceCard',
                                   {deleting: this.state.canDrag});
     const id = this.props.ideaID;
 
-    const color = BoardOptionsStore.getColor(this.props.userId) || '#AAA';
-
     const self = (
       <div
         id={id}
         className={classToAdd}
-        canDrag={this.state.canDrag}
         onMouseDown={this._onMouseDown}
         onMouseUp={this._onMouseUp}
         onMouseLeave={this._onMouseLeave}
         onMouseMove={this._onMouseMove}
-        style={this._style(color)}
+        style={this._style(this.state.color)}
       >
         {ideaString}
       </div>
@@ -98,8 +99,8 @@ const Idea = React.createClass({
     else {
       return self;
     }
-  },
-});
+  }
+}
 
 // REACT-DnD
 // DragSource parameters

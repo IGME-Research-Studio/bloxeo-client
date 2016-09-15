@@ -10,54 +10,52 @@ import VoteCollection from './VoteCollection';
 /**
  * Component for voting 'Yes' or 'No' and displaying results
  */
-const VotingContent = React.createClass({
+class VotingContent extends React.Component {
   /**
    * Set state to the first element of the array
    * @return {object} - initial state object
    */
-  getInitialState: function() {
-    return ({
-      collections: CollectionStore.getAllCollections(),
-      voteIndex: 0,
-    });
-  },
+  state = {
+    collections: CollectionStore.getAllCollections(),
+    voteIndex: 0,
+  };
 
   /**
    * Invoked before initial render occurs
    */
-  componentDidMount: function() {
+  componentDidMount() {
     CollectionStore.addChangeListener(this._onChange);
-  },
+  }
 
   /**
    * Invoked before component is unmounted from DOM
    */
-  componentWillUnmount: function() {
+  componentWillUnmount() {
     CollectionStore.removeChangeListener(this._onChange);
-  },
+  }
 
   /**
    * Event handler for change events from StormStore
    */
-  _onChange: function() {
+  _onChange = () => {
     this.setState({collections: CollectionStore.getAllCollections()});
-  },
+  };
 
   /**
    * @return {object} - the current collection to display
    */
-  _getCurrentCollection: function() {
+  _getCurrentCollection = () => {
     if (this.state.collections.length === 0) {
       return null;
     }
     const currId = Object.keys(this.state.collections)[this.state.voteIndex];
     return this.state.collections[currId];
-  },
+  };
 
   /**
    * Sort collections by number of votes
    */
-  _getSortedCollections: function() {
+  _getSortedCollections = () => {
     const self = this;
     const keys = Object.keys(this.state.collections);
     const sorted = keys.map(function(key) {
@@ -80,14 +78,15 @@ const VotingContent = React.createClass({
     });
 
     return sorted;
-  },
+  };
+
   /**
    * Get an array of ids of the ideaCollection not in the top number of
    * vote results to return to the workspace.
    * @return {array} - sorted array of collection objects
    * @return {array} - ids to hide
    */
-  _getHideIds: function(sorted) {
+  _getHideIds = (sorted) => {
     const numReturnToWorkspace = BoardOptionsStore.getNumReturnToWorkspace();
     const hideIds = [];
 
@@ -98,12 +97,13 @@ const VotingContent = React.createClass({
     }
 
     return hideIds;
-  },
+  };
+
   /**
    * Change state on button click
    * @param {boolean} keep - whether or not to keep the idea
    */
-  handleStateChange: function(upvote) {
+  handleStateChange = (upvote) => {
     const collection = this._getCurrentCollection();
     const collectionSize = Object.keys(this.state.collections).length;
 
@@ -125,12 +125,13 @@ const VotingContent = React.createClass({
     else {
       this.setState({voteIndex: this.state.voteIndex + 1});
     }
-  },
+  };
+
   /**
    * Render VotingContent component
    * @return {object}
    */
-  render: function() {
+  render() {
     const voteIndex = this.state.voteIndex;
     const numCollections = Object.keys(this.state.collections).length;
 
@@ -151,7 +152,7 @@ const VotingContent = React.createClass({
         </div>
       </div>
     );
-  },
-});
+  }
+}
 
 module.exports = VotingContent;

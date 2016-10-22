@@ -1,8 +1,9 @@
 import React, { PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import { DropTarget } from 'react-dnd';
-import _ from 'lodash';
+import { values } from 'ramda';
 
+import { mapWithIndex } from '../../utils/helpers';
 import CollectionStore from '../../stores/CollectionStore';
 import { createCollection, moveCollection,
   setLayoutSize } from '../../actionCreators';
@@ -95,14 +96,17 @@ class Workspace extends React.Component {
         onMouseLeave={this._onMouseLeave}
       >
         <div>
-          {_.values(this.state.ideaCollections).map((group, i) => (
-            <IdeaCollection
-              key={i}
-              ideas={group}
-              owner={this}
-              ideaID={group.key}
-            />
-          ))}
+          {
+            mapWithIndex((group, i) => (
+              <IdeaCollection
+                key={i}
+                ideas={group}
+                owner={this}
+                ideaID={group.key}
+              />
+            ),
+            values(this.state.ideaCollections))
+          }
         </div>
         <TrashCan />
       </div>

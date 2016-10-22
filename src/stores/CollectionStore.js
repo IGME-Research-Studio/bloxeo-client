@@ -1,6 +1,5 @@
 import { EventEmitter } from 'events';
 import assign from 'object-assign';
-import _ from 'lodash';
 
 import d from '../dispatcher/AppDispatcher';
 import actionTypes from '../constants/actionTypes';
@@ -131,14 +130,8 @@ function receivedAllCollections(collections, reset) {
 /**
  * Set specified collection's position
  */
-function moveCollection(_key, left, top) {
-  const d3Index = _.findIndex(layoutObjs, 'key', _key);
-  layoutObjs[d3Index].x = left;
-  layoutObjs[d3Index].y = top;
-  layoutObjs[d3Index].px = left;
-  layoutObjs[d3Index].py = top;
-  layoutObjs[d3Index].fixed = true;
-  _collections[_key].fixed = true;
+function moveCollection() {
+  // deprecated
 }
 
 function setLayoutSize(width) {

@@ -2,7 +2,7 @@ import {
   is, isNil, isEmpty,
   ifElse, cond, either, anyPass, always,
   T, F, not, equals, propEq, complement,
-  compose, map, pipe, curry,
+  compose, map, pipe, curry, addIndex,
   head, flatten, transpose, splitEvery, sortBy,
   assocPath, toLower, toUpper } from 'ramda';
 
@@ -122,5 +122,7 @@ self.sqrtInt = (integer) => Math.ceil(Math.sqrt(integer));
 self.gradientToDiscrete = (list) => {
   return flatten(transpose(splitEvery(self.sqrtInt(list.length), list)));
 };
+
+self.mapWithIndex = addIndex(map);
 
 module.exports = self;

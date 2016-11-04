@@ -3,7 +3,7 @@ import assign from 'object-assign';
 import { ify as lazy } from 'sloth';
 import materialColors from 'material-color';
 import { map, lensProp, set, pipe, find,
-  propEq, prop, unless, isNil } from 'ramda';
+  propEq, prop, unless, isNil, memoize } from 'ramda';
 
 import d from '../dispatcher/AppDispatcher';
 import actionTypes from '../constants/actionTypes';
@@ -46,7 +46,7 @@ const self = assign({}, EventEmitter.prototype, {
 
   getRoomDescription: () => boardOptions.boardDesc,
 
-  getColor: (userId) => unless(isNil, prop('color'))(getUser(userId)),
+  getColor: memoize((userId) => unless(isNil, prop('color'))(getUser(userId))),
 
   getRoomData: function() {
     return {

@@ -14,10 +14,10 @@ const getColor = (userId) => BoardOptionsStore.getColor(userId) || '#AAA';
 class Idea extends React.Component {
   static propTypes = {
     connectDragSource: PropTypes.func.isRequired,
+
     content: PropTypes.string.isRequired,
-    // @XXX actually the index?
-    ideaID: PropTypes.number.isRequired,
-    groupID: PropTypes.string.isRequired,
+    collectionId: PropTypes.string.isRequired,
+    userId: PropTypes.string.isRequired,
   };
 
   state = {
@@ -73,15 +73,11 @@ class Idea extends React.Component {
    * @return {object}
    */
   render() {
-    const ideaString = this.props.content.toString();
     const connectDragSource = this.props.connectDragSource;
     const classToAdd = classNames('idea', 'workspaceCard',
                                   {deleting: this.state.canDrag});
-    const id = this.props.ideaID;
-
     const self = (
       <div
-        id={id}
         className={classToAdd}
         onMouseDown={this._onMouseDown}
         onMouseUp={this._onMouseUp}
@@ -89,7 +85,7 @@ class Idea extends React.Component {
         onMouseMove={this._onMouseMove}
         style={this._style(this.state.color)}
       >
-        {ideaString}
+        {this.props.content.toString()}
       </div>
     );
 
@@ -107,10 +103,10 @@ class Idea extends React.Component {
 const ideaSource = {
   beginDrag: function(props) {
     return {
-      content: props.content,
       type: dndTypes.IDEA,
-      id: props.ideaID,
-      ideaCount: 1,
+      collectionId: props.collectionId,
+      content: props.content,
+      userId: props.userId,
     };
   },
 
@@ -119,7 +115,7 @@ const ideaSource = {
     if (dropped) {
       d.dispatch(
         separateIdeas({
-          groupId: component.props.groupID,
+          collectionId: props.collectionId,
           content: component.props.content,
         })
       );
@@ -134,4 +130,4 @@ function dragCollect(connect, monitor) {
   };
 }
 
-module.exports = DragSource(dndTypes.IDEA, ideaSource, dragCollect)(Idea);
+export default DragSource(dndTypes.IDEA, ideaSource, dragCollect)(Idea);

@@ -1,7 +1,8 @@
-const React = require('react');
-const IdeaCard = require('../IdeaCard');
-const IdeaStore = require('../../stores/IdeaStore');
-const classNames = require('classnames');
+import React from 'react';
+import classNames from 'classnames';
+
+import IdeaCard from '../IdeaCard';
+import IdeaStore from '../../stores/IdeaStore';
 
 class Wordbank extends React.Component {
   // set state to the first element of the array
@@ -66,9 +67,14 @@ class Wordbank extends React.Component {
       <div className={classToAdd} ref="wordbank">
         <div className='wordbankWrap'>
           <div className='wordbankIdeas'>
-            {this.props.data.map(function(item, i) {
-              return <IdeaCard key={i} idea={item} owner={this} ideaID={i} />;
-            })}
+            {this.props.data.map((item, i) => (
+              <IdeaCard
+                key={i}
+                idea={item}
+                owner={this}
+                index={i}
+              />
+            ))}
           </div>
         </div>
         <div className={arrowDirection} ref="expand" onClick={this._onClick}>
@@ -79,4 +85,4 @@ class Wordbank extends React.Component {
   }
 }
 
-module.exports = Wordbank;
+export default Wordbank;

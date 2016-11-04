@@ -2,26 +2,21 @@ import React, { PropTypes } from 'react';
 import { DragSource } from 'react-dnd';
 import dndTypes from '../constants/dndTypes';
 
-class IdeaCard extends React.Component {
-  static propTypes = {
-    connectDragSource: PropTypes.func.isRequired,
-    idea: PropTypes.shape({
-      content: PropTypes.string,
-      userId: PropTypes.string,
-    }).isRequired,
-  };
+const propTypes = {
+  connectDragSource: PropTypes.func.isRequired,
+  idea: PropTypes.shape({
+    content: PropTypes.string,
+    userId: PropTypes.string,
+  }).isRequired,
+};
 
-  render() {
-    const ideaString = this.props.idea.content;
-    const connectDragSource = this.props.connectDragSource;
-    // Apply REACT-DnD to element
-    return connectDragSource(
-      <div className="bankCard ui-widget-content drop-zone ui-state-default">
-        {ideaString}
-      </div>
-    );
-  }
-}
+const IdeaCard = ({ idea, connectDragSource }) => connectDragSource(
+  <div className="bankCard ui-widget-content drop-zone ui-state-default">
+    {idea.content}
+  </div>
+);
+
+IdeaCard.propTypes = propTypes;
 
 // REACT-DnD
 // DragSource parameters

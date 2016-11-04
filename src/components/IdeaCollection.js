@@ -1,55 +1,48 @@
 import React, { PropTypes } from 'react';
 import classNames from 'classnames';
 import { DropTarget, DragSource } from 'react-dnd';
-import FlipMove from 'react-flip-move';
 
 import { groupIdeas, removeCollection } from '../actionCreators';
 import d from '../dispatcher/AppDispatcher';
 import dndTypes from '../constants/dndTypes';
 import Idea from './Idea';
 
-class IdeaCollection extends React.Component {
-  static propTypes = {
-    connectDropTarget: PropTypes.func.isRequired,
+const propTypes = {
+  connectDropTarget: PropTypes.func.isRequired,
 
-    index: PropTypes.number.isRequired,
-    collectionId: PropTypes.string.isRequired,
-    ideas: PropTypes.arrayOf(
-      PropTypes.shape({
-        content: PropTypes.string.isRequired,
-        userId: PropTypes.string.isRequired,
-      })
-    ).isRequired,
-    votes: PropTypes.number,
-  };
+  index: PropTypes.number.isRequired,
+  collectionId: PropTypes.string.isRequired,
+  ideas: PropTypes.arrayOf(
+    PropTypes.shape({
+      content: PropTypes.string.isRequired,
+      userId: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  votes: PropTypes.number,
+};
 
-  render() {
-    const connectDropTarget = this.props.connectDropTarget;
-    const connectDragSource = this.props.connectDragSource;
+const IdeaCollection = ({
+  connectDropTarget,
+  connectDragSource,
+  ideas,
+  collectionId,
+}) => connectDragSource(connectDropTarget(
+  <div className={classNames('ideaGroup', 'drop-zone', 'collectionShadow')}>
+    {
+      ideas.map((idea, i) => (
+        <Idea
+          className="draggable"
+          key={i}
+          content={idea.content}
+          collectionId={collectionId}
+          userId={idea.userId}
+        />
+      ))
+    }
+  </div>
+));
 
-    const classes = classNames(
-      'ideaGroup',
-      'drop-zone',
-      'collectionShadow',
-    );
-
-    return connectDragSource(connectDropTarget(
-    <div className={classes}>
-      <FlipMove enterAnimation="fade" leaveAnimation="fade">
-        {this.props.ideas.map((idea, i) => (
-          <Idea
-            className="draggable"
-            key={i}
-            content={idea.content}
-            collectionId={this.props.collectionId}
-            userId={idea.userId}
-          />
-        ))}
-      </FlipMove>
-    </div>
-    ));
-  }
-}
+IdeaCollection.propTypes = propTypes;
 
 // REACT-DnD
 const dropTypes = [dndTypes.CARD, dndTypes.IDEA];

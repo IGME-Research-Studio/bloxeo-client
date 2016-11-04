@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import { DropTarget } from 'react-dnd';
 import { values } from 'ramda';
+import FlipMove from 'react-flip-move';
 
 import { mapWithIndex } from '../../utils/helpers';
 import CollectionStore from '../../stores/CollectionStore';
@@ -53,7 +54,7 @@ class Workspace extends React.Component {
 
     return connectDropTarget(
       <div className="droppable workspace" >
-        <div>
+        <FlipMove enterAnimation="fade" leaveAnimation="fade">
           {
             mapWithIndex(({ key, ideas, votes }, i) => (
               <IdeaCollection
@@ -64,7 +65,7 @@ class Workspace extends React.Component {
                 votes={votes}
               />), this.state.ideaCollections)
           }
-        </div>
+        </FlipMove>
         <TrashCan />
       </div>
     );

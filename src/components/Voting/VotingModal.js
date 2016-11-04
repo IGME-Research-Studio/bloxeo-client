@@ -29,7 +29,7 @@ class VotingModal extends React.Component {
    */
   hideModal = () => {
     // TODO: show results tab via browserHistory
-    browserHistory.push(`/room/${this.props.boardId}/results`)
+    browserHistory.push(`/room/${this.props.boardId}/results`);
     this.setState({showModal: false});
   };
 

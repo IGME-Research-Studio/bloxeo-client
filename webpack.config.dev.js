@@ -12,7 +12,7 @@ var paths = require('./paths');
 var env = require('./env');
 
 module.exports = {
-  devtool: 'source-map',
+  devtool: 'eval',
   contentBase: 'build',
 
   entry: [

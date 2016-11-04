@@ -1,13 +1,14 @@
 import { EventEmitter } from 'events';
 import assign from 'object-assign';
+import { has, set, lensProp, defaultTo, when, pipe, prop,
+  addIndex, map, values, sortBy } from 'ramda';
 
 import d from '../dispatcher/AppDispatcher';
 import actionTypes from '../constants/actionTypes';
 
-const COLLECTION_CHANGE_EVENT = 'collection';
+const COLLECTION_CHANGE_EVENT = 'COLLECTION_CHANGE_EVENT';
 
-let _collections = {};
-let layoutObjs = [];
+let _collections = [];
 const layoutSize = {
   width: 0,
 };
@@ -17,13 +18,9 @@ const CollectionStore = assign({}, EventEmitter.prototype, {
    * Get the entire array of collections
    * @return {array}
    */
-  getAllCollections: function() {
-    return _collections;
-  },
+  getAllCollections: () => _collections,
 
-  getD3Data: function() {
-    return layoutObjs;
-  },
+  getCollection: (id) => _collections[id],
 
   emitChange: function() {
     this.emit(COLLECTION_CHANGE_EVENT);
@@ -44,8 +41,6 @@ const CollectionStore = assign({}, EventEmitter.prototype, {
   removeChangeListener: function(callback) {
     this.removeListener(COLLECTION_CHANGE_EVENT, callback);
   },
-
-  updateCollection: (id) => _collections[id],
 });
 
 /**
@@ -67,64 +62,48 @@ function returnResults(results) {
     _collections.push({
       content: results[i].content,
       votes: 0,
-      fixed: false,
-      px: 0,
-      py: 0,
-      weight: 0,
-      x: 100,
-      y: 100,
     });
   }
 }
 
-/**
-* Mutate content strings to a more usable object
-* @param {Object[]} content - an array of strings
-*/
-function objectifyContent(cont) {
-  return cont.map((idea) => {
-    return { userId: idea.userId, text: idea.content, top: 0, left: 0 };
-  });
-}
+const mapWithIndex = addIndex(map);
+
+// SortBy predicate that treats undefined as Infinity
+// So that items without the given key will be placed at the end
+const propIndexSorter = (key) => (obj) => defaultTo(Infinity, prop(key, obj));
+
+const indexLens = lensProp('index');
+
+// Like a groupby, but without constructing an array since it is 1-1 mapping
+// [{key, index}, ...] => {key: {index, key}}
+// const fromOrderedToObj = reduce((acc, val) => {
+//   acc[val.key] = val;
+//   return acc;
+// }, {});
+
+const updateIndices = pipe(
+    // get an unordered array of values from object
+    values,
+    // sort those by the index key
+    sortBy(propIndexSorter('index')),
+    // updates all the indexes so that there are no gaps or nils
+    // e.g. if the current indexes are [0, 2, 3] => [0, 1, 2]
+    mapWithIndex((collection, i) => set(indexLens, i, collection))
+);
 
 /**
-* Create an idea group when an idea is dragged to the workspace
-*/
-function createCollection(_key, cont) {
-  const content = objectifyContent(cont);
-  _collections[_key] = {content, votes: 0, key: _key};
-}
-
-/**
- * Recieve collections from server
+ * Receive collections from server
+ * Converts: {[collectionId]: {content: [Ideas}, key} ->
+ * [ { content: [Ideas], key, index } ]
+ * while preserving previous, non persisted order
  * @param {object[]} collections - all collections
  * @param {bool} reset - should old collection postion data be retained
  */
-function receivedAllCollections(collections, reset) {
-  let oldCollections = {};
-  if (!reset) {
-    oldCollections = JSON.parse(JSON.stringify(_collections));
-  }
-  // Clear out old collection data
-  _collections = {};
-  layoutObjs = [];
-  CollectionStore.emitChange();
-  // Create collections from server data
-  let i = 0;
-  for (const _key in collections) {
-    if (_collections[_key] === undefined) {
-      createCollection(_key, collections[_key].ideas);
-      i++;
-      // Retain old collection postion data
-      const col = _collections[_key];
-      if (oldCollections[_key]) {
-        col.x = oldCollections[_key].x;
-        col.y = oldCollections[_key].y;
-        col.fixed = oldCollections[_key].fixed;
-      }
-      layoutObjs.push({key: _key, fixed: col.fixed, x: col.x, y: col.y});
-    }
-  }
+function receivedAllCollections(updatedCollections) {
+  return updateIndices(
+    map(when(
+      (c) => has(c.key, _collections),
+      (c) => set(indexLens, _collections[c.key].index, c)), updatedCollections));
 }
 
 /**
@@ -146,7 +125,7 @@ d.register(function({ type, payload }) {
     break;
 
   case actionTypes.MOVE_COLLECTION:
-    moveCollection(payload.collectionId, payload.left, payload.top);
+    moveCollection(payload.collectionId);
     CollectionStore.emitChange();
     break;
 
@@ -155,7 +134,7 @@ d.register(function({ type, payload }) {
     break;
 
   case actionTypes.RECEIVED_COLLECTIONS:
-    receivedAllCollections(payload.collections, payload.reset);
+    _collections = receivedAllCollections(payload.collections, payload.reset);
     CollectionStore.emitChange();
     break;
 

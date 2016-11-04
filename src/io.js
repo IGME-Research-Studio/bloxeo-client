@@ -1,4 +1,5 @@
 import io from 'socket.io-client';
+import { omit } from 'ramda';
 
 import { SERVER_URL } from './constants/appConstants';
 import API from './constants/APIConstants';
@@ -29,7 +30,7 @@ socket.on(EVENT_API.UPDATED_COLLECTIONS, (data) => {
   .then((res) => {
     d.dispatch(receivedCollections(
       {
-        collections: _.omit(res.data, ['top', 'left', 'key']),
+        collections: omit(['key'], res.data),
         reset: false,
       }
     ));

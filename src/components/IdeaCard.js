@@ -16,9 +16,7 @@ class IdeaCard extends React.Component {
     const connectDragSource = this.props.connectDragSource;
     // Apply REACT-DnD to element
     return connectDragSource(
-      <div
-        className="bankCard ui-widget-content drop-zone ui-state-default"
-      >
+      <div className="bankCard ui-widget-content drop-zone ui-state-default">
         {ideaString}
       </div>
     );
@@ -30,10 +28,9 @@ class IdeaCard extends React.Component {
 const cardSource = {
   beginDrag: function(props) {
     return {
+      type: dndTypes.CARD,
       content: props.idea.content,
       userId: props.idea.userId,
-      type: dndTypes.CARD,
-      ideaCount: 1,
     };
   },
 };
@@ -45,4 +42,4 @@ function dragCollect(connect, monitor) {
   };
 }
 
-module.exports = DragSource(dndTypes.CARD, cardSource, dragCollect)(IdeaCard);
+export default DragSource(dndTypes.CARD, cardSource, dragCollect)(IdeaCard);

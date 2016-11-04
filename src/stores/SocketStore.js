@@ -115,15 +115,13 @@ function destroyIdea(content) {
  * Creates a collection with the given idea
  * @param {string} collection content from first idea added to collection
  */
-function addCollection(content, left, top) {
+function createCollection(content) {
   io.emit(
     EVENT_API.CREATE_COLLECTION,
     {
       boardId: BoardOptionsStore.getBoardId(),
       content: content,
       userToken: UserStore.getUserToken(),
-      top: top,
-      left: left,
     }
   );
 }
@@ -227,13 +225,11 @@ d.register(({ type, payload }) => {
     break;
 
   case actionTypes.GROUP_IDEAS:
-    addIdeaToCollection(payload.ideaId, payload.idea.content);
+    addIdeaToCollection(payload.collectionId, payload.idea.content);
     break;
 
   case actionTypes.CREATE_COLLECTION:
-    addCollection(payload.ideaContent,
-                  payload.left,
-                  payload.top);
+    createCollection(payload.ideaContent);
     break;
 
   case actionTypes.REMOVE_COLLECTION:
@@ -241,7 +237,7 @@ d.register(({ type, payload }) => {
     break;
 
   case actionTypes.SEPARATE_IDEAS:
-    removeIdeaFromCollection(payload.groupId, payload.content);
+    removeIdeaFromCollection(payload.collectionId, payload.content);
     break;
 
   default:

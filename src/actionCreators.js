@@ -17,7 +17,7 @@ export const changeRoomOptions = createAction(actionTypes.CHANGE_ROOM_OPTS);
 export const groupIdeas = createAction(actionTypes.GROUP_IDEAS);
 export const separateIdeas = createAction(actionTypes.SEPARATE_IDEAS);
 export const createIdea = createAction(actionTypes.CREATE_IDEA);
-export const destroyIdeas = createAction(actionTypes.DESTROY_IDEA);
+export const destroyIdea = createAction(actionTypes.DESTROY_IDEA);
 export const updatedIdeas = createAction(actionTypes.UPDATED_IDEAS);
 
 export const hideCollections = createAction(actionTypes.HIDE_COLLECTIONS);

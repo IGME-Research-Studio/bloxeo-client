@@ -3,15 +3,13 @@ import assign from 'object-assign';
 import { ify as lazy } from 'sloth';
 import materialColors from 'material-color';
 import { map, lensProp, set, pipe, find,
-  propEq, prop, unless, isNil, memoize } from 'ramda';
+  propEq, prop, unless, isNil } from 'ramda';
 
 import d from '../dispatcher/AppDispatcher';
 import actionTypes from '../constants/actionTypes';
 import { gradientToDiscrete, moveToHeadByProp } from '../utils/helpers';
 import { getUserId } from '../stores/UserStore';
 
-const MEMBER_CHANGE_EVENT = 'MEMBER_CHANGE_EVENT';
-const NAME_CHANGE_EVENT = 'NAME_CHANGE_EVENT';
 const UPDATE_EVENT = 'UPDATE_EVENT';
 const COLORS = gradientToDiscrete(materialColors['300']);
 
@@ -46,7 +44,7 @@ const self = assign({}, EventEmitter.prototype, {
 
   getRoomDescription: () => boardOptions.boardDesc,
 
-  getColor: memoize((userId) => unless(isNil, prop('color'))(getUser(userId))),
+  getColor: (userId) => unless(isNil, prop('color'))(getUser(userId)),
 
   getRoomData: function() {
     return {
@@ -86,13 +84,6 @@ const self = assign({}, EventEmitter.prototype, {
   emitUpdate: function() {
     this.emit(UPDATE_EVENT);
   },
-  emitNameChange: function() {
-    this.emit(NAME_CHANGE_EVENT);
-  },
-  emitMemberChange: function() {
-    this.emit(MEMBER_CHANGE_EVENT);
-  },
-
   /**
    * Add a change listener
    * @param {function} callback - event callback function
@@ -100,25 +91,13 @@ const self = assign({}, EventEmitter.prototype, {
   addUpdateListener: function(callback) {
     this.on(UPDATE_EVENT, callback);
   },
-  addNameListener: function(callback) {
-    this.on(NAME_CHANGE_EVENT, callback);
-  },
-  addMemberListener: function(callback) {
-    this.on(MEMBER_CHANGE_EVENT, callback);
-  },
 
   /**
    * Remove a change listener
    * @param {function} callback - callback to be removed
    */
-  removeNameListener: function(callback) {
-    this.removeListener(NAME_CHANGE_EVENT, callback);
-  },
   removeUpdateListener: function(callback) {
     this.removeListener(UPDATE_EVENT, callback);
-  },
-  removeMemberListener: function(callback) {
-    this.removeListener(MEMBER_CHANGE_EVENT, callback);
   },
 });
 

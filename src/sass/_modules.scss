@@ -514,7 +514,6 @@ $modal-header-height: 48px;
 
 .idea {
   &:after {
-    transition: opacity .3s;
     opacity: 0;
     position: absolute;
     top: 0;
@@ -527,9 +526,6 @@ $modal-header-height: 48px;
   }
   &:hover:after {
     opacity: 1;
-  }
-  &.deleting {
-    border: 5px solid rgba(229,115,115,0.75);
   }
 }
 /* LANDING PAGE */

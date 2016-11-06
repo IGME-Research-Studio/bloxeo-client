@@ -7,8 +7,6 @@ import dndTypes from '../constants/dndTypes';
 import d from '../dispatcher/AppDispatcher';
 import BoardOptionsStore from '../stores/BoardOptionsStore';
 
-let holdTimeout = 0;
-
 const getColor = (userId) => BoardOptionsStore.getColor(userId) || '#AAA';
 
 class Idea extends React.Component {
@@ -21,35 +19,22 @@ class Idea extends React.Component {
   };
 
   state = {
-    canDrag: false,
     color: getColor(this.props.userId),
   };
 
+  // XXX: having this many event listeners causes warnings in the console
+  // Probably should be moved up the chain somehow.
   componentDidMount() {
-    BoardOptionsStore.addUpdateListener(() =>
-      this.setState({ color: getColor(this.props.userId) }));
+    BoardOptionsStore.addUpdateListener(this.updateUserColors);
   }
 
-  _onMouseDown = (e) => {
-    e.stopPropagation();
-    holdTimeout = setTimeout(() => {
-      this.setCanDrag(true);
-    }, 500);
-  };
+  componentWillUnmount() {
+    BoardOptionsStore.removeUpdateListener(this.updateUserColors);
+  }
 
-  _onMouseUp = () => {
-    clearTimeout(holdTimeout);
-    this.setCanDrag(false);
-  };
-
-  _onMouseLeave = () => {
-    clearTimeout(holdTimeout);
-    this.setCanDrag(false);
-  };
-
-  _onMouseMove = () => {
-    clearTimeout(holdTimeout);
-  };
+  updateUserColors = () => {
+    this.setState({ color: getColor(this.props.userId) });
+  }
 
   _style = (color) => {
     return {
@@ -60,41 +45,17 @@ class Idea extends React.Component {
   };
 
   /**
-   * Set draggable
-   * @param <Boolean> draggable
-   */
-  setCanDrag = (draggable) => {
-    this.setState({
-      canDrag: draggable,
-    });
-  };
-
-  /**
    * @return {object}
    */
   render() {
-    const connectDragSource = this.props.connectDragSource;
-    const classToAdd = classNames('idea', 'workspaceCard',
-                                  {deleting: this.state.canDrag});
-    const self = (
-      <div
-        className={classToAdd}
-        onMouseDown={this._onMouseDown}
-        onMouseUp={this._onMouseUp}
-        onMouseLeave={this._onMouseLeave}
-        onMouseMove={this._onMouseMove}
-        style={this._style(this.state.color)}
-      >
+    const { connectDragSource } = this.props;
+    const classToAdd = classNames('idea', 'workspaceCard');
+
+    return connectDragSource(
+      <div className={classToAdd} style={this._style(this.state.color)}>
         {this.props.content.toString()}
       </div>
     );
-
-    if (this.state.canDrag) {
-      return connectDragSource(self);
-    }
-    else {
-      return self;
-    }
   }
 }
 

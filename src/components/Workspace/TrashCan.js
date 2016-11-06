@@ -19,8 +19,8 @@ class TrashCan extends React.Component {
    * @return {object}
    */
   render() {
+    const { connectDropTarget } = this.props;
     const trashIcon = classNames('fa fa-trash-o trashCan');
-    const connectDropTarget = this.props.connectDropTarget;
     return connectDropTarget(
       <i className={trashIcon}></i>
     );
@@ -37,8 +37,14 @@ const collectionTarget = {
    * @param (object) monitor
    */
   canDrop: function(props, monitor) {
-    const idea = monitor.getItem();
-    return (idea.ideaCount === 1);
+    const item = monitor.getItem();
+    if (item.type === dndTypes.COLLECTION) {
+      return (item.ideas.count === 1);
+    }
+    else {
+      return true;
+    }
+
   },
   /**
    * Remove the collection dropped onto the trash can

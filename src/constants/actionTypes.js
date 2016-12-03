@@ -32,4 +32,6 @@ export default keyMirror({
 
   STORE_RESULTS: null,
   RETURN_RESULTS: null,
+
+  SHOW_ERROR: null,
 });

@@ -5,7 +5,7 @@ import { SERVER_URL } from './constants/appConstants';
 import API from './constants/APIConstants';
 import d from './dispatcher/AppDispatcher';
 import { changeRoomOptions, updatedIdeas,
-  receivedCollections, endLoadAnimation,  } from './actionCreators';
+  receivedCollections, endLoadAnimation, showError } from './actionCreators';
 import { checkSocketStatus } from './utils/checkStatus';
 
 const { EVENT_API } = API;
@@ -37,6 +37,11 @@ socket.on(EVENT_API.UPDATED_COLLECTIONS, (data) => {
   })
   .catch((res) => {
     console.error(`${res} Updating the collections.`);
+    d.dispatch(showError(
+      {
+        error: `${res} Updating the collections.`,
+      }
+    ));
   });
 });
 
@@ -48,6 +53,11 @@ socket.on(EVENT_API.UPDATED_IDEAS, (data) => {
   })
   .catch((res) => {
     console.error(`${res}. Updating the ideas.`);
+    d.dispatch(showError(
+      {
+        error: `${res} Updating the ideas.`,
+      }
+    ));
   });
 });
 
@@ -76,6 +86,11 @@ socket.on(EVENT_API.RECEIVED_COLLECTIONS, (data) => {
   })
   .catch((res) => {
     console.error(`Error receiving collections: ${res}`);
+    d.dispatch(showError(
+      {
+        error: `Error receiving collections: ${res}`,
+      }
+    ));
   });
 });
 
@@ -86,6 +101,11 @@ socket.on(EVENT_API.RECEIVED_IDEAS, (data) => {
   })
   .catch((res) => {
     console.error(`Error receiving ideas: ${res}`);
+    d.dispatch(showError(
+      {
+        error: `Error receving ideas: ${res}`,
+      }
+    ));
   });
 });
 
@@ -96,6 +116,11 @@ socket.on(EVENT_API.UPDATED_BOARD, (data) => {
   })
   .catch((res) => {
     console.error(`Error receiving update: ${res}`);
+    d.dispatch(showError(
+      {
+        error: `Error receiving update: ${res}`,
+      }
+    ));
   });
 });
 
@@ -106,6 +131,11 @@ socket.on(EVENT_API.RECEIVED_OPTIONS, (data) => {
   })
   .catch((res) => {
     console.error(`Error receiving options: ${res}`);
+    d.dispatch(showError(
+      {
+        error: `Error receiving options: ${res}`,
+      }
+    ));
   });
 });
 

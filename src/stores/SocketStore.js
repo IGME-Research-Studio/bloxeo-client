@@ -240,6 +240,11 @@ d.register(({ type, payload }) => {
     removeIdeaFromCollection(payload.collectionId, payload.content);
     break;
 
+  case actionTypes.SHOW_ERROR:
+    // Call some kind of function to display the ErrorSnackbar here
+    // payload.error will have the error
+    break;
+
   default:
   }
 });

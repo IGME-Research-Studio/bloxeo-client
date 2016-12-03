@@ -34,3 +34,5 @@ export const setLayoutSize = createAction(actionTypes.SET_LAYOUT_SIZE);
 
 export const storeResults = createAction(actionTypes.STORE_RESULTS);
 export const returnResults = createAction(actionTypes.RETURN_RESULTS);
+
+export const showError = createAction(actionTypes.SHOW_ERROR);

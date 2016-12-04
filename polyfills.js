@@ -5,4 +5,3 @@ require('react-tap-event-plugin')();
 
 // Browser fetch polyfill
 require('whatwg-fetch');
-

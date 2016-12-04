@@ -10,9 +10,9 @@ export default class ErrorSnackbar extends React.Component {
     console.log(this.props);
 
     return (
-      <div>
+      <div class='error-snackbar'>
         <Snackbar
-          className="error-snackbar"
+          bodyStyle={{ backgroundColor: '#FFFFFF', color: '#F06E7F' }}
           open={this.props.open}
           message={this.props.error}
           autoHideDuration={4000}

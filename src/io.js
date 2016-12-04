@@ -7,6 +7,7 @@ import d from './dispatcher/AppDispatcher';
 import { changeRoomOptions, updatedIdeas,
   receivedCollections, endLoadAnimation, showError } from './actionCreators';
 import { checkSocketStatus } from './utils/checkStatus';
+import { browserHistory } from 'react-router';
 
 const { EVENT_API } = API;
 
@@ -66,13 +67,22 @@ socket.on(EVENT_API.JOINED_ROOM, (data) => {
 
   checkSocketStatus(data)
   .then((res) => {
-
     d.dispatch(updatedIdeas({ ideas: res.data.ideas }));
     d.dispatch(receivedCollections({
       collections: res.data.collections, reset: false }));
     d.dispatch(changeRoomOptions({ updates: res.data.room }));
-
     d.dispatch(endLoadAnimation(true));
+  })
+  .catch((res) => {
+    const boardId = data.data.board;
+    console.error(`Cannnot join the room. ${res}`);
+    // Redirect from here back to /join with prefilled room code and error snackbar
+    browserHistory.push(`/join/${boardId}`);
+    d.dispatch(showError(
+      {
+        'error': `Board ${boardId} does not exist.`,
+      }
+    ));
   });
 });
 

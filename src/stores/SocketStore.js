@@ -8,6 +8,7 @@ import API from '../constants/APIConstants';
 import UserStore from './UserStore';
 import BoardOptionsStore from './BoardOptionsStore';
 import actionTypes from '../constants/actionTypes';
+import { showError } from '../actionCreators';
 import { post, checkHTTPStatus } from '../utils/checkStatus';
 
 const { REST_API, EVENT_API } = API;
@@ -194,8 +195,12 @@ d.register(({ type, payload }) => {
         browserHistory.push(`/room/${payload.boardId}/workspace`);
       }
       else {
-        // TODO: snackbar error or validation error message?
         console.error(`Room ${payload.boardId} does not exist`);
+        d.dispatch(showError(
+          {
+            error: `Room ${payload.boardId} does not exist`,
+          }
+        ));
       }
     });
     break;
@@ -238,11 +243,6 @@ d.register(({ type, payload }) => {
 
   case actionTypes.SEPARATE_IDEAS:
     removeIdeaFromCollection(payload.collectionId, payload.content);
-    break;
-
-  case actionTypes.SHOW_ERROR:
-    // Call some kind of function to display the ErrorSnackbar here
-    // payload.error will have the error
     break;
 
   default:

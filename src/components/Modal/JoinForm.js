@@ -31,19 +31,23 @@ class JoinForm extends React.Component {
     },
   };
 
-  _updateName = ({target: { value }}) => {
-    const errMsg = isntEmptyValidator('Username is required', value);
+  componentDidMount() {
+    this.setState({values: {username: this.state.values.username, boardId: this.props.boardId} });
+  }
 
-    this.setState(
-      updateValuesWithError('username', value, errMsg, this.state)
-    );
+  _updateName = ({target: { value }}) => {
+    this._validator('username', 'Username is required', value);
   };
 
   _updateCode = ({target: { value }}) => {
-    const errMsg = isntEmptyValidator('Room code is required', value);
+    this._validator('boardId', 'Room code is required', value);
+  };
+
+  _validator = (property, errMsg, value) => {
+    const maybeErrMsg = isntEmptyValidator(errMsg, value);
 
     this.setState(
-      updateValuesWithError('boardId', value, errMsg, this.state)
+      updateValuesWithError(property, value, maybeErrMsg, this.state)
     );
   };
 
@@ -54,6 +58,10 @@ class JoinForm extends React.Component {
     if (all(isntNilorEmpty, values(this.state.values))) {
       const { boardId, username } = this.state.values;
       d.dispatch(validateBoard({ boardId, username }));
+    }
+    else {
+      this._validator('username', 'Username is required', this.state.values.username);
+      this._validator('boardId', 'Room code is required', this.state.values.boardId);
     }
   };
 

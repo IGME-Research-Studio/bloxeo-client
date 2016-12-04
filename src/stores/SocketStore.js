@@ -8,6 +8,7 @@ import API from '../constants/APIConstants';
 import UserStore from './UserStore';
 import BoardOptionsStore from './BoardOptionsStore';
 import actionTypes from '../constants/actionTypes';
+import { showError } from '../actionCreators';
 import { post, checkHTTPStatus } from '../utils/checkStatus';
 
 const { REST_API, EVENT_API } = API;
@@ -187,6 +188,7 @@ d.register(({ type, payload }) => {
     break;
 
   case actionTypes.VALIDATE_BOARD:
+    console.log('board is being validated!');
     getOrCreateUser(payload.username)
     .then(() => checkBoardExists(payload.boardId))
     .then(({ exists }) => {
@@ -194,17 +196,23 @@ d.register(({ type, payload }) => {
         browserHistory.push(`/room/${payload.boardId}/workspace`);
       }
       else {
-        // TODO: snackbar error or validation error message?
         console.error(`Room ${payload.boardId} does not exist`);
+        d.dispatch(showError(
+          {
+            error: `Room ${payload.boardId} does not exist`,
+          }
+        ));
       }
     });
     break;
 
   case actionTypes.JOIN_BOARD:
+    console.log('joining a board: ', payload.boardId);
     joinBoard(payload.boardId, payload.userToken);
     break;
 
   case actionTypes.LEAVE_BOARD:
+    console.log('leaving a board: ', payload.boardId);
     leaveBoard(payload.boardId);
     break;
 

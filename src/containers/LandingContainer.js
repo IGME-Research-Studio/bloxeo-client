@@ -2,6 +2,7 @@ import React from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import colorTheme from '../colorTheme';
 
+import ErrorSnackbar from '../components/ErrorSnackbar';
 import FeatureButton from '../components/UI/FeatureButton';
 
 import bloxeoImg from '../assets/bloxeo.png';
@@ -15,7 +16,32 @@ import laptopImg from '../assets/Laptop.png';
 import whiteboardImg from '../assets/Whiteboard.png';
 import eggImg from '../assets/Egg.png';
 
+import ErrorStore from '../stores/ErrorStore';
+
+// Add state logic for ErrorSnackbar component. Find a way to use props instead
+
 class LandingContainer extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { 'error': '', 'errorOpen': false };
+  }
+
+  componentDidMount() {
+    ErrorStore.addErrorListener(this._onError);
+  }
+
+  componentWillUnmount() {
+    ErrorStore.removeErrorListener(this._onError);
+  }
+
+  _closeErrorSnackbar = () => {
+    this.setState({errorOpen: false});
+  }
+
+  _onError = ({error, errorOpen}) => {
+    this.setState({error, errorOpen});
+  }
+
   render() {
     return (
       <MuiThemeProvider muiTheme={colorTheme}>
@@ -153,6 +179,11 @@ class LandingContainer extends React.Component {
           </section>
         </main>
         {this.props.children}
+        <ErrorSnackbar
+          error={this.state.error}
+          open={this.state.errorOpen}
+          close={this._closeErrorSnackbar}
+        />
       </div>
 
     </MuiThemeProvider>

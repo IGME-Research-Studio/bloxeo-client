@@ -7,10 +7,12 @@ import { find, propEq, pipe, ifElse, F, isNil } from 'ramda';
 
 import BoardOptionsStore from '../stores/BoardOptionsStore';
 import CollectionStore from '../stores/CollectionStore';
+import ErrorStore from '../stores/ErrorStore';
 import IdeaStore from '../stores/IdeaStore';
 import LoadingStore from '../stores/LoadingStore';
 import UserStore from '../stores/UserStore';
 
+import ErrorSnackbar from '../components/ErrorSnackbar';
 import LoadingOverlay from '../components/LoadingOverlay';
 import NavBar from '../components/NavBar';
 import Sidebar from '../components/Sidebar/Sidebar';
@@ -36,10 +38,7 @@ function getRoomState(prevState) {
 class RoomContainer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = getRoomState({loading: true});
-
-    this._onChange = () => this.setState(getRoomState(this.state));
-    this._onLoad = () => this.setState({loading: false});
+    this.state = getRoomState({loading: true, error: '', errorOpen: false });
 
     this._isAdmin = () => (
       pipe(
@@ -54,6 +53,7 @@ class RoomContainer extends React.Component {
   componentDidMount() {
     BoardOptionsStore.addUpdateListener(this._onChange);
     CollectionStore.addChangeListener(this._onChange);
+    ErrorStore.addErrorListener(this._onError);
     IdeaStore.addChangeListener(this._onChange);
 
     LoadingStore.addLoadingListener(this._onLoad);
@@ -70,16 +70,38 @@ class RoomContainer extends React.Component {
   componentWillUnmount() {
     BoardOptionsStore.removeUpdateListener(this._onChange);
     CollectionStore.removeChangeListener(this._onChange);
+    ErrorStore.removeErrorListener(this._onError);
     IdeaStore.removeChangeListener(this._onChange);
     LoadingStore.removeLoadingListener(this._onLoad);
 
     d.dispatch(leaveBoard({ boardId: this.props.params.boardId }));
   }
 
+  _closeErrorSnackbar = () => {
+    this.setState({errorOpen: false});
+  }
+
+  _onChange = () => {
+    this.setState(getRoomState(this.state));
+  }
+
+  _onError = ({error, errorOpen}) => {
+    this.setState({error, errorOpen});
+  }
+
+  _onLoad = () => {
+    this.setState({loading: false});
+  }
+
   render() {
     return (
       <MuiThemeProvider muiTheme={colorTheme}>
         <div className="appContainer">
+          <ErrorSnackbar
+            error={this.state.error}
+            open={this.state.errorOpen}
+            close={this._closeErrorSnackbar}
+          />
 
           <LoadingOverlay enabled={this.state.loading}/>
 

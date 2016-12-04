@@ -1,13 +1,10 @@
 import React, { PropTypes } from 'react';
-import ReactDOM from 'react-dom';
 import { DropTarget } from 'react-dnd';
-import { values } from 'ramda';
 import FlipMove from 'react-flip-move';
 
 import { mapWithIndex } from '../../utils/helpers';
 import CollectionStore from '../../stores/CollectionStore';
-import { createCollection, moveCollection,
-  setLayoutSize } from '../../actionCreators';
+import { createCollection, moveCollection } from '../../actionCreators';
 import d from '../../dispatcher/AppDispatcher';
 
 import IdeaCollection from '../IdeaCollection';
@@ -77,7 +74,7 @@ const dropTypes = [dndTypes.CARD, dndTypes.COLLECTION, dndTypes.IDEA];
 
 // Workspace DropTarget options
 const workTarget = {
-  drop: function(props, monitor, component) {
+  drop: function(props, monitor) {
     const item = monitor.getItem();
     const hasDroppedOnChild = monitor.didDrop();
 

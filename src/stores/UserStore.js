@@ -47,26 +47,6 @@ const UserStore = assign({}, EventEmitter.prototype, {
       map((k) => [k, localStorage.getItem(k)],
       ['UserToken', 'UserName', 'UserId']));
   },
-  // 
-  // emitChange: function() {
-  //   this.emit(ERROR_CHANGE_EVENT);
-  // },
-  //
-  // /**
-  //  * Add a change listener
-  //  * @param {function} callback - event callback function
-  //  */
-  // addErrorListener: function(callback) {
-  //   this.on(ERROR_CHANGE_EVENT, callback);
-  // },
-  //
-  // /**
-  //  * Remove a change listener
-  //  * @param {function} callback - callback to be removed
-  //  */
-  // removeErrorListener: function(callback) {
-  //   this.removeListener(ERROR_CHANGE_EVENT, callback);
-  // },
 });
 
 module.exports = UserStore;

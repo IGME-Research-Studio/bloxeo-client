@@ -26,12 +26,12 @@ self.isntPosIntValidator = (msg, val) => (
     msg, Number(val))
 );
 
-self.updateValuesWithError = (prop, value, error, state) => (
+self.updateValuesWithError = curry((prop, value, error, state) => (
   pipe(
     assocPath(['values', prop], value),
     assocPath(['errors', prop], error)
   )(state)
-);
+));
 
 self.updateValues = (prop, value, state) => (
   assocPath(['values', prop], value, state)

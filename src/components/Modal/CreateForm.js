@@ -26,7 +26,9 @@ class CreateForm extends React.Component {
    * @param {object} event
    */
   _updateName = ({target: { value }}) => {
-    this._validator('username', 'Username is required', value);
+    this.setState(
+      this._validator('username', 'Username is required', value)(this.state)
+    );
   };
 
   _updateBoardName = ({target: { value }}) => {

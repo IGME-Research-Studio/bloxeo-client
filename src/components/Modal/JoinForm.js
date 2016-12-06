@@ -36,11 +36,15 @@ class JoinForm extends React.Component {
   }
 
   _updateName = ({target: { value }}) => {
-    this._validator('username', 'Username is required', value);
+    this.setState(
+      this._validator('username', 'Username is required', value)(this.state)
+    );
   };
 
   _updateCode = ({target: { value }}) => {
-    this._validator('boardId', 'Room code is required', value);
+    this.setState(
+      this._validator('boardId', 'Room code is required', value)(this.state)
+    );
   };
 
   _validator = (property, errMsg, value) => (

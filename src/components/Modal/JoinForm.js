@@ -1,6 +1,6 @@
 import React, { PropTypes }  from 'react';
 import { TextField } from 'material-ui';
-import { ifElse, isEmpty, always, all, values } from 'ramda';
+import { ifElse, isEmpty, always, all, values, compose } from 'ramda';
 
 import { validateBoard } from '../../actionCreators';
 import d from '../../dispatcher/AppDispatcher';
@@ -43,13 +43,9 @@ class JoinForm extends React.Component {
     this._validator('boardId', 'Room code is required', value);
   };
 
-  _validator = (property, errMsg, value) => {
-    const maybeErrMsg = isntEmptyValidator(errMsg, value);
-
-    this.setState(
-      updateValuesWithError(property, value, maybeErrMsg, this.state)
-    );
-  };
+  _validator = (property, errMsg, value) => (
+    updateValuesWithError(property, value, isntEmptyValidator(errMsg, value))
+  );
 
   /**
    * Handle submit
@@ -60,8 +56,10 @@ class JoinForm extends React.Component {
       d.dispatch(validateBoard({ boardId, username }));
     }
     else {
-      this._validator('username', 'Username is required', this.state.values.username);
-      this._validator('boardId', 'Room code is required', this.state.values.boardId);
+      this.setState(compose(
+        this._validator('boardId', 'Room code is required', this.state.values.boardId),
+        this._validator('username', 'Username is required', this.state.values.username)
+      )(this.state));
     }
   };
 

@@ -52,9 +52,9 @@ class CreateForm extends React.Component {
       d.dispatch(createBoard({ username, boardName, boardDesc }));
     }
     else {
-      this.setState(compose(
-        this._validator('username', 'Username is required', this.state.values.username)
-      )(this.state));
+      this.setState(
+        this._validator('username', 'Username is required', this.state.values.username)(this.state)
+      );
     }
   };
 

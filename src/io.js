@@ -93,7 +93,6 @@ socket.on(EVENT_API.JOINED_ROOM, (data) => {
         }
       ));
     }
-
   });
 });
 

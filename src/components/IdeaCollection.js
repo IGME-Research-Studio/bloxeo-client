@@ -1,8 +1,9 @@
 import React, { PropTypes } from 'react';
 import classNames from 'classnames';
 import { DropTarget, DragSource } from 'react-dnd';
+import { none, propEq } from 'ramda';
 
-import { groupIdeas, removeCollection } from '../actionCreators';
+import { groupIdeas, removeCollection, showError } from '../actionCreators';
 import d from '../dispatcher/AppDispatcher';
 import dndTypes from '../constants/dndTypes';
 import Idea from './Idea';
@@ -52,15 +53,28 @@ const collectionTarget = {
   // Group ideas on drop
   drop: function(props, monitor) {
     const item = monitor.getItem();
+    let success = false;
 
-    d.dispatch(groupIdeas(
-      { collectionId: props.collectionId, idea: item }
-    ));
+    const notInCollection = none(propEq('content', item.content))(props.ideas);
+
+    if ((item.type === dndTypes.IDEA || item.type === dndTypes.CARD) && notInCollection) {
+      d.dispatch(groupIdeas(
+        { collectionId: props.collectionId, idea: item }
+      ));
+      success = true;
+    }
+    else {
+      d.dispatch(showError(
+        {'error': `Idea '${item.content}' already exists in collection`}
+      ));
+    }
 
     // Remove combined collection
     if (item.type === dndTypes.COLLECTION) {
       d.dispatch(removeCollection({ collectionId: item.id }));
     }
+
+    return {success};
   },
 };
 

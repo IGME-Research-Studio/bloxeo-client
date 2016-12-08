@@ -89,7 +89,7 @@ const collectionSource = {
   beginDrag: function(props) {
     // Return the data describing the dragged item
     return {
-      content: props.ideas[0].content,
+      ideas: props.ideas,
       type: dndTypes.COLLECTION,
       id: props.collectionId,
     };

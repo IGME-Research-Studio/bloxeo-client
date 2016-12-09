@@ -73,16 +73,15 @@ const ideaSource = {
 
   endDrag: function(props, monitor, component) {
     const dropped = monitor.didDrop();
-    if (dropped) {
-      const dropResult = monitor.getDropResult();
-      if (dropResult.success) {
-        d.dispatch(
-          separateIdeas({
-            collectionId: props.collectionId,
-            content: component.props.content,
-          })
-        );
-      }
+    const dropResult = monitor.getDropResult();
+
+    if (dropped && !dropResult.sameCollection) {
+      d.dispatch(
+        separateIdeas({
+          collectionId: props.collectionId,
+          content: component.props.content,
+        })
+      );
     }
   },
 };

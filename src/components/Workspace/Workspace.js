@@ -93,8 +93,6 @@ const workTarget = {
         { ideaContent: item.content }
       ));
     }
-
-    return {success: true};
   },
 };
 

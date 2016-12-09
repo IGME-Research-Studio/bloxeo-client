@@ -46,8 +46,6 @@ const collectionTarget = {
     else if (item.type === dndTypes.CARD) {
       d.dispatch(destroyIdea({ content: item.content }));
     }
-
-    return {success: true};
   },
 };
 

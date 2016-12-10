@@ -1,5 +1,6 @@
 import React from 'react';
 import { TextField } from 'material-ui';
+import { compose } from 'ramda';
 
 import { createBoard } from '../../actionCreators';
 import d from '../../dispatcher/AppDispatcher';
@@ -25,10 +26,8 @@ class CreateForm extends React.Component {
    * @param {object} event
    */
   _updateName = ({target: { value }}) => {
-    const errMsg = isntEmptyValidator('Username is required', value);
-
     this.setState(
-      updateValuesWithError('username', value, errMsg, this.state)
+      this._validator('username', 'Username is required', value)(this.state)
     );
   };
 
@@ -40,6 +39,10 @@ class CreateForm extends React.Component {
     this.setState(updateValues('boardDesc', value, this.state));
   };
 
+  _validator = (property, errMsg, value) => (
+    updateValuesWithError(property, value, isntEmptyValidator(errMsg, value))
+  );
+
   /**
    * Handle submit
    */
@@ -47,6 +50,11 @@ class CreateForm extends React.Component {
     if (isntNilorEmpty(this.state.values.username)) {
       const { username, boardName, boardDesc } = this.state.values;
       d.dispatch(createBoard({ username, boardName, boardDesc }));
+    }
+    else {
+      this.setState(
+        this._validator('username', 'Username is required', this.state.values.username)(this.state)
+      );
     }
   };
 

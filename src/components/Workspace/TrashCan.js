@@ -32,21 +32,6 @@ class TrashCan extends React.Component {
  */
 const collectionTarget = {
   /**
-   * Only collections with a single idea can be trashed
-   * @param {object} props
-   * @param (object) monitor
-   */
-  canDrop: function(props, monitor) {
-    const item = monitor.getItem();
-    if (item.type === dndTypes.COLLECTION) {
-      return (item.ideas.count === 1);
-    }
-    else {
-      return true;
-    }
-
-  },
-  /**
    * Remove the collection dropped onto the trash can
    * @param {object} props
    * @param (object) monitor

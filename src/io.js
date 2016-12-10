@@ -63,8 +63,6 @@ socket.on(EVENT_API.UPDATED_IDEAS, (data) => {
 });
 
 socket.on(EVENT_API.JOINED_ROOM, (data) => {
-  console.log(data);
-
   checkSocketStatus(data)
   .then((res) => {
     d.dispatch(updatedIdeas({ ideas: res.data.ideas }));
@@ -74,15 +72,27 @@ socket.on(EVENT_API.JOINED_ROOM, (data) => {
     d.dispatch(endLoadAnimation(true));
   })
   .catch((res) => {
-    const boardId = data.data.board;
+    const boardId = data.data.board || data.data.boardId;
+    const statusCode = data.code;
+
     console.error(`Cannnot join the room. ${res}`);
     // Redirect from here back to /join with prefilled room code and error snackbar
     browserHistory.push(`/join/${boardId}`);
-    d.dispatch(showError(
-      {
-        'error': `Board ${boardId} does not exist.`,
-      }
-    ));
+
+    if (statusCode === 400) {
+      d.dispatch(showError(
+        {
+          'error': `Username is required to join a room`,
+        }
+      ));
+    }
+    else {
+      d.dispatch(showError(
+        {
+          'error': `Board ${boardId} does not exist.`,
+        }
+      ));
+    }
   });
 });
 

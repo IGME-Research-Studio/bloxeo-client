@@ -13,17 +13,16 @@ class Wordbank extends React.Component {
   };
 
   calcHeight = () => {
-    const bankElement = document.querySelector('.wordbank');
-    const ideasElement = document.querySelector('.wordbankIdeas');
-    const bankHeight = bankElement.offsetHeight;
-    const ideasHeight = 'height:' + bankHeight + 'px;';
-    ideasElement.setAttribute('style', ideasHeight);
+    const bankHeight = this.refs.wordbankWrap.offsetHeight;
+    const ideasHeight = `height: ${bankHeight}px;`;
+
+    this.refs.wordbankIdeas.setAttribute('style', ideasHeight);
   };
 
   componentDidMount() {
     IdeaStore.addChangeListener(this.ideaAdd);
     window.addEventListener('resize', this.calcHeight);
-    this.calcHeight();
+    setTimeout(() => this.calcHeight(), 1000); // this is mad hacky eric
   }
 
   componentWillUnmount() {
@@ -65,8 +64,8 @@ class Wordbank extends React.Component {
 
     return (
       <div className={classToAdd} ref="wordbank">
-        <div className='wordbankWrap'>
-          <div className='wordbankIdeas'>
+        <div className='wordbankWrap' ref="wordbankWrap">
+          <div className='wordbankIdeas' ref="wordbankIdeas">
             {this.props.data.map((item, i) => (
               <IdeaCard
                 key={i}

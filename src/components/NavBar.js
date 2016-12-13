@@ -84,14 +84,6 @@ class NavBar extends React.Component {
           Workspace
         </Link>
 
-        <Link
-          to={`/room/${this.props.boardId}/results`}
-          className={tabClass}
-          activeClassName={selectedClass}>
-
-          Results
-        </Link>
-
         {this.props.isAdmin ?
           <span>
             <button

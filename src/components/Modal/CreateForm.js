@@ -1,7 +1,5 @@
 import React from 'react';
 import { TextField } from 'material-ui';
-import { compose } from 'ramda';
-
 import { createBoard } from '../../actionCreators';
 import d from '../../dispatcher/AppDispatcher';
 import ModalFooter from './ModalFooter';

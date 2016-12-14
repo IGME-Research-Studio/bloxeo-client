@@ -1,7 +1,6 @@
 import Promise from 'bluebird';
 import { equals, or, not, isNil } from 'ramda';
 import { browserHistory } from 'react-router';
-
 import io from '../io';
 import d from '../dispatcher/AppDispatcher';
 import API from '../constants/APIConstants';
@@ -12,7 +11,6 @@ import { showError } from '../actionCreators';
 import { post, checkHTTPStatus } from '../utils/checkStatus';
 
 const { REST_API, EVENT_API } = API;
-
 /**
  * Joins board of given id
  * @param {string} boardId
@@ -188,7 +186,6 @@ d.register(({ type, payload }) => {
     break;
 
   case actionTypes.VALIDATE_BOARD:
-    console.log('board is being validated!');
     getOrCreateUser(payload.username)
     .then(() => checkBoardExists(payload.boardId))
     .then(({ exists }) => {
@@ -207,12 +204,10 @@ d.register(({ type, payload }) => {
     break;
 
   case actionTypes.JOIN_BOARD:
-    console.log('joining a board: ', payload.boardId);
     joinBoard(payload.boardId, payload.userToken);
     break;
 
   case actionTypes.LEAVE_BOARD:
-    console.log('leaving a board: ', payload.boardId);
     leaveBoard(payload.boardId);
     break;
 

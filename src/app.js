@@ -2,7 +2,6 @@ import { render } from 'react-dom';
 import { browserHistory } from 'react-router';
 
 import renderRoutes from './routes';
-import './io';
 import './stores/SocketStore';
 import './sass/theme.scss';
 

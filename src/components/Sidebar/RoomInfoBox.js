@@ -16,7 +16,7 @@ const RoomInfoBox = ({room}) => (
       {room.boardDesc}
     </div>
 
-    <p>Room Code: {room.boardId}</p>
+    <p className="room-code">Room Code: {room.boardId}</p>
   </div>
 );
 

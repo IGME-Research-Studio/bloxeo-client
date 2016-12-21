@@ -432,3 +432,11 @@ img {
 .resultsHeading {
   display: inline-block;
 }
+
+.room-code {
+  user-select: initial;
+}
+
+.room-code::selection {
+  background: $storm-lightGreen;
+}

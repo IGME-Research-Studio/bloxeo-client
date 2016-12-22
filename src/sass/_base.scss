@@ -15,7 +15,6 @@
 }
 
 body {
-  overflow: hidden;
   height: 100vh;
   @include font-regular();
 }
@@ -50,7 +49,7 @@ html {
   background-clip: padding-box;
   border: 8px solid rgba(0, 0, 0, 0);
   &:hover {
-    background-color: rgba(115, 115, 115, 1);    
+    background-color: rgba(115, 115, 115, 1);
     border: 7px solid rgba(0, 0, 0, 0);
   }
 }

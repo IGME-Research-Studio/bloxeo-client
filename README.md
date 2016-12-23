@@ -22,8 +22,8 @@ The frontend code for our brainstorming app, [live version available here](http:
 Clone or fork the repo.
 
 ```
-$ git clone git@github.com:IGME-Research-Studio/StormClient.git
-$ cd StormClient
+$ git clone git@github.com:IGME-Research-Studio/bloxeo-client.git
+$ cd bloxeo-client
 $ npm install
 ```
 
@@ -65,6 +65,6 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for contributing guidelines.
 
 ### License
 
-Copyright &copy; 2015-2016 MAGIC Spell Studios, all rights reserved.
+Copyright &copy; 2016-2017 MAGIC Spell Studios, all rights reserved.
 
 See [PEOPLE.md](PEOPLE.md) for a list of contributors.

@@ -99,10 +99,6 @@ class JoinForm extends React.Component {
 
             <Avatar name={this.state.values.username} />
           </div>
-
-          <p className="modalTerms">
-            Logging in confirms your agreement to <a href="#">our EULA</a>.
-          </p>
         </div>
 
         <ModalFooter

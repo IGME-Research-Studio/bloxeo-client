@@ -74,11 +74,6 @@ class LandingContainer extends React.Component {
                         url='/join'
                         label='Join a room'
                       />
-
-                      <p>
-                        By creating a room, you are agreeing to our
-                        <a className="termsOfService">Terms of Service</a>.
-                      </p>
                     </div>
                   </div>
                 </div>
@@ -168,11 +163,6 @@ class LandingContainer extends React.Component {
                       label='Create a room'
                     />
                   </div>
-
-                  <p>
-                    By creating a room you&rsquo;re agreeing to our
-                    <a className="termsOfService">Terms of Service</a>.
-                  </p>
                  </div>
               </div>
             </div>

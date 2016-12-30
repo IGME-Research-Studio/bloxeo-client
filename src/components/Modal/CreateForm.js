@@ -82,7 +82,8 @@ class CreateForm extends React.Component {
       <TextField
         fullWidth
         multiLine
-        rows={2}
+        rows={1}
+        rowsMax={3}
       hintText={"Project description (optional)"}
       value={this.state.values.boardDesc}
       onChange={this._updateBoardDesc}

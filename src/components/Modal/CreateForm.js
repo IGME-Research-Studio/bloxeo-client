@@ -56,11 +56,7 @@ class CreateForm extends React.Component {
     }
   };
 
-  /**
-   * @return {object}
-   */
   render() {
-
     return (
       <div className="joinModal">
         <div className="modalContent">

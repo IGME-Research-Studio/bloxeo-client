@@ -36,23 +36,24 @@ module.exports = {
 
   entry: [
     require.resolve('./polyfills'),
-    path.join(paths.appSrc, 'app')
+    path.join(paths.appSrc, 'app'),
   ],
 
   output: {
     path: paths.appBuild,
     filename: 'static/js/[name].[chunkhash:8].js',
     chunkFilename: 'static/js/[name].[chunkhash:8].chunk.js',
-    publicPath: publicPath
+    publicPath: publicPath,
   },
 
   resolve: {
-    extensions: ['.js', '.json', ''],
+    moduleDirectories: ['node_modules', 'src'],
+    extensions: ['.js', '.json', '', '.jsx', '.scss'],
   },
 
   resolveLoader: {
     root: paths.ownNodeModules,
-    moduleTemplates: ['*-loader']
+    moduleTemplates: ['*-loader'],
   },
 
   module: {
@@ -60,8 +61,8 @@ module.exports = {
       {
         test: /\.js$/,
         loader: 'eslint',
-        include: paths.appSrc
-      }
+        include: paths.appSrc,
+      },
     ],
 
     loaders: [
@@ -80,7 +81,7 @@ module.exports = {
       {
         test: /\.json$/,
         include: [paths.appSrc, paths.appNodeModules],
-        loader: 'json'
+        loader: 'json',
       },
       {
         test: /\.(ico|jpg|png|gif|eot|svg|ttf|woff|woff2)(\?.*)?$/,
@@ -88,8 +89,8 @@ module.exports = {
         include: [paths.appSrc, paths.appNodeModules],
         loader: 'file',
         query: {
-          name: 'static/media/[name].[hash:8].[ext]'
-        }
+          name: 'static/media/[name].[hash:8].[ext]',
+        },
       },
 
       {
@@ -97,8 +98,8 @@ module.exports = {
         include: [paths.appSrc],
         loader: 'file',
         query: {
-          name: 'favicon.ico?[hash:8]'
-        }
+          name: 'favicon.ico?[hash:8]',
+        },
       },
 
       {
@@ -107,17 +108,17 @@ module.exports = {
         loader: 'url',
         query: {
           limit: 10000,
-          name: 'static/media/[name].[hash:8].[ext]'
-        }
+          name: 'static/media/[name].[hash:8].[ext]',
+        },
       },
       {
         test: /\.html$/,
         loader: 'html',
         query: {
           attrs: ['link:href'],
-        }
-      }
-    ]
+        },
+      },
+    ],
   },
 
   eslint: {
@@ -168,6 +169,6 @@ module.exports = {
     //   }
     // }),
 
-    new ExtractTextPlugin('static/css/[name].[contenthash:8].css')
-  ]
+    new ExtractTextPlugin('static/css/[name].[contenthash:8].css'),
+  ],
 };

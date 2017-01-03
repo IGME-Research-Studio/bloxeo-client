@@ -9,7 +9,6 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 var NpmInstallPlugin = require('npm-install-webpack-plugin');
 var paths = require('./paths');
-var env = require('./env');
 
 module.exports = {
   devtool: 'eval',
@@ -17,18 +16,19 @@ module.exports = {
 
   entry: [
     require.resolve('./polyfills'),
-    path.join(paths.appSrc, 'app')
+    path.join(paths.appSrc, 'app'),
   ],
 
   output: {
     path: paths.appBuild,
     pathinfo: true,
     filename: 'static/js/bundle.js',
-    publicPath: '/'
+    publicPath: '/',
   },
 
   resolve: {
-    extensions: ['.js', '.json', ''],
+    moduleDirectories: ['node_modules', 'src'],
+    extensions: ['.js', '.json', '', '.jsx', '.scss'],
   },
 
   module: {
@@ -50,7 +50,7 @@ module.exports = {
       {
         test: /\.json$/,
         include: [paths.appSrc, paths.appNodeModules],
-        loader: 'json'
+        loader: 'json',
       },
 
       {
@@ -59,8 +59,8 @@ module.exports = {
         exclude: /\/favicon.ico$/,
         loader: 'file',
         query: {
-          name: 'static/media/[name].[ext]'
-        }
+          name: 'static/media/[name].[ext]',
+        },
       },
 
       {
@@ -68,8 +68,8 @@ module.exports = {
         include: [paths.appSrc],
         loader: 'file',
         query: {
-          name: 'favicon.ico?[hash:8]'
-        }
+          name: 'favicon.ico?[hash:8]',
+        },
       },
 
       {
@@ -78,8 +78,8 @@ module.exports = {
         loader: 'url',
         query: {
           limit: 10000,
-          name: 'static/media/[name].[ext]'
-        }
+          name: 'static/media/[name].[ext]',
+        },
       },
 
       {
@@ -87,9 +87,9 @@ module.exports = {
         loader: 'html',
         query: {
           attrs: ['link:href'],
-        }
-      }
-    ]
+        },
+      },
+    ],
   },
 
   eslint: {
@@ -110,5 +110,5 @@ module.exports = {
     }),
     new ExtractTextPlugin('static/css/[name].css'),
     new CaseSensitivePathsPlugin(),
-  ]
+  ],
 };

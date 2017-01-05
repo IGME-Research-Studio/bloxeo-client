@@ -65,6 +65,6 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for contributing guidelines.
 
 ### License
 
-Copyright &copy; 2016-2017 MAGIC Spell Studios, all rights reserved.
+Copyright MAGIC Spell Studios, 2017
 
 See [PEOPLE.md](PEOPLE.md) for a list of contributors.
